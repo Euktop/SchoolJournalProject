@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <style name="TextAppearance.SchJ.Title1.Regular">
+        <item name="android:fontWeight">@integer/font_weight_regular</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title1.Medium">
+        <item name="android:fontWeight">@integer/font_weight_medium</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title1.SemiBold">
+        <item name="android:fontWeight">@integer/font_weight_semibold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title1.Bold">
+        <item name="android:fontWeight">@integer/font_weight_bold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title1.ExtraBold">
+        <item name="android:fontWeight">@integer/font_weight_extrabold</item>
+    </style>
+        <style name="TextAppearance.SchJ.Title2.Regular">
+        <item name="android:fontWeight">@integer/font_weight_regular</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title2.Medium">
+        <item name="android:fontWeight">@integer/font_weight_medium</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title2.SemiBold">
+        <item name="android:fontWeight">@integer/font_weight_semibold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title2.Bold">
+        <item name="android:fontWeight">@integer/font_weight_bold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title2.ExtraBold">
+        <item name="android:fontWeight">@integer/font_weight_extrabold</item>
+    </style>
+        <style name="TextAppearance.SchJ.Title3.Regular">
+        <item name="android:fontWeight">@integer/font_weight_regular</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title3.Medium">
+        <item name="android:fontWeight">@integer/font_weight_medium</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title3.SemiBold">
+        <item name="android:fontWeight">@integer/font_weight_semibold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title3.Bold">
+        <item name="android:fontWeight">@integer/font_weight_bold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Title3.ExtraBold">
+        <item name="android:fontWeight">@integer/font_weight_extrabold</item>
+    </style>
+        <style name="TextAppearance.SchJ.Headline.Regular">
+        <item name="android:fontWeight">@integer/font_weight_regular</item>
+    </style>
+    <style name="TextAppearance.SchJ.Headline.Medium">
+        <item name="android:fontWeight">@integer/font_weight_medium</item>
+    </style>
+    <style name="TextAppearance.SchJ.Headline.SemiBold">
+        <item name="android:fontWeight">@integer/font_weight_semibold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Headline.Bold">
+        <item name="android:fontWeight">@integer/font_weight_bold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Headline.ExtraBold">
+        <item name="android:fontWeight">@integer/font_weight_extrabold</item>
+    </style>
+        <style name="TextAppearance.SchJ.Text.Regular">
+        <item name="android:fontWeight">@integer/font_weight_regular</item>
+    </style>
+    <style name="TextAppearance.SchJ.Text.Medium">
+        <item name="android:fontWeight">@integer/font_weight_medium</item>
+    </style>
+    <style name="TextAppearance.SchJ.Text.SemiBold">
+        <item name="android:fontWeight">@integer/font_weight_semibold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Text.Bold">
+        <item name="android:fontWeight">@integer/font_weight_bold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Text.ExtraBold">
+        <item name="android:fontWeight">@integer/font_weight_extrabold</item>
+    </style>
+        <style name="TextAppearance.SchJ.Caption.Regular">
+        <item name="android:fontWeight">@integer/font_weight_regular</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption.Medium">
+        <item name="android:fontWeight">@integer/font_weight_medium</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption.SemiBold">
+        <item name="android:fontWeight">@integer/font_weight_semibold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption.Bold">
+        <item name="android:fontWeight">@integer/font_weight_bold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption.ExtraBold">
+        <item name="android:fontWeight">@integer/font_weight_extrabold</item>
+    </style>
+        <style name="TextAppearance.SchJ.Caption2.Regular">
+        <item name="android:fontWeight">@integer/font_weight_regular</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption2.Medium">
+        <item name="android:fontWeight">@integer/font_weight_medium</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption2.SemiBold">
+        <item name="android:fontWeight">@integer/font_weight_semibold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption2.Bold">
+        <item name="android:fontWeight">@integer/font_weight_bold</item>
+    </style>
+    <style name="TextAppearance.SchJ.Caption2.ExtraBold">
+        <item name="android:fontWeight">@integer/font_weight_extrabold</item>
+    </style>
+</resources>

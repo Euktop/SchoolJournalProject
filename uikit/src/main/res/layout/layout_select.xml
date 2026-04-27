@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<stud.euktop.uikit.components.input.SchJTextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:endIconDrawable="@drawable/right_r"
+    app:endIconMinSize="20dp"
+    app:endIconMode="custom"
+    app:endIconTint="@null">
+
+    <stud.euktop.uikit.components.input.SchJTextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:inputType="none"
+        android:singleLine="true"
+        android:textColorHint="@color/color_text_tertiary"
+        tools:hint="Name" />
+</stud.euktop.uikit.components.input.SchJTextInputLayout>

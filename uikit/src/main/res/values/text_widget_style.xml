@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.SchJ.TextView" parent="Base.Widget.AppCompat.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.SchJ.Text.Regular</item>
+        <item name="android:textColor">@color/color_text_primary</item>
+    </style>
+</resources>

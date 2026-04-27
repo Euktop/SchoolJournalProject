@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">SchoolJournal</string>
+    <string name="school_journal">School Journal</string>
+    <string name="t_loggin_title1">Welcome!</string>
+    <string name="t_loggin_title2">Log in to use the app\'s features</string>
+    <string name="t_regestration">Register</string>
+    <string name="error_email_invalid">Incorrect email address</string>
+    <string name="t_email_sign">Log in by E-mail</string>
+    <string name="password">Password</string>
+    <string name="example_mail_com" translatable="false">example@mail.com</string>
+    <string name="hello">Hello!</string>
+    <string name="create_profile">Create Profile</string>
+    <string name="name">Name</string>
+    <string name="lastname">Lastname</string>
+    <string name="surname">Surname</string>
+    <string name="birthday">Birthday</string>
+    <string name="email">Email</string>
+    <string name="next">Next</string>
+    <string name="gender">Gender</string>
+    <string name="telephone">Telephone</string>
+    <string name="incorrect_phone_number">Incorrect phone number</string>
+    <string name="male">Male</string>
+    <string name="woman">Woman</string>
+    <string name="none">None</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="the_password_must_contain_at_least_8_characters_uppercase_and_lowercase_letters_numbers_and_special_characters">The password must contain at least 8 characters: uppercase and lowercase letters, numbers, and special characters.</string>
+    <string name="new_password">New password</string>
+    <string name="the_passwords_don_t_match">The passwords don\'t match.</string>
+    <string name="repeat_the_password">Repeat the password</string>
+    <string name="save">Save</string>
+</resources>

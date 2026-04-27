@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Школьный Дневник</string>
+    <string name="school_journal">Школьный Дневник</string>
+    <string name="t_loggin_title1">Добро пожаловать!</string>
+    <string name="lastname">Фамилия</string>
+    <string name="surname">Отчество</string>
+    <string name="t_loggin_title2">Войдите в систему, чтобы использовать функции приложения</string>
+    <string name="t_regestration">Регистрация</string>
+    <string name="t_email_sign">Войдите в систему по электронной почте</string>
+    <string name="password">Пароль</string>
+    <string name="error_email_invalid">Неверный адрес электронной почты</string>
+    <string name="birthday">День рождения</string>
+    <string name="email">Электронная почта</string>
+    <string name="next">Дальше</string>
+    <string name="create_profile">Создание Профиля</string>
+    <string name="name">Имя</string>
+    <string name="hello">Привет!</string>
+    <string name="gender">Пол</string>
+    <string name="telephone">Телефон</string>
+    <string name="incorrect_phone_number">Не корректный номер телефона</string>
+    <string name="male">Мужчина</string>
+    <string name="woman">Женщина</string>
+    <string name="none">Нет</string>
+    <string name="hello_blank_fragment">Хрень</string>
+    <string name="the_password_must_contain_at_least_8_characters_uppercase_and_lowercase_letters_numbers_and_special_characters">Пароль должен содержать не менее 8 символов: заглавные и сточные буквы, цифры и спец-символы.</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="the_passwords_don_t_match">Пароли не совпадают.</string>
+    <string name="repeat_the_password">Повторите пароль</string>
+    <string name="save">Сохранить</string>
+</resources>

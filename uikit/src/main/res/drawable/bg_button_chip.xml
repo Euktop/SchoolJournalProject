@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+    <item>
+        <selector>
+            <item
+                android:drawable="@drawable/bg_button_selected"
+                android:state_selected="false" />
+            <item android:drawable="@drawable/bg_button_filled" />
+        </selector>
+    </item>
+</ripple>

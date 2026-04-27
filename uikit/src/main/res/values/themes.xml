@@ -1,0 +1,35 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Base.Theme.SchoolJournal" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/color_accent</item>
+        <item name="colorOnPrimary">@color/color_text_on_accent</item>
+        <item name="colorPrimaryContainer">@color/color_accent_inactive
+        </item>
+        <item name="colorOnPrimaryContainer">@color/color_text_primary</item>
+
+        <item name="colorSecondary">@color/color_accent</item>
+        <item name="colorOnSecondary">@color/color_text_on_accent</item>
+
+        <item name="colorError">@color/color_error</item>
+        <item name="colorOnError">@color/color_white</item>
+        <item name="colorErrorContainer">@color/color_input_bg_error</item>
+        <item name="colorOnErrorContainer">@color/color_error</item>
+
+        <item name="colorOnBackground">@color/color_text_primary</item>
+        <item name="colorSurface">@color/color_bg_secondary</item>
+        <item name="colorOnSurface">@color/color_text_primary</item>
+        <item name="colorSurfaceVariant">@color/color_bg_tertiary</item>
+        <item name="colorOnSurfaceVariant">@color/color_text_secondary</item>
+
+        <item name="colorOutline">@color/color_stroke_default</item>
+        <item name="colorOutlineVariant">@color/color_divider</item>
+
+        <item name="android:textAppearance">@style/TextAppearance.SchJ.Text.Regular</item>
+        <item name="android:textViewStyle">@style/Widget.SchJ.TextView</item>
+        <item name="editTextStyle">@style/Widget.SchJ.Input.EditText</item>
+        <item name="textInputStyle">@style/Widget.SchJ.Input.Description</item>
+        <item name="schJButtonStyle">@style/Widget.SchJ.Button</item>
+    </style>
+
+    <style name="Theme.SchoolJournal" parent="Base.Theme.SchoolJournal" />
+</resources>

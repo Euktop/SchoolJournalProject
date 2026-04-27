@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_accent">#1A6FEE</color>
+    <color name="color_accent_inactive">#C9D4FB</color>
+    <color name="color_error">#FD3535</color>
+    <color name="color_black">#121212</color>
+    <color name="color_white">#ffffff</color>
+    <color name="color_bg_primary">@color/color_white</color>
+    <color name="color_bg_secondary">#F5F5F9</color>
+    <color name="color_bg_tertiary">#F1F1F1</color>
+    <color name="color_stroke_default">#EBEBEB</color>
+    <color name="color_text_primary">@color/color_black</color>
+    <color name="color_text_secondary">#939396</color>
+    <color name="color_text_tertiary">#7E7E9A</color>
+    <color name="color_text_on_accent">#FFFFFF</color>
+    <color name="color_text_accent">@color/color_accent</color>
+    <color name="color_icon_default">#B8C1CC</color>
+    <color name="color_divider">#F4F4F4</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_overlay">#99000000</color>
+
+    <color name="color_input_stroke_error">#FD3535</color>
+    <color name="color_input_bg_error">#19FD3535</color>
+</resources>

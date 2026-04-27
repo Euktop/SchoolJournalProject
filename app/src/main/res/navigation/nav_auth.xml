@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_auth"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="stud.euktop.schooljournal.presentation.auth.login.LoginFragment"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login">
+        <action
+            android:id="@+id/action_loginFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPasswordFragment"
+        android:name="stud.euktop.schooljournal.presentation.auth.password.CreatePasswordFragment"
+        android:label="fragment_create_password"
+        tools:layout="@layout/fragment_create_password">
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="stud.euktop.schooljournal.presentation.auth.profile.ProfileFragment"
+        android:label="fragment_reg"
+        tools:layout="@layout/fragment_reg">
+        <action
+            android:id="@+id/action_profileFragment_to_createPasswordFragment"
+            app:destination="@id/createPasswordFragment" />
+    </fragment>
+</navigation>

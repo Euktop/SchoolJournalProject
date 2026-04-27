@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:orientation="vertical"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <TextView
+        android:id="@+id/helperText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="4dp"
+        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+        android:textColor="@color/color_text_secondary"
+        android:visibility="gone"
+        tools:text="Helper text"
+        tools:visibility="visible" />
+
+    <stud.euktop.uikit.components.input.SchJTextInputLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:endIconMode="none">
+
+        <stud.euktop.uikit.components.input.SchJTextInputEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            tools:hint="example@mail.com" />
+
+    </stud.euktop.uikit.components.input.SchJTextInputLayout>
+
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+        android:textColor="@color/color_error"
+        android:visibility="gone"
+        tools:text="Error message"
+        tools:visibility="visible" />
+</merge>

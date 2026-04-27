@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SchJInput">
+        <attr name="android:text" />
+        <attr name="endIconMode" />
+        <attr name="android:hint" />
+        <attr name="schjTextError" format="string" />
+        <attr name="helperText" />
+        <attr name="errorEnabled" />
+        <attr name="errorIconDrawable" />
+        <attr name="android:inputType" />
+    </declare-styleable>
+    <declare-styleable name="SchJTextInputLayout">
+        <attr name="textInputStyle" />
+    </declare-styleable>
+    <declare-styleable name="SchJTextInputEditText">
+        <attr name="editTextStyle" />
+    </declare-styleable>
+    <declare-styleable name="SchJSelect">
+        <attr name="android:title"/>
+    </declare-styleable>
+    <declare-styleable name="SchJButton">
+        <attr name="schJButtonStyle" format="reference" />
+        <attr name="schJButtonType">
+            <enum name="BIG" value="0" />
+            <enum name="SMALL" value="1" />
+            <enum name="CHIPS" value="2" />
+        </attr>
+        <attr name="schJButtonClass">
+            <enum name="PRIMARY" value="0" />
+            <enum name="INACTIVE" value="1" />
+            <enum name="SECONDARY" value="2" />
+            <enum name="TETRIARY" value="3" />
+            <enum name="SELECT" value="4" />
+            <enum name="UNSELECT" value="5" />
+        </attr>
+    </declare-styleable>
+</resources>

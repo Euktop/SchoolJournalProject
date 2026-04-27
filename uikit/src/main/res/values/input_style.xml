@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.SchJ.Input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="errorEnabled">false</item>
+        <item name="android:textColorHint">@color/color_text_secondary</item>
+        <item name="endIconTint">@color/color_black</item>
+        <item name="cursorColor">@color/color_accent</item>
+        <item name="cursorErrorColor">@color/color_error</item>
+    </style>
+
+    <style name="Widget.SchJ.Input.EditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:singleLine">true</item>
+        <item name="android:textCursorDrawable">@drawable/bg_cursor</item>
+        <item name="android:textColorHint">@color/color_text_secondary</item>
+        <item name="android:textColor">@color/color_text_primary</item>
+        <item name="android:textAppearance">@style/TextAppearance.SchJ.Text.Regular</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="Widget.SchJ.Input.Description" parent="Widget.SchJ.Input">
+        <item name="boxBackgroundColor">@color/color_bg_secondary</item>
+        <item name="boxStrokeColor">@color/color_stroke_default</item>
+    </style>
+
+    <style name="Widget.SchJ.Input.Search" parent="Widget.SchJ.Input.Description">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="startIconDrawable">@drawable/ic_search</item>
+    </style>
+
+    <style name="Widget.SchJ.Input.EditText.Search" parent="@style/Widget.SchJ.Input.EditText">
+        <item name="android:hint">Искать описание</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:inputType">text</item>
+    </style>
+
+    <style name="Widget.SchJ.TextView.Helper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.SchJ.Caption.Regular</item>
+        <item name="android:textColor">@color/color_text_tertiary</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+</resources>
