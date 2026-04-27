@@ -28,4 +28,14 @@
     <string name="the_passwords_don_t_match">Пароли не совпадают.</string>
     <string name="repeat_the_password">Повторите пароль</string>
     <string name="save">Сохранить</string>
+    <string name="error_network">Проверьте подключение к сети</string>
+    <string name="error_auth_expired">Сессия истекла. Пожалуйста, войдите заново</string>
+    <string name="error_no_permission">Недостаточно прав для выполнения операции</string>
+    <string name="error_not_found">Запрашиваемые данные не найдены</string>
+    <string name="error_server">Ошибка на сервере. Попробуйте позже</string>
+    <string name="error_empty_body">Пустой ответ от сервера</string>
+    <string name="error_unknown">Что-то пошло не так. Попробуйте ещё раз</string>
+    <string name="error_invalid_credentials">Неверный логин или пароль</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_ok">ОК</string>
 </resources>

@@ -1,124 +1,79 @@
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
-import androidx.annotation.IdRes
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import stud.euktop.domain.utils.loger.logger
-import stud.euktop.domain.utils.loger.toSimpleTag
-import stud.euktop.schooljournal.presentation.common.navigate.Destination
-import stud.euktop.schooljournal.presentation.common.navigate.Group
-import stud.euktop.schooljournal.presentation.common.navigate.StackAction
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
-import stud.euktop.schooljournal.presentation.common.navigate.mainDestination
-import stud.euktop.uikit.R
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class NavigationManagerImpl @Inject constructor(
-    private val fragmentManager: FragmentManager,
-    @param:IdRes private val containerId: Int
-) : NavigationManager {
-    private var lastGroup: Group? = null
-    override fun navigateTo(
-        destination: Destination,
-        stackAction: StackAction
-    ) {
-        val fragmentTag = "${destination.group.name}_${destination.id}"
-        val fragment = destination.action()
+@Singleton
+class NavigationManagerImpl @Inject constructor() : NavigationManager {
 
-        var transaction: FragmentTransaction? = null
-        fun transact() {
-            transaction = fragmentManager.beginTransaction().apply { applyDefaultAnimations(this) }
-            transaction.replace(containerId, fragment, fragmentTag)
-        }
-        when (stackAction) {
-            StackAction.KEEP -> {
-                transact()
-                transaction?.addToBackStack(fragmentTag)
+    private val controllers = mutableMapOf<String, NavController>()
+    private val tasks = ArrayDeque<Pair<String?, NavCommand>>()
+    private var mainNavController: NavController? = null
+
+    override fun bindMain(navController: NavController) {
+        mainNavController = navController
+        controllers["main"] = navController
+        processTasksFor("main")
+    }
+
+    override fun register(key: String, navController: NavController) {
+        controllers[key] = navController
+        processTasksFor(key)
+    }
+
+    override fun unregister(key: String) {
+        controllers.remove(key)
+    }
+
+    override fun navigate(cmd: NavCommand) {
+        when (cmd) {
+            is NavCommand.ToDestination -> {
+                val targetKey = cmd.targetKey
+                val nav = if (targetKey != null) controllers[targetKey] else mainNavController
+                if (nav != null) {
+                    execute(nav, cmd)
+                } else {
+                    tasks.addLast(Pair(targetKey, cmd))
+                }
             }
 
-            StackAction.REPLACE -> {
-                transact()
-            }
-
-            StackAction.CLEAR_ALL -> {
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                transact()
-            }
-
-            StackAction.CLEAR_GROUP -> {
-                clearGroupFromBackStack(lastGroup)
-                transact()
+            is NavCommand.Back -> {
+                val nav = controllers.values.lastOrNull() ?: mainNavController
+                nav?.popBackStack() ?: tasks.addLast(Pair(null, cmd))
             }
         }
-        lastGroup = destination.group
-        logger?.d(
-            this.toSimpleTag(),
-            "Navigate",
-            "To ${fragment.toSimpleTag()}; id: ${destination.id}; group: ${destination.group.name} ; Action: ${stackAction.name}"
-        )
-        transaction?.commit()
     }
 
-    override fun navigateTo(
-        group: Group,
-        stackAction: StackAction
-    ) = navigateTo(mainDestination.getValue(group), stackAction)
-
-    override fun switchTab(
-        destination: Destination,
-        clearHistory: Boolean
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    override fun back() {
-        TODO("Not yet implemented")
-    }
-
-    override fun backGroup() {
-        TODO("Not yet implemented")
-    }
-
-    override fun back(destination: Destination) {
-        TODO("Not yet implemented")
-    }
-
-    override fun backGroup(group: Group) {
-        TODO("Not yet implemented")
-    }
-
-
-    private fun applyDefaultAnimations(transaction: FragmentTransaction) {
-        transaction.setCustomAnimations(
-            R.anim.slide_in_right,
-            R.anim.slide_out_left,
-            R.anim.slide_in_left,
-            R.anim.slide_out_right,
-        )
-    }
-
-    private fun clearGroupFromBackStack(group: Group?) {
-        if (group == null) return
-        val backStackCount = fragmentManager.backStackEntryCount
-        var firstGroupEntryId: Int? = null
-        for (i in backStackCount - 1 downTo 0) {
-            val entry = fragmentManager.getBackStackEntryAt(i)
-            if (entry.name?.startsWith("${group.name}_") == true) {
-                firstGroupEntryId = entry.id
-            } else {
-                break
+    private fun processTasksFor(key: String) {
+        val nav = controllers[key] ?: return
+        val iterator = tasks.iterator()
+        while (iterator.hasNext()) {
+            val (taskKey, cmd) = iterator.next()
+            if (taskKey == key || (taskKey == null && nav == mainNavController)) {
+                execute(nav, cmd)
+                iterator.remove()
             }
         }
-        firstGroupEntryId?.let { id ->
-            fragmentManager.popBackStackImmediate(id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
     }
 
-    override fun onBackPressed(): Boolean {
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
-            return true
+    private fun execute(nav: NavController, command: NavCommand) {
+        when (command) {
+            is NavCommand.ToDestination -> {
+                if (command.popUpTo != null) {
+                    val navOptions = NavOptions.Builder()
+                        .setPopUpTo(command.popUpTo, command.inclusive)
+                        .build()
+                    nav.navigate(command.destId, command.args, navOptions)
+                } else {
+                    nav.navigate(command.destId, command.args)
+                }
+            }
+
+            NavCommand.Back -> nav.popBackStack()
         }
-        return false
     }
 }

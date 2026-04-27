@@ -4,10 +4,14 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationRouterSplash
+import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
+import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHandler
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
+import stud.euktop.schooljournal.presentation.common.navigate.impl.CoordinatorExecImpl
+import stud.euktop.schooljournal.presentation.common.navigate.impl.ErrorHandlerImpl
 import stud.euktop.schooljournal.presentation.common.navigate.impl.NavigationManagerImpl
-import stud.euktop.schooljournal.presentation.common.navigate.impl.NavigationRouterImpl
+import stud.euktop.schooljournal.presentation.common.navigate.impl.RouterImpl
 import javax.inject.Singleton
 
 @Module
@@ -15,5 +19,17 @@ import javax.inject.Singleton
 abstract class NavigationModule {
     @Binds
     @Singleton
-    abstract fun bindNavigationRouterSplash(navigationRouterImpl: NavigationRouterImpl): NavigationRouterSplash
+    abstract fun bindCoordinatorExec(coordinatorExec: CoordinatorExecImpl): CoordinatorExec
+
+    @Binds
+    @Singleton
+    abstract fun bindErrorHandler(errorHandlerImpl: ErrorHandlerImpl): ErrorHandler
+
+    @Binds
+    @Singleton
+    abstract fun bindNavigationManager(navigationManager: NavigationManagerImpl): NavigationManager
+
+    @Binds
+    @Singleton
+    abstract fun bindRouterSplash(routerSplash: RouterImpl): RouterSplash
 }

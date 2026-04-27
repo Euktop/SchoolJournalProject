@@ -9,20 +9,15 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.ActivitySplashBinding
-import stud.euktop.schooljournal.presentation.common.navigate.contract.FrameNavigationManager
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationRouterSplash
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
     @Inject
-    lateinit var routerSplash: NavigationRouterSplash
-
-    @Inject
-    lateinit var authRepository: AuthRepository
+    lateinit var routerSplash: RouterSplash
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +29,6 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val start = System.currentTimeMillis()
-        val navigate = routerSplash.navigationAfterSplash()
         lifecycleScope.launch {
             delay(
                 maxOf(
@@ -42,7 +36,7 @@ class SplashFragment : Fragment() {
                         .toLong() - System.currentTimeMillis() + start, 0
                 )
             )
-            navigate(requireActivity() as FrameNavigationManager)
+            routerSplash.navigateAction()
         }
         super.onViewCreated(view, savedInstanceState)
     }

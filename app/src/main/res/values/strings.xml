@@ -29,4 +29,14 @@
     <string name="the_passwords_don_t_match">The passwords don\'t match.</string>
     <string name="repeat_the_password">Repeat the password</string>
     <string name="save">Save</string>
+    <string name="error_network">Check your network connection</string>
+    <string name="error_auth_expired">Your session has expired. Please log in again.</string>
+    <string name="error_no_permission">You do not have sufficient permissions to perform the operation.</string>
+    <string name="error_not_found">The requested data was not found.</string>
+    <string name="error_server">Server error. Please try again.</string>
+    <string name="error_empty_body">Empty server response.</string>
+    <string name="error_unknown">Something went wrong. Please try again.</string>
+    <string name="error_invalid_credentials">Incorrect login or password.</string>
+    <string name="action_retry">Retry.</string>
+    <string name="action_ok">OK.</string>
 </resources>
