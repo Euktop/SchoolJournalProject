@@ -45,9 +45,7 @@ class SchJSelect @JvmOverloads constructor(
             }
         }
     }
-    private var adapter: SchJTextAdapter<*>? = null
-    private var bottomSheet: SchJBottomSheet? = null
-    private var fragmentManager: FragmentManager? = null
+
     fun showSheet() {
         val fm = fragmentManager ?: return
         val adapter = adapter ?: return
@@ -58,31 +56,48 @@ class SchJSelect @JvmOverloads constructor(
         }
     }
 
-    fun <T> register(
-        fragmentManager: FragmentManager,
-        items: List<T>,
-        onClick: (T) -> Unit,
-        toText: (T) -> String,
-        isEquals: (value1: T, value2: T) -> Boolean = { p1, p2 -> p1 == p2 }
+    private var adapter: SchJTextAdapter<*>? = null
+    private var bottomSheet: SchJBottomSheet? = null
+    private var fragmentManager: FragmentManager? = null
+
+    inner class RegisterList<T>(
+        val onCLick: (T) -> Unit = {},
+        val toText: (T) -> String = { it.toString() },
+        val isEquals: (value1: T, value2: T) -> Boolean = { p1, p2 -> p1 == p2 }
     ) {
-        this.fragmentManager = fragmentManager
-        val listener = object : SchJTextAdapter.Listener<T> {
-            override fun onClick(value: T) {
-                onClick(value)
-                state = state.copy(selectText = toText(value))
-                bottomSheet?.dismiss()
+        var items: List<T> = emptyList()
+            set(value) {
+                field = value
+                updateList()
             }
+        private var adapter: SchJTextAdapter<T>? = null
 
-            override fun toText(value: T): String {
-                return toText(value)
+        fun register(fragmentManager: FragmentManager) {
+            this@SchJSelect.fragmentManager = fragmentManager
+            val listener = object : SchJTextAdapter.Listener<T> {
+                override fun onClick(value: T) {
+                    this@RegisterList.onCLick(value)
+                    state = state.copy(selectText = toText(value))
+                    bottomSheet?.dismiss()
+                }
+
+                override fun toText(value: T): String {
+                    return this@RegisterList.toText(value)
+                }
+
+                override fun isEquals(value1: T, value2: T): Boolean {
+                    return this@RegisterList.isEquals(value1, value2)
+                }
+
             }
-
-            override fun isEquals(value1: T, value2: T): Boolean {
-                return isEquals(value1, value2)
-            }
-
+            adapter = SchJTextAdapter(listener)
+            updateList()
         }
-        adapter = SchJTextAdapter(listener).apply { submitList(items) }
+
+        private fun updateList() {
+            adapter?.submitList(items)
+            this@SchJSelect.adapter = adapter
+        }
     }
 
     override var state: State by base

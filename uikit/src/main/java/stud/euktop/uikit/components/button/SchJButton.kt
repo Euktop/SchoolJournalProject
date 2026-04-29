@@ -27,12 +27,14 @@ class SchJButton @JvmOverloads constructor(
         }
     }
     override var state: SchJButtonState by schJBase
-
     override fun setEnabled(enabled: Boolean) {
-        if (enabled && state.buttonClass == SchJButtonState.ButtonClass.INACTIVE)
-            state = state.copy(buttonClass = SchJButtonState.ButtonClass.PRIMARY)
-        else if (!enabled && state.buttonClass == SchJButtonState.ButtonClass.INACTIVE)
-            state = state.copy(buttonClass = SchJButtonState.ButtonClass.INACTIVE)
+        when {
+            !enabled && state.buttonClass == SchJButtonState.ButtonClass.PRIMARY ->
+                state = state.copy(buttonClass = SchJButtonState.ButtonClass.INACTIVE)
+
+            enabled && state.buttonClass == SchJButtonState.ButtonClass.INACTIVE ->
+                state = state.copy(buttonClass = SchJButtonState.ButtonClass.PRIMARY)
+        }
         super.setEnabled(enabled)
     }
 

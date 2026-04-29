@@ -5,7 +5,9 @@ import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RouterImpl @Inject constructor(
     private val navigationManager: NavigationManager
 ) : RouterSplash {

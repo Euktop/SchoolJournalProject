@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_description">Поиск описания</string>
+    <string name="short_change">Изм.</string>
+    <string name="short_delete">Уд.</string>
+    <string name="good">" Хорошо"</string>
+    <string name="irrespectable">Н</string>
+    <string name="ill">Б</string>
+    <string name="respectable">У</string>
 </resources>

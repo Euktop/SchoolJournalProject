@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvStudentName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+        android:textColor="@color/color_text_primary"
+        tools:text="Оценка" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnMark2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/g2"
+            app:schJButtonClass="PRIMARY"
+            app:schJButtonType="CHIPS" />
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnMark3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/g3"
+            app:schJButtonClass="PRIMARY"
+            app:schJButtonType="CHIPS" />
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnMark4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/g4"
+            app:schJButtonClass="PRIMARY"
+            app:schJButtonType="CHIPS" />
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnMark5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/g5"
+            app:schJButtonClass="PRIMARY"
+            app:schJButtonType="CHIPS" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnIrrespectable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/irrespectable"
+            app:schJButtonClass="UNSELECT"
+            app:schJButtonType="CHIPS" />
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnIll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ill"
+            app:schJButtonClass="UNSELECT"
+            app:schJButtonType="CHIPS" />
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnRespectable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/respectable"
+            app:schJButtonClass="UNSELECT"
+            app:schJButtonType="CHIPS" />
+    </LinearLayout>
+</LinearLayout>

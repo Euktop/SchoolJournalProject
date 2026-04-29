@@ -38,4 +38,15 @@
     <string name="error_invalid_credentials">Неверный логин или пароль</string>
     <string name="action_retry">Повторить</string>
     <string name="action_ok">ОК</string>
+    <string name="error_loading">Ошибка загрузки</string>
+    <string name="mock_grade_saved">Оценка сохранена</string>
+    <string name="without_a_theme">Без темы</string>
+    <string name="users">Пользователи</string>
+    <string name="classes">Классы</string>
+    <string name="objects">Предметы</string>
+    <string name="appointments">Назначения</string>
+    <string name="average_mark_format">Средний балл: %.1f</string>
+    <string name="exit">Выйти</string>
+    <string name="logout_message">Вы вышли из системы</string>
+    <string name="press_again_to_exit">Нажмите ещё раз для выхода</string>
 </resources>

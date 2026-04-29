@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+        android:textColor="@color/color_text_primary"
+        tools:text="28.04.2026" />
+
+    <stud.euktop.uikit.components.button.SchJButton
+        android:id="@+id/btnMark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
+        app:schJButtonClass="PRIMARY"
+        app:schJButtonType="CHIPS"
+        tools:text="5" />
+
+    <TextView
+        android:id="@+id/tvComment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:text="@string/good"
+        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+        android:textColor="@color/color_text_secondary" />
+</LinearLayout>

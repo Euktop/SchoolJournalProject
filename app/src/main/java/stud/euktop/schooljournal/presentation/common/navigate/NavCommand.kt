@@ -1,6 +1,7 @@
 package stud.euktop.schooljournal.presentation.common.navigate
 
 import android.os.Bundle
+import androidx.navigation.NavDirections
 
 sealed class NavCommand {
     data class ToDestination(
@@ -10,5 +11,7 @@ sealed class NavCommand {
         val popUpTo: Int? = null,
         val inclusive: Boolean = false
     ) : NavCommand()
+
+    data class ToAction(val directions: NavDirections) : NavCommand()
     object Back : NavCommand()
 }

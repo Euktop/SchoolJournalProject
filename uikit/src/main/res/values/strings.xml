@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_description">Search Description</string>
+    <string name="short_change">Ch.</string>
+    <string name="short_delete">Del.</string>
+    <string name="good">Good</string>
+    <string name="irrespectable">U</string>
+    <string name="ill">M</string>
+    <string name="respectable">E</string>
+    <string name="g5" translatable="false">5</string>
+    <string name="g4" translatable="false">4</string>
+    <string name="g3" translatable="false">3</string>
+    <string name="g2" translatable="false">2</string>
 </resources>

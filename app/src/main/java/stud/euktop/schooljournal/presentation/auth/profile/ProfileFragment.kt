@@ -5,17 +5,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.Gender
-import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentRegBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
+import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.schooljournal.presentation.common.utils.check
 import stud.euktop.schooljournal.presentation.common.utils.setup
-import java.text.SimpleDateFormat
+import stud.euktop.schooljournal.presentation.common.utils.toMessageId
+import stud.euktop.uikit.components.datePicker.SchJDatePicker
+import stud.euktop.uikit.components.input.select.SchJSelect
+import java.sql.Date
 import java.util.Calendar
-import java.util.GregorianCalendar
-import java.util.Locale
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentRegBinding, ProfileViewModel, ProfileState, Unit>() {
     override fun inflateBinding(
         i: LayoutInflater,
@@ -24,55 +30,62 @@ class ProfileFragment : BaseFragment<FragmentRegBinding, ProfileViewModel, Profi
 
     override val viewModel: ProfileViewModel by viewModels()
     val focusTrack = FocusTrack()
-
+    private var dialogRef: DatePickerDialog? = null
+    private lateinit var register: SchJSelect.RegisterList<Gender>
     override fun setupUI() {
         binding.apply {
-            lastNameInput.setup(focusTrack) { viewModel.lastNameSet(it) }
             firstNameInput.setup(focusTrack) { viewModel.firstNameSet(it) }
+            lastNameInput.setup(focusTrack) { viewModel.lastNameSet(it) }
             surNameInput.setup(focusTrack) { viewModel.surNameSet(it) }
             phoneInput.setup(focusTrack) { viewModel.phoneSet(it) }
             emailInput.setup(focusTrack) { viewModel.emailSet(it) }
-            genderSelect.register(childFragmentManager, Gender.entries, {
-                viewModel.genderSet(it)
-            }, {
-                ContextCompat.getString(
-                    requireContext(), when (it) {
-                        Gender.MALE -> R.string.male
-                        Gender.WOMAN -> R.string.woman
-                        Gender.NONE -> R.string.none
-                    }
-                )
-            })
-            birthDateInput.setOnClickListener {
-                val calendar = Calendar.getInstance()
-                val maxDate = calendar.timeInMillis
-                calendar.add(Calendar.YEAR, -100)
-                val minDate = calendar.timeInMillis
-
-                DatePickerDialog(
-                    requireContext(),
-                    { _, year, month, dayOfMonth ->
-                        val selectedDate = GregorianCalendar(year, month, dayOfMonth).time
-                        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-                        birthDateInput.state =
-                            birthDateInput.state.copy(text = dateFormat.format(selectedDate))
-                        viewModel.birthDaySet(selectedDate)
-                    },
-                    calendar.get(Calendar.YEAR),
-                    calendar.get(Calendar.MONTH),
-                    calendar.get(Calendar.DAY_OF_MONTH)
-                ).apply {
-                    datePicker.maxDate = maxDate
-                    datePicker.minDate = minDate
-                }.show()
+            register = genderSelect.RegisterList<Gender>(
+                onCLick = { viewModel.genderSet(it) },
+                toText = { ContextCompat.getString(requireContext(), it.toMessageId()) }).apply {
+                items = Gender.entries
+                register(childFragmentManager)
             }
+            birthDateInput.setOnClickListener {
+                val datePicker = SchJDatePicker(
+                    context = requireContext(),
+                    onDateSelected = { selectedDate ->
+                        viewModel.birthDaySet(selectedDate)
+                    }
+                ).apply { state = state.copy(selectedDate = viewModel.state.value.birthDay) }
+                if (dialogRef != null && dialogRef?.isShowing == true) {
+                    dialogRef?.dismiss()
+                }
+                dialogRef = datePicker
+                datePicker.showUnique()
+            }
+            focusTrack.onFocusChanged = { updateState() }
         }
     }
 
+    @Inject
+    internal lateinit var navigationManager: NavigationManager
     override fun updateState(state: ProfileState) {
-
+        binding.apply {
+            birthDateInput.state = birthDateInput.state.copy(
+                text = if (state.birthDay == null) "" else state.dateFormat.format(
+                    state.birthDay
+                )
+            )
+            firstNameInput.check(focusTrack, state.firstName)
+            lastNameInput.check(focusTrack, state.lastName)
+            surNameInput.check(focusTrack, state.surName)
+            phoneInput.check(focusTrack, state.phone)
+            emailInput.check(focusTrack, state.email)
+            genderSelect.state = genderSelect.state.copy(
+                selectText = (if (state.gender == null) "" else register.toText(state.gender))
+            )
+            nextButton.isEnabled = state.isButtonActive()
+        }
     }
 
     override fun updateEvent(event: Unit) {
+        navigationManager.navigate(
+            NavCommand.ToAction(ProfileFragmentDirections.actionProfileFragmentToCreatePasswordFragment())
+        )
     }
 }

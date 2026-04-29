@@ -9,6 +9,7 @@
         <attr name="errorEnabled" />
         <attr name="errorIconDrawable" />
         <attr name="android:inputType" />
+        <attr name="android:cursorVisible"/>
     </declare-styleable>
     <declare-styleable name="SchJTextInputLayout">
         <attr name="textInputStyle" />

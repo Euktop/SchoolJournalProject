@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 android {
@@ -34,11 +35,11 @@ android {
         viewBinding = true
     }
 }
-
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+    implementation(libs.mpandroidchart)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

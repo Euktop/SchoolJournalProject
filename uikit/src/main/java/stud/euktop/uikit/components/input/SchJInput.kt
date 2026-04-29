@@ -6,8 +6,8 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.widget.LinearLayout
-import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import com.google.android.material.textfield.TextInputLayout
 import stud.euktop.uikit.R
@@ -24,6 +24,17 @@ class SchJInput @JvmOverloads constructor(
         orientation = VERTICAL
     }
 
+
+    override fun setOnClickListener(l: OnClickListener?) {
+        super.setOnClickListener(l)
+        schJBase.binding.editText.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                performClick()
+            }
+            false
+        }
+    }
+
     private val schJBase = object : SchJBaseBinding<LayoutTextInputBinding, State>() {
         override fun initBinding() =
             LayoutTextInputBinding.inflate(LayoutInflater.from(context), this@SchJInput)
@@ -33,10 +44,10 @@ class SchJInput @JvmOverloads constructor(
         override fun updateState(state: State) {
             binding.apply {
                 editText.apply {
+                    isCursorVisible = state.isCursorVisible
                     setText(state.text)
                     hint = state.textHint
                     inputType = state.inputType
-                    updateStrokeAndBackground(hasFocus(), state.errorVisible())
                 }
                 inputLayout.endIconMode = state.endIconMode
                 helperText.apply {
@@ -51,12 +62,12 @@ class SchJInput @JvmOverloads constructor(
         }
 
         override fun setupUI() {
+            binding.inputLayout.hasError = { _state.errorVisible() }
             binding.editText.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
-                    if (_state.text != s.toString()) {
-                        _state = _state.copy(text = s.toString())
-                        listener?.afterTextChanged(s.toString())
-                    }
+                    if (_state.text == s.toString()) return
+                    _state = _state.copy(text = s.toString())
+                    listener?.afterTextChanged(s.toString())
                 }
 
                 override fun beforeTextChanged(
@@ -69,26 +80,6 @@ class SchJInput @JvmOverloads constructor(
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
-
-            binding.editText.setOnFocusChangeListener { _, hasFocus ->
-                updateStrokeAndBackground(hasFocus, _state.errorVisible())
-            }
-        }
-
-        private fun updateStrokeAndBackground(hasFocus: Boolean, hasError: Boolean) {
-            val strokeColorRes = when {
-                hasError -> R.color.color_error
-                hasFocus -> R.color.color_accent
-                else -> R.color.color_stroke_default
-            }
-            val bgColorRes = when {
-                hasError -> R.color.color_input_bg_error
-                else -> R.color.color_bg_secondary
-            }
-            ContextCompat.getColorStateList(context, strokeColorRes)?.apply {
-                binding.inputLayout.setBoxStrokeColorStateList(this)
-            }
-            binding.inputLayout.boxBackgroundColor = ContextCompat.getColor(context, bgColorRes)
         }
 
         init {
@@ -104,11 +95,16 @@ class SchJInput @JvmOverloads constructor(
                         R.styleable.SchJInput_errorEnabled,
                         state.isErrorVisible
                     ),
-                    inputType = getInt(R.styleable.SchJInput_android_inputType, state.inputType)
+                    inputType = getInt(R.styleable.SchJInput_android_inputType, state.inputType),
+                    isCursorVisible = getBoolean(
+                        R.styleable.SchJInput_android_cursorVisible,
+                        state.isCursorVisible
+                    )
                 )
             }
         }
     }
+    val editText get() = schJBase.binding.inputLayout.editText
 
     fun interface Listener {
         fun afterTextChanged(text: String)
@@ -124,7 +120,8 @@ class SchJInput @JvmOverloads constructor(
         val textError: String = "",
         val isErrorVisible: Boolean = false,
         val endIconMode: Int = TextInputLayout.END_ICON_NONE,
-        val inputType: Int = InputType.TYPE_CLASS_TEXT
+        val inputType: Int = InputType.TYPE_CLASS_TEXT,
+        val isCursorVisible: Boolean = true
     ) {
         fun errorVisible() = textError.isNotEmpty() && isErrorVisible
     }

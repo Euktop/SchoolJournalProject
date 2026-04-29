@@ -1,7 +1,7 @@
 [versions]
 agp = "9.1.1"
 ksp = "2.3.6"
-jetbrainsKotlinJvm = "2.3.20"
+jetbrainsKotlinJvm = "2.3.21"
 coreKtx = "1.18.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -10,21 +10,22 @@ appcompat = "1.7.1"
 material = "1.13.0"
 activity = "1.13.0"
 constraintlayout = "2.2.1"
+mpandroidchart = "v3.1.0"
 okhttp = "5.3.2"
 mockwebserver = "5.3.2"
 loggingInterceptor = "5.3.2"
 moshi = "1.15.2"
 
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 hilt = "2.59.2"
 fragmentKtx = "1.8.9"
 recyclerview = "1.4.0"
 workRuntimeKtx = "2.11.2"
 lifecycleViewmodelKtx = "2.10.0"
 lifecycleRuntimeKtx = "2.10.0"
-navigationFragmentKtx = "2.9.7"
-navigationUiKtx = "2.9.7"
-androidxNavigationSafeargsKotlinGradlePlugin = "2.9.7"
+navigationFragmentKtx = "2.9.8"
+navigationUiKtx = "2.9.8"
+androidxNavigationSafeargsKotlinGradlePlugin = "2.9.8"
 coroutines = "1.10.2"
 kotlinxCoroutinesCore = "1.10.2"
 kotlinxCoroutinesTest = "1.10.2"
@@ -33,7 +34,7 @@ converterMoshi = "3.0.0"
 dagger = "2.59.2"
 daggerCompiler = "2.59.2"
 javaxInject = "1"
-datastorePreferences = "1.3.0-alpha07"
+datastorePreferences = "1.3.0-alpha08"
 pagingRuntimeKtx = "3.4.2"
 coil = "2.7.0"
 mockk = "1.14.9"
@@ -53,6 +54,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
@@ -89,11 +91,14 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
 
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

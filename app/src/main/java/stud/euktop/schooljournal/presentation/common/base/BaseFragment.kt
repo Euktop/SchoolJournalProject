@@ -4,10 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
@@ -61,11 +57,11 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
     protected open fun updateLoading(state: STATE) {}
 
     protected abstract fun setupUI()
-    protected abstract fun updateState(state: STATE)
+    protected abstract fun updateState(state: STATE = viewModel.state.value)
     protected lateinit var messages: MessageDisplayer
     protected open fun updateMessageEvent(event: MessageEvent) {
         when (event) {
-            is MessageEvent.MessageEvent -> messages.message(event.param)
+            is MessageEvent.Message -> messages.message(event.param)
         }
     }
 

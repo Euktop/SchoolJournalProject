@@ -6,7 +6,9 @@ import stud.euktop.domain.utils.validation.NameLetterOnlyValidator
 import stud.euktop.domain.utils.validation.PhoneValidator
 import stud.euktop.domain.utils.validation.Validator
 import stud.euktop.schooljournal.presentation.common.base.BaseState
+import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 data class ProfileState(
     override val isLoading: Boolean = false,
@@ -18,6 +20,8 @@ data class ProfileState(
     val email: EmailValidator = EmailValidator(),
     val phone: PhoneValidator = PhoneValidator(),
 ) : BaseState<ProfileState>() {
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+
     fun isButtonActive() = Validator.isAllValidate(lastName, firstName, surName, email, phone)
             && Validator.isAllNullValidate(gender, birthDay)
 

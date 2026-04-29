@@ -16,4 +16,9 @@
         app:destination="@id/nav_auth"
         app:popUpTo="@id/splashFragment"
         app:popUpToInclusive="true" />
+    <action
+        android:id="@+id/action_global_nav_main_main"
+        app:destination="@id/nav_main_main"
+        app:popUpTo="@id/nav1"
+        app:popUpToInclusive="true" />
 </navigation>

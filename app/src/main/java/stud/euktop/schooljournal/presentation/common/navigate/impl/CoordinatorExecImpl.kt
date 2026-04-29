@@ -4,7 +4,9 @@ import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHandler
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class CoordinatorExecImpl @Inject constructor(
     private val errorHandler: ErrorHandler
 ) : CoordinatorExec {

@@ -19,7 +19,14 @@ class SnackBarMessages(
             view.context.resources.getInteger(R.integer.duration_notification)
         ).apply { }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
             override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                param.action()
+                when (event) {
+                    DISMISS_EVENT_ACTION,
+                    DISMISS_EVENT_MANUAL,
+                    DISMISS_EVENT_CONSECUTIVE,
+                    DISMISS_EVENT_TIMEOUT -> param.action?.invoke()
+
+                    DISMISS_EVENT_SWIPE -> if (param.dismiss == null) param.action?.invoke() else param.dismiss()
+                }
                 super.onDismissed(transientBottomBar, event)
             }
         }).show()

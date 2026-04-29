@@ -1,14 +1,18 @@
 package stud.euktop.schooljournal.presentation.auth.profile
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import stud.euktop.domain.model.Gender
+import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
+    private val authCoordinator: AuthCoordinator
 ) : BaseViewModel<ProfileState, Unit>() {
     override fun initState() = ProfileState()
 
@@ -38,5 +42,22 @@ class ProfileViewModel @Inject constructor(
 
     fun phoneSet(value: String) {
         _state.update { it.copy(phone = it.phone.copy(value)) }
+    }
+
+    fun onNextClick() {
+        executeLoadingBlockSync(
+            block = {
+                authCoordinator.saveProfile(
+                    lastName = state.value.lastName.getValidate(),
+                    firstName = state.value.firstName.getValidate(),
+                    surName = state.value.surName.getValidate(),
+                    gender = state.value.gender ?: Gender.NONE,
+                    birthDay = state.value.birthDay ?: Date(),
+                    email = state.value.email.getValidate(),
+                    phone = state.value.phone.getValidate()
+                )
+            }
+        )
+        viewModelScope.launch { _event.emit(Unit) }
     }
 }

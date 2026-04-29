@@ -39,4 +39,21 @@
     <string name="error_invalid_credentials">Incorrect login or password.</string>
     <string name="action_retry">Retry.</string>
     <string name="action_ok">OK.</string>
+    <string name="error_loading">Error Loading</string>
+    <string name="class_grade_letter_format" translatable="false">%d%s</string>
+    <string name="tv_lessons_time" translatable="false">%1$s - %2$s</string>
+    <string name="without_a_theme">Without a theme</string>
+    <string name="without_a_room_number" translatable="false">-</string>
+    <string name="tv_student_name" translatable="false">%1$s %2$s</string>
+    <string name="mock_grade_saved">Rating saved</string>
+    <string name="users">Users</string>
+    <string name="classes">Classes</string>
+    <string name="objects">Subjects</string>
+    <string name="appointments">Assignments</string>
+    <string name="average_mark_format">Average score: %.1f</string>
+    <string name="exit">Exit</string>
+    <string name="logout_message">You are logged out</string>
+    <string name="press_again_to_exit">Press again to exit</string>
+    <string name="incorrect_lastname">Incorrect lastname</string>
+    <string name="incorrect_surname">Incorrect surname</string>
 </resources>

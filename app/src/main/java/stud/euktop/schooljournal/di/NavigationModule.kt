@@ -4,6 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import stud.euktop.data.repository.AuthRepositoryImpl
+import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHandler
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
@@ -19,17 +21,13 @@ import javax.inject.Singleton
 abstract class NavigationModule {
     @Binds
     @Singleton
-    abstract fun bindCoordinatorExec(coordinatorExec: CoordinatorExecImpl): CoordinatorExec
+    abstract fun bindsErrorHandler(errorHandlerImpl: ErrorHandlerImpl): ErrorHandler
 
     @Binds
     @Singleton
-    abstract fun bindErrorHandler(errorHandlerImpl: ErrorHandlerImpl): ErrorHandler
+    abstract fun bindsNavigationManager(navigationManager: NavigationManagerImpl): NavigationManager
 
     @Binds
     @Singleton
-    abstract fun bindNavigationManager(navigationManager: NavigationManagerImpl): NavigationManager
-
-    @Binds
-    @Singleton
-    abstract fun bindRouterSplash(routerSplash: RouterImpl): RouterSplash
+    abstract fun bindsRouterSplash(routerSplash: RouterImpl): RouterSplash
 }

@@ -6,7 +6,7 @@ data class Profile(
     val userId: Int,
     val lastName: String,
     val firstName: String,
-    val surName: String,
+    val surName: String?,
     val gender: Gender,
     val birthDay: Date?,
     val email: String,

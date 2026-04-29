@@ -6,7 +6,9 @@ import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHandler
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ErrorHandlerImpl @Inject constructor() : ErrorHandler {
     override suspend fun exec(throwable: Throwable): CoordinatorResult.Error {
         val (msgId, navCmd) = when (throwable) {

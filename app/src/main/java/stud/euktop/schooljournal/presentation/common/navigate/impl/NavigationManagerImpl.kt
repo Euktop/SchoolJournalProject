@@ -1,7 +1,10 @@
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
+import android.content.Context
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
+import androidx.navigation.NavOptions.*
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
@@ -29,22 +32,37 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
         controllers.remove(key)
     }
 
-    override fun navigate(cmd: NavCommand) {
-        when (cmd) {
-            is NavCommand.ToDestination -> {
-                val targetKey = cmd.targetKey
-                val nav = if (targetKey != null) controllers[targetKey] else mainNavController
-                if (nav != null) {
-                    execute(nav, cmd)
-                } else {
-                    tasks.addLast(Pair(targetKey, cmd))
+    override fun navigate(vararg cmds: NavCommand) {
+        cmds.forEach { cmd ->
+            logger?.let {
+                val description = when (cmd) {
+                    is NavCommand.ToDestination -> {
+                        val name = resourceName(cmd.destId)
+                        "ToDestination($name, args=${cmd.args})"
+                    }
+
+                    is NavCommand.Back -> "Back"
+                    is NavCommand.ToAction -> cmd.directions::class.simpleName
+                }
+                it.d(toSimpleTag(), "Navigate", description)
+            }
+            val (nav, key) = when (cmd) {
+                is NavCommand.ToDestination -> {
+                    val targetKey = cmd.targetKey
+                    val nav = if (targetKey != null) controllers[targetKey] else mainNavController
+                    nav to targetKey
+                }
+
+                is NavCommand.ToAction,
+                is NavCommand.Back -> {
+                    val nav = controllers.values.lastOrNull() ?: mainNavController
+                    nav to null
                 }
             }
-
-            is NavCommand.Back -> {
-                val nav = controllers.values.lastOrNull() ?: mainNavController
-                nav?.popBackStack() ?: tasks.addLast(Pair(null, cmd))
-            }
+            if (nav != null)
+                execute(nav, cmd)
+            else
+                tasks.addLast(Pair(key, cmd))
         }
     }
 
@@ -64,7 +82,7 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
         when (command) {
             is NavCommand.ToDestination -> {
                 if (command.popUpTo != null) {
-                    val navOptions = NavOptions.Builder()
+                    val navOptions = Builder()
                         .setPopUpTo(command.popUpTo, command.inclusive)
                         .build()
                     nav.navigate(command.destId, command.args, navOptions)
@@ -74,6 +92,17 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
             }
 
             NavCommand.Back -> nav.popBackStack()
+            is NavCommand.ToAction -> nav.navigate(command.directions)
+        }
+    }
+
+    private fun resourceName(resId: Int): String {
+        val context: Context? =
+            mainNavController?.context ?: controllers.values.firstOrNull()?.context
+        return try {
+            context?.resources?.getResourceEntryName(resId) ?: resId.toString()
+        } catch (_: Exception) {
+            resId.toString()
         }
     }
 }

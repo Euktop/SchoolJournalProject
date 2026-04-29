@@ -12,6 +12,7 @@
     <stud.euktop.uikit.components.input.SchJTextInputEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:cursorVisible="false"
         android:focusable="false"
         android:inputType="none"
         android:singleLine="true"
