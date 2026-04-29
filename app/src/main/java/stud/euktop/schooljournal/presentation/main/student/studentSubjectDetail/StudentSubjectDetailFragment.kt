@@ -9,7 +9,23 @@ import stud.euktop.schooljournal.databinding.FragmentStudentSubjectDetailBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.uikit.components.lineChart.SchJLineChartState
 import stud.euktop.uikit.components.lineChart.SchJLinePoint
-
+/**
+ * Детальный экран успеваемости по предмету (ученик).
+ *
+ * Назначение: отображает динамику успеваемости (график) и список всех оценок/пропусков
+ * по выбранному предмету.
+ *
+ * Роли: STUDENT, PARENT
+ *
+ * Функционал:
+ * - Получение subjectId из аргументов навигации
+ * - Загрузка списка оценок через StudentRepository.getSubjectMarks(studentId, subjectId)
+ * - Построение линейного графика (SchJLineChart) по датам (значения 2-5, пропуски = 0)
+ * - Отображение списка оценок в RecyclerView: дата, оценка/код пропуска, комментарий
+ * - Обработка пустого состояния (если нет оценок)
+ *
+ * @see StudentSubjectDetailViewModel
+ */
 //stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentSubjectDetailFragment
 @AndroidEntryPoint
 class StudentSubjectDetailFragment : BaseFragment<

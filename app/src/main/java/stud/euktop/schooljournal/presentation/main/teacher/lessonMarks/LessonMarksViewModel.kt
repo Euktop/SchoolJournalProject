@@ -8,7 +8,16 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
-
+/**
+ * ViewModel для экрана оценок за урок.
+ *
+ * Назначение: загружает список учеников с их оценками/пропусками.
+ *
+ * Функционал:
+ * - Извлечение lessonId из SavedStateHandle
+ * - State: marks (List<StudentMarkItem>), isLoading
+ * - loadMarks() – вызов LessonMarksRepository.getMarks()
+ */
 @HiltViewModel
 class LessonMarksViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,

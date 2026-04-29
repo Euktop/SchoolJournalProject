@@ -17,10 +17,30 @@ import stud.euktop.schooljournal.presentation.common.utils.setup
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import stud.euktop.uikit.components.datePicker.SchJDatePicker
 import stud.euktop.uikit.components.input.select.SchJSelect
-import java.sql.Date
-import java.util.Calendar
 import javax.inject.Inject
 
+/**
+ * Экран регистрации (заполнение профиля пользователя).
+ *
+ * Назначение: собирает персональные данные нового пользователя:
+ * - Фамилия, имя, отчество (обязательно только имя и фамилия? – проверьте валидатор)
+ * - Пол, дата рождения (необязательно)
+ * - Email (обязательно, уникальный)
+ * - Телефон (необязательно, с валидацией формата)
+ *
+ * Роли: неавторизованные пользователи, проходящие регистрацию
+ *
+ * Функционал:
+ * - Ввод данных с валидацией на лету
+ * - Выбор даты рождения через календарь (SchJDatePicker)
+ * - Выбор пола через выпадающий список (SchJSelect)
+ * - Сохранение данных через AuthCoordinator.saveProfile
+ * - Переход к экрану CreatePasswordFragment после успешного сохранения
+ * - Отображение загрузки при сохранении
+ *
+ * @see ProfileViewModel
+ * @see stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
+ */
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentRegBinding, ProfileViewModel, ProfileState, Unit>() {
     override fun inflateBinding(
@@ -59,6 +79,7 @@ class ProfileFragment : BaseFragment<FragmentRegBinding, ProfileViewModel, Profi
                 datePicker.showUnique()
             }
             focusTrack.onFocusChanged = { updateState() }
+            nextButton.setOnClickListener { viewModel.onNextClick() }
         }
     }
 

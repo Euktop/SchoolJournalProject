@@ -10,6 +10,22 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import java.util.Date
 import javax.inject.Inject
 
+/**
+ * ViewModel для экрана регистрации.
+ *
+ * Назначение: управляет валидацией полей профиля и временным хранением данных
+ * через AuthCoordinator.
+ *
+ * Функционал:
+ * - State: поля lastName, firstName, surName, gender, birthDay, email, phone
+ * - Методы обновления каждого поля
+ * - Валидация всех полей через соответствующие валидаторы
+ * - onNextClick() – сохраняет профиль через AuthCoordinator.saveProfile
+ * - После сохранения отправляет событие Unit для перехода к CreatePasswordFragment
+ *
+ * @see ProfileFragment
+ * @see AuthCoordinator
+ */
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator

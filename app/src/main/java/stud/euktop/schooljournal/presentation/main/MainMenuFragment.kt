@@ -13,7 +13,23 @@ import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
 import javax.inject.Inject
-
+/**
+ * ВРЕМЕННЫЙ экран главного меню.
+ *
+ * Назначение: служит для навигации по функциональным экранам во время разработки.
+ * Показывает кнопки для всех ролей (не адаптивно).
+ *
+ * Роли: все (но для демонстрации – любые)
+ *
+ * Функционал:
+ * - Набор кнопок с явными переходами к TeacherClassesFragment, StudentSubjectsFragment,
+ *   AdminPanelFragment, ProfileFragment и др.
+ * - НЕ ФИНАЛЬНАЯ ВЕРСИЯ: будет заменён на динамическое меню на основе ролей.
+ *
+ * TODO: После реализации всех экранов и определения ролей, переделать на динамическую генерацию кнопок.
+ *
+ * @see MainMenuViewModel (пока нет, будет создан при переделке)
+ */
 @AndroidEntryPoint
 class MainMenuFragment : Fragment() {
 

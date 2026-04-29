@@ -7,7 +7,16 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
-
+/**
+ * ViewModel для экрана профиля.
+ *
+ * Назначение: загружает данные текущего пользователя.
+ *
+ * Функционал:
+ * - State: userName, email, roleNames, isLoading
+ * - loadProfile() – вызов AuthRepository.getCurrentUser()
+ * - При успехе обновляет state
+ */
 // ProfileViewModel.kt
 @HiltViewModel
 class ProfileViewModel @Inject constructor(

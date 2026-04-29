@@ -13,7 +13,22 @@ import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
 import javax.inject.Inject
-
+/**
+ * Экран списка уроков по выбранному классу и предмету (учитель).
+ *
+ * Назначение: отображает все уроки (Lessons) для заданных classId и subjectId.
+ *
+ * Роли: TEACHER
+ *
+ * Функционал:
+ * - Получение аргументов навигации (classId, subjectId) из SavedStateHandle
+ * - Загрузка списка уроков через TeacherLessonsRepository.getLessons()
+ * - Отображение уроков в RecyclerView с датой, темой, временем, кабинетом, учителем
+ * - При клике на урок переход к экрану LessonMarksFragment с передачей lessonId
+ * - Pull-to-refresh (опционально)
+ *
+ * @see TeacherLessonsViewModel
+ */
 @AndroidEntryPoint
 class TeacherLessonsFragment : BaseFragment<
         FragmentTeacherLessonsBinding,

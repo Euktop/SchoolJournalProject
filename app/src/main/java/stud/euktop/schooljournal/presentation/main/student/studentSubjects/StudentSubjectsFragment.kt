@@ -14,6 +14,23 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.Navigatio
 import javax.inject.Inject
 
 //stud.euktop.schooljournal.presentation.main.student.studentSubjects.StudentSubjectsFragment
+/**
+ * Экран списка предметов ученика с успеваемостью.
+ *
+ * Назначение: отображает для текущего ученика список всех предметов,
+ * средний балл и итоговую оценку (если есть).
+ *
+ * Роли: STUDENT, PARENT (для выбранного ребёнка)
+ *
+ * Функционал:
+ * - Загрузка данных через StudentRepository.getSubjectsSummary(studentId)
+ * - Отображение в RecyclerView: название предмета, средний балл, итог
+ * - При клике на предмет переход к детальному экрану StudentSubjectDetailFragment
+ *   с передачей subjectId
+ * - Обработка пустого состояния
+ *
+ * @see StudentSubjectsViewModel
+ */
 @AndroidEntryPoint
 class StudentSubjectsFragment : BaseFragment<
         FragmentStudentSubjectsBinding,

@@ -7,7 +7,20 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
-
+/**
+ * ViewModel для экрана создания пароля.
+ *
+ * Назначение: управляет вводом и валидацией паролей.
+ *
+ * Функционал:
+ * - State: passwordValidator, nextPasswordNextValidator, isLoading
+ * - Методы обновления полей пароля
+ * - isNextActive() – проверяет валидность и совпадение паролей
+ * - onSaveClick() – вызывает AuthCoordinator.register с паролем
+ * - При успехе отправляет событие Unit для перехода в главное меню
+ *
+ * @see CreatePasswordFragment
+ */
 @HiltViewModel
 class CreatePasswordViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator,

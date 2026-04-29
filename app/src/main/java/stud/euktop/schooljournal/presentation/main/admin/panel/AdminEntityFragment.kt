@@ -11,7 +11,24 @@ import stud.euktop.domain.model.TeacherAssignment
 import stud.euktop.domain.model.UserInfo
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-
+/**
+ * Обобщённый фрагмент для отображения списка сущностей в админ-панели.
+ *
+ * Назначение: отображает одну из сущностей (Users, Classes, Subjects, TeacherAssignments)
+ * в виде списка с возможностью редактирования и удаления.
+ *
+ * Роли: ADMIN, DIRECTOR
+ *
+ * Функционал:
+ * - Получение типа сущности (EntityType) при создании фрагмента
+ * - Использует shared ViewModel родительского AdminPanelFragment
+ * - Отображает список через AdminAdapter с кнопками "Изменить" и "Удалить"
+ * - При клике на "Изменить" открывается диалог/экран редактирования (пока TODO)
+ * - При клике на "Удалить" – подтверждение и вызов репозитория (TODO после реализации CRUD-процедур)
+ *
+ * @param T тип сущности (UserInfo, ClassInfo, Subject, TeacherAssignment)
+ * @see AdminPanelViewModel
+ */
 class AdminEntityFragment<out T : Any>(private val entityType: EntityType) : BaseFragment<
         FragmentAdminEntityBinding,
         AdminPanelViewModel,

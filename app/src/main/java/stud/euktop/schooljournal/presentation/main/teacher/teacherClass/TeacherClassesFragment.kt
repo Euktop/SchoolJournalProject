@@ -14,6 +14,23 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.Navigatio
 import stud.euktop.schooljournal.presentation.main.teacher.teacherLessons.TeacherLessonsViewModel
 import javax.inject.Inject
 
+/**
+ * Экран списка классов и предметов для учителя.
+ *
+ * Назначение: отображает все пары (класс, предмет), которые учитель ведёт
+ * в текущем учебном году (на основе TeacherClassSubjects).
+ *
+ * Роли: TEACHER
+ *
+ * Функционал:
+ * - Загрузка списка через TeacherRepository.getTeacherClasses()
+ * - Отображение элементов в RecyclerView (MaterialCardView с названием класса и предмета)
+ * - При клике на элемент переход к экрану TeacherLessonsFragment
+ *   с передачей classId и subjectId через аргументы навигации
+ * - Обработка пустого состояния и ошибок загрузки
+ *
+ * @see TeacherClassesViewModel
+ */
 @AndroidEntryPoint
 class TeacherClassesFragment : BaseFragment<
         FragmentTeacherClassesBinding,

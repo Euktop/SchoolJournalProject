@@ -8,7 +8,25 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminPanelBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-
+/**
+ * Административная панель (главный экран админа).
+ *
+ * Назначение: предоставляет доступ к управлению сущностями через вкладки (TabLayout + ViewPager2):
+ * - Пользователи (Users)
+ * - Классы (Classes)
+ * - Предметы (Subjects)
+ * - Назначения учителей (TeacherAssignments)
+ *
+ * Роли: ADMIN, DIRECTOR
+ *
+ * Функционал:
+ * - Загрузка всех необходимых данных (пользователи, классы, предметы, назначения)
+ * - Переключение между вкладками без перезагрузки данных
+ * - Каждая вкладка представлена отдельным фрагментом (AdminEntityFragment)
+ * - Кнопка обновления (refresh) для всей панели
+ *
+ * @see AdminPanelViewModel
+ */
 //stud.euktop.schooljournal.presentation.main.admin.adminPanel.AdminPanelFragment
 @AndroidEntryPoint
 class AdminPanelFragment : BaseFragment<

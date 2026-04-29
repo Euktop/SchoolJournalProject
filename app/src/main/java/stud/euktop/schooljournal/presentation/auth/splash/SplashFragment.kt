@@ -13,7 +13,21 @@ import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.ActivitySplashBinding
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
 import javax.inject.Inject
-
+/**
+ * Сплэш-экран, отображаемый при запуске приложения.
+ *
+ * Назначение: показать заставку с логотипом и названием,
+ * выполнить минимальную задержку (из ресурсов), затем перейти к основному экрану.
+ *
+ * Роли: любой пользователь (неавторизованный или авторизованный)
+ *
+ * Функционал:
+ * - Отображение статического контента (изображение + текст)
+ * - Задержка на время, указанное в integers.xml (delay_loading)
+ * - Перенаправление через RouterSplash.navigateAction()
+ *
+ * @see RouterSplash
+ */
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
     @Inject

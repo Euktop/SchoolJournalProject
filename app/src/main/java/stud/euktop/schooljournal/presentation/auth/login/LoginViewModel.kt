@@ -8,9 +8,24 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.Coordinat
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
 
+/**
+ * ViewModel для экрана авторизации.
+ *
+ * Назначение: управляет состоянием полей ввода, валидацией и процессом входа.
+ *
+ * Функционал:
+ * - Хранит состояние (LoginState): emailValidator, passwordValidator, isLoading
+ * - Методы обновления email и пароля
+ * - Метод onLoginClick() – вызывает AuthCoordinator.login
+ * - При успехе отправляет событие NavigateToMain для перехода в главное меню
+ *
+ * @see LoginFragment
+ * @see LoginState
+ * @see LoginEvent
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authCoordinator: AuthCoordinator,  // добавить
+    private val authCoordinator: AuthCoordinator,
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager
 ) : BaseViewModel<LoginState, LoginEvent>() {

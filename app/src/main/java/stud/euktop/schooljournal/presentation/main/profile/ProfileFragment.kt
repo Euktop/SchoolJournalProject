@@ -9,7 +9,21 @@ import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
-
+/**
+ * Экран профиля авторизованного пользователя.
+ *
+ * Назначение: показывает информацию о текущем пользователе (ФИО, email, список ролей).
+ *
+ * Роли: все авторизованные пользователи (ученик, учитель, родитель, администратор)
+ *
+ * Функционал:
+ * - Загрузка данных через AuthRepository.getCurrentUser()
+ * - Отображение инициалов в кружке, имени, email
+ * - Список ролей в виде Chip-ов
+ * - Кнопка выхода (logout) – очистка сессии и переход на экран входа
+ *
+ * @see ProfileViewModel
+ */
 //stud.euktop.schooljournal.presentation.main.profile.ProfileFragment
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<

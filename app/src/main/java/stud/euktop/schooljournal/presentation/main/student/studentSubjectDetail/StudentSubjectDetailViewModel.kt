@@ -8,7 +8,16 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
-
+/**
+ * ViewModel для детального экрана предмета.
+ *
+ * Назначение: загружает историю оценок по предмету.
+ *
+ * Функционал:
+ * - Извлечение subjectId из SavedStateHandle
+ * - State: marks (List<StudentSubjectMark>), isLoading
+ * - loadDetails() – вызов StudentRepository.getSubjectMarks(studentId, subjectId)
+ */
 @HiltViewModel
 class StudentSubjectDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,

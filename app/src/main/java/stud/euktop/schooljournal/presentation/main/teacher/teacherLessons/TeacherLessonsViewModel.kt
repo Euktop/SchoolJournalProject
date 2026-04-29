@@ -8,7 +8,16 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
-
+/**
+ * ViewModel для экрана уроков учителя.
+ *
+ * Назначение: загружает уроки по переданным classId и subjectId.
+ *
+ * Функционал:
+ * - Извлечение аргументов (classId, subjectId) из SavedStateHandle
+ * - State: lessons (List<TeacherLessonItem>), isLoading
+ * - loadLessons() – вызов TeacherLessonsRepository.getLessons()
+ */
 @HiltViewModel
 class TeacherLessonsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,

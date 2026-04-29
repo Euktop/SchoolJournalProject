@@ -11,7 +11,17 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
-
+/**
+ * ViewModel для административной панели.
+ *
+ * Назначение: загружает и хранит все справочные данные для администрирования.
+ *
+ * Функционал:
+ * - State: users, classes, subjects, assignments (каждый List<...>), isLoading
+ * - refreshAll() – параллельная загрузка через AdminRepository
+ * - Обновление state после успешной загрузки
+ * - Обработка ошибок частичной загрузки (если один из запросов упал)
+ */
 @Suppress("UNCHECKED_CAST")
 @HiltViewModel
 class AdminPanelViewModel @Inject constructor(
