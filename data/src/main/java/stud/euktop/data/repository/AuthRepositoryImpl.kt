@@ -9,16 +9,21 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepositoryImpl @Inject constructor() : AuthRepository {
     override suspend fun login(
-        login: String,
-        passwordHash: String
-    ): Result<Profile> = Result.success(MockData.currentUser)
+        login: String, passwordHash: String
+    ): Result<Profile> {
+        MockData.delay()
+        return Result.success(MockData.currentUser)
+    }
 
     override suspend fun registration(
-        profile: Profile,
-        password: String
-    ): Result<Profile> = Result.success(MockData.currentUser)
+        profile: Profile, password: String
+    ): Result<Profile> {
+        MockData.delay()
+        return Result.success(MockData.currentUser)
+    }
 
     override suspend fun getCurrentUser(): Result<Profile> {
+        MockData.delay()
         return Result.success(MockData.currentUser)
     }
 }

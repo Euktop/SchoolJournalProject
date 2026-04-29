@@ -9,12 +9,16 @@ import javax.inject.Singleton
 
 @Singleton
 class StudentRepositoryImpl @Inject constructor() : StudentRepository {
-    override suspend fun getSubjectsSummary(studentId: Int): Result<List<StudentSubjectSummary>> =
-        Result.success(MockData.studentSubjectsSummary)
+    override suspend fun getSubjectsSummary(studentId: Int): Result<List<StudentSubjectSummary>> {
+        MockData.delay()
+        return Result.success(MockData.studentSubjectsSummary)
+    }
 
     override suspend fun getSubjectMarks(
         studentId: Int,
         subjectId: Int
-    ): Result<List<StudentSubjectMark>> =
-        Result.success(MockData.studentSubjectMarks)
+    ): Result<List<StudentSubjectMark>> {
+        MockData.delay()
+        return Result.success(MockData.studentSubjectMarks)
+    }
 }

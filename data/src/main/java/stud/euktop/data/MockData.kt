@@ -1,5 +1,6 @@
 package stud.euktop.data
 
+import kotlinx.coroutines.delay
 import stud.euktop.domain.model.AbsenceTypes
 import stud.euktop.domain.model.AccountStatus
 import stud.euktop.domain.model.ClassInfo
@@ -17,6 +18,10 @@ import stud.euktop.domain.model.UserInfo
 import java.util.Date
 
 internal object MockData {
+    suspend fun delay() {
+        delay(500)
+    }
+
     val classes = listOf(
         TeacherClassItem(1, "Школа №1", 5, "А", 2025, 2026, 1, "Математика"),
         TeacherClassItem(2, "Школа №1", 5, "А", 2025, 2026, 2, "Русский язык"),

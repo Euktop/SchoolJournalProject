@@ -9,6 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class TeacherLessonsRepositoryImpl @Inject constructor() : TeacherLessonsRepository {
     override suspend fun getLessons(classId: Int, subjectId: Int): Result<List<TeacherLessonItem>> {
+        MockData.delay()
         return Result.success(MockData.lessons)
     }
 }
