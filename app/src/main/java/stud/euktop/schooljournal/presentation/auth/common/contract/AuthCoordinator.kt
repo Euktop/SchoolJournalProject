@@ -1,7 +1,7 @@
 package stud.euktop.schooljournal.presentation.auth.common.contract
 
-import stud.euktop.domain.model.Gender
-import stud.euktop.domain.model.Profile
+import stud.euktop.domain.model.user.Gender
+import stud.euktop.domain.model.auth.Profile
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import java.util.Date
 

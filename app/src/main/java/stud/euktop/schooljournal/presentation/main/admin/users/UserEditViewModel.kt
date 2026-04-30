@@ -3,11 +3,13 @@ package stud.euktop.schooljournal.presentation.main.admin.users
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
-import stud.euktop.domain.model.AccountStatus
-import stud.euktop.domain.model.Role
-import stud.euktop.domain.model.RoleSchools
-import stud.euktop.domain.model.UserInfo
-import stud.euktop.domain.repository.AdminRepository
+import stud.euktop.domain.model.user.AccountStatus
+import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.user.RoleSchools
+import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.repository.SchoolAdminRepository
+import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
@@ -18,7 +20,8 @@ class UserEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager,
-    private val adminRepository: AdminRepository
+    private val schoolAdminRepository: SchoolAdminRepository,
+    private val userAdminRepository: UserAdminRepository
 ) : BaseViewModel<UserEditState, UserEditEvent>() {
 
     companion object {
@@ -37,7 +40,7 @@ class UserEditViewModel @Inject constructor(
 
     private fun loadInitialData() {
         executeWithCoordinatorAndLoadingSync(
-            block = { adminRepository.getSchools() },
+            block = { schoolAdminRepository.getSchools() },
             onSuccess = { schools ->
                 _state.update { it.copy(availableSchools = schools) }
             }
@@ -47,7 +50,7 @@ class UserEditViewModel @Inject constructor(
 
     private fun loadUser() {
         executeWithCoordinatorAndLoadingSync(
-            block = { adminRepository.getUser(userId) },
+            block = { userAdminRepository.getUser(userId) },
             onSuccess = { user ->
                 val firstRoleSchool = user.roles.firstOrNull()
                 _state.update {
@@ -60,7 +63,7 @@ class UserEditViewModel @Inject constructor(
                         phone = it.phone.copy(user.phone ?: ""),
                         accountStatus = user.accountStatus,
                         selectedRole = firstRoleSchool?.role,
-                        selectedSchoolId = firstRoleSchool?.schoolId
+                        selectedSchool = firstRoleSchool?.school
                     )
                 }
             }
@@ -99,13 +102,22 @@ class UserEditViewModel @Inject constructor(
         _state.update {
             it.copy(
                 selectedRole = role,
-                selectedSchoolId = if (role == Role.ADMIN || role == null) null else it.selectedSchoolId
+                selectedSchool = if (role == Role.ADMIN || role == null) null else it.selectedSchool
             )
         }
     }
 
-    fun updateSelectedSchool(schoolId: Int?) {
-        _state.update { it.copy(selectedSchoolId = schoolId) }
+    fun updateSchool(school: School) {
+        _state.update { it.copy(selectedSchool = school) }
+    }
+
+    fun loadSchools(query: String) {
+        executeWithCoordinatorAndLoadingSync(
+            block = { schoolAdminRepository.getSchools(query) },
+            onSuccess = { schools ->
+                _state.update { it.copy(availableSchools = schools) }
+            }
+        )
     }
 
     fun save() {
@@ -113,7 +125,7 @@ class UserEditViewModel @Inject constructor(
         if (!state.isFormValid()) return
 
         val roles = state.selectedRole?.let { role ->
-            listOf(RoleSchools(role, state.selectedSchoolId))
+            listOf(RoleSchools(role, state.selectedSchool))
         } ?: emptyList()
 
         val user = UserInfo(
@@ -129,11 +141,8 @@ class UserEditViewModel @Inject constructor(
 
         executeWithCoordinatorAndLoadingSync(
             block = {
-                if (state.isEditMode()) {
-                    adminRepository.updateUser(user)
-                } else {
-                    adminRepository.addUser(user, state.password.value)
-                }
+                if (state.isEditMode()) userAdminRepository.updateUser(user)
+                else userAdminRepository.addUser(user, state.password.value)
             },
             onSuccess = { _event.emit(UserEditEvent.NavigateBack) }
         )

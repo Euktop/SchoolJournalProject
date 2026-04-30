@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.ClassInfo
-import stud.euktop.domain.model.Subject
-import stud.euktop.domain.model.TeacherAssignment
-import stud.euktop.domain.model.UserInfo
+import stud.euktop.domain.model.school.ClassInfo
+import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.model.assignment.TeacherAssignment
+import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.schooljournal.R as R
 import stud.euktop.uikit.R as R2
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
@@ -16,6 +16,7 @@ import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.submitList
+import stud.euktop.schooljournal.presentation.main.admin.assignments.TeacherAssignmentEditViewModel
 import stud.euktop.schooljournal.presentation.main.admin.classes.ClassEditViewModel
 import stud.euktop.schooljournal.presentation.main.admin.subjects.SubjectEditViewModel
 import stud.euktop.schooljournal.presentation.main.admin.users.UserEditViewModel
@@ -79,7 +80,7 @@ class AdminEntityFragment : BaseFragment<
 
     private fun createClassAdapter(): AdminAdapter<ClassInfo> {
         return AdminAdapter(
-            toText = { "${it.grade}${it.letter} - ${it.schoolName}" },
+            toText = { "${it.grade}${it.letter} - ${it.school.name}" },
             onEditClick = { classInfo ->
                 navigationManager.navigate(
                     NavCommand.ToDestination(
@@ -129,9 +130,24 @@ class AdminEntityFragment : BaseFragment<
 
     private fun createAssignmentAdapter(): AdminAdapter<TeacherAssignment> {
         return AdminAdapter(
-            toText = { "${it.teacherName} → ${it.className} · ${it.subjectName}" },
-            onEditClick = { /* TODO */ },
-            onDeleteClick = { /* TODO */ }
+            toText = { "${it.teacher.fullName} → ${it.classInfo.name} · ${it.subject.name}" },
+            onEditClick = { assignment ->
+                navigationManager.navigate(
+                    NavCommand.ToDestination(
+                        R.id.teacherAssignmentEditFragment,
+                        args = Bundle().apply {
+                            putInt(TeacherAssignmentEditViewModel.KEY_ASSIGNMENT_ID, assignment.id)
+                        }
+                    )
+                )
+            },
+            onDeleteClick = { assignment ->
+                showDeleteConfirmation(
+                    getString(R.string.delete_assignment_confirmation, assignment.teacher.fullName)
+                ) {
+                    viewModel.deleteAssignment(assignment.id)
+                }
+            }
         )
     }
 

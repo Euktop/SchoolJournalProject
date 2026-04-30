@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import stud.euktop.domain.model.AbsenceTypes
-import stud.euktop.domain.model.StudentMarkItem
+import stud.euktop.domain.model.attendance.StudentMarkItem
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.utils.toUI
 import stud.euktop.uikit.components.button.SchJButtonState

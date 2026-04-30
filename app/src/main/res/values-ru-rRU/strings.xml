@@ -85,4 +85,10 @@
     <string name="incorrect_subject_name">Введите название предмета</string>
     <string name="delete_subject_confirmation">Удалить предмет %s?</string>
     <string name="description">Описание</string>
+    <string name="edit_assignment">Редактирование назначения</string>
+    <string name="subject">Предмет</string>
+    <string name="valid_from">Дата начала (дд.мм.гггг)</string>
+    <string name="valid_to">Дата окончания (дд.мм.гггг)</string>
+    <string name="is_primary">Основное назначение</string>
+    <string name="delete_assignment_confirmation">Удалить назначение учителя %s?</string>
 </resources>

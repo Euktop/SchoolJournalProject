@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/gender" />
 
-                    <stud.euktop.uikit.components.input.select.SchJSelect
+                    <stud.euktop.uikit.components.input.select.def.SchJSelect
                         android:id="@+id/genderSelect"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

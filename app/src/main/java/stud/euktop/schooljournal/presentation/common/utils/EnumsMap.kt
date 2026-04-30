@@ -1,10 +1,10 @@
 package stud.euktop.schooljournal.presentation.common.utils
 
-import stud.euktop.domain.model.AccountStatus
-import stud.euktop.domain.model.Gender
-import stud.euktop.domain.model.Role
+import stud.euktop.domain.model.user.AccountStatus
+import stud.euktop.domain.model.user.Gender
+import stud.euktop.domain.model.auth.Role
 import stud.euktop.schooljournal.R
-import stud.euktop.domain.model.AbsenceTypes as t1
+import stud.euktop.domain.model.attendance.AbsenceTypes as t1
 import stud.euktop.uikit.components.markPicker.AbsenceTypes as t2
 
 fun t1.toUI(): t2 = absenceTypes.getValue(this)

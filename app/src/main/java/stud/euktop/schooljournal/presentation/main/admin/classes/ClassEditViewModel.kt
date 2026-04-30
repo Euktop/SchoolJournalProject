@@ -4,9 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.update
-import stud.euktop.domain.model.ClassInfo
-import stud.euktop.domain.model.Role
-import stud.euktop.domain.repository.AdminRepository
+import stud.euktop.domain.model.school.ClassInfo
+import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.repository.*
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.message.MessageEvent
@@ -20,7 +22,9 @@ class ClassEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager,
-    private val adminRepository: AdminRepository
+    private val schoolAdminRepository: SchoolAdminRepository,
+    private val userAdminRepository: UserAdminRepository,
+    private val classAdminRepository: ClassAdminRepository
 ) : BaseViewModel<ClassEditState, ClassEditEvent>() {
 
     companion object {
@@ -37,66 +41,58 @@ class ClassEditViewModel @Inject constructor(
 
     override fun initState() = ClassEditState(classId = classId)
 
-    /**
-     * Загружает списки школ и учителей параллельно с единой индикацией загрузки.
-     */
     private fun loadInitialData() {
         executeLoadingBlockSync {
-            val schoolsDeferred = async { adminRepository.getSchools() }
-            val teachersDeferred = async { adminRepository.getTeachersByRole(Role.TEACHER) }
+            val schoolsDeferred = async { schoolAdminRepository.getSchools() }
+            val teachersDeferred = async { userAdminRepository.getTeachersByRole(Role.TEACHER) }
 
             schoolsDeferred.await().onSuccess { schools ->
                 _state.update { it.copy(availableSchools = schools) }
             }.onFailure {
-                _messageEvent.tryEmit(
-                    MessageEvent.Message(
-                        MessageParam(R.string.error_load_schools)
-                    )
-                )
+                _messageEvent.tryEmit(MessageEvent.Message(MessageParam(R.string.error_load_schools)))
             }
             teachersDeferred.await().onSuccess { teachers ->
                 _state.update { it.copy(availableTeachers = teachers) }
             }.onFailure {
-                _messageEvent.tryEmit(
-                    MessageEvent.Message(
-                        MessageParam(R.string.error_load_teachers)
-                    )
-                )
-
+                _messageEvent.tryEmit(MessageEvent.Message(MessageParam(R.string.error_load_teachers)))
             }
         }
     }
 
-    /**
-     * Загружает данные редактируемого класса.
-     */
     private fun loadClass() {
         executeWithCoordinatorAndLoadingSync(
-            block = { adminRepository.getClass(classId) },
+            block = { classAdminRepository.getClass(classId) },
             onSuccess = { classInfo ->
+                val school = classInfo.school
+                val teacher = classInfo.teacher
                 _state.update {
                     it.copy(
                         classId = classInfo.classId,
-                        schoolId = classInfo.schoolId,
                         grade = classInfo.grade,
                         letter = it.letter.copy(classInfo.letter),
                         academicYearStart = classInfo.academicYearStart,
                         academicYearEnd = classInfo.academicYearEnd,
-                        classTeacherId = classInfo.teacherId,
-                        selectedSchoolName = classInfo.schoolName ?: "",
-                        selectedTeacherName = classInfo.teacherName ?: ""
+                        selectedSchool = school,
+                        selectedTeacher = teacher
                     )
                 }
             })
     }
 
-    // Обновление полей
-    fun updateSchool(schoolId: Int, schoolName: String) {
-        _state.update {
-            it.copy(
-                schoolId = schoolId, selectedSchoolName = schoolName
-            )
-        }
+    fun updateSchool(school: School) {
+        _state.update { it.copy(selectedSchool = school) }
+    }
+
+    fun updateClassTeacher(teacher: UserInfo) {
+        _state.update { it.copy(selectedTeacher = teacher) }
+    }
+
+    fun loadSchools(query: String) {
+        executeWithCoordinatorAndLoadingSync(
+            block = { schoolAdminRepository.getSchools(query) },
+            onSuccess = { schools ->
+                _state.update { it.copy(availableSchools = schools) }
+            })
     }
 
     fun updateGrade(grade: Int?) {
@@ -115,36 +111,23 @@ class ClassEditViewModel @Inject constructor(
         _state.update { it.copy(academicYearEnd = year) }
     }
 
-    fun updateClassTeacher(teacherId: Int?, teacherName: String) {
-        _state.update {
-            it.copy(
-                classTeacherId = teacherId, selectedTeacherName = teacherName
-            )
-        }
-    }
-
     fun save() {
         val state = _state.value
         if (!state.isFormValid()) return
 
+        val school = state.selectedSchool ?: return
         val classInfo = ClassInfo(
             classId = state.classId,
-            schoolId = state.schoolId!!,
-            schoolName = state.selectedSchoolName,
+            school = school,
             grade = state.grade!!,
             letter = state.letter.getValidate(),
             academicYearStart = state.academicYearStart!!,
             academicYearEnd = state.academicYearEnd!!,
-            teacherId = state.classTeacherId,
-            teacherName = state.selectedTeacherName
+            teacher = state.selectedTeacher
         )
-
         executeWithCoordinatorAndLoadingSync(block = {
-            if (state.isEditMode()) {
-                adminRepository.updateClass(classInfo)
-            } else {
-                adminRepository.addClass(classInfo)
-            }
+            if (state.isEditMode()) classAdminRepository.updateClass(classInfo)
+            else classAdminRepository.addClass(classInfo)
         }, onSuccess = { _event.emit(ClassEditEvent.NavigateBack) })
     }
 }

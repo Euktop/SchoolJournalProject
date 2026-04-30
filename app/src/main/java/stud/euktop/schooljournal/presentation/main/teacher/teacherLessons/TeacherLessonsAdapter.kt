@@ -5,7 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import stud.euktop.domain.model.TeacherLessonItem
+import stud.euktop.domain.model.lesson.TeacherLessonItem
+import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.uikit.databinding.ItemTeacherLessonBinding
 
@@ -33,7 +34,7 @@ class TeacherLessonsAdapter(
         fun bind(item: TeacherLessonItem) {
             binding.tvLessonTopic.text =
                 item.topic ?: binding.root.context.getString(R.string.without_a_theme)
-            binding.tvLessonDate.text = item.date
+            binding.tvLessonDate.text = item.date.toBaseString()
             binding.tvLessonTime.text =
                 binding.root.context.getString(
                     R.string.tv_lessons_time,

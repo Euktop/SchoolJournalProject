@@ -93,7 +93,32 @@
         android:label="@string/edit_subject">
         <argument
             android:name="subjectId"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherAssignmentEditFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.assignments.TeacherAssignmentEditFragment"
+        android:label="@string/edit_assignment">
+        <argument
+            android:name="assignmentId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherHomeworkListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.homework.TeacherHomeworkListFragment"
+        android:label="Домашние задания"
+        tools:layout="@layout/fragment_teacher_homework_list" />
+
+    <fragment
+        android:id="@+id/teacherHomeworkEditFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.homework.TeacherHomeworkEditFragment"
+        android:label="Редактирование ДЗ"
+        tools:layout="@layout/fragment_teacher_homework_edit">
+        <argument
+            android:name="homeworkId"
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
 </navigation>

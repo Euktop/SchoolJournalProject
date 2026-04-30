@@ -1,6 +1,6 @@
 package stud.euktop.data.map
 
-import stud.euktop.domain.model.DataError
+import stud.euktop.domain.model.common.DataError
 import stud.euktop.network.util.NetworkError
 
 internal fun NetworkError.toDataError() = when (this) {

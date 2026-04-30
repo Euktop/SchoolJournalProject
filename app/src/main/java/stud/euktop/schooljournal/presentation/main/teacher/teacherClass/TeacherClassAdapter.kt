@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import stud.euktop.domain.model.TeacherClassItem
+import stud.euktop.domain.model.lesson.TeacherClassItem
 import stud.euktop.schooljournal.R
 import stud.euktop.uikit.databinding.ItemTeacherClassBinding
 

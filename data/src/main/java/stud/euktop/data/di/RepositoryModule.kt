@@ -11,29 +11,70 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
-    @Binds
-    @Singleton
-    abstract fun bindsTeacherRepository(teacherRepositoryImpl: TeacherRepositoryImpl): TeacherRepository
 
+    // === Существующие репозитории (без изменений) ===
     @Binds
     @Singleton
-    abstract fun bindsTeacherLessonsRepository(impl: TeacherLessonsRepositoryImpl): TeacherLessonsRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindLessonMarksRepository(impl: LessonMarksRepositoryImpl): LessonMarksRepository
+    abstract fun bindsTeacherRepository(
+        teacherRepositoryImpl: TeacherRepositoryImpl
+    ): TeacherRepository
 
     @Binds
     @Singleton
-    abstract fun bindAdminRepository(impl: AdminRepositoryImpl): AdminRepository
+    abstract fun bindsTeacherLessonsRepository(
+        impl: TeacherLessonsRepositoryImpl
+    ): TeacherLessonsRepository
 
     @Binds
     @Singleton
-    abstract fun bindStudentRepository(impl: StudentRepositoryImpl): StudentRepository
-
+    abstract fun bindLessonMarksRepository(
+        impl: LessonMarksRepositoryImpl
+    ): LessonMarksRepository
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+    abstract fun bindStudentRepository(
+        impl: StudentRepositoryImpl
+    ): StudentRepository
 
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(
+        impl: AuthRepositoryImpl
+    ): AuthRepository
+
+    // === Новые репозитории для административной части ===
+    @Binds
+    @Singleton
+    abstract fun bindUserAdminRepository(
+        impl: UserAdminRepositoryImpl
+    ): UserAdminRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSchoolAdminRepository(
+        impl: SchoolAdminRepositoryImpl
+    ): SchoolAdminRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindClassAdminRepository(
+        impl: ClassAdminRepositoryImpl
+    ): ClassAdminRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSubjectAdminRepository(
+        impl: SubjectAdminRepositoryImpl
+    ): SubjectAdminRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAssignmentAdminRepository(
+        impl: AssignmentAdminRepositoryImpl
+    ): AssignmentAdminRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHomeworkRepository(impl: HomeworkRepositoryImpl): HomeworkRepository
 }

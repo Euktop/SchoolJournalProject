@@ -117,6 +117,15 @@
                 android:text="Оценки за урок (учитель)"
                 app:schJButtonClass="SECONDARY"
                 app:schJButtonType="BIG" />
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnHomework"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Домашние задания (учитель)"
+                app:schJButtonClass="PRIMARY"
+                app:schJButtonType="BIG" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

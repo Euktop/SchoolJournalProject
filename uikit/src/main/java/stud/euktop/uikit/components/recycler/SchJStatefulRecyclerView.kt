@@ -56,8 +56,8 @@ class SchJStatefulRecyclerView @JvmOverloads constructor(
             return binding.recyclerView.adapter
         }
         set(value) {
-            update()
             binding.recyclerView.adapter = value
+            update()
         }
     val recyclerView
         get() = binding.recyclerView

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><!-- res/layout/fragment_teacher_homework_edit.xml -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="44dp"
+                android:text="@string/add_homework"
+                android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/div_16"
+                android:dividerPadding="16dp"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <!-- Выбор урока -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.SchJ.TextView.Helper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lesson" />
+
+                    <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+                        android:id="@+id/selectLesson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:title="@string/lesson" />
+                </LinearLayout>
+
+                <!-- Описание -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine"
+                    app:helperText="@string/description"
+                    app:schjTextError="@string/description_error" />
+
+                <!-- Прикреплённые файлы (пока текстовое поле) -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputAttachedFiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/attached_files"
+                    android:inputType="textUri"
+                    app:helperText="@string/attached_files_hint" />
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/buttonsSaveCancel"
+                layout="@layout/layout_buttons_save_cancel" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

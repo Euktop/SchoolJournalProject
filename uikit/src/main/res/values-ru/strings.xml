@@ -8,6 +8,23 @@
     <string name="ill">Б</string>
     <string name="respectable">У</string>
     <string name="empty_list">Нет данных</string>
-    <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
+    <string name="search">Поиск</string>
+    <string name="nothing_found">Ничего не найдено</string>
+    <string name="cancel">Отмена</string>
+    <string name="edit_assignment">Редактирование назначения</string>
+    <string name="teacher">Учитель</string>
+    <string name="Class">Класс</string>
+    <string name="subject">Предмет</string>
+    <string name="valid_from">Дата начала</string>
+    <string name="valid_to">Дата окончания</string>
+    <string name="is_primary">Основной учитель</string>
+    <string name="date_required">Выберите дату</string>
+    <string name="error_load_classes">Не удалось загрузить список классов</string>
+    <string name="error_load_subjects">Не удалось загрузить список предметов</string>
+    <string name="lesson">Урок</string>
+    <string name="add_homework">Добавить домашнее задание</string>
+    <string name="attached_files">Прикреплённые файлы</string>
+    <string name="attached_files_hint">Введите ссылки на файлы (через запятую)</string>
+    <string name="description_error">Описание не может быть пустым</string>
 </resources>

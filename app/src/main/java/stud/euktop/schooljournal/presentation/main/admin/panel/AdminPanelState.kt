@@ -1,9 +1,9 @@
 package stud.euktop.schooljournal.presentation.main.admin.panel
 
-import stud.euktop.domain.model.ClassInfo
-import stud.euktop.domain.model.Subject
-import stud.euktop.domain.model.TeacherAssignment
-import stud.euktop.domain.model.UserInfo
+import stud.euktop.domain.model.school.ClassInfo
+import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.model.assignment.TeacherAssignment
+import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class AdminPanelState(

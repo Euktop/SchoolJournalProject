@@ -29,6 +29,8 @@
         <item name="editTextStyle">@style/Widget.SchJ.Input.EditText</item>
         <item name="textInputStyle">@style/Widget.SchJ.Input.Description</item>
         <item name="schJButtonStyle">@style/Widget.SchJ.Button</item>
+        <item name="schJSearchStyle">@style/Widget.SchJ.Input.Search</item>
+        <item name="schJSearchEditStyle">@style/Widget.SchJ.Input.EditText.Search</item>
     </style>
 
     <style name="Theme.SchoolJournal" parent="Base.Theme.SchoolJournal" />

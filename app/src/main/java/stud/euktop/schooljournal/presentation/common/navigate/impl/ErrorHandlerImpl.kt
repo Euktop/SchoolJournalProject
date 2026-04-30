@@ -1,6 +1,6 @@
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
-import stud.euktop.domain.model.DataError
+import stud.euktop.domain.model.common.DataError
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand

@@ -1,8 +1,8 @@
 package stud.euktop.schooljournal.presentation.auth.common.impl
 
-import stud.euktop.domain.model.AccountStatus
-import stud.euktop.domain.model.Gender
-import stud.euktop.domain.model.Profile
+import stud.euktop.domain.model.user.AccountStatus
+import stud.euktop.domain.model.user.Gender
+import stud.euktop.domain.model.auth.Profile
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
@@ -44,7 +44,7 @@ class AuthCoordinatorImpl @Inject constructor(
                 email = email,
                 phone = phone,
                 dateRegistration = Date(),
-                accountStatusId = AccountStatus.ACTIVE,
+                accountStatus = AccountStatus.ACTIVE,
                 roles = emptyList()
             )
             Result.success(Unit)

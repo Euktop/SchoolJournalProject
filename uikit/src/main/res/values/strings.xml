@@ -14,4 +14,21 @@
     <string name="empty_list">No data available</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="search">Search</string>
+    <string name="nothing_found">Nothing was found.</string>
+    <string name="edit_assignment">Editing an assignment</string>
+    <string name="teacher">Teacher</string>
+    <string name="subject">Subject</string>
+    <string name="valid_from">Start date</string>
+    <string name="valid_to">End date</string>
+    <string name="is_primary">Primary teacher</string>
+    <string name="date_required">Select a date</string>
+    <string name="error_load_classes">Unable to load the class list</string>
+    <string name="error_load_subjects">Unable to load the subject list</string>
+    <string name="Class">Class</string>
+    <string name="add_homework">Добавить Домашнее Задание</string>
+    <string name="lesson">Lesson</string>
+    <string name="attached_files">Attached files</string>
+    <string name="attached_files_hint">Enter file links (separated by commas)</string>
+    <string name="description_error">Description cannot be empty</string>
 </resources>

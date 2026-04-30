@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentMainMenuBinding
@@ -13,6 +12,7 @@ import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
 import javax.inject.Inject
+
 /**
  * ВРЕМЕННЫЙ экран главного меню.
  *
@@ -28,7 +28,6 @@ import javax.inject.Inject
  *
  * TODO: После реализации всех экранов и определения ролей, переделать на динамическую генерацию кнопок.
  *
- * @see MainMenuViewModel (пока нет, будет создан при переделке)
  */
 @AndroidEntryPoint
 class MainMenuFragment : Fragment() {
@@ -118,6 +117,9 @@ class MainMenuFragment : Fragment() {
                     R.id.lessonMarksFragment,
                     args = Bundle().apply { putInt(LessonMarksViewModel.LESSON_ID_KEY, 101) }
                 ))
+        }
+        binding.btnHomework.setOnClickListener {
+            navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkListFragment))
         }
     }
 

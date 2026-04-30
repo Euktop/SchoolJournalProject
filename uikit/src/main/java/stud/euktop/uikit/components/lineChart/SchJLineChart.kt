@@ -35,9 +35,10 @@ class SchJLineChart @JvmOverloads constructor(
                 color = ContextCompat.getColor(context, R.color.color_accent)
                 valueTextColor = ContextCompat.getColor(context, R.color.color_text_secondary)
                 lineWidth = resources.getDimension(R.dimen.chart_line_width)
-                circleRadius = resources.getDimension(R.dimen.chart_circle_radius)
-                setDrawValues(true)
-                valueTextSize = resources.getDimension(R.dimen.chart_value_text_size)
+                // Убираем подписи значений над точками
+                setDrawValues(false)
+                // Убираем точки (кружки)
+                setDrawCircles(false)
                 mode = LineDataSet.Mode.CUBIC_BEZIER
             }
             binding.lineChart.apply {
@@ -48,10 +49,16 @@ class SchJLineChart @JvmOverloads constructor(
                     valueFormatter = IndexAxisValueFormatter(state.points.map { it.label })
                     setDrawGridLines(false)
                     textColor = ContextCompat.getColor(context, R.color.color_text_secondary)
+                    if (entries.isNotEmpty()) {
+                        axisMinimum = -0.5f
+                        axisMaximum = (entries.size - 1).toFloat() + 0.5f
+                    }
                 }
                 axisRight.isEnabled = false
                 description.isEnabled = false
                 legend.isEnabled = false
+                // Отступ сверху, чтобы верхняя точка не выходила за границу
+                extraTopOffset = resources.getDimension(R.dimen.chart_extra_top_offset)
                 animateX(500)
                 invalidate()
             }

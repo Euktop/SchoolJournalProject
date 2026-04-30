@@ -6,7 +6,7 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 
-internal abstract class SchJBase<STATE : Any> : SchJState<STATE>, ReadWriteProperty<Any?, STATE> {
+abstract class SchJBase<STATE : Any> : SchJState<STATE>, ReadWriteProperty<Any?, STATE> {
     protected abstract fun initState(): STATE
     protected abstract fun updateState(state: STATE)
     protected abstract fun setupUI()

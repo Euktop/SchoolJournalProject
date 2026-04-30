@@ -5,7 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import stud.euktop.domain.model.StudentSubjectMark
+import stud.euktop.domain.model.attendance.StudentSubjectMark
+import stud.euktop.domain.utils.toBaseString
+import stud.euktop.schooljournal.presentation.common.utils.getTextFromId
+import stud.euktop.schooljournal.presentation.common.utils.toUI
 import stud.euktop.uikit.components.button.SchJButtonState
 import stud.euktop.uikit.databinding.ItemStudentSubjectMarkBinding
 
@@ -31,19 +34,14 @@ class StudentMarkAdapter(
     class ViewHolder(private val binding: ItemStudentSubjectMarkBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: StudentSubjectMark) {
-            binding.tvDate.text = item.date
-            val markText = when {
-                item.value != null -> item.value.toString()
-                item.absenceCode != null -> item.absenceCode?.uppercase()
-                else -> "—"
-            }
+            binding.tvDate.text = item.date.toBaseString()
+            val markText =
+                getTextFromId(binding.root.resources, item.absenceCode?.toUI()?.messageId)
             binding.btnMark.text = markText
             binding.btnMark.state = SchJButtonState(
                 buttonType = SchJButtonState.ButtonType.CHIPS,
                 buttonClass = when {
-                    item.absenceCode != null -> SchJButtonState.ButtonClass.UNSELECT
-                    item.value == 5 || item.value == 4 -> SchJButtonState.ButtonClass.PRIMARY
-                    item.value == 3 -> SchJButtonState.ButtonClass.PRIMARY
+                    item.absenceCode != null -> SchJButtonState.ButtonClass.SELECT
                     else -> SchJButtonState.ButtonClass.UNSELECT
                 }
             )

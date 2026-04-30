@@ -6,16 +6,16 @@
     </style>
 
     <style name="TextAppearance.SchJ.Title1">
-        <item name="android:textSize">24sp</item>
+        <item name="android:textSize">@dimen/title1_size</item>
         <item name="android:lineHeight">28sp</item>
         <item name="android:letterSpacing">0.0033</item>
     </style>
 
-    <style name="TextAppearance.SchJ.Title1.24"/>
+    <style name="TextAppearance.SchJ.Title1.24" />
 
 
     <style name="TextAppearance.SchJ.Title2">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">@dimen/title2_size</item>
         <item name="android:lineHeight">28sp</item>
         <item name="android:letterSpacing">0.0038</item>
     </style>
@@ -23,14 +23,14 @@
     <style name="TextAppearance.SchJ.Title2.20" />
 
     <style name="TextAppearance.SchJ.Title3">
-        <item name="android:textSize">17sp</item>
+        <item name="android:textSize">@dimen/title3_size</item>
         <item name="android:lineHeight">24sp</item>
     </style>
 
     <style name="TextAppearance.SchJ.Title3.17" />
 
     <style name="TextAppearance.SchJ.Headline">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">@dimen/headline_size</item>
         <item name="android:lineHeight">20sp</item>
         <item name="android:letterSpacing">-0.0032</item>
     </style>
@@ -38,21 +38,21 @@
     <style name="TextAppearance.SchJ.Headline.16" />
 
     <style name="TextAppearance.SchJ.Text">
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/text_size</item>
         <item name="android:lineHeight">20sp</item>
     </style>
 
     <style name="TextAppearance.SchJ.Text.15" />
 
     <style name="TextAppearance.SchJ.Caption">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/caption_size</item>
         <item name="android:lineHeight">20sp</item>
     </style>
 
     <style name="TextAppearance.SchJ.Caption.14" />
 
     <style name="TextAppearance.SchJ.Caption2">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">@dimen/caption2_size</item>
         <item name="android:lineHeight">20sp</item>
     </style>
 

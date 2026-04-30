@@ -9,16 +9,13 @@
         <attr name="errorEnabled" />
         <attr name="errorIconDrawable" />
         <attr name="android:inputType" />
-        <attr name="android:cursorVisible"/>
+        <attr name="android:cursorVisible" />
     </declare-styleable>
     <declare-styleable name="SchJTextInputLayout">
         <attr name="textInputStyle" />
     </declare-styleable>
     <declare-styleable name="SchJTextInputEditText">
         <attr name="editTextStyle" />
-    </declare-styleable>
-    <declare-styleable name="SchJSelect">
-        <attr name="android:title"/>
     </declare-styleable>
     <declare-styleable name="SchJButton">
         <attr name="schJButtonStyle" format="reference" />
@@ -35,5 +32,17 @@
             <enum name="SELECT" value="4" />
             <enum name="UNSELECT" value="5" />
         </attr>
+    </declare-styleable>
+    <declare-styleable name="SchJSearchLayout">
+        <attr name="schJSearchStyle" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="SchJSearchEditText">
+        <attr name="schJSearchEditStyle" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="SchJSearchableSelect">
+        <attr name="android:title" format="string" />
+    </declare-styleable>
+    <declare-styleable name="SchJBaseSelect">
+        <attr name="android:title" format="string" />
     </declare-styleable>
 </resources>

@@ -1,11 +1,10 @@
-// presentation/main/admin/subjects/SubjectEditViewModel.kt
 package stud.euktop.schooljournal.presentation.main.admin.subjects
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
-import stud.euktop.domain.model.Subject
-import stud.euktop.domain.repository.AdminRepository
+import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.repository.SubjectAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
@@ -16,7 +15,7 @@ class SubjectEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager,
-    private val adminRepository: AdminRepository
+    private val subjectAdminRepository: SubjectAdminRepository
 ) : BaseViewModel<SubjectEditState, SubjectEditEvent>() {
 
     companion object {
@@ -34,7 +33,7 @@ class SubjectEditViewModel @Inject constructor(
 
     private fun loadSubject() {
         executeWithCoordinatorAndLoadingSync(
-            block = { adminRepository.getSubject(subjectId) },
+            block = { subjectAdminRepository.getSubject(subjectId) },
             onSuccess = { subject ->
                 _state.update {
                     it.copy(
@@ -65,14 +64,10 @@ class SubjectEditViewModel @Inject constructor(
             description = state.description.takeIf { it.isNotBlank() }
         )
 
-
         executeWithCoordinatorAndLoadingSync(
             block = {
-                if (state.isEditMode()) {
-                    adminRepository.updateSubject(subject)
-                } else {
-                    adminRepository.addSubject(subject)
-                }
+                if (state.isEditMode()) subjectAdminRepository.updateSubject(subject)
+                else subjectAdminRepository.addSubject(subject)
             },
             onSuccess = { _event.emit(SubjectEditEvent.NavigateBack) }
         )

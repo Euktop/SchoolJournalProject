@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/school" />
 
-                    <stud.euktop.uikit.components.input.select.SchJSelect
+                    <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
                         android:id="@+id/selectSchool"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/class_teacher" />
 
-                    <stud.euktop.uikit.components.input.select.SchJSelect
+                    <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
                         android:id="@+id/selectClassTeacher"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -1,21 +1,18 @@
-// presentation/main/admin/classes/ClassEditFragment.kt
 package stud.euktop.schooljournal.presentation.main.admin.classes
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.School
-import stud.euktop.domain.model.UserInfo
+import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.schooljournal.databinding.FragmentClassEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
-import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
-import stud.euktop.schooljournal.presentation.common.utils.check
-import stud.euktop.schooljournal.presentation.common.utils.inputChecks
-import stud.euktop.schooljournal.presentation.common.utils.setup
-import stud.euktop.schooljournal.presentation.common.utils.submitList
+import stud.euktop.schooljournal.presentation.common.utils.*
+import stud.euktop.uikit.components.input.select.ListSafe
+import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,59 +33,48 @@ class ClassEditFragment : BaseFragment<
     @Inject
     lateinit var navigationManager: NavigationManager
 
+    private lateinit var schoolRegister: SchJSearchableSelect.RegisterList<School, Any>
+    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo, Any>
+
     override fun setupUI() {
         binding.apply {
             // Поля ввода
-            inputGrade.setup(focusTrack) { value ->
-                viewModel.updateGrade(value.toIntOrNull())
-            }
+            inputGrade.setup(focusTrack) { value -> viewModel.updateGrade(value.toIntOrNull()) }
             inputLetter.setup(focusTrack) { viewModel.updateLetter(it) }
-            inputYearStart.setup(focusTrack) { value ->
-                viewModel.updateAcademicYearStart(value.toIntOrNull())
-            }
-            inputYearEnd.setup(focusTrack) { value ->
-                viewModel.updateAcademicYearEnd(value.toIntOrNull())
-            }
+            inputYearStart.setup(focusTrack) { value -> viewModel.updateAcademicYearStart(value.toIntOrNull()) }
+            inputYearEnd.setup(focusTrack) { value -> viewModel.updateAcademicYearEnd(value.toIntOrNull()) }
 
-            // Выбор школы
-            selectSchool.RegisterList<School>(
-                onCLick = { school ->
-                    viewModel.updateSchool(school.schoolId, school.name)
-                },
-                toText = { it.name }
-            ).apply {
-                register(childFragmentManager)
-            }
+            // Поисковый выбор школы
+            val schoolListSafe = ListSafe<School>(
+                toText = { it.name },
+                onClick = { school, _ -> viewModel.updateSchool(school) }
+            )
+            schoolRegister = selectSchool.RegisterList(
+                items = schoolListSafe,
+                categories = ListSafe(),
+                onSearchQueryChanged = { query -> viewModel.loadSchools(query) }
+            )
+            schoolRegister.register(childFragmentManager)
 
-            // Выбор классного руководителя
-            selectClassTeacher.RegisterList<UserInfo>(
-                onCLick = { teacher ->
-                    viewModel.updateClassTeacher(
-                        teacher.userId,
-                        "${teacher.lastName} ${teacher.firstName}"
-                    )
-                },
-                toText = { "${it.lastName} ${it.firstName}" }
-            ).apply {
-                register(childFragmentManager)
-            }
+            val teacherListSafe = ListSafe<UserInfo>(
+                toText = { "${it.lastName} ${it.firstName}" },
+                onClick = { teacher, _ -> viewModel.updateClassTeacher(teacher) }
+            )
+            teacherRegister = selectClassTeacher.RegisterList(teacherListSafe)
+            teacherRegister.register(childFragmentManager)
 
-            // Кнопки (из include)
-            val buttons = binding.buttonsSaveCancel
-            buttons.btnSave.setOnClickListener { viewModel.save() }
-            buttons.btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
+            // Кнопки
+            buttonsSaveCancel.btnSave.setOnClickListener { viewModel.save() }
+            buttonsSaveCancel.btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
         }
     }
 
     override fun updateState(state: ClassEditState) {
         binding.apply {
-            inputChecks(
-                focusTrack,
-                inputLetter to state.letter
-            )
+            // Валидация полей
+            inputChecks(focusTrack, inputLetter to state.letter)
             val gradeValid = state.grade != null && state.grade in 1..11
             inputGrade.check(focusTrack, gradeValid)
-
             val start = state.academicYearStart
             val end = state.academicYearEnd
             inputYearStart.check(focusTrack, start != null && start > 0)
@@ -97,18 +83,20 @@ class ClassEditFragment : BaseFragment<
                 end != null && end > 0 && (start == null || end >= start)
             )
 
-            selectSchool.adapter?.submitList(state.availableSchools)
-            selectClassTeacher.adapter?.submitList(state.availableTeachers)
+            // Обновление выпадающих списков
+            schoolRegister.updateItems(state.availableSchools, emptyList())
+            teacherRegister.updateItems(state.availableTeachers)
 
+            // Отображение выбранных значений
             selectSchool.state = selectSchool.state.copy(
-                selectText = state.selectedSchoolName
+                selectText = state.selectedSchool?.name ?: ""
             )
             selectClassTeacher.state = selectClassTeacher.state.copy(
-                selectText = state.selectedTeacherName
+                selectText = state.selectedTeacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
             )
 
-            val buttons = binding.buttonsSaveCancel
-            buttons.btnSave.isEnabled = state.isFormValid()
+            // Активация кнопки сохранения
+            buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isLoading
         }
     }
 

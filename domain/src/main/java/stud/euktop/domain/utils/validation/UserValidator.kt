@@ -1,6 +1,6 @@
 package stud.euktop.domain.utils.validation
 
-import stud.euktop.domain.model.Profile
+import stud.euktop.domain.model.auth.Profile
 
 class UserValidator(
     override var value: Profile?

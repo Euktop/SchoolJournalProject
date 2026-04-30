@@ -2,9 +2,10 @@ package stud.euktop.schooljournal.presentation.common.navigate.impl
 
 import android.content.Context
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions.*
+import androidx.navigation.NavOptions
 import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
+import stud.euktop.uikit.R
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
@@ -16,6 +17,14 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
     private val controllers = mutableMapOf<String, NavController>()
     private val tasks = ArrayDeque<Pair<String?, NavCommand>>()
     private var mainNavController: NavController? = null
+
+    // Анимации по умолчанию для переходов ToDestination
+    private val defaultNavOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_in_right)
+        .setExitAnim(R.anim.slide_out_left)
+        .setPopEnterAnim(R.anim.slide_in_left)
+        .setPopExitAnim(R.anim.slide_out_right)
+        .build()
 
     override fun bindMain(navController: NavController) {
         mainNavController = navController
@@ -82,12 +91,17 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
         when (command) {
             is NavCommand.ToDestination -> {
                 if (command.popUpTo != null) {
-                    val navOptions = Builder()
+                    val navOptions = NavOptions.Builder()
                         .setPopUpTo(command.popUpTo, command.inclusive)
+                        .setEnterAnim(R.anim.slide_in_right)
+                        .setExitAnim(R.anim.slide_out_left)
+                        .setPopEnterAnim(R.anim.slide_in_left)
+                        .setPopExitAnim(R.anim.slide_out_right)
                         .build()
                     nav.navigate(command.destId, command.args, navOptions)
                 } else {
-                    nav.navigate(command.destId, command.args)
+                    // Используем анимацию по умолчанию
+                    nav.navigate(command.destId, command.args, defaultNavOptions)
                 }
             }
 

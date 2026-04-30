@@ -5,14 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.AccountStatus
-import stud.euktop.domain.model.Role
-import stud.euktop.domain.model.School
+import stud.euktop.domain.model.user.AccountStatus
+import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.school.School
 import stud.euktop.schooljournal.databinding.DialogUserEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.*
+import stud.euktop.uikit.components.input.select.ListSafe
+import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -33,9 +35,11 @@ class UserEditFragment : BaseFragment<
     @Inject
     lateinit var navigationManager: NavigationManager
 
+    private lateinit var schoolRegister: SchJSearchableSelect.RegisterList<School, Any>
+
     override fun setupUI() {
         binding.apply {
-            // Основные поля
+            // Поля ввода
             inputLastName.setup(focusTrack) { viewModel.updateLastName(it) }
             inputFirstName.setup(focusTrack) { viewModel.updateFirstName(it) }
             inputSurName.setup(focusTrack) { viewModel.updateSurName(it) }
@@ -44,35 +48,38 @@ class UserEditFragment : BaseFragment<
             inputPassword.setup(focusTrack) { viewModel.updatePassword(it) }
 
             // Статус
-            selectStatus.RegisterList<AccountStatus>(
-                onCLick = { viewModel.updateAccountStatus(it) },
-                toText = { requireContext().getString(it.toMessageId()) }
-            ).apply {
-                items = AccountStatus.entries.toList()
-                register(childFragmentManager)
-            }
+            selectStatus.RegisterList(
+                items = ListSafe(
+                    values = AccountStatus.entries.toList(),
+                    toText = { requireContext().getString(it.toMessageId()) },
+                    onClick = { status, _ -> viewModel.updateAccountStatus(status) }
+                )
+            ).register(childFragmentManager)
 
-            // Роль (одиночный выбор)
-            selectRole.RegisterList<Role>(
-                onCLick = { role ->
-                    viewModel.updateSelectedRole(role)
-                    val requiresSchool = role != Role.ADMIN
-                    tvSchoolLabel.visibility = if (requiresSchool) View.VISIBLE else View.GONE
-                    selectSchool.visibility = if (requiresSchool) View.VISIBLE else View.GONE
-                },
-                toText = { requireContext().getString(it.toMessageId()) }
-            ).apply {
-                items = Role.entries.toList()
-                register(childFragmentManager)
-            }
+            // Роль
+            selectRole.RegisterList(
+                items = ListSafe(
+                    values = Role.entries.toList(),
+                    toText = { requireContext().getString(it.toMessageId()) },
+                    onClick = { role, _ ->
+                        viewModel.updateSelectedRole(role)
+                        val requiresSchool = role != Role.ADMIN
+                        schoolLayout.visibility = if (requiresSchool) View.VISIBLE else View.GONE
+                    }
+                )
+            ).register(childFragmentManager)
 
-            // Школа
-            selectSchool.RegisterList<School>(
-                onCLick = { school -> viewModel.updateSelectedSchool(school.schoolId) },
-                toText = { it.name }
-            ).apply {
-                register(childFragmentManager)
-            }
+            // Поисковый выбор школы
+            val schoolListSafe = ListSafe<School>(
+                toText = { it.name },
+                onClick = { school, _ -> viewModel.updateSchool(school) }
+            )
+            schoolRegister = selectSchool.RegisterList(
+                items = schoolListSafe,
+                categories = ListSafe(),
+                onSearchQueryChanged = { query -> viewModel.loadSchools(query) }
+            )
+            schoolRegister.register(childFragmentManager)
 
             btnSave.setOnClickListener { viewModel.save() }
             btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
@@ -81,7 +88,7 @@ class UserEditFragment : BaseFragment<
 
     override fun updateState(state: UserEditState) {
         binding.apply {
-            // Валидация ФИО, email, телефона
+            // Валидация
             inputChecks(
                 focusTrack,
                 inputLastName to state.lastName,
@@ -91,7 +98,7 @@ class UserEditFragment : BaseFragment<
                 inputPhone to state.phone
             )
 
-            // Валидация пароля: при редактировании ошибка только если поле не пустое и невалидное
+            // Пароль
             val passwordErrorVisible = if (state.isEditMode()) {
                 focusTrack.isTouched(inputPassword) &&
                         !state.password.value.isNullOrBlank() &&
@@ -110,23 +117,20 @@ class UserEditFragment : BaseFragment<
             )
 
             // Роль
-            val roleText =
-                state.selectedRole?.let { requireContext().getString(it.toMessageId()) } ?: ""
-            selectRole.state = selectRole.state.copy(selectText = roleText)
+            selectRole.state = selectRole.state.copy(
+                selectText = state.selectedRole?.let { requireContext().getString(it.toMessageId()) } ?: ""
+            )
 
-            // Школа – обновляем список и выбранное значение
-            selectRole.adapter?.submitList(state.availableRoles)
-            selectSchool.adapter?.submitList(state.availableSchools)
-            val schoolText =
-                state.availableSchools.find { it.schoolId == state.selectedSchoolId }?.name ?: ""
-            selectSchool.state = selectSchool.state.copy(selectText = schoolText)
+            // Школа — обновление списка и выбранного элемента
+            schoolRegister.updateItems(state.availableSchools, emptyList())
+            selectSchool.state = selectSchool.state.copy(
+                selectText = state.selectedSchool?.name ?: ""
+            )
 
-            // Видимость выбора школы
+            // Видимость блока школы
             val requiresSchool = state.selectedRole != Role.ADMIN && state.selectedRole != null
-            tvSchoolLabel.visibility = if (requiresSchool) View.VISIBLE else View.GONE
-            selectSchool.visibility = if (requiresSchool) View.VISIBLE else View.GONE
+            schoolLayout.visibility = if (requiresSchool) View.VISIBLE else View.GONE
 
-            // Кнопка сохранить доступна только при валидной форме и не во время загрузки
             btnSave.isEnabled = state.isFormValid() && !state.isLoading
         }
     }

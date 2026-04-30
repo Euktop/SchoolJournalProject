@@ -1,6 +1,6 @@
 package stud.euktop.schooljournal.presentation.main.teacher.teacherLessons
 
-import stud.euktop.domain.model.TeacherLessonItem
+import stud.euktop.domain.model.lesson.TeacherLessonItem
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class TeacherLessonsState(

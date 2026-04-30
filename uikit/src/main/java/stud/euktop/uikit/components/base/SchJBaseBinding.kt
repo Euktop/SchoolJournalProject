@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.viewbinding.ViewBinding
 
 
-internal abstract class SchJBaseBinding<BINDING : ViewBinding, STATE : Any> :
+abstract class SchJBaseBinding<BINDING : ViewBinding, STATE : Any> :
     SchJBase<STATE>() {
     lateinit var binding: BINDING
     protected abstract fun initBinding(): BINDING

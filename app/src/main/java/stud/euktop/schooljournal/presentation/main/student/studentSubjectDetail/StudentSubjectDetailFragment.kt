@@ -1,16 +1,20 @@
 package stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectDetailBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentMarkAdapter
 import stud.euktop.uikit.components.lineChart.SchJLineChartState
 import stud.euktop.uikit.components.lineChart.SchJLinePoint
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 /**
  * Детальный экран успеваемости по предмету (ученик).
@@ -46,12 +50,15 @@ class StudentSubjectDetailFragment : BaseFragment<
         binding.rvMarks.adapter = StudentMarkAdapter { /* клик по оценке не нужен */ }
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun updateState(state: StudentSubjectDetailState) {
         binding.lcProgress.state = SchJLineChartState(
-            points = state.marks.mapIndexed { _, mark ->
+            points = state.marks.sortedBy {
+                it.date
+            }.mapIndexed { _, mark ->
                 SchJLinePoint(
-                    label = mark.date.substring(0, 5),
-                    value = mark.value?.toFloat() ?: 0f
+                    label = SimpleDateFormat("dd.MM", Locale.getDefault()).format(mark.date),
+                    value = mark.absenceCode?.getGrade()?.toFloat() ?: 0.0f
                 )
             }
         )

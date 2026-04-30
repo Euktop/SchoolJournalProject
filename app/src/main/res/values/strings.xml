@@ -90,4 +90,10 @@
     <string name="incorrect_subject_name">Enter item name</string>
     <string name="delete_subject_confirmation">Delete item %s?</string>
     <string name="description">Description</string>
+    <string name="edit_assignment">Editing an assignment</string>
+    <string name="subject">Subject</string>
+    <string name="valid_from">Start date (dd.mm.yyyy)</string>
+    <string name="valid_to">End date (dd.mm.yyyy)</string>
+    <string name="is_primary">Main assignment</string>
+    <string name="delete_assignment_confirmation">Delete teacher assignment %s?</string>
 </resources>

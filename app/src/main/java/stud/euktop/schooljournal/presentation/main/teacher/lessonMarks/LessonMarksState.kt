@@ -1,6 +1,6 @@
 package stud.euktop.schooljournal.presentation.main.teacher.lessonMarks
 
-import stud.euktop.domain.model.StudentMarkItem
+import stud.euktop.domain.model.attendance.StudentMarkItem
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class LessonMarksState(

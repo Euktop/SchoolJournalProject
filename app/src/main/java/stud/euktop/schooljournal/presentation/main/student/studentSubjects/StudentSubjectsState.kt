@@ -1,6 +1,6 @@
 package stud.euktop.schooljournal.presentation.main.student.studentSubjects
 
-import stud.euktop.domain.model.StudentSubjectSummary
+import stud.euktop.domain.model.attendance.StudentSubjectSummary
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class StudentSubjectsState(

@@ -1,6 +1,6 @@
 package stud.euktop.domain.repository
 
-import stud.euktop.domain.model.Profile
+import stud.euktop.domain.model.auth.Profile
 
 interface AuthRepository {
     suspend fun login(login: String, passwordHash: String): Result<Profile>

@@ -100,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/status" />
 
-                <stud.euktop.uikit.components.input.select.SchJSelect
+                <stud.euktop.uikit.components.input.select.def.SchJSelect
                     android:id="@+id/selectStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/role" />
 
-                <stud.euktop.uikit.components.input.select.SchJSelect
+                <stud.euktop.uikit.components.input.select.def.SchJSelect
                     android:id="@+id/selectRole"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -127,24 +127,23 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/schoolLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/tvSchoolLabel"
                     style="@style/Widget.SchJ.TextView.Helper"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/school"
-                    android:visibility="gone" />
+                    android:text="@string/school" />
 
-                <stud.euktop.uikit.components.input.select.SchJSelect
+                <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
                     android:id="@+id/selectSchool"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:title="@string/school"
-                    android:visibility="gone" />
+                    android:title="@string/school" />
             </LinearLayout>
 
             <stud.euktop.uikit.components.button.SchJButton

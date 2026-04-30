@@ -30,19 +30,6 @@
         <item name="boxStrokeColor">@color/color_stroke_default</item>
     </style>
 
-    <style name="Widget.SchJ.Input.Search" parent="Widget.SchJ.Input.Description">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="endIconMode">clear_text</item>
-        <item name="startIconDrawable">@drawable/ic_search</item>
-    </style>
-
-    <style name="Widget.SchJ.Input.EditText.Search" parent="@style/Widget.SchJ.Input.EditText">
-        <item name="android:hint">Искать описание</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:inputType">text</item>
-    </style>
-
     <style name="Widget.SchJ.TextView.Helper">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

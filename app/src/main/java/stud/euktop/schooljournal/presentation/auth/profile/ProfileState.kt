@@ -1,6 +1,6 @@
 package stud.euktop.schooljournal.presentation.auth.profile
 
-import stud.euktop.domain.model.Gender
+import stud.euktop.domain.model.user.Gender
 import stud.euktop.domain.utils.validation.EmailValidator
 import stud.euktop.domain.utils.validation.NameLetterOnlyValidator
 import stud.euktop.domain.utils.validation.PhoneValidator
