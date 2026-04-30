@@ -1,6 +1,8 @@
 package stud.euktop.schooljournal.presentation.common.utils
 
+import stud.euktop.domain.model.AccountStatus
 import stud.euktop.domain.model.Gender
+import stud.euktop.domain.model.Role
 import stud.euktop.schooljournal.R
 import stud.euktop.domain.model.AbsenceTypes as t1
 import stud.euktop.uikit.components.markPicker.AbsenceTypes as t2
@@ -21,4 +23,19 @@ fun Gender.toMessageId() = when (this) {
     Gender.MALE -> R.string.male
     Gender.WOMAN -> R.string.woman
     Gender.NONE -> R.string.none
+}
+
+fun Role.toMessageId() = when (this) {
+    Role.ADMIN -> R.string.administrator
+    Role.DIRECTOR -> R.string.director
+    Role.TEACHER -> R.string.teacher
+    Role.STUDENT -> R.string.student
+    Role.PARENT -> R.string.representative
+}
+
+fun AccountStatus.toMessageId() = when (this) {
+    AccountStatus.ACTIVE -> R.string.active
+    AccountStatus.DELETED -> R.string.deleting
+    AccountStatus.PENDING -> R.string.pending
+    AccountStatus.BLOCKED -> R.string.blocked
 }

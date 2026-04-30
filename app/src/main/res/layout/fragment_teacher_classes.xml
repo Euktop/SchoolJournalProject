@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="stud.euktop.schooljournal.presentation.main.teacher.teacherClass.TeacherClassesFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
         android:id="@+id/rvClasses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

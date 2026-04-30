@@ -7,4 +7,7 @@
     <string name="irrespectable">Н</string>
     <string name="ill">Б</string>
     <string name="respectable">У</string>
+    <string name="empty_list">Нет данных</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
 </resources>

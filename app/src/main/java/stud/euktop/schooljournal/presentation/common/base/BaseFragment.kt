@@ -95,8 +95,8 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        observeViewModel()
         setupLoadingOverlay()
+        observeViewModel()
     }
 
     /**
@@ -143,9 +143,8 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewModel.state.collect { state ->
-                if (state.isLoading) {
-                    updateLoading(state)
-                } else {
+                updateLoading(state)
+                if (!state.isLoading) {
                     updateState(state)
                 }
             }

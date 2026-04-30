@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.databinding.FragmentStudentSubjectsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.utils.submitList
 import javax.inject.Inject
 
 //stud.euktop.schooljournal.presentation.main.student.studentSubjects.StudentSubjectsFragment
@@ -47,7 +48,7 @@ class StudentSubjectsFragment : BaseFragment<
     internal lateinit var navigationManager: NavigationManager
 
     override fun setupUI() {
-        val adapter = StudentSubjectAdapter { item ->
+        binding.rvSubjects.adapter = StudentSubjectAdapter { item ->
             navigationManager.navigate(
                 NavCommand.ToDestination(
                     destId = R.id.studentSubjectDetailFragment,
@@ -57,12 +58,10 @@ class StudentSubjectsFragment : BaseFragment<
                 )
             )
         }
-        binding.rvSubjects.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvSubjects.adapter = adapter
     }
 
     override fun updateState(state: StudentSubjectsState) {
-        (binding.rvSubjects.adapter as? StudentSubjectAdapter)?.submitList(state.subjects)
+        binding.rvSubjects.submitList(state.subjects)
     }
 
     override fun updateEvent(event: Unit) {}

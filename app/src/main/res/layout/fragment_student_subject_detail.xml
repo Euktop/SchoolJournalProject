@@ -3,20 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     tools:context="stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentSubjectDetailFragment">
 
-    <stud.euktop.uikit.components.lineChart.SchJLineChart
-        android:id="@+id/lcProgress"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:ignore="UselessParent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMarks"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_weight="1" />
+        <stud.euktop.uikit.components.lineChart.SchJLineChart
+            android:id="@+id/lcProgress"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
 
+        <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
+            android:id="@+id/rvMarks"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 </FrameLayout>

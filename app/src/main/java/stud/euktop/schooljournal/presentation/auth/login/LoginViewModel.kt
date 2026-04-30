@@ -44,11 +44,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginClick() {
-        if (!_state.value.isButtonActive()) {
-            _state.update { it.updateIsLoading(!it.isLoading) }
-            _state.update { it.updateIsLoading(!it.isLoading) }
-            return
-        }
+        if (!_state.value.isButtonActive()) return
         executeCoordinatorAndLoadingSync(
             block = {
                 authCoordinator.login(

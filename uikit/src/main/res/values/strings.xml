@@ -11,4 +11,7 @@
     <string name="g4" translatable="false">4</string>
     <string name="g3" translatable="false">3</string>
     <string name="g2" translatable="false">2</string>
+    <string name="empty_list">No data available</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

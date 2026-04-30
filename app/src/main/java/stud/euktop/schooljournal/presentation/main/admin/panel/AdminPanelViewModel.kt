@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
+
 /**
  * ViewModel для административной панели.
  *
@@ -64,6 +65,26 @@ class AdminPanelViewModel @Inject constructor(
                     )
                 }
             }
+        )
+    }
+
+    fun deleteUser(userId: Int) {
+        executeWithCoordinatorAndLoadingSync(
+            block = { adminRepository.deleteUser(userId) },
+            onSuccess = { refreshAll() }
+        )
+    }
+
+    fun deleteClass(classId: Int) {
+        executeWithCoordinatorAndLoadingSync(
+            block = { adminRepository.deleteClass(classId) },
+            onSuccess = { refreshAll() }
+        )
+    }
+    fun deleteSubject(subjectId: Int) {
+        executeWithCoordinatorAndLoadingSync(
+            block = { adminRepository.deleteSubject(subjectId) },
+            onSuccess = { refreshAll() }
         )
     }
 }

@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+
 data class ProfileState(
     override val isLoading: Boolean = false,
     val lastName: NameLetterOnlyValidator = NameLetterOnlyValidator(),

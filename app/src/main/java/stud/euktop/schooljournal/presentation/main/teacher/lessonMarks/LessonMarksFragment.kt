@@ -9,10 +9,12 @@ import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentLessonMarksBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
+import stud.euktop.schooljournal.presentation.common.utils.submitList
 import stud.euktop.schooljournal.presentation.common.utils.toUI
 import stud.euktop.uikit.components.markPicker.SchJMarkPicker
 import stud.euktop.uikit.components.markPicker.SchJMarkPickerSheet
 import stud.euktop.uikit.components.markPicker.SchJMarkPickerState
+
 /**
  * Экран оценок за конкретный урок (учитель).
  *
@@ -44,10 +46,8 @@ class LessonMarksFragment : BaseFragment<
         FragmentLessonMarksBinding.inflate(i, c, false)
 
     override val viewModel: LessonMarksViewModel by viewModels()
-    private var adapter: LessonMarksAdapter? = null
-
     override fun setupUI() {
-        adapter = LessonMarksAdapter { item ->
+        binding.rvMarks.adapter = LessonMarksAdapter { item ->
             SchJMarkPickerSheet(
                 state = SchJMarkPickerState(
                     studentName = "${item.lastName} ${item.firstName}",
@@ -57,12 +57,10 @@ class LessonMarksFragment : BaseFragment<
                 messages.message(MessageParam(R.string.mock_grade_saved) {})
             }.show(parentFragmentManager, "markPicker")
         }
-        binding.rvMarks.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvMarks.adapter = adapter
     }
 
     override fun updateState(state: LessonMarksState) {
-        adapter?.submitList(state.marks)
+        binding.rvMarks.submitList(state.marks)
     }
 
     override fun updateEvent(event: Unit) {}

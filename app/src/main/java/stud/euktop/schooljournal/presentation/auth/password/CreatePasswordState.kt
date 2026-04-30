@@ -1,6 +1,5 @@
 package stud.euktop.schooljournal.presentation.auth.password
 
-import stud.euktop.domain.utils.validation.PasswordNextValidator
 import stud.euktop.domain.utils.validation.PasswordValidator
 import stud.euktop.domain.utils.validation.Validator
 import stud.euktop.schooljournal.presentation.common.base.BaseState

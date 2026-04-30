@@ -21,7 +21,8 @@ interface AuthCoordinator {
     suspend fun login(email: String, password: String): CoordinatorResult<Profile>
 
     /**
-     * Сохраняет временное состояние профиля
+     * Сохраняет временное состояние профиля.
+     * @return Result<Unit> – успех или ошибка (например, если email уже существует)
      */
     suspend fun saveProfile(
         lastName: String,
@@ -30,8 +31,8 @@ interface AuthCoordinator {
         gender: Gender,
         birthDay: Date,
         email: String,
-        phone: String?,
-    )
+        phone: String?
+    ): Result<Unit>
 
     /**
      * Выполняет регистрацию нового пользователя.

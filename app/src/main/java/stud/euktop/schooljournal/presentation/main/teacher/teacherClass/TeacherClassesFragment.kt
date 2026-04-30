@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.databinding.FragmentTeacherClassesBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.utils.submitList
 import stud.euktop.schooljournal.presentation.main.teacher.teacherLessons.TeacherLessonsViewModel
 import javax.inject.Inject
 
@@ -44,10 +45,9 @@ class TeacherClassesFragment : BaseFragment<
         FragmentTeacherClassesBinding.inflate(i, c, false)
 
     override val viewModel: TeacherClassesViewModel by viewModels()
-    private var adapter: TeacherClassAdapter? = null
 
     override fun setupUI() {
-        adapter = TeacherClassAdapter { item ->
+        binding.rvClasses.adapter = TeacherClassAdapter { item ->
             navigationManager.navigate(
                 NavCommand.ToDestination(
                     destId = R.id.teacherLessonsFragment,
@@ -58,13 +58,11 @@ class TeacherClassesFragment : BaseFragment<
                 )
             )
         }
-        binding.rvClasses.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvClasses.adapter = adapter
         viewModel.loadClasses()
     }
 
     override fun updateState(state: TeacherClassesState) {
-        adapter?.submitList(state.classes)
+        binding.rvClasses.submitList(state.classes)
     }
 
     override fun updateEvent(event: Unit) {}

@@ -7,6 +7,6 @@ data class UserInfo(
     val surName: String?,
     val email: String,
     val phone: String?,
-    val roleNames: List<String>,  // "Администратор", "Учитель" и т.д.
+    val roles: List<RoleSchools>,
     val accountStatus: AccountStatus
 )

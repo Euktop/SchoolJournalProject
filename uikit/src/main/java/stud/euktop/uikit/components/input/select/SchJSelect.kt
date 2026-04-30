@@ -56,7 +56,7 @@ class SchJSelect @JvmOverloads constructor(
         }
     }
 
-    private var adapter: SchJTextAdapter<*>? = null
+    var adapter: SchJTextAdapter<*>? = null
     private var bottomSheet: SchJBottomSheet? = null
     private var fragmentManager: FragmentManager? = null
 

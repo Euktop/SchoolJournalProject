@@ -1,0 +1,170 @@
+<!-- res/layout/dialog_user_edit.xml -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:focusable="true"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/div_16"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:showDividers="middle">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="44dp"
+                android:text="@string/changing_the_profile"
+                android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold" />
+
+            <!-- ФИО -->
+            <stud.euktop.uikit.components.input.SchJInput
+                android:id="@+id/inputLastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/lastname"
+                android:inputType="textPersonName"
+                app:helperText="@string/lastname"
+                app:schjTextError="@string/incorrect_lastname" />
+
+            <stud.euktop.uikit.components.input.SchJInput
+                android:id="@+id/inputFirstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:inputType="textPersonName"
+                app:helperText="@string/name"
+                app:schjTextError="@string/incorrect_name" />
+
+            <stud.euktop.uikit.components.input.SchJInput
+                android:id="@+id/inputSurName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/surname"
+                android:inputType="textPersonName"
+                app:helperText="@string/surname" />
+
+            <!-- Email и телефон -->
+            <stud.euktop.uikit.components.input.SchJInput
+                android:id="@+id/inputEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                app:helperText="@string/email"
+                app:schjTextError="@string/error_email_invalid" />
+
+            <stud.euktop.uikit.components.input.SchJInput
+                android:id="@+id/inputPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/telephone"
+                android:inputType="phone"
+                app:helperText="@string/telephone"
+                app:schjTextError="@string/incorrect_phone_number" />
+
+            <!-- Пароль -->
+
+            <stud.euktop.uikit.components.input.SchJInput
+                android:id="@+id/inputPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                app:endIconMode="password_toggle"
+                app:helperText="@string/password"
+                app:schjTextError="@string/the_password_must_contain_at_least_8_characters_uppercase_and_lowercase_letters_numbers_and_special_characters" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Widget.SchJ.TextView.Helper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/status" />
+
+                <stud.euktop.uikit.components.input.select.SchJSelect
+                    android:id="@+id/selectStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:title="@string/status" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/Widget.SchJ.TextView.Helper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/role" />
+
+                <stud.euktop.uikit.components.input.select.SchJSelect
+                    android:id="@+id/selectRole"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:title="@string/role" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvSchoolLabel"
+                    style="@style/Widget.SchJ.TextView.Helper"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/school"
+                    android:visibility="gone" />
+
+                <stud.euktop.uikit.components.input.select.SchJSelect
+                    android:id="@+id/selectSchool"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:title="@string/school"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/save"
+                app:schJButtonClass="PRIMARY"
+                app:schJButtonType="BIG" />
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/cancel"
+                app:schJButtonClass="SECONDARY"
+                app:schJButtonType="BIG" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

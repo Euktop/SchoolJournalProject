@@ -69,4 +69,31 @@
         android:label="Профиль"
         tools:layout="@layout/fragment_profile" />
 
+    <fragment
+        android:id="@+id/userEditFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.users.UserEditFragment"
+        android:label="@string/editing_a_user">
+        <argument
+            android:name="userId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/classEditFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.classes.ClassEditFragment"
+        android:label="@string/edit_class">
+        <argument
+            android:name="classId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/subjectEditFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.subjects.SubjectEditFragment"
+        android:label="@string/edit_subject">
+        <argument
+            android:name="subjectId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

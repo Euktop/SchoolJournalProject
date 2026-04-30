@@ -2,6 +2,7 @@ package stud.euktop.schooljournal.presentation.common.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -100,8 +101,8 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
         noinline onSuccess: suspend (T) -> Unit
     ) = viewModelScope.launch { executeCoordinatorAndLoading(block, onSuccess) }
 
-    protected suspend inline fun <T> executeLoadingBlock(
-        block: suspend () -> T
+    protected suspend inline fun <T> CoroutineScope.executeLoadingBlock(
+        block: suspend CoroutineScope.() -> T
     ): T {
         _state.update { it.updateIsLoading(true) }
         try {
@@ -112,7 +113,7 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
     }
 
     protected inline fun <T> executeLoadingBlockSync(
-        crossinline block: suspend () -> T
+        crossinline block: suspend CoroutineScope.() -> T
     ) = viewModelScope.launch { executeLoadingBlock(block) }
 
     protected lateinit var executeCoordinator: ExecuteCoordinator

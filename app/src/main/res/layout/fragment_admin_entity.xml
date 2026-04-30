@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="stud.euktop.schooljournal.presentation.main.admin.panel.AdminEntityFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
         android:id="@+id/rvEntity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

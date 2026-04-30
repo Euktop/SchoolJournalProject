@@ -11,8 +11,10 @@ import stud.euktop.schooljournal.databinding.FragmentTeacherLessonsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.utils.submitList
 import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
 import javax.inject.Inject
+
 /**
  * Экран списка уроков по выбранному классу и предмету (учитель).
  *
@@ -45,7 +47,7 @@ class TeacherLessonsFragment : BaseFragment<
     private var adapter: TeacherLessonsAdapter? = null
 
     override fun setupUI() {
-        adapter = TeacherLessonsAdapter { lesson ->
+        binding.rvLessons.adapter = TeacherLessonsAdapter { lesson ->
             navigationManager.navigate(
                 NavCommand.ToDestination(
                     destId = R.id.lessonMarksFragment,
@@ -55,12 +57,10 @@ class TeacherLessonsFragment : BaseFragment<
                 )
             )
         }
-        binding.rvLessons.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvLessons.adapter = adapter
     }
 
     override fun updateState(state: TeacherLessonsState) {
-        adapter?.submitList(state.lessons)
+        binding.rvLessons.submitList(state.lessons)
     }
 
     override fun updateEvent(event: Unit) {}

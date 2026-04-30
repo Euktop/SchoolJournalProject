@@ -1,0 +1,122 @@
+<!-- res/layout/fragment_class_edit.xml -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="44dp"
+                android:text="@string/edit_class"
+                android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/div_16"
+                android:dividerPadding="16dp"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.SchJ.TextView.Helper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/school" />
+
+                    <stud.euktop.uikit.components.input.select.SchJSelect
+                        android:id="@+id/selectSchool"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:title="@string/school" />
+                </LinearLayout>
+
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputGrade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/grade_number"
+                    android:inputType="number"
+                    app:helperText="@string/grade_number"
+                    app:schjTextError="@string/grade_error" />
+
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputLetter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/letter"
+                    android:inputType="textCapCharacters"
+                    app:helperText="@string/letter"
+                    app:schjTextError="@string/letter_error" />
+
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputYearStart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/academic_year_start"
+                    android:inputType="number"
+                    app:helperText="@string/academic_year_start" />
+
+                <!-- Год окончания -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputYearEnd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/academic_year_end"
+                    android:inputType="number"
+                    app:helperText="@string/academic_year_end" />
+
+                <!-- Классный руководитель -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.SchJ.TextView.Helper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/class_teacher" />
+
+                    <stud.euktop.uikit.components.input.select.SchJSelect
+                        android:id="@+id/selectClassTeacher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:title="@string/class_teacher" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:minHeight="32dp" />
+
+            <include
+                android:id="@+id/buttons_save_cancel"
+                layout="@layout/layout_buttons_save_cancel" />
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

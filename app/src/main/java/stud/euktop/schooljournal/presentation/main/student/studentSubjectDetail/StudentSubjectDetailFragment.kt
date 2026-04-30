@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectDetailBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.utils.submitList
+import stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentMarkAdapter
 import stud.euktop.uikit.components.lineChart.SchJLineChartState
 import stud.euktop.uikit.components.lineChart.SchJLinePoint
+
 /**
  * Детальный экран успеваемости по предмету (ученик).
  *
@@ -38,26 +41,21 @@ class StudentSubjectDetailFragment : BaseFragment<
         FragmentStudentSubjectDetailBinding.inflate(i, c, false)
 
     override val viewModel: StudentSubjectDetailViewModel by viewModels()
-    private var marksAdapter: StudentMarkAdapter? = null
 
     override fun setupUI() {
-        marksAdapter = StudentMarkAdapter { /* клик по оценке не нужен */ }
-        binding.rvMarks.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvMarks.adapter = marksAdapter
+        binding.rvMarks.adapter = StudentMarkAdapter { /* клик по оценке не нужен */ }
     }
 
     override fun updateState(state: StudentSubjectDetailState) {
-        // Обновляем график
         binding.lcProgress.state = SchJLineChartState(
             points = state.marks.mapIndexed { _, mark ->
                 SchJLinePoint(
-                    label = mark.date.substring(0, 5), // первые 5 символов даты "28.04"
+                    label = mark.date.substring(0, 5),
                     value = mark.value?.toFloat() ?: 0f
                 )
             }
         )
-        // Обновляем список оценок
-        marksAdapter?.submitList(state.marks)
+        binding.rvMarks.submitList(state.marks)
     }
 
     override fun updateEvent(event: Unit) {}

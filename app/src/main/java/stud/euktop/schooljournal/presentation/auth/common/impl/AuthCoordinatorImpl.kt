@@ -1,5 +1,6 @@
 package stud.euktop.schooljournal.presentation.auth.common.impl
 
+import stud.euktop.domain.model.AccountStatus
 import stud.euktop.domain.model.Gender
 import stud.euktop.domain.model.Profile
 import stud.euktop.domain.repository.AuthRepository
@@ -31,20 +32,25 @@ class AuthCoordinatorImpl @Inject constructor(
         birthDay: Date,
         email: String,
         phone: String?
-    ) {
-        pendingProfile = Profile(
-            userId = 0,
-            lastName = lastName,
-            firstName = firstName,
-            surName = surName,
-            gender = gender,
-            birthDay = birthDay,
-            email = email,
-            phone = phone,
-            dateRegistration = Date(),
-            accountStatusId = stud.euktop.domain.model.AccountStatus.ACTIVE,
-            roles = emptyList()
-        )
+    ): Result<Unit> {
+        return try {
+            pendingProfile = Profile(
+                userId = 0,
+                lastName = lastName,
+                firstName = firstName,
+                surName = surName,
+                gender = gender,
+                birthDay = birthDay,
+                email = email,
+                phone = phone,
+                dateRegistration = Date(),
+                accountStatusId = AccountStatus.ACTIVE,
+                roles = emptyList()
+            )
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun register(password: String): CoordinatorResult<Profile> {

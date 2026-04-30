@@ -14,7 +14,8 @@
         android:layout_gravity="center"
         android:divider="@drawable/div_16"
         android:orientation="horizontal"
-        android:showDividers="middle">
+        android:showDividers="middle"
+        tools:ignore="UselessParent">
 
         <View
             android:id="@+id/view"

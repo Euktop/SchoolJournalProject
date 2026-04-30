@@ -37,3 +37,6 @@ fun SchJInput.check(focusTrack: FocusTrack, validate: Validator<String, *>) {
     if (state.text != text)
         state = state.copy(text = validate.value ?: "")
 }
+
+fun inputChecks(focusTrack: FocusTrack, vararg inputs: Pair<SchJInput, Validator<String, *>>) =
+    inputs.forEach { it.first.check(focusTrack, it.second) }

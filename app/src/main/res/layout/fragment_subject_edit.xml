@@ -1,0 +1,60 @@
+<!-- res/layout/fragment_subject_edit.xml -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="44dp"
+                android:text="@string/edit_subject"
+                android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/div_16"
+                android:dividerPadding="16dp"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/subject_name"
+                    android:inputType="text"
+                    app:helperText="@string/subject_name"
+                    app:schjTextError="@string/incorrect_subject_name" />
+
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description"
+                    android:inputType="textMultiLine"
+                    app:helperText="@string/description" />
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/buttonsSaveCancel"
+                layout="@layout/layout_buttons_save_cancel" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

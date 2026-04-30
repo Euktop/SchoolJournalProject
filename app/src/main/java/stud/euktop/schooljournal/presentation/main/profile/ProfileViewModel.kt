@@ -7,23 +7,23 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
+
 /**
- * ViewModel для экрана профиля.
+ * ViewModel для экрана регистрации (заполнение профиля).
  *
- * Назначение: загружает данные текущего пользователя.
+ * Назначение: управляет валидацией полей профиля и временным хранением данных
+ * через AuthCoordinator.
  *
- * Функционал:
- * - State: userName, email, roleNames, isLoading
- * - loadProfile() – вызов AuthRepository.getCurrentUser()
- * - При успехе обновляет state
+ * @see ProfileFragment
+ * @see stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
  */
-// ProfileViewModel.kt
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager,
     private val authRepository: AuthRepository
 ) : BaseViewModel<ProfileState, Unit>() {
+
     override fun initState() = ProfileState()
 
     init {
@@ -39,10 +39,9 @@ class ProfileViewModel @Inject constructor(
                     it.copy(
                         userName = "${profile.lastName} ${profile.firstName}",
                         email = profile.email,
-                        roleNames = profile.roles.map { r ->
-                            r.name.lowercase().replaceFirstChar { it.uppercase() }
-                        },
-                        isLoading = false
+                        roleNames = profile.roles.map { it ->
+                            it.name.lowercase().replaceFirstChar { it.uppercase() }
+                        }
                     )
                 }
             }
