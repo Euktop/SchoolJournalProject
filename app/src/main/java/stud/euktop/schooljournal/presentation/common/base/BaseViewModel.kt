@@ -11,10 +11,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.presentation.common.message.MessageEvent
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
+import stud.euktop.schooljournal.presentation.common.navigate.RepositoryExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 
-abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel() {
+abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(), RepositoryExec {
     abstract fun initState(): STATE
     protected val _state = MutableStateFlow(initState())
     val state = _state.asStateFlow()
@@ -22,6 +23,18 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
     val event = _event.asSharedFlow()
     protected val _messageEvent = MutableSharedFlow<MessageEvent>()
     val messageEvent = _messageEvent.asSharedFlow()
+
+    override var onError: ((CoordinatorResult.Error) -> Unit) = { result ->
+        viewModelScope.launch {
+            _messageEvent.emit(
+                MessageEvent.Message(
+                    stud.euktop.schooljournal.presentation.common.message.contract.MessageParam(
+                        message = result.messageId,
+                        action = { executeCoordinator.navigationManager.navigate(result.navCommand) }
+                    )
+                ))
+        }
+    }
 
     /**
      * Выполняет блок через [CoordinatorExec], автоматически обрабатывает ошибки:
@@ -46,13 +59,7 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
         when (val result = block()) {
             is CoordinatorResult.Success -> onSuccess(result.result)
             is CoordinatorResult.Error -> {
-                _messageEvent.emit(
-                    MessageEvent.Message(
-                        stud.euktop.schooljournal.presentation.common.message.contract.MessageParam(
-                            message = result.messageId,
-                            action = { executeCoordinator.navigationManager.navigate(result.navCommand) }
-                        )
-                    ))
+                onError.invoke(result)
             }
         }
     }

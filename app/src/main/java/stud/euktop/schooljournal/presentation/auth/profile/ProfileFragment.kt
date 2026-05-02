@@ -43,8 +43,10 @@ class ProfileFragment : BaseFragment<FragmentRegBinding, ProfileViewModel, Profi
 
             genderListSafe = ListSafe(
                 values = Gender.entries.toList(),
-                toText = { ContextCompat.getString(requireContext(), it.toMessageId()) },
-                onClick = { gender, _ -> viewModel.genderSet(gender) }
+                toText = {
+                    it?.let { ContextCompat.getString(requireContext(), it.toMessageId()) } ?: ""
+                },
+                onClick = { gender, _ -> viewModel.genderSet(gender ?: Gender.NONE) }
             )
             genderRegister = genderSelect.RegisterList(genderListSafe)
             genderRegister.register(childFragmentManager)

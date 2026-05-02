@@ -77,7 +77,7 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
     /**
      * Показывает или скрывает полупрозрачный оверлей с ProgressBar.
      */
-    protected fun showLoading(isLoading: Boolean) {
+    protected open fun showLoading(isLoading: Boolean) {
         loadingOverlay?.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
@@ -114,13 +114,13 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
-            )
+            )/*
             setBackgroundColor(
                 ContextCompat.getColor(
                     context,
                     R.color.color_overlay
                 )
-            )
+            )*/
             visibility = View.GONE
 
             val progressBar = ProgressBar(requireContext()).apply {

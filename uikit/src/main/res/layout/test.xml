@@ -1,10 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!-- res/layout/dialog_homework_filter.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-        />
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Фильтр домашних заданий"
+        android:textAppearance="@style/TextAppearance.SchJ.Title2.SemiBold" />
+
+    <!-- Поиск по описанию -->
+    <stud.euktop.uikit.components.input.SchJInput
+        android:id="@+id/inputSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Поиск по описанию"
+        android:inputType="text"
+        app:helperText="Введите часть описания" />
+
+    <!-- Предмет (поисковый селект) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Widget.SchJ.TextView.Helper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Предмет" />
+
+        <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+            android:id="@+id/selectSubject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title="Предмет" />
+    </LinearLayout>
+
+    <!-- Учитель (обычный селект) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/Widget.SchJ.TextView.Helper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Учитель" />
+
+        <stud.euktop.uikit.components.input.select.def.SchJSelect
+            android:id="@+id/selectTeacher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:title="Учитель" />
+    </LinearLayout>
+
+    <!-- Дата (текстовое поле с вызовом DatePicker) -->
+    <stud.euktop.uikit.components.input.SchJInput
+        android:id="@+id/inputDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Дата создания"
+        android:inputType="none"
+        app:endIconMode="clear_text"
+        app:helperText="Нажмите для выбора даты" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnReset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Сбросить"
+            app:schJButtonClass="SECONDARY"
+            app:schJButtonType="BIG" />
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Применить"
+            app:schJButtonClass="PRIMARY"
+            app:schJButtonType="BIG" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,30 +1,25 @@
 package stud.euktop.schooljournal.presentation.main.profile
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.user.Role
+import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
-/**
- * Экран профиля авторизованного пользователя.
- *
- * Назначение: показывает информацию о текущем пользователе (ФИО, email, список ролей).
- *
- * Роли: все авторизованные пользователи (ученик, учитель, родитель, администратор)
- *
- * Функционал:
- * - Загрузка данных через AuthRepository.getCurrentUser()
- * - Отображение инициалов в кружке, имени, email
- * - Список ролей в виде Chip-ов
- * - Кнопка выхода (logout) – очистка сессии и переход на экран входа
- *
- * @see ProfileViewModel
- */
-//stud.euktop.schooljournal.presentation.main.profile.ProfileFragment
+import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
+import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.utils.toMessageId
+import stud.euktop.schooljournal.presentation.main.admin.users.UserEditViewModel
+import javax.inject.Inject
+
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<
         FragmentProfileBinding,
@@ -32,33 +27,62 @@ class ProfileFragment : BaseFragment<
         ProfileState,
         Unit
         >() {
+
     override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
         FragmentProfileBinding.inflate(i, c, false)
 
     override val viewModel: ProfileViewModel by viewModels()
 
+    @Inject
+    lateinit var navigationManager: NavigationManager
+
     override fun setupUI() {
+        binding.btnEditProfile.setOnClickListener {
+            val currentUser = viewModel.state.value.user ?: return@setOnClickListener
+            val bundle = Bundle().apply {
+                putInt(UserEditViewModel.KEY_USER_ID, currentUser.userId)
+            }
+            navigationManager.navigate(
+                NavCommand.ToDestination(R.id.userEditFragment, args = bundle)
+            )
+        }
         binding.btnLogout.setOnClickListener {
             messages.message(MessageParam(R.string.logout_message) {})
         }
     }
 
     override fun updateState(state: ProfileState) {
-        binding.tvUserName.text = state.userName
-        binding.tvEmail.text = state.email
+        val user = state.user ?: return
+        updateUI(user)
+    }
 
-        val initials =
-            state.userName.split(" ").take(2).map { it.firstOrNull() ?: ' ' }.joinToString("")
-        binding.tvInitials.text = initials.uppercase()
+    private fun updateUI(user: UserInfo) {
+        binding.apply {
+            tvUserName.text = user.fullName
+            tvEmail.text = user.email
+            tvPhone.text = user.phone ?: getString(R.string.not_specified)
+            tvBirthday.text = user.birthday?.toBaseString() ?: getString(R.string.not_specified)
+            tvGender.text = user.gender.toMessageId().let { getString(it) }
+            val initials =
+                "${user.firstName.firstOrNull()}${user.lastName.firstOrNull()}".uppercase()
+            tvInitials.text = initials
 
-        binding.rolesContainer.removeAllViews()
-        state.roleNames.forEach { role ->
-            val chip = Chip(context).apply {
-                text = role
-                isClickable = false
-                isCheckable = false
+            rolesContainer.removeAllViews()
+            user.roles.forEach { roleSchool ->
+                val chip = Chip(requireContext()).apply {
+                    text = when (roleSchool.role) {
+                        Role.ADMIN -> getString(R.string.administrator)
+                        else -> {
+                            val schoolName =
+                                roleSchool.school?.name ?: getString(R.string.no_school)
+                            "${getString(roleSchool.role.toMessageId())} ($schoolName)"
+                        }
+                    }
+                    isClickable = false
+                    isCheckable = false
+                }
+                rolesContainer.addView(chip)
             }
-            binding.rolesContainer.addView(chip)
         }
     }
 

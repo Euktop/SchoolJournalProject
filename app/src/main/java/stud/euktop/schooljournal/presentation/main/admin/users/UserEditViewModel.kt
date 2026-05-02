@@ -3,16 +3,15 @@ package stud.euktop.schooljournal.presentation.main.admin.users
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import stud.euktop.domain.contract.RoleRepository
 import stud.euktop.domain.model.user.AccountStatus
-import stud.euktop.domain.model.auth.Role
 import stud.euktop.domain.model.user.RoleSchools
-import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.user.UserInfo
-import stud.euktop.domain.repository.SchoolAdminRepository
 import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,8 +19,8 @@ class UserEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager,
-    private val schoolAdminRepository: SchoolAdminRepository,
-    private val userAdminRepository: UserAdminRepository
+    private val userAdminRepository: UserAdminRepository,
+    private val roleRepository: RoleRepository
 ) : BaseViewModel<UserEditState, UserEditEvent>() {
 
     companion object {
@@ -29,30 +28,46 @@ class UserEditViewModel @Inject constructor(
     }
 
     private val userId: Int = savedStateHandle[KEY_USER_ID] ?: 0
+    private var canEditFull = false
 
     init {
         executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
-        loadInitialData()
-        if (userId != 0) loadUser()
+        initData()
     }
 
     override fun initState() = UserEditState(userId = userId)
+    fun initData() {
+        if (userId != 0) loadUser()
+        checkEditPermissions()
+    }
 
-    private fun loadInitialData() {
+    private fun checkEditPermissions() {
         executeWithCoordinatorAndLoadingSync(
-            block = { schoolAdminRepository.getSchools() },
-            onSuccess = { schools ->
-                _state.update { it.copy(availableSchools = schools) }
+            block = { runCatching { roleRepository.canEditUser(userId) } },
+            onSuccess = { canEdit ->
+                canEditFull = canEdit
             }
         )
-        _state.update { it.copy(availableRoles = Role.entries.toList()) }
+    }
+
+    fun removeRole(role: RoleSchools) {
+        _state.update { it ->
+            it.copy(selectedRoles = it.selectedRoles.filter { it != role })
+        }
+    }
+
+    fun addRole(role: RoleSchools) {
+        _state.update { it ->
+            it.copy(
+                selectedRoles = it.selectedRoles.toMutableList()
+                    .apply { if (!this.contains(role)) add(role) })
+        }
     }
 
     private fun loadUser() {
         executeWithCoordinatorAndLoadingSync(
             block = { userAdminRepository.getUser(userId) },
             onSuccess = { user ->
-                val firstRoleSchool = user.roles.firstOrNull()
                 _state.update {
                     it.copy(
                         userId = user.userId,
@@ -62,8 +77,7 @@ class UserEditViewModel @Inject constructor(
                         email = it.email.copy(user.email),
                         phone = it.phone.copy(user.phone ?: ""),
                         accountStatus = user.accountStatus,
-                        selectedRole = firstRoleSchool?.role,
-                        selectedSchool = firstRoleSchool?.school
+                        selectedRoles = user.roles
                     )
                 }
             }
@@ -98,45 +112,28 @@ class UserEditViewModel @Inject constructor(
         _state.update { it.copy(accountStatus = status) }
     }
 
-    fun updateSelectedRole(role: Role?) {
-        _state.update {
-            it.copy(
-                selectedRole = role,
-                selectedSchool = if (role == Role.ADMIN || role == null) null else it.selectedSchool
-            )
-        }
-    }
-
-    fun updateSchool(school: School) {
-        _state.update { it.copy(selectedSchool = school) }
-    }
-
-    fun loadSchools(query: String) {
-        executeWithCoordinatorAndLoadingSync(
-            block = { schoolAdminRepository.getSchools(query) },
-            onSuccess = { schools ->
-                _state.update { it.copy(availableSchools = schools) }
-            }
-        )
-    }
+    fun canEditFull(): Boolean = canEditFull
 
     fun save() {
         val state = _state.value
         if (!state.isFormValid()) return
 
-        val roles = state.selectedRole?.let { role ->
-            listOf(RoleSchools(role, state.selectedSchool))
-        } ?: emptyList()
+        val roles = state.selectedRoles.map { (role, school) ->
+            RoleSchools(role, school)
+        }
 
         val user = UserInfo(
             userId = state.userId,
             lastName = state.lastName.getValidate(),
             firstName = state.firstName.getValidate(),
             surName = state.surName.value?.takeIf { it.isNotBlank() },
+            birthday = null,
+            gender = stud.euktop.domain.model.user.Gender.NONE,
             email = state.email.getValidate(),
             phone = state.phone.value?.takeIf { it.isNotBlank() },
-            accountStatus = state.accountStatus,
-            roles = roles
+            roles = roles,
+            dateRegistration = Date(),
+            accountStatus = if (canEditFull) state.accountStatus else _state.value.accountStatus
         )
 
         executeWithCoordinatorAndLoadingSync(

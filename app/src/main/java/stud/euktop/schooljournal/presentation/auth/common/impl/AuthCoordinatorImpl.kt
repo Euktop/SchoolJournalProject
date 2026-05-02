@@ -2,7 +2,7 @@ package stud.euktop.schooljournal.presentation.auth.common.impl
 
 import stud.euktop.domain.model.user.AccountStatus
 import stud.euktop.domain.model.user.Gender
-import stud.euktop.domain.model.auth.Profile
+import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
@@ -18,9 +18,9 @@ class AuthCoordinatorImpl @Inject constructor(
     private val coordinatorExec: CoordinatorExec
 ) : AuthCoordinator {
 
-    private var pendingProfile: Profile? = null
+    private var pendingUserInfo: UserInfo? = null
 
-    override suspend fun login(email: String, password: String): CoordinatorResult<Profile> {
+    override suspend fun login(email: String, password: String): CoordinatorResult<UserInfo> {
         return coordinatorExec.exec { authRepository.login(email, password) }
     }
 
@@ -34,13 +34,13 @@ class AuthCoordinatorImpl @Inject constructor(
         phone: String?
     ): Result<Unit> {
         return try {
-            pendingProfile = Profile(
+            pendingUserInfo = UserInfo(
                 userId = 0,
                 lastName = lastName,
                 firstName = firstName,
                 surName = surName,
                 gender = gender,
-                birthDay = birthDay,
+                birthday = birthDay,
                 email = email,
                 phone = phone,
                 dateRegistration = Date(),
@@ -53,8 +53,8 @@ class AuthCoordinatorImpl @Inject constructor(
         }
     }
 
-    override suspend fun register(password: String): CoordinatorResult<Profile> {
-        val profile = pendingProfile
+    override suspend fun register(password: String): CoordinatorResult<UserInfo> {
+        val profile = pendingUserInfo
             ?: return CoordinatorResult.Error(
                 NavCommand.Back,
                 stud.euktop.schooljournal.R.string.error_empty_body
@@ -63,11 +63,11 @@ class AuthCoordinatorImpl @Inject constructor(
     }
 
     override suspend fun logout(): CoordinatorResult<Unit> {
-        pendingProfile = null
+        pendingUserInfo = null
         return CoordinatorResult.Success(Unit)
     }
 
-    override suspend fun getUser(): CoordinatorResult<Profile> {
+    override suspend fun getUser(): CoordinatorResult<UserInfo> {
         return coordinatorExec.exec { authRepository.getCurrentUser() }
     }
 }

@@ -19,7 +19,16 @@ data class SchJButtonState(val buttonType: ButtonType, val buttonClass: ButtonCl
         SECONDARY,
         TETRIARY,
         SELECT,
-        UNSELECT
+        UNSELECT;
+
+        fun updateSelect(isSelect: Boolean): ButtonClass {
+            return if (isSelect) SELECT
+            else UNSELECT
+        }
+
+        fun isSelect(): Boolean {
+            return this == SELECT
+        }
     }
 
     fun updateView(view: View) {

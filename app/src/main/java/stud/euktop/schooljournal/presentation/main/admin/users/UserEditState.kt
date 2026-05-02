@@ -1,8 +1,9 @@
 package stud.euktop.schooljournal.presentation.main.admin.users
 
 import stud.euktop.domain.model.user.AccountStatus
-import stud.euktop.domain.model.auth.Role
 import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.user.Role
+import stud.euktop.domain.model.user.RoleSchools
 import stud.euktop.domain.utils.validation.EmailValidator
 import stud.euktop.domain.utils.validation.NameLetterOnlyOrNullValidator
 import stud.euktop.domain.utils.validation.NameLetterOnlyValidator
@@ -21,29 +22,13 @@ data class UserEditState(
     val phone: PhoneValidator = PhoneValidator(),
     val password: PasswordNullValidator = PasswordNullValidator(),
     val accountStatus: AccountStatus = AccountStatus.ACTIVE,
-    val availableRoles: List<Role> = emptyList(),
-    val availableSchools: List<School> = emptyList(),
-    val selectedRole: Role? = null,
-    val selectedSchool: School? = null,
+    val selectedRoles: List<RoleSchools> = emptyList()
 ) : BaseState<UserEditState>() {
 
     fun isEditMode() = userId != 0
 
-    fun isFormValid(): Boolean {
-        val baseValid = Validator.isAllValidate(lastName, firstName, surName, email, phone)
-        if (!baseValid) return false
-        val passwordValid = if (isEditMode()) {
-            password.value.isNullOrBlank() || password.validate()
-        } else {
-            !password.value.isNullOrBlank() && password.validate()
-        }
-        if (!passwordValid) return false
-        if (selectedRole != null) {
-            return if (selectedRole == Role.ADMIN) true
-            else selectedSchool != null
-        }
-        return false
-    }
+    fun isFormValid() =
+        Validator.isAllValidate(lastName, firstName, surName, email, phone, password)
 
     override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
 }

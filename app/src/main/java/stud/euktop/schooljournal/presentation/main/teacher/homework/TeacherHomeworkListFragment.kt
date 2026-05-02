@@ -8,6 +8,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.filter.homework.HomeworkFilterDialog
+import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.submitList
@@ -38,7 +40,6 @@ class TeacherHomeworkListFragment : BaseFragment<
             navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkEditFragment))
         }
         adapter = TeacherHomeworkAdapter { homework ->
-            // Переход на экран редактирования с передачей homeworkId
             val bundle = Bundle().apply {
                 putInt("homeworkId", homework.homeworkId)
             }
@@ -46,6 +47,7 @@ class TeacherHomeworkListFragment : BaseFragment<
                 NavCommand.ToDestination(R.id.teacherHomeworkEditFragment, args = bundle)
             )
         }
+        binding.toolbar.showFilterDialog = { showFilterDialog() }
         binding.rvHomeworkList.adapter = adapter
     }
 
@@ -72,4 +74,15 @@ class TeacherHomeworkListFragment : BaseFragment<
         }
     }
 
+    fun showFilterDialog() {
+        if (parentFragmentManager.findFragmentByTag("filter") != null) return
+        val dialog = HomeworkFilterDialog(
+            initialFilter = viewModel.state.value.homeworkFilter,
+            onFilterApplied = { filter -> viewModel.applyFilter(filter) },
+            onError = { error ->
+                messages.message(MessageParam(error.messageId))
+            }
+        )
+        dialog.show(parentFragmentManager, "filter")
+    }
 }

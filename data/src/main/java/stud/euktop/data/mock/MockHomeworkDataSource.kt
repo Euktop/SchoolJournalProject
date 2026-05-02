@@ -1,7 +1,7 @@
 // data/src/main/java/stud/euktop/data/mock/MockHomeworkDataSource.kt
 package stud.euktop.data.mock
 
-import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.homework.Homework
 import stud.euktop.domain.model.school.ClassInfo
 import java.util.Date
@@ -9,7 +9,7 @@ import java.util.Date
 object MockHomeworkDataSource {
     private val _storage = mutableListOf<Homework>().apply {
         // Инициализация тестовыми данными (если нужны)
-        val teacher = MockUserDataSource.getUser(2) // учитель Петрова
+        val teacher = MockUserDataSource.getUser(1) // учитель Петрова
         val lesson = MockLessonDataSource.getLesson(101) // должен существовать
         if (teacher != null && lesson != null) {
             add(

@@ -7,12 +7,14 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.lesson.Lesson
 import stud.euktop.domain.utils.toBaseString
-import stud.euktop.uikit.R as R1
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.*
+import stud.euktop.uikit.R as R1
 import stud.euktop.uikit.components.input.select.ListSafe
 import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
 import javax.inject.Inject
@@ -34,7 +36,7 @@ class TeacherHomeworkEditFragment : BaseFragment<
     @Inject
     lateinit var navigationManager: NavigationManager
 
-    private lateinit var lessonRegister: SchJSearchableSelect.RegisterList<Lesson, Any>
+    private lateinit var lessonRegister: SchJSearchableSelect.RegisterList<Lesson>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,26 +51,22 @@ class TeacherHomeworkEditFragment : BaseFragment<
             inputDescription.setup(focusTrack) { viewModel.updateDescription(it) }
             inputAttachedFiles.setup(focusTrack) { viewModel.updateAttachedFiles(it) }
 
-            lessonRegister = selectLesson.RegisterList(
-                items = ListSafe(
-                    toText = { lesson ->
-                        "${lesson.subject.name} - ${lesson.classInfo.name} (${lesson.date.toBaseString()})"
-                    },
-                    onClick = { lesson, _ -> viewModel.selectLesson(lesson.lessonId) }
-                ),
-                onSearchQueryChanged = { query ->
-                    val filtered = viewModel.state.value.availableLessons.filter { lesson ->
-                        lesson.subject.name.contains(query, ignoreCase = true) ||
-                                lesson.classInfo.name.contains(query, ignoreCase = true)
-                    }
-                    lessonRegister.updateItems(filtered)
-                }
+            val lessonListSafe = ListSafe<Lesson>(
+                toText = { lesson -> lesson?.name ?: "" },
+                onClick = { lesson, _ -> viewModel.selectLesson(lesson?.lessonId) }
             )
+            lessonRegister = selectLesson.RegisterList(lessonListSafe)
             lessonRegister.register(childFragmentManager)
+            // При открытии диалога обновляем список (но данные уже загружены)
+            selectLesson.onShowing =
+                { lessonRegister.updateItems(viewModel.state.value.availableLessons) }
 
             buttonsSaveCancel.btnSave.setOnClickListener {
-                val selectedLesson =
-                    viewModel.state.value.selectedLesson ?: return@setOnClickListener
+                val selectedLesson = viewModel.state.value.selectedLesson
+                if (selectedLesson == null) {
+                    messages.message(MessageParam(R1.string.error_no_lesson_selected))
+                    return@setOnClickListener
+                }
                 if (viewModel.state.value.isEditMode) {
                     viewModel.updateHomework(
                         homeworkId = viewModel.state.value.editingHomeworkId,
@@ -116,8 +114,9 @@ class TeacherHomeworkEditFragment : BaseFragment<
 
     override fun updateEvent(event: TeacherHomeworkEvent) {
         when (event) {
-            TeacherHomeworkEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
-            else -> {}
+            is TeacherHomeworkEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
+            is TeacherHomeworkEvent.EditHomework -> {}
+            is TeacherHomeworkEvent.NavigateToAdd -> {}
         }
     }
 }

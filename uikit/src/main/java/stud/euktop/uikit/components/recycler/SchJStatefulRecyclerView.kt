@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.content.withStyledAttributes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import stud.euktop.uikit.R
 import stud.euktop.uikit.databinding.LayoutStatefulRecyclerBinding
 
 /**
@@ -30,6 +32,12 @@ class SchJStatefulRecyclerView @JvmOverloads constructor(
 
     init {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        context.withStyledAttributes(attrs, R.styleable.SchJStatefulRecyclerView) {
+            binding.recyclerView.isNestedScrollingEnabled = getBoolean(
+                R.styleable.SchJStatefulRecyclerView_android_nestedScrollingEnabled,
+                false
+            )
+        }
     }
 
     fun update() {

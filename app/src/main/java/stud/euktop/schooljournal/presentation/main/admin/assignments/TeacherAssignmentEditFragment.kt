@@ -35,49 +35,40 @@ class TeacherAssignmentEditFragment :
     override val viewModel: TeacherAssignmentEditViewModel by viewModels()
 
     private val focusTrack = FocusTrack()
-    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo, Any>
-    private lateinit var classRegister: SchJSearchableSelect.RegisterList<ClassInfo, Any>
-    private lateinit var subjectRegister: SchJSearchableSelect.RegisterList<Subject, Any>
+    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo>
+    private lateinit var classRegister: SchJSearchableSelect.RegisterList<ClassInfo>
+    private lateinit var subjectRegister: SchJSearchableSelect.RegisterList<Subject>
     private var fromDateDialog: DatePickerDialog? = null
     private var toDateDialog: DatePickerDialog? = null
 
     override fun setupUI() {
         binding.apply {
-            // Настройка поискового выбора учителя
+            // Учитель
             val teacherListSafe = ListSafe<UserInfo>(
-                toText = { "${it.lastName} ${it.firstName}" },
+                toText = { it?.let { "${it.lastName} ${it.firstName}" } ?: "" },
                 onClick = { teacher, _ -> viewModel.updateTeacher(teacher) }
             )
-            teacherRegister = selectTeacher.RegisterList(
-                items = teacherListSafe,
-                categories = ListSafe(),
-                onSearchQueryChanged = { query -> viewModel.loadTeachers(query) }
-            )
+            teacherRegister = selectTeacher.RegisterList(teacherListSafe)
             teacherRegister.register(childFragmentManager)
+            selectTeacher.onShowing = { viewModel.loadTeachers("") }
 
             // Класс
             val classListSafe = ListSafe<ClassInfo>(
-                toText = { "${it.grade}${it.letter} (${it.school.name})" },
+                toText = { it?.name ?: "" },
                 onClick = { classInfo, _ -> viewModel.updateClass(classInfo) }
             )
-            classRegister = selectClass.RegisterList(
-                items = classListSafe,
-                categories = ListSafe(),
-                onSearchQueryChanged = { query -> viewModel.loadClasses(query) }
-            )
+            classRegister = selectClass.RegisterList(classListSafe)
             classRegister.register(childFragmentManager)
+            selectClass.onShowing = { viewModel.loadClasses("") }
 
             // Предмет
             val subjectListSafe = ListSafe<Subject>(
-                toText = { it.name },
+                toText = { it?.name ?: "" },
                 onClick = { subject, _ -> viewModel.updateSubject(subject) }
             )
-            subjectRegister = selectSubject.RegisterList(
-                items = subjectListSafe,
-                categories = ListSafe(),
-                onSearchQueryChanged = { query -> viewModel.loadSubjects(query) }
-            )
+            subjectRegister = selectSubject.RegisterList(subjectListSafe)
             subjectRegister.register(childFragmentManager)
+            selectSubject.onShowing = { viewModel.loadSubjects("") }
 
             inputValidFrom.setOnClickListener {
                 showDatePicker(true)
@@ -116,12 +107,10 @@ class TeacherAssignmentEditFragment :
 
     override fun updateState(state: TeacherAssignmentEditState) {
         binding.apply {
-            // Обновление списков
-            teacherRegister.updateItems(state.availableTeachers, emptyList())
-            classRegister.updateItems(state.availableClasses, emptyList())
-            subjectRegister.updateItems(state.availableSubjects, emptyList())
+            teacherRegister.updateItems(state.availableTeachers)
+            classRegister.updateItems(state.availableClasses)
+            subjectRegister.updateItems(state.availableSubjects)
 
-            // Отображение выбранных значений
             selectTeacher.state = selectTeacher.state.copy(
                 selectText = state.teacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
             )
@@ -133,7 +122,6 @@ class TeacherAssignmentEditFragment :
                 selectText = state.subject?.name ?: ""
             )
 
-            // Даты
             inputValidFrom.state = inputValidFrom.state.copy(
                 text = state.validFrom?.let { state.dateFormat.format(it) } ?: ""
             )
@@ -142,7 +130,6 @@ class TeacherAssignmentEditFragment :
             )
             chkIsPrimary.isChecked = state.isPrimary
 
-            // Кнопка сохранения активна при валидной форме
             buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isLoading
         }
     }

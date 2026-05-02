@@ -1,16 +1,14 @@
 package stud.euktop.data.mock
 
-import stud.euktop.domain.model.auth.Profile
-import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.user.AccountStatus
 import stud.euktop.domain.model.user.Gender
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.RoleSchools
-import stud.euktop.domain.model.user.UserInfo
 import java.util.Date
 
 object MockUserDataSource {
-    // Хранилище пользователей
     private val _users = mutableListOf<UserInfo>().apply {
         add(
             UserInfo(
@@ -18,9 +16,16 @@ object MockUserDataSource {
                 lastName = "Иванов",
                 firstName = "Иван",
                 surName = "Иванович",
-                email = "ivanov@school.ru",
-                phone = "+71234567890",
-                roles = emptyList(),
+                birthday = null,
+                gender = Gender.MALE,
+                email = "noLox@school.ru",
+                phone = "+71212121219",
+                roles = listOf(
+                    RoleSchools(Role.ADMIN, null),
+                    RoleSchools(Role.STUDENT, MockSchoolDataSource.getAll()[3]),
+                    RoleSchools(Role.STUDENT, MockSchoolDataSource.getAll()[2]),
+                ),
+                dateRegistration = Date(),
                 accountStatus = AccountStatus.ACTIVE
             )
         )
@@ -30,10 +35,15 @@ object MockUserDataSource {
                 lastName = "Петрова",
                 firstName = "Анна",
                 surName = "Сергеевна",
+                birthday = null,
+                gender = Gender.WOMAN,
                 email = "petrova@school.ru",
                 phone = null,
-                roles = emptyList(),
-                accountStatus = AccountStatus.ACTIVE
+                roles = listOf(
+                    RoleSchools(Role.TEACHER, MockSchoolDataSource.getAll()[1]),
+                ),
+                dateRegistration = Date(),
+                accountStatus = AccountStatus.PENDING
             )
         )
         add(
@@ -42,10 +52,15 @@ object MockUserDataSource {
                 lastName = "Сидоров",
                 firstName = "Алексей",
                 surName = null,
+                birthday = null,
+                gender = Gender.MALE,
                 email = "sidorov@school.ru",
                 phone = null,
-                roles = emptyList(),
-                accountStatus = AccountStatus.ACTIVE
+                roles = listOf(
+                    RoleSchools(Role.DIRECTOR, MockSchoolDataSource.getAll()[2]),
+                ),
+                dateRegistration = Date(),
+                accountStatus = AccountStatus.BLOCKED
             )
         )
         add(
@@ -54,9 +69,12 @@ object MockUserDataSource {
                 lastName = "Борисова",
                 firstName = "Вера",
                 surName = "Владимировна",
+                birthday = null,
+                gender = Gender.WOMAN,
                 email = "borisova@school.ru",
                 phone = null,
                 roles = emptyList(),
+                dateRegistration = Date(),
                 accountStatus = AccountStatus.ACTIVE
             )
         )
@@ -66,15 +84,17 @@ object MockUserDataSource {
                 lastName = "Дмитриева",
                 firstName = "Елена",
                 surName = null,
+                birthday = null,
+                gender = Gender.WOMAN,
                 email = "dmitrieva@school.ru",
                 phone = null,
                 roles = emptyList(),
+                dateRegistration = Date(),
                 accountStatus = AccountStatus.ACTIVE
             )
         )
     }
 
-    // Хранилище ролей (userId, role, school)
     private val _userRoles = mutableListOf<Triple<Int, Role, School?>>().apply {
         add(Triple(1, Role.ADMIN, null))
         add(Triple(2, Role.TEACHER, MockSchoolDataSource.getAll()[1]))
@@ -83,19 +103,21 @@ object MockUserDataSource {
         add(Triple(5, Role.STUDENT, MockSchoolDataSource.getAll()[1]))
     }
 
-    // Текущий профиль (для авторизации)
-    val currentUser = Profile(
+    val currentUser = UserInfo(
         userId = 1,
         lastName = "Иванов",
         firstName = "Иван",
         surName = "Иванович",
+        birthday = null,
         gender = Gender.MALE,
-        birthDay = null,
         email = "ivanov@school.ru",
         phone = "+71234567890",
+        roles = listOf(
+            RoleSchools(Role.ADMIN, null),
+            RoleSchools(Role.TEACHER, MockSchoolDataSource.getAll()[1])
+        ),
         dateRegistration = Date(),
-        accountStatus = AccountStatus.ACTIVE,
-        roles = listOf(Role.ADMIN, Role.TEACHER)
+        accountStatus = AccountStatus.ACTIVE
     )
 
     fun getAllUsersWithRoles(): List<UserInfo> {
@@ -108,14 +130,12 @@ object MockUserDataSource {
 
     fun getUser(userId: Int): UserInfo? {
         val user = _users.find { it.userId == userId } ?: return null
-        val roles = _userRoles.filter { it.first == userId }
-            .map { RoleSchools(it.second, it.third) }
-        return user.copy(roles = roles)
+        return user
     }
 
     fun addUser(user: UserInfo, roles: List<RoleSchools>): UserInfo {
         val newId = (_users.maxOfOrNull { it.userId } ?: 0) + 1
-        val newUser = user.copy(userId = newId)
+        val newUser = user.copy(userId = newId, dateRegistration = Date())
         _users.add(newUser)
         roles.forEach { roleSchool ->
             _userRoles.add(Triple(newId, roleSchool.role, roleSchool.school))
@@ -127,7 +147,6 @@ object MockUserDataSource {
         val index = _users.indexOfFirst { it.userId == user.userId }
         if (index >= 0) {
             _users[index] = user
-            // Обновляем роли: удаляем старые и добавляем новые
             _userRoles.removeAll { it.first == user.userId }
             user.roles.forEach { roleSchool ->
                 _userRoles.add(Triple(user.userId, roleSchool.role, roleSchool.school))

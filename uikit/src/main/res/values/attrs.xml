@@ -45,4 +45,7 @@
     <declare-styleable name="SchJBaseSelect">
         <attr name="android:title" format="string" />
     </declare-styleable>
+    <declare-styleable name="SchJStatefulRecyclerView">
+        <attr name="android:nestedScrollingEnabled" />
+    </declare-styleable>
 </resources>

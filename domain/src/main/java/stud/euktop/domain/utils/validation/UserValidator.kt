@@ -1,12 +1,12 @@
 package stud.euktop.domain.utils.validation
 
-import stud.euktop.domain.model.auth.Profile
+import stud.euktop.domain.model.user.UserInfo
 
 class UserValidator(
-    override var value: Profile?
-) : Validator<Profile, UserValidator>() {
+    override var value: UserInfo?
+) : Validator<UserInfo, UserValidator>() {
 
-    override fun _validate(value: Profile?): Boolean {
+    override fun _validate(value: UserInfo?): Boolean {
         var result = false
         value?.apply {
             result = isAllValidate(
@@ -20,8 +20,8 @@ class UserValidator(
         return result
     }
 
-    override fun getValidate(): Profile = value!!
-    override fun copy(value: Profile?): UserValidator {
+    override fun getValidate(): UserInfo = value!!
+    override fun copy(value: UserInfo?): UserValidator {
         return UserValidator(value)
     }
 }

@@ -1,5 +1,6 @@
 package stud.euktop.uikit.components.input.select.def
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,16 @@ import stud.euktop.uikit.components.bottomsheet.SchJBottomSheet
 import stud.euktop.uikit.databinding.ItemListContentBinding
 
 class SchJSelectSheet<T>(
-    private val adapter: SchJTextAdapter<T>
+    private val adapter: SchJTextAdapter<T>,
+    val onDismiss: (() -> Unit)? = null
 ) : SchJBottomSheet() {
     private var binding: ItemListContentBinding? = null
-    override fun provideContentView(
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismiss?.invoke()
+    }
+
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?

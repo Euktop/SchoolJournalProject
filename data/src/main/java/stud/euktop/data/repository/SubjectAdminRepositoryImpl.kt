@@ -3,13 +3,14 @@ package stud.euktop.data.repository
 import stud.euktop.data.mock.MockDelayService
 import stud.euktop.data.mock.MockSubjectDataSource
 import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.model.school.SubjectFilter
 import stud.euktop.domain.repository.SubjectAdminRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SubjectAdminRepositoryImpl @Inject constructor() : SubjectAdminRepository {
-    override suspend fun getSubjects(): Result<List<Subject>> {
+    override suspend fun getSubjects(filter: SubjectFilter): Result<List<Subject>> {
         MockDelayService.delay()
         return Result.success(MockSubjectDataSource.getAll())
     }

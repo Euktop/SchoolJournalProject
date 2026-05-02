@@ -31,6 +31,9 @@
         <item name="schJButtonStyle">@style/Widget.SchJ.Button</item>
         <item name="schJSearchStyle">@style/Widget.SchJ.Input.Search</item>
         <item name="schJSearchEditStyle">@style/Widget.SchJ.Input.EditText.Search</item>
+
+        <item name="materialCardViewStyle">@style/Widget.SchJ.CardView</item>
+        <item name="toolbarStyle">@style/Widget.SchJ.Toolbar</item>
     </style>
 
     <style name="Theme.SchoolJournal" parent="Base.Theme.SchoolJournal" />

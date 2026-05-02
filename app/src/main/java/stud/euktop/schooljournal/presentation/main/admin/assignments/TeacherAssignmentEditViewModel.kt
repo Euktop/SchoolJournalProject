@@ -5,7 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.model.school.ClassInfo
-import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.assignment.TeacherAssignment
 import stud.euktop.domain.model.user.UserInfo
@@ -88,19 +88,19 @@ class TeacherAssignmentEditViewModel @Inject constructor(
         )
     }
 
-    fun updateTeacher(teacher: UserInfo) {
+    fun updateTeacher(teacher: UserInfo?) {
         _state.update { it.copy(teacher = teacher) }
     }
 
-    fun updateClass(classInfo: ClassInfo) {
+    fun updateClass(classInfo: ClassInfo?) {
         _state.update { it.copy(classInfo = classInfo) }
     }
 
-    fun updateSubject(subject: Subject) {
+    fun updateSubject(subject: Subject?) {
         _state.update { it.copy(subject = subject) }
     }
 
-    fun updateValidFrom(date: Date) {
+    fun updateValidFrom(date: Date?) {
         _state.update { it.copy(validFrom = date) }
     }
 

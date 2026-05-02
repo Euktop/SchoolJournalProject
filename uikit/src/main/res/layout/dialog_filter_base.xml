@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><!-- uikit/src/main/res/layout/dialog_filter_base.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        tools:text="Фильтрация"
+        android:textAppearance="@style/TextAppearance.SchJ.Title2.SemiBold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/containerFields"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/div_16"
+            android:orientation="vertical"
+            android:showDividers="middle" />
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnReset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/reset"
+            app:schJButtonClass="SECONDARY"
+            app:schJButtonType="BIG" />
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="0dp" />
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/btnApply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/apply"
+            app:schJButtonClass="PRIMARY"
+            app:schJButtonType="BIG" />
+
+    </LinearLayout>
+
+</LinearLayout>

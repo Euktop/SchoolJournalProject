@@ -1,7 +1,7 @@
 package stud.euktop.schooljournal.presentation.auth.common.contract
 
 import stud.euktop.domain.model.user.Gender
-import stud.euktop.domain.model.auth.Profile
+import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import java.util.Date
 
@@ -18,7 +18,7 @@ interface AuthCoordinator {
      * @param password Пароль.
      * @return CoordinatorResult с данными пользователя и, возможно, следующим экраном.
      */
-    suspend fun login(email: String, password: String): CoordinatorResult<Profile>
+    suspend fun login(email: String, password: String): CoordinatorResult<UserInfo>
 
     /**
      * Сохраняет временное состояние профиля.
@@ -40,7 +40,7 @@ interface AuthCoordinator {
      * @param password Пароль.
      * @return CoordinatorResult с данными пользователя и следующим экраном.
      */
-    suspend fun register(password: String): CoordinatorResult<Profile>
+    suspend fun register(password: String): CoordinatorResult<UserInfo>
 
     /**
      * Выполняет выход из системы.
@@ -54,5 +54,5 @@ interface AuthCoordinator {
      *
      * @return UserEntity, если профиль существует и заполнен, иначе null.
      */
-    suspend fun getUser(): CoordinatorResult<Profile>
+    suspend fun getUser(): CoordinatorResult<UserInfo>
 }

@@ -17,13 +17,20 @@ class SchJSelect @JvmOverloads constructor(
     private var fragmentManager: FragmentManager? = null
     private var allItems: List<Any> = emptyList()
     private var toText: (Any) -> String = { it.toString() }
-    private var onSelectedListener: ((Any) -> Unit)? = null
+    private var onSelectedListener: ((Any?) -> Unit)? = null
+    override fun onClearText() {
+        onSelectedListener?.invoke(null)
+    }
 
+    private var isShowing: Boolean = false
+    private var dialog: SchJSelectSheet<*>? = null
     override fun showSelectionDialog() {
+        if (isShowing) return
         val fm = fragmentManager ?: return
         val adapter = createAdapter()
-        val dialog = SchJSelectSheet(adapter)
-        dialog.show(fm, "select_sheet_${hashCode()}")
+        dialog = SchJSelectSheet(adapter) { isShowing = false }
+        isShowing = true
+        dialog?.show(fm, "select_sheet")
     }
 
     private fun createAdapter(): SchJTextAdapter<Any> {
@@ -52,8 +59,13 @@ class SchJSelect @JvmOverloads constructor(
 
         fun updateItems(items: ListSafe<T> = this.items) {
             this@SchJSelect.allItems = items.values
-            this@SchJSelect.toText = { obj -> items.toText(obj as T) }
-            this@SchJSelect.onSelectedListener = { obj -> items.onClick(obj as T, true) }
+            this@SchJSelect.toText = { obj -> items.toText(obj as T?) }
+            this@SchJSelect.onSelectedListener = { obj ->
+                val value = obj as T?
+                items.onClick(value, true)
+                dialog?.dismiss()
+                state = state.copy(selectText = items.toText(value))
+            }
         }
     }
 }

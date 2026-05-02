@@ -5,8 +5,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.model.school.ClassInfo
-import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.school.SchoolFilter
 import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.domain.repository.*
 import stud.euktop.schooljournal.R
@@ -79,15 +80,15 @@ class ClassEditViewModel @Inject constructor(
             })
     }
 
-    fun updateSchool(school: School) {
+    fun updateSchool(school: School?) {
         _state.update { it.copy(selectedSchool = school) }
     }
 
-    fun updateClassTeacher(teacher: UserInfo) {
+    fun updateClassTeacher(teacher: UserInfo?) {
         _state.update { it.copy(selectedTeacher = teacher) }
     }
 
-    fun loadSchools(query: String) {
+    fun loadSchools(query: SchoolFilter = SchoolFilter()) {
         executeWithCoordinatorAndLoadingSync(
             block = { schoolAdminRepository.getSchools(query) },
             onSuccess = { schools ->

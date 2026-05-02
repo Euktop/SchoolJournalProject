@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.SchJ.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="titleTextColor">?attr/colorOnSurface</item>
+        <item name="navigationIconTint">?attr/colorOnSurface</item>
+        <item name="navigationIcon">?attr/homeAsUpIndicator</item>
+        <item name="android:textAppearance">@style/TextAppearance.SchJ.Title2.Medium</item>
+        <item name="titleCentered">false</item>
+    </style>
+
+</resources>

@@ -4,14 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.model.homework.Homework
-import stud.euktop.domain.model.lesson.Lesson
-import stud.euktop.domain.model.school.ClassInfo
-import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.homework.HomeworkFilter
 import stud.euktop.domain.model.school.Subject
-import stud.euktop.domain.model.user.AccountStatus
+import stud.euktop.domain.model.school.SubjectFilter
 import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.HomeworkRepository
+import stud.euktop.domain.repository.SubjectAdminRepository
 import stud.euktop.domain.repository.TeacherRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
@@ -26,7 +25,8 @@ class TeacherHomeworkViewModel @Inject constructor(
     navigationManager: NavigationManager,
     private val authRepository: AuthRepository,
     private val teacherRepository: TeacherRepository,
-    private val homeworkRepository: HomeworkRepository
+    private val homeworkRepository: HomeworkRepository,
+    private val subjectAdminRepository: SubjectAdminRepository
 ) : BaseViewModel<TeacherHomeworkState, TeacherHomeworkEvent>() {
 
     private var currentUserId: Int = 0
@@ -58,15 +58,6 @@ class TeacherHomeworkViewModel @Inject constructor(
         )
     }
 
-    private fun loadHomeworkList() {
-        executeWithCoordinatorAndLoadingSync(
-            block = { homeworkRepository.getHomeworkByTeacher(currentUserId) },
-            onSuccess = { list ->
-                _state.update { it.copy(homeworkList = list) }
-            }
-        )
-    }
-
     fun addHomework(description: String, attachedFiles: String, lessonId: Int) {
         val selectedLesson = _state.value.availableLessons.find { it.lessonId == lessonId }
         if (selectedLesson == null) return
@@ -79,14 +70,7 @@ class TeacherHomeworkViewModel @Inject constructor(
             attachedFiles = attachedFiles.takeIf { it.isNotBlank() },
             createdAt = Date(),
             createdByUser = UserInfo(
-                userId = currentUserId,
-                lastName = "",
-                firstName = "",
-                surName = null,
-                email = "",
-                phone = null,
-                roles = emptyList(),
-                accountStatus = AccountStatus.ACTIVE
+                userId = currentUserId
             )
         )
         executeWithCoordinatorAndLoadingSync(
@@ -95,6 +79,13 @@ class TeacherHomeworkViewModel @Inject constructor(
                 loadHomeworkList()
                 _event.tryEmit(TeacherHomeworkEvent.NavigateBack)
             }
+        )
+    }
+
+    fun loadSubjects(query: SubjectFilter, callback: (List<Subject>) -> Unit) {
+        executeWithCoordinatorAndLoadingSync(
+            block = { subjectAdminRepository.getSubjects(query) }, // метод с параметром поиска
+            onSuccess = { subjects -> callback(subjects) }
         )
     }
 
@@ -124,7 +115,23 @@ class TeacherHomeworkViewModel @Inject constructor(
         )
     }
 
-    fun selectLesson(lessonId: Int) {
+    fun applyFilter(filter: HomeworkFilter) {
+        _state.update { it.copy(homeworkFilter = filter) }
+        loadHomeworkList()
+    }
+
+    private fun loadHomeworkList() {
+        executeWithCoordinatorAndLoadingSync(
+            block = {
+                homeworkRepository.getHomeworks(_state.value.homeworkFilter)
+            },
+            onSuccess = { list ->
+                _state.update { it.copy(homeworkList = list) }
+            }
+        )
+    }
+
+    fun selectLesson(lessonId: Int?) {
         val lesson = _state.value.availableLessons.find { it.lessonId == lessonId }
         _state.update { it.copy(selectedLesson = lesson) }
     }
@@ -138,18 +145,23 @@ class TeacherHomeworkViewModel @Inject constructor(
     }
 
     fun setEditMode(homeworkId: Int) {
-        val homework = _state.value.homeworkList.find { it.homeworkId == homeworkId }
-        if (homework != null) {
-            _state.update {
-                it.copy(
-                    isEditMode = true,
-                    editingHomeworkId = homeworkId,
-                    selectedLesson = homework.lesson,
-                    description = it.description.copy(homework.description),
-                    attachedFiles = homework.attachedFiles ?: ""
-                )
+        executeCoordinatorAndLoadingSync(
+            block = {
+                executeCoordinator.coordinatorExec.exec {
+                    homeworkRepository.getHomeworkById(homeworkId)
+                }
+            }, onSuccess = { homework ->
+                _state.update {
+                    it.copy(
+                        isEditMode = true,
+                        editingHomeworkId = homeworkId,
+                        selectedLesson = homework.lesson,
+                        description = it.description.copy(homework.description),
+                        attachedFiles = homework.attachedFiles ?: ""
+                    )
+                }
             }
-        }
+        )
     }
 
     fun resetForm() {

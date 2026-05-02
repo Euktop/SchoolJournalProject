@@ -91,4 +91,10 @@
     <string name="valid_to">Дата окончания (дд.мм.гггг)</string>
     <string name="is_primary">Основное назначение</string>
     <string name="delete_assignment_confirmation">Удалить назначение учителя %s?</string>
+    <string name="date_create">Дата создания</string>
+    <string name="homeworks">Домашние задания</string>
+    <string name="class_name_hint">Название класса (например, 5А)</string>
+    <string name="edit_profile">Редактировать профиль</string>
+    <string name="not_specified">Не указано</string>
+    <string name="no_school">без школы</string>
 </resources>

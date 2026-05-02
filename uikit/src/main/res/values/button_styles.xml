@@ -5,5 +5,8 @@
         <item name="schJButtonClass">PRIMARY</item>
         <item name="schJButtonType">BIG</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="titleTextEllipsize">end</item>
     </style>
 </resources>

@@ -2,25 +2,12 @@
 package stud.euktop.domain.repository
 
 import stud.euktop.domain.model.homework.Homework
+import stud.euktop.domain.model.homework.HomeworkFilter
 
 interface HomeworkRepository {
-    /**
-     * Получить все домашние задания, созданные учителем (по ID учителя).
-     * @param teacherId ID пользователя-учителя.
-     */
-    suspend fun getHomeworkByTeacher(teacherId: Int): Result<List<Homework>>
 
-    /**
-     * Получить домашние задания, доступные ученику (через уроки его класса).
-     * @param studentId ID ученика.
-     */
-    suspend fun getHomeworkByStudent(studentId: Int): Result<List<Homework>>
-
-    /**
-     * Получить домашние задания, привязанные к конкретному уроку.
-     * @param lessonId ID урока.
-     */
-    suspend fun getHomeworkByLesson(lessonId: Int): Result<List<Homework>>
+    suspend fun getHomeworks(filter: HomeworkFilter = HomeworkFilter()): Result<List<Homework>>
+    suspend fun getHomeworkById(id: Int): Result<Homework>
 
     /**
      * Добавить новое домашнее задание.

@@ -28,9 +28,8 @@ class TeacherHomeworkAdapter(
         private val binding: ItemTeacherHomeworkBinding,
         private val onItemClick: (Homework) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(homework: Homework) {
-            with(binding) {
+            binding.apply {
                 tvSubjectName.text = homework.lesson.subject.name
                 tvClassName.text = homework.lesson.classInfo.name
                 tvDescription.text = homework.description

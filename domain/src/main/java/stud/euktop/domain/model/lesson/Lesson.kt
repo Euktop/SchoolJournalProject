@@ -1,9 +1,11 @@
 package stud.euktop.domain.model.lesson
 
+import stud.euktop.domain.model.common.PrimaryKey
 import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.Room
 import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.utils.toBaseString
 import java.util.Date
 
 /**
@@ -22,13 +24,17 @@ import java.util.Date
  */
 data class Lesson(
     val lessonId: Int = 0,
-    val classInfo: ClassInfo,
-    val subject: Subject,
-    val teacher: UserInfo,
-    val date: Date,
+    val classInfo: ClassInfo = ClassInfo(),
+    val subject: Subject = Subject(),
+    val teacher: UserInfo = UserInfo(),
+    val date: Date = Date(),
     val topic: String? = null,
-    val startTime: String,
-    val endTime: String,
+    val startTime: String = "",
+    val endTime: String = "",
     val room: Room? = null,
     val locationAddress: String? = null
-)
+) : PrimaryKey<Int> {
+    override val idKey: Int
+        get() = lessonId
+    val name = "${subject.name} - ${classInfo.name} (${date.toBaseString()})"
+}

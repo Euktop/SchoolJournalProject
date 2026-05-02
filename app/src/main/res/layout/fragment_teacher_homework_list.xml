@@ -11,13 +11,14 @@
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
-        <com.google.android.material.appbar.MaterialToolbar
+        <stud.euktop.uikit.components.filter.SchJFilterToolBar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorSurface"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="Домашние задания" />
+            app:menu="@menu/menu_filter"
+            style="@style/Widget.SchJ.Toolbar"
+            android:paddingHorizontal="8dp"
+            app:title="@string/homeworks" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddHomework"
@@ -25,10 +26,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_margin="16dp"
+            android:backgroundTint="@color/color_accent"
             android:contentDescription="@string/add_homework"
             android:src="@android:drawable/ic_menu_add"
-            app:tint="@color/color_text_on_accent"
-            android:backgroundTint="@color/color_accent"/>
+            app:tint="@color/color_text_on_accent" />
 
         <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
             android:id="@+id/rvHomeworkList"

@@ -13,60 +13,44 @@ class SchJSearchableSelect @JvmOverloads constructor(
 ) : SchJBaseSelect(context, attrs, defStyleAttr) {
 
     private var fragmentManager: FragmentManager? = null
-    private var config: SchJSearchableSelectDialogConfig<*, *> =
-        SchJSearchableSelectDialogConfig<Any, Any>()
-    private var currentDialog: SchJSearchableSelectDialog<*, *>? = null
+    private var config: SchJSearchableSelectDialogConfig<*>? = null
+    private var currentDialog: SchJSearchableSelectDialog<*>? = null
+    override fun onClearText() {
+        config?.items?.onClick(null, true)
+    }
 
     override fun showSelectionDialog() {
         val fm = fragmentManager ?: return
-        config = config.copy(title = state.title ?: "")
+        val config = config?.copy(title = state.title ?: "") ?: return
+        this.config = config
         val dialog = SchJSearchableSelectDialog(config)
         currentDialog = dialog
         dialog.show(fm, "searchable_select_${hashCode()}")
     }
 
-    fun <T : Any> RegisterList(
-        items: ListSafe<T>,
-        onSearchQueryChanged: (String) -> Unit = {},
-    ) = RegisterList(items, ListSafe(), onSearchQueryChanged)
-
-    inner class RegisterList<T : Any, C : Any>(
+    inner class RegisterList<T : Any>(
         private val items: ListSafe<T>,
-        private val categories: ListSafe<C> = ListSafe(),
-        private val onSearchQueryChanged: (String) -> Unit = {},
+        private val showFilterDialog: (() -> Unit)? = null
     ) {
-        fun register(
-            fragmentManager: FragmentManager,
-            items: ListSafe<T> = this.items,
-            categories: ListSafe<C> = this.categories
-        ) {
+        fun register(fragmentManager: FragmentManager) {
             this@SchJSearchableSelect.fragmentManager = fragmentManager
-            updateItems(items, categories)
+            updateItems(items)
         }
 
-        fun updateItems(
-            newItems: List<T> = this.items.values,
-            categories: List<C> = this.categories.values
-        ) =
-            updateItems(
-                this.items.copy(values = newItems),
-                this.categories.copy(values = categories)
-            )
+        fun updateItems(newItems: List<T>) {
+            updateItems(this.items.copy(values = newItems))
+        }
 
-        fun updateItems(
-            newItems: ListSafe<T> = this.items,
-            categories: ListSafe<C> = this.categories
-        ) {
+        fun updateItems(newItems: ListSafe<T>) {
             this@SchJSearchableSelect.config = SchJSearchableSelectDialogConfig(
                 title = "",
-                items = newItems,
-                categories = categories,
-                onSearchQueryChanged = onSearchQueryChanged
+                items = newItems.copy { t, bool ->
+                    newItems.onClick(t, bool)
+                    state = state.copy(selectText = newItems.toText(t))
+                },
+                showFilterDialog = showFilterDialog
             )
-            (currentDialog as? SchJSearchableSelectDialog<T, C>)?.apply {
-                this.updateItems(newItems.values)
-                this.updateCategories(categories.values)
-            }
+            (currentDialog as? SchJSearchableSelectDialog<T>)?.updateConfig(newItems.values)
         }
     }
 }

@@ -27,4 +27,20 @@
     <string name="attached_files">Прикреплённые файлы</string>
     <string name="attached_files_hint">Введите ссылки на файлы (через запятую)</string>
     <string name="description_error">Описание не может быть пустым</string>
+    <string name="error_no_lesson_selected">Выберите урок</string>
+    <string name="date_range">Диапазон дат</string>
+    <string name="from">От</string>
+    <string name="to">До</string>
+    <string name="reset">Сброс</string>
+    <string name="apply">Применить</string>
+    <string name="filter">Фильтр</string>
+    <string name="school_name">Название школы</string>
+    <string name="region">Регион</string>
+    <string name="address">Адрес</string>
+    <string name="edit_role_school">Редактирование роли и школы</string>
+    <string name="select_school">Выберите школу</string>
+    <string name="role">Роль</string>
+    <string name="school">Школа</string>
+    <string name="add_role">Добавить роль</string>
+    <string name="no_school">без школы</string>
 </resources>

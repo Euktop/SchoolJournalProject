@@ -4,68 +4,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="stud.euktop.schooljournal.presentation.main.profile.ProfileFragment">
+    tools:context="stud.euktop.schooljournal.presentation.main.userInfo.ProfileFragment">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/avatarContainer"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/circle_bg_accent" />
-
-        <TextView
-            android:id="@+id/tvInitials"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            tools:text="ИИ"
-            android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
-            android:textColor="@color/color_text_on_accent" />
-
-        <!-- Имя -->
-        <TextView
-            android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            tools:text="Иванов Иван"
-            android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
-            android:textColor="@color/color_text_primary" />
-
-        <!-- Email -->
-        <TextView
-            android:id="@+id/tvEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
-            android:textColor="@color/color_text_secondary"
-            tools:text="ivanov@school.ru" />
-
-        <!-- Роли -->
         <LinearLayout
-            android:id="@+id/rolesContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:orientation="horizontal" />
-
-        <!-- Кнопка выхода -->
-        <stud.euktop.uikit.components.button.SchJButton
-            android:id="@+id/btnLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:text="@string/exit"
-            app:schJButtonClass="SECONDARY"
-            app:schJButtonType="BIG" />
-    </LinearLayout>
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <FrameLayout
+                android:id="@+id/avatarContainer"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/circle_bg_accent" />
+
+            <TextView
+                android:id="@+id/tvInitials"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
+                android:textColor="@color/color_text_on_accent"
+                tools:text="ИИ" />
+
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                android:textColor="@color/color_text_primary"
+                tools:text="Иванов Иван" />
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                android:textColor="@color/color_text_secondary"
+                tools:text="ivanov@school.ru" />
+
+            <TextView
+                android:id="@+id/tvPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                android:textColor="@color/color_text_secondary"
+                tools:text="+71234567890" />
+
+            <TextView
+                android:id="@+id/tvBirthday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                android:textColor="@color/color_text_secondary"
+                tools:text="01.01.2000" />
+
+            <TextView
+                android:id="@+id/tvGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                android:textColor="@color/color_text_secondary"
+                tools:text="Мужской" />
+
+            <LinearLayout
+                android:id="@+id/rolesContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:orientation="horizontal" />
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/edit_profile"
+                app:schJButtonClass="PRIMARY"
+                app:schJButtonType="BIG" />
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/exit"
+                app:schJButtonClass="SECONDARY"
+                app:schJButtonType="BIG" />
+
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

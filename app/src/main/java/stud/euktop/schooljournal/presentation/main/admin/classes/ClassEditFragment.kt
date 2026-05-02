@@ -33,37 +33,31 @@ class ClassEditFragment : BaseFragment<
     @Inject
     lateinit var navigationManager: NavigationManager
 
-    private lateinit var schoolRegister: SchJSearchableSelect.RegisterList<School, Any>
-    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo, Any>
+    private lateinit var schoolRegister: SchJSearchableSelect.RegisterList<School>
+    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo>
 
     override fun setupUI() {
         binding.apply {
-            // Поля ввода
             inputGrade.setup(focusTrack) { value -> viewModel.updateGrade(value.toIntOrNull()) }
             inputLetter.setup(focusTrack) { viewModel.updateLetter(it) }
             inputYearStart.setup(focusTrack) { value -> viewModel.updateAcademicYearStart(value.toIntOrNull()) }
             inputYearEnd.setup(focusTrack) { value -> viewModel.updateAcademicYearEnd(value.toIntOrNull()) }
 
-            // Поисковый выбор школы
             val schoolListSafe = ListSafe<School>(
-                toText = { it.name },
+                toText = { it?.name ?: "" },
                 onClick = { school, _ -> viewModel.updateSchool(school) }
             )
-            schoolRegister = selectSchool.RegisterList(
-                items = schoolListSafe,
-                categories = ListSafe(),
-                onSearchQueryChanged = { query -> viewModel.loadSchools(query) }
-            )
+            schoolRegister = selectSchool.RegisterList(schoolListSafe)
             schoolRegister.register(childFragmentManager)
+            selectSchool.onShowing = { viewModel.loadSchools() }
 
             val teacherListSafe = ListSafe<UserInfo>(
-                toText = { "${it.lastName} ${it.firstName}" },
+                toText = { it?.fullName ?: "" },
                 onClick = { teacher, _ -> viewModel.updateClassTeacher(teacher) }
             )
             teacherRegister = selectClassTeacher.RegisterList(teacherListSafe)
             teacherRegister.register(childFragmentManager)
 
-            // Кнопки
             buttonsSaveCancel.btnSave.setOnClickListener { viewModel.save() }
             buttonsSaveCancel.btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
         }
@@ -71,7 +65,6 @@ class ClassEditFragment : BaseFragment<
 
     override fun updateState(state: ClassEditState) {
         binding.apply {
-            // Валидация полей
             inputChecks(focusTrack, inputLetter to state.letter)
             val gradeValid = state.grade != null && state.grade in 1..11
             inputGrade.check(focusTrack, gradeValid)
@@ -83,11 +76,9 @@ class ClassEditFragment : BaseFragment<
                 end != null && end > 0 && (start == null || end >= start)
             )
 
-            // Обновление выпадающих списков
-            schoolRegister.updateItems(state.availableSchools, emptyList())
+            schoolRegister.updateItems(state.availableSchools)
             teacherRegister.updateItems(state.availableTeachers)
 
-            // Отображение выбранных значений
             selectSchool.state = selectSchool.state.copy(
                 selectText = state.selectedSchool?.name ?: ""
             )
@@ -95,7 +86,6 @@ class ClassEditFragment : BaseFragment<
                 selectText = state.selectedTeacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
             )
 
-            // Активация кнопки сохранения
             buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isLoading
         }
     }

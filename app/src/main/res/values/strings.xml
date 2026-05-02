@@ -22,7 +22,6 @@
     <string name="male">Male</string>
     <string name="woman">Woman</string>
     <string name="none">None</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="the_password_must_contain_at_least_8_characters_uppercase_and_lowercase_letters_numbers_and_special_characters">The password must contain at least 8 characters: uppercase and lowercase letters, numbers, and special characters.</string>
     <string name="new_password">New password</string>
@@ -62,7 +61,7 @@
     <string name="representative">Representative</string>
     <string name="incorrect_name">Incorrect name</string>
     <string name="roles">Roles</string>
-    <string name="changing_the_profile">Changing the profile</string>
+    <string name="changing_the_profile">Changing the userInfo</string>
     <string name="active">Activated</string>
     <string name="deleting">Deleted</string>
     <string name="pending">Not Activated</string>
@@ -96,4 +95,10 @@
     <string name="valid_to">End date (dd.mm.yyyy)</string>
     <string name="is_primary">Main assignment</string>
     <string name="delete_assignment_confirmation">Delete teacher assignment %s?</string>
+    <string name="date_create">Date create</string>
+    <string name="homeworks">Homework assignments</string>
+    <string name="class_name_hint">Class name (for example, 5A)</string>
+    <string name="edit_profile">Edit userInfo</string>
+    <string name="not_specified">Not specified</string>
+    <string name="no_school">without school</string>
 </resources>

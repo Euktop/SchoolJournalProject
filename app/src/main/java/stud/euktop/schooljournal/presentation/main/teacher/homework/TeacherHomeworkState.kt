@@ -1,7 +1,9 @@
 package stud.euktop.schooljournal.presentation.main.teacher.homework
 
 import stud.euktop.domain.model.homework.Homework
+import stud.euktop.domain.model.homework.HomeworkFilter
 import stud.euktop.domain.model.lesson.Lesson
+import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.utils.validation.TextThereValidator
 import stud.euktop.domain.utils.validation.Validator
 import stud.euktop.schooljournal.presentation.common.base.BaseState
@@ -14,7 +16,9 @@ data class TeacherHomeworkState(
     val description: TextThereValidator = TextThereValidator(),
     val attachedFiles: String = "",
     val isEditMode: Boolean = false,
-    val editingHomeworkId: Int = 0
+    val editingHomeworkId: Int = 0,
+    val subjects: List<Subject> = emptyList(),
+    val homeworkFilter: HomeworkFilter = HomeworkFilter()
 ) : BaseState<TeacherHomeworkState>() {
 
     fun isFormValid(): Boolean = Validator.isAllValidate(description) && selectedLesson != null

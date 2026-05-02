@@ -1,5 +1,6 @@
 package stud.euktop.domain.model.homework
 
+import stud.euktop.domain.model.common.PrimaryKey
 import stud.euktop.domain.model.user.UserInfo
 import stud.euktop.domain.model.lesson.Lesson
 import java.util.Date
@@ -16,9 +17,12 @@ import java.util.Date
  */
 data class Homework(
     val homeworkId: Int = 0,
-    val lesson: Lesson,
-    val description: String,
+    val lesson: Lesson = Lesson(),
+    val description: String = "",
     val attachedFiles: String? = null,
-    val createdAt: Date,
-    val createdByUser: UserInfo
-)
+    val createdAt: Date = Date(),
+    val createdByUser: UserInfo = UserInfo()
+) : PrimaryKey<Int> {
+    override val idKey: Int
+        get() = homeworkId
+}

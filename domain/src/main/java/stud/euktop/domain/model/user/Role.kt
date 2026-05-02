@@ -1,4 +1,5 @@
-package stud.euktop.domain.model.auth
+package stud.euktop.domain.model.user
+
 /**
  * Роли пользователя в системе.
  */

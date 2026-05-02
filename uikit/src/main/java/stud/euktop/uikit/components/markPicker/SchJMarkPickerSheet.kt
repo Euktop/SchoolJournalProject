@@ -10,8 +10,10 @@ class SchJMarkPickerSheet(
     private val state: SchJMarkPickerState,
     private val listener: SchJMarkPicker.Listener
 ) : SchJBottomSheet() {
-    override fun provideContentView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         val picker = SchJMarkPicker(requireContext())
         picker.state = state

@@ -8,6 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminPanelBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+
 /**
  * Административная панель (главный экран админа).
  *
@@ -52,6 +53,8 @@ class AdminPanelFragment : BaseFragment<
             }
         }.attach()
     }
+
+    override fun showLoading(isLoading: Boolean) {}
 
     override fun updateState(state: AdminPanelState) {
         // TODO: Update state

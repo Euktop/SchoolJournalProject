@@ -4,7 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import com.google.android.material.textfield.TextInputLayout
 import stud.euktop.uikit.R
 import stud.euktop.uikit.components.base.SchJBaseBinding
 import stud.euktop.uikit.components.base.SchJState
@@ -24,24 +26,35 @@ abstract class SchJBaseSelect @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr), SchJState<SchJBaseSelectState> {
 
-    protected lateinit var binding: LayoutSelectBinding
-
     private val baseBinding = object : SchJBaseBinding<LayoutSelectBinding, SchJBaseSelectState>() {
-        override fun initBinding(): LayoutSelectBinding {
-            binding =
-                LayoutSelectBinding.inflate(LayoutInflater.from(context), this@SchJBaseSelect, true)
-            return binding
-        }
+        override fun initBinding() =
+            LayoutSelectBinding.inflate(LayoutInflater.from(context), this@SchJBaseSelect, true)
 
         override fun initState() = SchJBaseSelectState()
 
         override fun updateState(state: SchJBaseSelectState) {
-            binding.root.editText?.setTextUnique(state.selectText)
-            binding.root.editText?.setHintUnique(state.title)
+            binding.root.editText?.apply {
+                setTextUnique(state.selectText)
+                setHintUnique(state.title)
+            }
+            binding.root.apply {
+                endIconDrawable = if (state.selectText.isNullOrBlank()) {
+                    ContextCompat.getDrawable(context, R.drawable.right_r)
+                } else {
+                    ContextCompat.getDrawable(context, R.drawable.ic_close_select)
+                }
+            }
         }
 
         override fun setupUI() {
-            binding.root.editText?.setOnClickListener { showSelectionDialog() }
+            binding.root.editText?.setOnClickListener {
+                onShowing?.invoke()
+                showSelectionDialog()
+            }
+            binding.root.setEndIconOnClickListener {
+                setSelectedText("")
+                onClearText()
+            }
         }
 
         init {
@@ -53,6 +66,8 @@ abstract class SchJBaseSelect @JvmOverloads constructor(
         }
     }
 
+    protected abstract fun onClearText()
+
     override var state: SchJBaseSelectState by baseBinding
 
     /**
@@ -60,6 +75,8 @@ abstract class SchJBaseSelect @JvmOverloads constructor(
      * Наследники должны реализовать этот метод.
      */
     protected abstract fun showSelectionDialog()
+
+    var onShowing: (() -> Unit)? = null
 
     /**
      * Устанавливает выбранный текст после закрытия диалога.

@@ -2,15 +2,16 @@ package stud.euktop.data.repository
 
 import stud.euktop.data.mock.MockDelayService
 import stud.euktop.data.mock.MockUserDataSource
-import stud.euktop.domain.model.auth.Role
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserInfoFilter
 import stud.euktop.domain.repository.UserAdminRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UserAdminRepositoryImpl @Inject constructor() : UserAdminRepository {
-    override suspend fun getUsers(): Result<List<UserInfo>> {
+    override suspend fun getUsers(filter: UserInfoFilter): Result<List<UserInfo>> {
         MockDelayService.delay()
         return Result.success(MockUserDataSource.getAllUsersWithRoles())
     }
