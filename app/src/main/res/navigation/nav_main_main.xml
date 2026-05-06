@@ -41,6 +41,15 @@
             android:name="lessonId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/lessonEditFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.lessons.LessonEditFragment"
+        android:label="@string/edit_lesson">
+        <argument
+            android:name="lessonId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 
     <!-- Студенческая цепочка -->
     <fragment
@@ -121,4 +130,9 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/studentHomeworkListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.student.homework.StudentHomeworkListFragment"
+        android:label="Домашние задания"
+        tools:layout="@layout/fragment_student_homework_list" />
 </navigation>

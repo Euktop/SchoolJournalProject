@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import stud.euktop.domain.model.homework.Homework
 import stud.euktop.domain.utils.toBaseString
+import stud.euktop.uikit.R
 import stud.euktop.uikit.databinding.ItemTeacherHomeworkBinding
 
 class TeacherHomeworkAdapter(
@@ -33,7 +34,9 @@ class TeacherHomeworkAdapter(
                 tvSubjectName.text = homework.lesson.subject.name
                 tvClassName.text = homework.lesson.classInfo.name
                 tvDescription.text = homework.description
-                tvAttachedFiles.text = homework.attachedFiles?.let { "Файлы: $it" } ?: ""
+                tvAttachedFiles.text =
+                    homework.attachedFiles?.let { "${binding.root.context.getString(R.string.files)}: $it" }
+                        ?: ""
                 tvDate.text = homework.createdAt.toBaseString()
                 root.setOnClickListener { onItemClick(homework) }
             }

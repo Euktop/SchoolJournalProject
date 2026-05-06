@@ -3,10 +3,12 @@ package stud.euktop.domain.repository
 
 import stud.euktop.domain.model.homework.Homework
 import stud.euktop.domain.model.homework.HomeworkFilter
+import stud.euktop.domain.model.homework.HomeworkFilter2
 
 interface HomeworkRepository {
 
     suspend fun getHomeworks(filter: HomeworkFilter = HomeworkFilter()): Result<List<Homework>>
+    suspend fun getHomeworks(filter: HomeworkFilter2 = HomeworkFilter2()): Result<List<Homework>>
     suspend fun getHomeworkById(id: Int): Result<Homework>
 
     /**

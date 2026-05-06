@@ -114,4 +114,7 @@ class UserFilterDialog(
             fullName = fullNameInput.state.text
         )
     }
+    companion object{
+        const val TAG = "UserFilterDialog"
+    }
 }

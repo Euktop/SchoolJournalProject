@@ -1,5 +1,6 @@
 package stud.euktop.domain.model.school
 
+import stud.euktop.domain.model.common.BaseModel
 import stud.euktop.domain.model.user.UserInfo
 
 /**
@@ -13,7 +14,8 @@ data class ClassInfo(
     val academicYearStart: Int = -1,
     val academicYearEnd: Int = -1,
     val teacher: UserInfo? = null,
-) {
+) : BaseModel {
     val name
         get() = "$grade $letter ${school.name}"
+    override val idKey: Int = classId
 }

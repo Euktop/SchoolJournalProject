@@ -101,4 +101,5 @@
     <string name="edit_profile">Edit userInfo</string>
     <string name="not_specified">Not specified</string>
     <string name="no_school">without school</string>
+    <string name="homework_assignments">Homework assignments</string>
 </resources>

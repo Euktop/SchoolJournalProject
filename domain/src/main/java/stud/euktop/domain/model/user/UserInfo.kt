@@ -1,6 +1,7 @@
 package stud.euktop.domain.model.user
 
 import stud.euktop.domain.model.common.BaseModel
+import stud.euktop.domain.model.common.Defaults
 import java.util.Date
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date
  * Используется для отображения профиля, списков пользователей и т.д.
  */
 data class UserInfo(
-    val userId: Int = 0,
+    val userId: Int = Defaults.ID_DEFAULT,
     val lastName: String = "",
     val firstName: String = "",
     val surName: String? = null,

@@ -43,4 +43,13 @@
     <string name="school">Школа</string>
     <string name="add_role">Добавить роль</string>
     <string name="no_school">без школы</string>
+    <string name="files">Файлы</string>
+    <string name="edit_lesson">Редактирование урока</string>
+    <string name="date">Дата</string>
+    <string name="start_time">Время начала</string>
+    <string name="end_time">Время окончания</string>
+    <string name="time_error">Введите время в формате HH:MM</string>
+    <string name="room">Кабинет</string>
+    <string name="topic">Тема урока</string>
+    <string name="location_address">Адрес (для выездного урока)</string>
 </resources>

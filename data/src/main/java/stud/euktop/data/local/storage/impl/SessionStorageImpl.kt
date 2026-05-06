@@ -1,0 +1,48 @@
+package stud.euktop.data.local.storage.impl
+
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
+import stud.euktop.data.local.storage.contract.TokenStorage
+import stud.euktop.data.local.storage.contract.UserIdStorage
+import javax.inject.Inject
+import javax.inject.Singleton
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("session")
+
+@Singleton
+class SessionStorageImpl @Inject constructor(
+    @param:ApplicationContext private val context: Context
+) : TokenStorage, UserIdStorage {
+
+    private val tokenKey = stringPreferencesKey("token")
+    private val userIdKey = intPreferencesKey("user_id")
+
+    private suspend fun <T> Preferences.Key<T>.getValue(): T? = context.dataStore.data.first()[this]
+
+    private suspend fun <T> Preferences.Key<T>.setValue(value: T?) {
+        context.dataStore.edit { preferences ->
+            if (value == null) {
+                preferences.remove(this)
+            } else {
+                preferences[this] = value
+            }
+        }
+    }
+
+    override suspend fun getToken(): String? = tokenKey.getValue()
+    override suspend fun setToken(token: String?) = tokenKey.setValue(token)
+
+    override suspend fun getUserId(): Int? = userIdKey.getValue()
+    override suspend fun setUserId(userId: Int?) = userIdKey.setValue(userId)
+
+    override suspend fun clearAll() {
+        context.dataStore.edit { it.clear() }
+    }
+}

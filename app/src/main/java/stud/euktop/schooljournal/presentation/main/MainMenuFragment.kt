@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentMainMenuBinding
@@ -13,22 +14,6 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.Navigatio
 import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
 import javax.inject.Inject
 
-/**
- * ВРЕМЕННЫЙ экран главного меню.
- *
- * Назначение: служит для навигации по функциональным экранам во время разработки.
- * Показывает кнопки для всех ролей (не адаптивно).
- *
- * Роли: все (но для демонстрации – любые)
- *
- * Функционал:
- * - Набор кнопок с явными переходами к TeacherClassesFragment, StudentSubjectsFragment,
- *   AdminPanelFragment, ProfileFragment и др.
- * - НЕ ФИНАЛЬНАЯ ВЕРСИЯ: будет заменён на динамическое меню на основе ролей.
- *
- * TODO: После реализации всех экранов и определения ролей, переделать на динамическую генерацию кнопок.
- *
- */
 @AndroidEntryPoint
 class MainMenuFragment : Fragment() {
 
@@ -50,45 +35,22 @@ class MainMenuFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnTeacherClasses.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    R.id.teacherClassesFragment
-                )
-            )
+            navigationManager.navigate(NavCommand.ToDestination(R.id.teacherClassesFragment))
         }
         binding.btnStudentSubjects.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    R.id.studentSubjectsFragment
-                )
-            )
+            navigationManager.navigate(NavCommand.ToDestination(R.id.studentSubjectsFragment))
         }
         binding.btnAdminPanel.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    R.id.adminPanelFragment
-                )
-            )
+            navigationManager.navigate(NavCommand.ToDestination(R.id.adminPanelFragment))
         }
         binding.btnProfile.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    R.id.profileFragment
-                )
-            )
+            navigationManager.navigate(NavCommand.ToDestination(R.id.profileFragment))
         }
         binding.btnStudentDetail.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    R.id.studentSubjectDetailFragment
-                )
-            )
+            navigationManager.navigate(NavCommand.ToDestination(R.id.studentSubjectDetailFragment))
         }
         binding.btnLogin.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(R.id.nav_auth),
-                NavCommand.ToDestination(R.id.loginFragment)
-            )
+            navigationManager.navigate(NavCommand.ToDestination(R.id.nav_auth))
         }
         binding.btnProfileRegistration.setOnClickListener {
             navigationManager.navigate(
@@ -103,23 +65,32 @@ class MainMenuFragment : Fragment() {
             )
         }
         binding.btnSchools.setOnClickListener {
-            // Пока заглушка – переход на AdminPanel (вкладка 2) или отдельный фрагмент, если создашь
             navigationManager.navigate(NavCommand.ToDestination(R.id.adminPanelFragment))
         }
         binding.btnRooms.setOnClickListener {
-            // Аналогично, в будущем можно сделать отдельный список
             navigationManager.navigate(NavCommand.ToDestination(R.id.adminPanelFragment))
         }
         binding.btnLessonMarks.setOnClickListener {
-            // Откроем LessonMarksFragment с тестовым lessonId (например, 101)
             navigationManager.navigate(
                 NavCommand.ToDestination(
                     R.id.lessonMarksFragment,
                     args = Bundle().apply { putInt(LessonMarksViewModel.LESSON_ID_KEY, 101) }
-                ))
+                )
+            )
         }
         binding.btnHomework.setOnClickListener {
             navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkListFragment))
+        }
+        binding.btnStudentHomework.setOnClickListener {
+            navigationManager.navigate(NavCommand.ToDestination(R.id.studentHomeworkListFragment))
+        }
+
+        // Новая кнопка для редактирования урока (администратор/директор)
+        binding.btnLessonEdit.setOnClickListener {
+            findNavController().navigate(R.id.lessonEditFragment)
+        }
+        binding.testConnection.setOnClickListener {
+
         }
     }
 

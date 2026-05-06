@@ -1,6 +1,7 @@
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
 import stud.euktop.domain.model.common.DataError
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
@@ -32,6 +33,7 @@ class ErrorHandlerImpl @Inject constructor() : ErrorHandler {
             else ->
                 R.string.error_unknown to NavCommand.Back
         }
+        logger?.e(ErrorHandler::class.java.simpleName.toString(), "Error Exec", throwable)
         return CoordinatorResult.Error(navCmd, msgId)
     }
 }

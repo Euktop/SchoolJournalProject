@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="44dp"
+                android:text="@string/edit_lesson"
+                android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/div_16"
+                android:orientation="vertical"
+                android:showDividers="middle">
+
+                <!-- Класс -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.SchJ.TextView.Helper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Class" />
+
+                    <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+                        android:id="@+id/selectClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:title="@string/Class" />
+                </LinearLayout>
+
+                <!-- Предмет -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.SchJ.TextView.Helper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/subject" />
+
+                    <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+                        android:id="@+id/selectSubject"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:title="@string/subject" />
+                </LinearLayout>
+
+                <!-- Учитель -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.SchJ.TextView.Helper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/teacher" />
+
+                    <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+                        android:id="@+id/selectTeacher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:title="@string/teacher" />
+                </LinearLayout>
+
+                <!-- Дата -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/date"
+                    android:inputType="none"
+                    app:endIconMode="clear_text"
+                    app:helperText="@string/date" />
+
+                <!-- Время начала -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputStartTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/start_time"
+                    app:helperText="@string/start_time"
+                    app:schjTextError="@string/time_error" />
+
+                <!-- Время окончания -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputEndTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/end_time"
+                    app:helperText="@string/end_time"
+                    app:schjTextError="@string/time_error" />
+
+                <!-- Кабинет -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/Widget.SchJ.TextView.Helper"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/room" />
+
+                    <stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+                        android:id="@+id/selectRoom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:title="@string/room" />
+                </LinearLayout>
+
+                <!-- Тема -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputTopic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/topic"
+                    android:inputType="text"
+                    app:helperText="@string/topic" />
+
+                <!-- Адрес (если урок вне школы) -->
+                <stud.euktop.uikit.components.input.SchJInput
+                    android:id="@+id/inputLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/location_address"
+                    android:inputType="text"
+                    app:helperText="@string/location_address" />
+
+            </LinearLayout>
+
+            <include
+                android:id="@+id/saveCancel"
+                layout="@layout/layout_buttons_save_cancel" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</FrameLayout>

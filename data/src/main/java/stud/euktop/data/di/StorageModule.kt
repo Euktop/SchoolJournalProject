@@ -1,0 +1,22 @@
+package stud.euktop.data.di
+
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import stud.euktop.data.local.storage.contract.TokenStorage
+import stud.euktop.data.local.storage.contract.UserIdStorage
+import stud.euktop.data.local.storage.impl.SessionStorageImpl
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal abstract class StorageModule {
+    @Binds
+    @Singleton
+    abstract fun bindTokenStorage(impl: SessionStorageImpl): TokenStorage
+
+    @Binds
+    @Singleton
+    abstract fun bindUserIdStorage(impl: SessionStorageImpl): UserIdStorage
+}

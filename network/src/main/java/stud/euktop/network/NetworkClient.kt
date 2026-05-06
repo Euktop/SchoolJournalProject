@@ -1,14 +1,10 @@
 package stud.euktop.network
 
-import com.schooljournal.api.AuthorizationApi
-import com.schooljournal.api.TestApi
+import com.schooljournal.api.*
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.openapitools.client.infrastructure.Serializer
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import stud.euktop.network.interceptor.AuthTokenInterceptor
 import stud.euktop.network.interceptor.TokenProvider
 import java.security.SecureRandom
@@ -24,19 +20,23 @@ class NetworkClient @Inject constructor(
 ) {
     internal val moshi: Moshi = Serializer.moshiBuilder.build()
 
-/*    internal val okHttpClient: OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(AuthTokenInterceptor(tokenProvider))
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }).build()*/
-private val okHttpClient: OkHttpClient =
-    getUnsafeOkHttpClient(tokenProvider)
+    private val okHttpClient: OkHttpClient =
+        getUnsafeOkHttpClient(tokenProvider)
 
     private fun getUnsafeOkHttpClient(tokenProvider: TokenProvider): OkHttpClient {
         val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
-            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+            override fun checkClientTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
+            override fun checkServerTrusted(
+                chain: Array<out X509Certificate>?,
+                authType: String?
+            ) {
+            }
+
             override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
         })
         val sslContext = SSLContext.getInstance("SSL")
@@ -47,20 +47,29 @@ private val okHttpClient: OkHttpClient =
             .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
             .hostnameVerifier { _, _ -> true }
             .addInterceptor(AuthTokenInterceptor(tokenProvider))
-            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             .build()
     }
 
-/*    internal val retrofit = Retrofit.Builder()
-        .baseUrl(networkConfig.baseUrl)
-        .client(okHttpClient)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .build()*/
-
     private val baseUrl: String = networkConfig.baseUrl
-    internal fun authorizationApi(): AuthorizationApi =
-        AuthorizationApi(basePath = baseUrl, client = okHttpClient)
-
     internal fun testApi(): TestApi =
         TestApi(basePath = baseUrl, client = okHttpClient)
+
+    // внутри класса NetworkClient
+    fun authorizationApi(): AuthorizationApi = AuthorizationApi(baseUrl, okHttpClient)
+    fun classesApi(): ClassesApi = ClassesApi(baseUrl, okHttpClient)
+    fun homeworkApi(): HomeworkApi = HomeworkApi(baseUrl, okHttpClient)
+    fun lessonsApi(): LessonsApi = LessonsApi(baseUrl, okHttpClient)
+    fun schoolsApi(): SchoolsApi = SchoolsApi(baseUrl, okHttpClient)
+    fun studentApi(): StudentApi = StudentApi(baseUrl, okHttpClient)
+    fun subjectsApi(): SubjectsApi = SubjectsApi(baseUrl, okHttpClient)
+    fun teacherAssignmentsApi(): TeacherAssignmentsApi =
+        TeacherAssignmentsApi(baseUrl, okHttpClient)
+
+    fun usersApi(): UsersApi = UsersApi(baseUrl, okHttpClient)
+    fun auditApi(): AuditApi = AuditApi(baseUrl, okHttpClient)
+    fun rolesApi(): RolesApi = RolesApi(baseUrl, okHttpClient)
+    fun absenceTypesApi(): AbsenceTypesApi = AbsenceTypesApi(baseUrl, okHttpClient)
 }

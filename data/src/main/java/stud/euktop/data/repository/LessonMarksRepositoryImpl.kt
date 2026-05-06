@@ -1,16 +1,29 @@
+// LessonMarksRepositoryImpl.kt
 package stud.euktop.data.repository
 
 import stud.euktop.data.mock.MockDelayService
 import stud.euktop.data.mock.MockLessonMarksDataSource
 import stud.euktop.domain.model.attendance.StudentMarkItem
 import stud.euktop.domain.repository.LessonMarksRepository
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LessonMarksRepositoryImpl @Inject constructor() : LessonMarksRepository {
+    private val tag = this.toSimpleTag()
+
     override suspend fun getMarks(lessonId: Int): Result<List<StudentMarkItem>> {
+        logger?.i(tag, "getMarks started", "lessonId=$lessonId")
         MockDelayService.delay()
-        return Result.success(MockLessonMarksDataSource.getMarks(lessonId))
+        return try {
+            val marks = MockLessonMarksDataSource.getMarks(lessonId)
+            logger?.i(tag, "getMarks succeeded", "lessonId=$lessonId, count=${marks.size}")
+            Result.success(marks)
+        } catch (e: Exception) {
+            logger?.e(tag, "getMarks failed", e, "lessonId=$lessonId")
+            Result.failure(e)
+        }
     }
 }

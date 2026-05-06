@@ -77,4 +77,12 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindHomeworkRepository(impl: HomeworkRepositoryImpl): HomeworkRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindLessonRepository(impl: LessonRepositoryImpl): LessonRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRoomAdminRepository(impl: RoomAdminRepositoryImpl): RoomAdminRepository
 }

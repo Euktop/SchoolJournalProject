@@ -48,4 +48,13 @@
     <string name="add_role">Add a role</string>
     <string name="role_school_format" translatable="false">%1$s (%2$s)</string>
     <string name="no_school">without school</string>
+    <string name="files">FIles</string>
+    <string name="edit_lesson">Lesson editing</string>
+    <string name="date">Date</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
+    <string name="time_error">Enter the time in the format HH:MM</string>
+    <string name="room">Office</string>
+    <string name="topic">Lesson title</string>
+    <string name="location_address">Address (for a field lesson)</string>
 </resources>
