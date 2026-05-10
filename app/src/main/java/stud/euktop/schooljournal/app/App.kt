@@ -2,9 +2,7 @@ package stud.euktop.schooljournal.app
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {

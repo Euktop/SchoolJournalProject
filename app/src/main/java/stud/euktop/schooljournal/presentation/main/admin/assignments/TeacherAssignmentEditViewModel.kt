@@ -8,7 +8,7 @@ import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.assignment.TeacherAssignment
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.*
 import stud.euktop.uikit.R as R
 import stud.euktop.schooljournal.R as R2
@@ -46,7 +46,7 @@ class TeacherAssignmentEditViewModel @Inject constructor(
 
     private fun loadInitialData() {
         executeLoadingBlockSync {
-            val teachersDeferred = async { userAdminRepository.getTeachersByRole(Role.TEACHER) }
+            val teachersDeferred = async { userAdminRepository.getUsersByRole(Role.TEACHER) }
             val classesDeferred = async { classAdminRepository.getClasses() }
             val subjectsDeferred = async { subjectAdminRepository.getSubjects() }
 
@@ -88,7 +88,7 @@ class TeacherAssignmentEditViewModel @Inject constructor(
         )
     }
 
-    fun updateTeacher(teacher: UserInfo?) {
+    fun updateTeacher(teacher: UserProfile?) {
         _state.update { it.copy(teacher = teacher) }
     }
 
@@ -138,7 +138,7 @@ class TeacherAssignmentEditViewModel @Inject constructor(
 
     fun loadTeachers(query: String) {
         executeWithCoordinatorAndLoadingSync(
-            block = { userAdminRepository.getTeachersByRole(Role.TEACHER) },
+            block = { userAdminRepository.getUsersByRole(Role.TEACHER) },
             onSuccess = { teachers ->
                 // Временная локальная фильтрация для демонстрации (позже заменить на серверный поиск)
                 val filtered = if (query.isBlank()) teachers

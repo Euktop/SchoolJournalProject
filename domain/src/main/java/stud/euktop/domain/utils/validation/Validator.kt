@@ -3,15 +3,14 @@ package stud.euktop.domain.utils.validation
 import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
 
-abstract class Validator<T, V : Validator<T, V>> {
-    abstract var value: T?
+abstract class Validator<T, V : Validator<T, V>> : ValidatorInterface<T> {
 
     /**
      * Валидирует значение.
      * @param value Значение для проверки
      * @return Результат валидации
      */
-    fun validate(value: T? = this.value): Boolean {
+    override fun validate(value: T?): Boolean {
         val result = _validate(value)
         if (!result)
             logger?.e(this.toSimpleTag(), "value:${value?.toSimpleTag()}")
@@ -26,6 +25,5 @@ abstract class Validator<T, V : Validator<T, V>> {
     }
 
     protected abstract fun _validate(value: T? = this.value): Boolean
-    abstract fun getValidate(): T
     abstract fun copy(value: T?): V
 }

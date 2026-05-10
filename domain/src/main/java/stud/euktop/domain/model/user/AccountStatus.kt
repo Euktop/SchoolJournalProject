@@ -7,9 +7,13 @@ package stud.euktop.domain.model.user
  * @param PENDING: ожидает подтверждения
  * @param BLOCKED: заблокирована
  */
-enum class AccountStatus {
-    ACTIVE,
-    DELETED,
-    PENDING,
-    BLOCKED,
+enum class AccountStatus(val id: Int) {
+    ACTIVE(1),
+    DELETED(2),
+    PENDING(3),
+    BLOCKED(4);
+
+    companion object {
+        fun fromId(id: Int) = entries.find { it.id == id }
+    }
 }

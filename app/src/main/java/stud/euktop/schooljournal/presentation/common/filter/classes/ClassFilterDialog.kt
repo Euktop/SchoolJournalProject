@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.ClassInfoFilter
 import stud.euktop.domain.model.school.School
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.base.BaseFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.school.SchoolFilterDialog
@@ -32,7 +32,7 @@ class ClassFilterDialog(
 
     private lateinit var schoolSelectResult: FilterFieldBuilder.AddSearchableSelectResult<School>
     private lateinit var classSearchInput: SchJInput
-    private lateinit var teacherSelectResult: FilterFieldBuilder.AddSearchableSelectResult<UserInfo>
+    private lateinit var teacherSelectResult: FilterFieldBuilder.AddSearchableSelectResult<UserProfile>
     private lateinit var yearStartInput: SchJInput
     private lateinit var yearEndInput: SchJInput
 

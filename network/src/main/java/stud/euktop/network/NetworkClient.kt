@@ -1,6 +1,18 @@
 package stud.euktop.network
 
-import com.schooljournal.api.*
+import com.schooljournal.api.AbsenceTypesApi
+import com.schooljournal.api.AuditApi
+import com.schooljournal.api.AuthorizationApi
+import com.schooljournal.api.ClassesApi
+import com.schooljournal.api.HomeworkApi
+import com.schooljournal.api.LessonsApi
+import com.schooljournal.api.RolesApi
+import com.schooljournal.api.SchoolsApi
+import com.schooljournal.api.StudentApi
+import com.schooljournal.api.SubjectsApi
+import com.schooljournal.api.TeacherAssignmentsApi
+import com.schooljournal.api.TestApi
+import com.schooljournal.api.UsersApi
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,12 +27,12 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 class NetworkClient @Inject constructor(
-    tokenProvider: TokenProvider,
-    networkConfig: NetworkConfig
+    internal val tokenProvider: TokenProvider,
+    internal val networkConfig: NetworkConfig
 ) {
     internal val moshi: Moshi = Serializer.moshiBuilder.build()
 
-    private val okHttpClient: OkHttpClient =
+    internal val okHttpClient: OkHttpClient =
         getUnsafeOkHttpClient(tokenProvider)
 
     private fun getUnsafeOkHttpClient(tokenProvider: TokenProvider): OkHttpClient {
@@ -53,11 +65,10 @@ class NetworkClient @Inject constructor(
             .build()
     }
 
-    private val baseUrl: String = networkConfig.baseUrl
+    internal val baseUrl: String = networkConfig.baseUrl
     internal fun testApi(): TestApi =
         TestApi(basePath = baseUrl, client = okHttpClient)
 
-    // внутри класса NetworkClient
     fun authorizationApi(): AuthorizationApi = AuthorizationApi(baseUrl, okHttpClient)
     fun classesApi(): ClassesApi = ClassesApi(baseUrl, okHttpClient)
     fun homeworkApi(): HomeworkApi = HomeworkApi(baseUrl, okHttpClient)

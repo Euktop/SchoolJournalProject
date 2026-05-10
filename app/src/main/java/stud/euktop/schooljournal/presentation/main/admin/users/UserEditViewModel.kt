@@ -5,8 +5,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.contract.RoleRepository
 import stud.euktop.domain.model.user.AccountStatus
-import stud.euktop.domain.model.user.RoleSchools
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserRole
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
@@ -50,13 +50,13 @@ class UserEditViewModel @Inject constructor(
         )
     }
 
-    fun removeRole(role: RoleSchools) {
+    fun removeRole(role: UserRole) {
         _state.update { it ->
             it.copy(selectedRoles = it.selectedRoles.filter { it != role })
         }
     }
 
-    fun addRole(role: RoleSchools) {
+    fun addRole(role: UserRole) {
         _state.update { it ->
             it.copy(
                 selectedRoles = it.selectedRoles.toMutableList()
@@ -119,10 +119,10 @@ class UserEditViewModel @Inject constructor(
         if (!state.isFormValid()) return
 
         val roles = state.selectedRoles.map { (role, school) ->
-            RoleSchools(role, school)
+            UserRole(role, school)
         }
 
-        val user = UserInfo(
+        val user = UserProfile(
             userId = state.userId,
             lastName = state.lastName.getValidate(),
             firstName = state.firstName.getValidate(),

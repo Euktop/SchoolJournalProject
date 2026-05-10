@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.update
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.assignment.TeacherAssignment
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.*
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
@@ -50,7 +50,7 @@ class AdminPanelViewModel @Inject constructor(
             onSuccess = { lists ->
                 _state.update {
                     it.copy(
-                        users = lists[0] as List<UserInfo>,
+                        users = lists[0] as List<UserProfile>,
                         classes = lists[1] as List<ClassInfo>,
                         subjects = lists[2] as List<Subject>,
                         assignments = lists[3] as List<TeacherAssignment>

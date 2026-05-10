@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.Room
 import stud.euktop.domain.model.school.Subject
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.databinding.FragmentLessonEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -41,7 +41,7 @@ class LessonEditFragment : BaseFragment<
 
     private lateinit var classRegister: SchJSearchableSelect.RegisterList<ClassInfo>
     private lateinit var subjectRegister: SchJSearchableSelect.RegisterList<Subject>
-    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo>
+    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserProfile>
     private lateinit var roomRegister: SchJSearchableSelect.RegisterList<Room>
 
     override fun setupUI() {

@@ -1,15 +1,22 @@
 package stud.euktop.domain.model.school
 
-import stud.euktop.domain.model.common.PrimaryKey
-
 /**
  * Учебный предмет (например, Математика, Физика).
  */
 data class Subject(
     val subjectId: Int = 0,
-    val name: String = "",
-    val description: String? = null
-) : PrimaryKey<Int> {
-    override val idKey: Int
-        get() = subjectId
+    val name: String,
+    val description: String?
+) {
+    companion object {
+        fun createObject(
+            subjectId: Int?,
+            name: String?,
+            description: String?
+        ) = Subject(
+            subjectId = subjectId ?: 0,
+            name = name ?: "",
+            description = description
+        )
+    }
 }

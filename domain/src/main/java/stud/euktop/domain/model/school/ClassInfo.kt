@@ -1,21 +1,34 @@
 package stud.euktop.domain.model.school
 
-import stud.euktop.domain.model.common.BaseModel
-import stud.euktop.domain.model.user.UserInfo
-
 /**
  * Информация о классе (параллель, буква, учебный год, школа, классный руководитель).
  */
 data class ClassInfo(
     val classId: Int = 0,
-    val school: School = School(),
-    val grade: Int = 0,
-    val letter: String = "",
-    val academicYearStart: Int = -1,
-    val academicYearEnd: Int = -1,
-    val teacher: UserInfo? = null,
-) : BaseModel {
-    val name
-        get() = "$grade $letter ${school.name}"
-    override val idKey: Int = classId
+    val schoolId: Int,
+    val grade: Int,
+    val letter: String,
+    val academicYearStart: Int,
+    val academicYearEnd: Int,
+    val teacherId: Int?
+) {
+    companion object {
+        fun createObject(
+            classId: Int?,
+            schoolId: Int?,
+            grade: Int?,
+            letter: String?,
+            academicYearStart: Int?,
+            academicYearEnd: Int?,
+            teacherId: Int?
+        ) = ClassInfo(
+            classId = classId ?: 0,
+            schoolId = schoolId ?: 0,
+            grade = grade ?: 0,
+            letter = letter ?: "",
+            academicYearStart = academicYearStart ?: 0,
+            academicYearEnd = academicYearEnd ?: 0,
+            teacherId = teacherId
+        )
+    }
 }

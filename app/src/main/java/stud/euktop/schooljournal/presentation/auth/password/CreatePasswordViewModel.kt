@@ -4,9 +4,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
-import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.binding.CreatePasswordFormActions
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import javax.inject.Inject
+
 /**
  * ViewModel для экрана создания пароля.
  *
@@ -24,30 +25,25 @@ import javax.inject.Inject
 @HiltViewModel
 class CreatePasswordViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator,
-    coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager
+    private val routerAuthorization: RouterAuthorization
 ) : BaseViewModel<CreatePasswordState, Unit>() {
-    init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
-    }
-
     override fun initState() = CreatePasswordState()
+    val updateState = object : CreatePasswordFormActions {
+        override fun updatePassword(value: String) {
+            _state.update { it.copy(password = it.password.copy(value)) }
+        }
 
-    fun passwordValidatorSet(value: String) {
-        _state.update { it.copy(passwordValidator = it.passwordValidator.copy(value)) }
-    }
-
-    fun nextPasswordNextValidatorSet(value: String) {
-        _state.update { it.copy(nextPasswordNextValidator = value) }
+        override fun updateConfirmPassword(value: String) {
+            _state.update { it.copy(confirmPassword = value) }
+        }
     }
 
     fun onSaveClick() {
         if (!_state.value.isNextActive()) return
-        executeCoordinatorAndLoadingSync(
-            block = { authCoordinator.register(state.value.passwordValidator.getValidate()) },
-            onSuccess = { _ ->
-                _event.emit(Unit)
-            }
+        executeLoadingBlockSync(
+            key = "register",
+            block = { authCoordinator.register(_state.value.password.getValidate()) },
+            onSuccess = { routerAuthorization.toSuccessCreate() }
         )
     }
 }

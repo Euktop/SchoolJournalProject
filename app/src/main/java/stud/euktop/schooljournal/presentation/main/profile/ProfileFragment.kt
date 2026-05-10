@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
@@ -56,7 +55,7 @@ class ProfileFragment : BaseFragment<
         updateUI(user)
     }
 
-    private fun updateUI(user: UserInfo) {
+    private fun updateUI(user: UserProfile) {
         binding.apply {
             tvUserName.text = user.fullName
             tvEmail.text = user.email

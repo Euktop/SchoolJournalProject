@@ -102,4 +102,6 @@
     <string name="not_specified">Not specified</string>
     <string name="no_school">without school</string>
     <string name="homework_assignments">Homework assignments</string>
+    <string name="logging_in">Выполняем вход</string>
+    <string name="saving">Сохранение</string>
 </resources>

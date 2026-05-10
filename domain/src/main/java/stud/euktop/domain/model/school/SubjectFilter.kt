@@ -1,11 +1,8 @@
 package stud.euktop.domain.model.school
 
+import stud.euktop.domain.model.common.Pagination
+
 data class SubjectFilter(
-    val description: String? = null
-) {
-/*    companion object {
-        fun exec(subject: Subject?) = SubjectFilter(
-            description = subject?.name + subject?.description
-        )
-    }*/
-}
+    val name: String? = null,
+    val pagination: Pagination = Pagination()
+)

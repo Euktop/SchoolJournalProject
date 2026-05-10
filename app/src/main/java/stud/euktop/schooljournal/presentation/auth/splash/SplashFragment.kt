@@ -50,7 +50,7 @@ class SplashFragment : Fragment() {
                         .toLong() - System.currentTimeMillis() + start, 0
                 )
             )
-            routerSplash.navigateAction()
+            routerSplash.navigateAfterSplash()
         }
         super.onViewCreated(view, savedInstanceState)
     }

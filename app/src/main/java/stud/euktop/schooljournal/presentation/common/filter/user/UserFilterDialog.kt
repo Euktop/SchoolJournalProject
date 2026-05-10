@@ -6,7 +6,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.user.AccountStatus
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.UserInfoFilter
+import stud.euktop.domain.model.user.UserFilter
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.base.BaseFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.school.SchoolFilterDialog
@@ -18,10 +18,10 @@ import stud.euktop.uikit.components.input.select.ListSafe
 
 @AndroidEntryPoint
 class UserFilterDialog(
-    initialFilter: UserInfoFilter,
-    onFilterApplied: (UserInfoFilter) -> Unit,
+    initialFilter: UserFilter,
+    onFilterApplied: (UserFilter) -> Unit,
     onError: (CoordinatorResult.Error) -> Unit
-) : BaseFilterDialog<UserFilterViewModel, UserInfoFilter>(
+) : BaseFilterDialog<UserFilterViewModel, UserFilter>(
     initialFilter, onFilterApplied, onError
 ) {
 
@@ -106,10 +106,10 @@ class UserFilterDialog(
         roleSelect?.select?.let { it.state = it.state.copy(selectText = "") }
         schoolSelect.select.state = schoolSelect.select.state.copy(selectText = "")
         statusSelect?.select?.let { it.state = it.state.copy(selectText = "") }
-        initialFilter = UserInfoFilter()
+        initialFilter = UserFilter()
     }
 
-    override fun collectFilter(): UserInfoFilter {
+    override fun collectFilter(): UserFilter {
         return initialFilter.copy(
             fullName = fullNameInput.state.text
         )

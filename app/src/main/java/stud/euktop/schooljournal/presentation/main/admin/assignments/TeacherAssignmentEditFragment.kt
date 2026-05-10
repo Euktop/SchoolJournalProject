@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.Subject
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.databinding.FragmentTeacherAssignmentEditBinding
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
@@ -35,7 +35,7 @@ class TeacherAssignmentEditFragment :
     override val viewModel: TeacherAssignmentEditViewModel by viewModels()
 
     private val focusTrack = FocusTrack()
-    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo>
+    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserProfile>
     private lateinit var classRegister: SchJSearchableSelect.RegisterList<ClassInfo>
     private lateinit var subjectRegister: SchJSearchableSelect.RegisterList<Subject>
     private var fromDateDialog: DatePickerDialog? = null
@@ -44,7 +44,7 @@ class TeacherAssignmentEditFragment :
     override fun setupUI() {
         binding.apply {
             // Учитель
-            val teacherListSafe = ListSafe<UserInfo>(
+            val teacherListSafe = ListSafe<UserProfile>(
                 toText = { it?.let { "${it.lastName} ${it.firstName}" } ?: "" },
                 onClick = { teacher, _ -> viewModel.updateTeacher(teacher) }
             )

@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.school.SchoolFilter
-import stud.euktop.domain.model.user.UserInfo
-import stud.euktop.domain.model.user.UserInfoFilter
+import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.domain.model.user.UserFilter
 import stud.euktop.domain.repository.SchoolAdminRepository
 import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseFilterViewModel
@@ -23,8 +23,8 @@ class ClassFilterViewModel @Inject constructor(
     private val _schools = MutableStateFlow<List<School>>(emptyList())
     val schools: StateFlow<List<School>> = _schools
 
-    private val _teachers = MutableStateFlow<List<UserInfo>>(emptyList())
-    val teachers: StateFlow<List<UserInfo>> = _teachers
+    private val _teachers = MutableStateFlow<List<UserProfile>>(emptyList())
+    val teachers: StateFlow<List<UserProfile>> = _teachers
 
     fun loadSchools(filter: SchoolFilter = SchoolFilter()) {
         execSync({ schoolAdminRepository.getSchools(filter) }) { schools ->
@@ -32,7 +32,7 @@ class ClassFilterViewModel @Inject constructor(
         }
     }
 
-    fun loadTeachers(userFilter: UserInfoFilter) {
+    fun loadTeachers(userFilter: UserFilter) {
         execSync({ userAdminRepository.getUsers(userFilter) }) { teachers ->
             _teachers.value = teachers
         }

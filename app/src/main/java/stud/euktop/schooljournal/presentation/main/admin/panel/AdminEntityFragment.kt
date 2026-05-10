@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.assignment.TeacherAssignment
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.R as R
 import stud.euktop.uikit.R as R2
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
@@ -55,7 +55,7 @@ class AdminEntityFragment : BaseFragment<
         binding.rvEntity.adapter = adapter
     }
 
-    private fun createUserAdapter(): AdminAdapter<UserInfo> {
+    private fun createUserAdapter(): AdminAdapter<UserProfile> {
         return AdminAdapter(
             toText = { "${it.lastName} ${it.firstName} (${it.email})" },
             onEditClick = { user ->

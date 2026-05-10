@@ -10,7 +10,7 @@ import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.Room
 import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.*
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
@@ -85,8 +85,8 @@ class LessonEditViewModel @Inject constructor(
         return result.getOrElse { emptyList() }
     }
 
-    suspend fun loadTeachers(): List<UserInfo> {
-        val result = userAdminRepository.getTeachersByRole(Role.TEACHER)
+    suspend fun loadTeachers(): List<UserProfile> {
+        val result = userAdminRepository.getUsersByRole(Role.TEACHER)
         return result.getOrElse { emptyList() }
     }
 
@@ -104,7 +104,7 @@ class LessonEditViewModel @Inject constructor(
         _state.update { it.copy(selectedSubject = subject) }
     }
 
-    fun updateTeacher(teacher: UserInfo?) {
+    fun updateTeacher(teacher: UserProfile?) {
         _state.update { it.copy(selectedTeacher = teacher) }
     }
 

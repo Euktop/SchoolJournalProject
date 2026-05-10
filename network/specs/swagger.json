@@ -431,9 +431,10 @@
         "tags": [
           "Classes"
         ],
+        "summary": "Получить список классов с фильтрацией.",
         "parameters": [
           {
-            "name": "SchoolId",
+            "name": "schoolId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -441,14 +442,7 @@
             }
           },
           {
-            "name": "FilterBySchoolId",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "Grade",
+            "name": "grade",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -456,43 +450,21 @@
             }
           },
           {
-            "name": "FilterByGrade",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "Letter",
+            "name": "letter",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "FilterByLetter",
+            "name": "query",
             "in": "query",
             "schema": {
-              "type": "boolean"
+              "type": "string"
             }
           },
           {
-            "name": "ClassTeacherId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "FilterByClassTeacherId",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "AcademicYearStart",
+            "name": "classTeacherId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -500,14 +472,14 @@
             }
           },
           {
-            "name": "FilterByAcademicYearStart",
+            "name": "filterByClassTeacherId",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "Offset",
+            "name": "academicYearStart",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -515,7 +487,15 @@
             }
           },
           {
-            "name": "Limit",
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -604,6 +584,7 @@
         "tags": [
           "Classes"
         ],
+        "summary": "Создать новый класс.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -698,6 +679,7 @@
         "tags": [
           "Classes"
         ],
+        "summary": "Частичное обновление класса (multipart/form-data).",
         "parameters": [
           {
             "name": "id",
@@ -719,24 +701,42 @@
                     "type": "integer",
                     "format": "int32"
                   },
+                  "updateSchoolId": {
+                    "type": "boolean"
+                  },
                   "grade": {
                     "type": "integer",
                     "format": "int32"
                   },
+                  "updateGrade": {
+                    "type": "boolean"
+                  },
                   "letter": {
                     "type": "string"
+                  },
+                  "updateLetter": {
+                    "type": "boolean"
                   },
                   "academicYearStart": {
                     "type": "integer",
                     "format": "int32"
                   },
+                  "updateAcademicYearStart": {
+                    "type": "boolean"
+                  },
                   "academicYearEnd": {
                     "type": "integer",
                     "format": "int32"
                   },
+                  "updateAcademicYearEnd": {
+                    "type": "boolean"
+                  },
                   "classTeacherId": {
                     "type": "integer",
                     "format": "int32"
+                  },
+                  "updateClassTeacherId": {
+                    "type": "boolean"
                   }
                 }
               },
@@ -744,19 +744,37 @@
                 "schoolId": {
                   "style": "form"
                 },
+                "updateSchoolId": {
+                  "style": "form"
+                },
                 "grade": {
+                  "style": "form"
+                },
+                "updateGrade": {
                   "style": "form"
                 },
                 "letter": {
                   "style": "form"
                 },
+                "updateLetter": {
+                  "style": "form"
+                },
                 "academicYearStart": {
+                  "style": "form"
+                },
+                "updateAcademicYearStart": {
                   "style": "form"
                 },
                 "academicYearEnd": {
                   "style": "form"
                 },
+                "updateAcademicYearEnd": {
+                  "style": "form"
+                },
                 "classTeacherId": {
+                  "style": "form"
+                },
+                "updateClassTeacherId": {
                   "style": "form"
                 }
               }
@@ -856,6 +874,7 @@
         "tags": [
           "Classes"
         ],
+        "summary": "Удалить класс (мягкое удаление).",
         "parameters": [
           {
             "name": "id",
@@ -1047,7 +1066,6 @@
         "tags": [
           "Grades"
         ],
-        "summary": "Выставить оценку или пропуск ученику за урок.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1142,7 +1160,6 @@
         "tags": [
           "Grades"
         ],
-        "summary": "Обновить оценку или пропуск.",
         "parameters": [
           {
             "name": "gradeId",
@@ -1280,7 +1297,6 @@
         "tags": [
           "Grades"
         ],
-        "summary": "Удалить оценку или пропуск.",
         "parameters": [
           {
             "name": "gradeId",
@@ -1365,47 +1381,40 @@
         }
       }
     },
-    "/api/Homework": {
-      "post": {
+    "/api/Homework/{id}": {
+      "get": {
         "tags": [
           "Homework"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateHomeworkRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateHomeworkRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateHomeworkRequest"
-              }
+        "summary": "Получить домашнее задание по ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateHomework_Result"
+                  "$ref": "#/components/schemas/GetHomeworkById_Result"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateHomework_Result"
+                  "$ref": "#/components/schemas/GetHomeworkById_Result"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateHomework_Result"
+                  "$ref": "#/components/schemas/GetHomeworkById_Result"
                 }
               }
             }
@@ -1450,20 +1459,36 @@
               }
             }
           },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "403": {
             "description": "Доступ запрещён"
-          },
-          "500": {
-            "description": "Внутренняя ошибка сервера"
           }
         }
-      }
-    },
-    "/api/Homework/{id}": {
+      },
       "put": {
         "tags": [
           "Homework"
         ],
+        "summary": "Обновить описание ДЗ.",
         "parameters": [
           {
             "name": "id",
@@ -1587,6 +1612,7 @@
         "tags": [
           "Homework"
         ],
+        "summary": "Удалить ДЗ.",
         "parameters": [
           {
             "name": "id",
@@ -1669,17 +1695,89 @@
             "description": "Внутренняя ошибка сервера"
           }
         }
-      },
+      }
+    },
+    "/api/Homework/filter": {
       "get": {
         "tags": [
           "Homework"
         ],
-        "summary": "Получить домашнее задание по ID (с полными данными урока).",
+        "summary": "Фильтр домашних заданий (универсальный).",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "required": true,
+            "name": "lessonId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "teacherId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "classId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "subjectId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -1692,17 +1790,26 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetHomeworkById_Result"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetHomeworks_Result"
+                  }
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetHomeworkById_Result"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetHomeworks_Result"
+                  }
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetHomeworkById_Result"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetHomeworks_Result"
+                  }
                 }
               }
             }
@@ -1747,8 +1854,81 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
+    "/api/Homework/{homeworkId}/media": {
+      "get": {
+        "tags": [
+          "Homework"
+        ],
+        "summary": "Получить медиафайлы домашнего задания.",
+        "parameters": [
+          {
+            "name": "homeworkId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetHomeworkMedia_Result"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetHomeworkMedia_Result"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetHomeworkMedia_Result"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "text/plain": {
                 "schema": {
@@ -1771,13 +1951,12 @@
             "description": "Доступ запрещён"
           }
         }
-      }
-    },
-    "/api/Homework/{homeworkId}/media": {
+      },
       "post": {
         "tags": [
           "Homework"
         ],
+        "summary": "Прикрепить медиафайл к ДЗ.",
         "parameters": [
           {
             "name": "homeworkId",
@@ -1877,14 +2056,17 @@
             "description": "Внутренняя ошибка сервера"
           }
         }
-      },
+      }
+    },
+    "/api/Homework/media/{mediaId}": {
       "get": {
         "tags": [
           "Homework"
         ],
+        "summary": "Скачать медиафайл.",
         "parameters": [
           {
-            "name": "homeworkId",
+            "name": "mediaId",
             "in": "path",
             "required": true,
             "schema": {
@@ -1897,28 +2079,173 @@
           "200": {
             "description": "OK",
             "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Не авторизован"
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Homework"
+        ],
+        "summary": "Удалить медиафайл.",
+        "parameters": [
+          {
+            "name": "mediaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetHomeworkMedia_Result"
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetHomeworkMedia_Result"
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetHomeworkMedia_Result"
-                  }
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера"
+          }
+        }
+      }
+    },
+    "/api/Homework": {
+      "post": {
+        "tags": [
+          "Homework"
+        ],
+        "summary": "Создать домашнее задание.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHomeworkRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHomeworkRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHomeworkRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateHomework_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateHomework_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateHomework_Result"
                 }
               }
             }
@@ -1965,18 +2292,22 @@
           },
           "403": {
             "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера"
           }
         }
       }
     },
-    "/api/Homework/media/{mediaId}": {
+    "/api/Lessons/{id}": {
       "get": {
         "tags": [
-          "Homework"
+          "Lessons"
         ],
+        "summary": "Получить урок по ID.",
         "parameters": [
           {
-            "name": "mediaId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -1987,7 +2318,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLessonById_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLessonById_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLessonById_Result"
+                }
+              }
+            }
           },
           "400": {
             "description": "Bad Request",
@@ -2053,6 +2401,275 @@
             "description": "Доступ запрещён"
           }
         }
+      },
+      "patch": {
+        "tags": [
+          "Lessons"
+        ],
+        "summary": "Частичное обновление урока (multipart/form-data).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "topic": {
+                    "type": "string"
+                  },
+                  "updateTopic": {
+                    "type": "boolean"
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "format": "date-span"
+                  },
+                  "updateStartTime": {
+                    "type": "boolean"
+                  },
+                  "endTime": {
+                    "type": "string",
+                    "format": "date-span"
+                  },
+                  "updateEndTime": {
+                    "type": "boolean"
+                  },
+                  "roomId": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "updateRoomId": {
+                    "type": "boolean"
+                  },
+                  "locationAddress": {
+                    "type": "string"
+                  },
+                  "updateLocationAddress": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "encoding": {
+                "topic": {
+                  "style": "form"
+                },
+                "updateTopic": {
+                  "style": "form"
+                },
+                "startTime": {
+                  "style": "form"
+                },
+                "updateStartTime": {
+                  "style": "form"
+                },
+                "endTime": {
+                  "style": "form"
+                },
+                "updateEndTime": {
+                  "style": "form"
+                },
+                "roomId": {
+                  "style": "form"
+                },
+                "updateRoomId": {
+                  "style": "form"
+                },
+                "locationAddress": {
+                  "style": "form"
+                },
+                "updateLocationAddress": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLesson_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLesson_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLesson_Result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Lessons"
+        ],
+        "summary": "Удалить урок.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера"
+          }
+        }
       }
     },
     "/api/Lessons/teacher": {
@@ -2060,6 +2677,7 @@
         "tags": [
           "Lessons"
         ],
+        "summary": "Получить уроки для учителя (по его классам и предметам).",
         "parameters": [
           {
             "name": "ClassId",
@@ -2175,9 +2793,10 @@
         "tags": [
           "Lessons"
         ],
+        "summary": "Получить список всех уроков с фильтрацией (для администратора).",
         "parameters": [
           {
-            "name": "ClassId",
+            "name": "classId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2185,14 +2804,7 @@
             }
           },
           {
-            "name": "FilterByClassId",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "SubjectId",
+            "name": "subjectId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2200,14 +2812,7 @@
             }
           },
           {
-            "name": "FilterBySubjectId",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "TeacherId",
+            "name": "teacherId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2215,14 +2820,7 @@
             }
           },
           {
-            "name": "FilterByTeacherId",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "DateFrom",
+            "name": "dateFrom",
             "in": "query",
             "schema": {
               "type": "string",
@@ -2230,14 +2828,7 @@
             }
           },
           {
-            "name": "FilterByDateFrom",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "DateTo",
+            "name": "dateTo",
             "in": "query",
             "schema": {
               "type": "string",
@@ -2245,14 +2836,7 @@
             }
           },
           {
-            "name": "FilterByDateTo",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "Offset",
+            "name": "offset",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2260,7 +2844,7 @@
             }
           },
           {
-            "name": "Limit",
+            "name": "limit",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2349,6 +2933,7 @@
         "tags": [
           "Lessons"
         ],
+        "summary": "Получить оценки за урок.",
         "parameters": [
           {
             "name": "lessonId",
@@ -2441,6 +3026,7 @@
         "tags": [
           "Lessons"
         ],
+        "summary": "Создать новый урок.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2503,245 +3089,6 @@
           },
           "401": {
             "description": "Unauthorized",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Доступ запрещён"
-          },
-          "500": {
-            "description": "Внутренняя ошибка сервера"
-          }
-        }
-      }
-    },
-    "/api/Lessons/{id}": {
-      "patch": {
-        "tags": [
-          "Lessons"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "topic": {
-                    "type": "string"
-                  },
-                  "startTime": {
-                    "type": "string",
-                    "format": "date-span"
-                  },
-                  "endTime": {
-                    "type": "string",
-                    "format": "date-span"
-                  },
-                  "roomId": {
-                    "type": "integer",
-                    "format": "int32"
-                  },
-                  "locationAddress": {
-                    "type": "string"
-                  }
-                }
-              },
-              "encoding": {
-                "topic": {
-                  "style": "form"
-                },
-                "startTime": {
-                  "style": "form"
-                },
-                "endTime": {
-                  "style": "form"
-                },
-                "roomId": {
-                  "style": "form"
-                },
-                "locationAddress": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateLesson_Result"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateLesson_Result"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpdateLesson_Result"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Доступ запрещён"
-          },
-          "500": {
-            "description": "Внутренняя ошибка сервера"
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "Lessons"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
             "content": {
               "text/plain": {
                 "schema": {
@@ -3114,7 +3461,6 @@
         "tags": [
           "Rooms"
         ],
-        "summary": "Получить список кабинетов с фильтрацией.",
         "parameters": [
           {
             "name": "SchoolId",
@@ -3125,24 +3471,10 @@
             }
           },
           {
-            "name": "FilterBySchoolId",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
             "name": "Name",
             "in": "query",
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "FilterByName",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
             }
           },
           {
@@ -3238,48 +3570,39 @@
         }
       }
     },
-    "/api/Rooms": {
-      "post": {
+    "/api/Rooms/{id}": {
+      "get": {
         "tags": [
           "Rooms"
         ],
-        "summary": "Создать кабинет.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRoomRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRoomRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateRoomRequest"
-              }
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
-        },
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateRoom_Result"
+                  "$ref": "#/components/schemas/GetRoomById_Result"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateRoom_Result"
+                  "$ref": "#/components/schemas/GetRoomById_Result"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateRoom_Result"
+                  "$ref": "#/components/schemas/GetRoomById_Result"
                 }
               }
             }
@@ -3325,20 +3648,51 @@
             }
           },
           "403": {
-            "description": "Доступ запрещён"
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           },
-          "500": {
-            "description": "Внутренняя ошибка сервера"
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
-      }
-    },
-    "/api/Rooms/{id}": {
+      },
       "put": {
         "tags": [
           "Rooms"
         ],
-        "summary": "Обновить кабинет.",
         "parameters": [
           {
             "name": "id",
@@ -3462,7 +3816,6 @@
         "tags": [
           "Rooms"
         ],
-        "summary": "Удалить кабинет.",
         "parameters": [
           {
             "name": "id",
@@ -3547,6 +3900,100 @@
         }
       }
     },
+    "/api/Rooms": {
+      "post": {
+        "tags": [
+          "Rooms"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateRoom_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateRoom_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateRoom_Result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера"
+          }
+        }
+      }
+    },
     "/api/errors": {
       "get": {
         "tags": [
@@ -3567,35 +4014,28 @@
         "summary": "Получить список школ с фильтрацией.",
         "parameters": [
           {
-            "name": "Name",
+            "name": "name",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "FilterByName",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "Region",
+            "name": "region",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "FilterByRegion",
+            "name": "address",
             "in": "query",
             "schema": {
-              "type": "boolean"
+              "type": "string"
             }
           },
           {
-            "name": "Offset",
+            "name": "offset",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3603,7 +4043,7 @@
             }
           },
           {
-            "name": "Limit",
+            "name": "limit",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3904,7 +4344,7 @@
         "tags": [
           "Schools"
         ],
-        "summary": "Обновить данные школы (только администратор).",
+        "summary": "Обновить школу.",
         "parameters": [
           {
             "name": "id",
@@ -4045,7 +4485,7 @@
         "tags": [
           "Schools"
         ],
-        "summary": "Удалить школу (только администратор).",
+        "summary": "Удалить школу.",
         "parameters": [
           {
             "name": "id",
@@ -4245,6 +4685,17 @@
         "tags": [
           "Student"
         ],
+        "summary": "Получить предметы ученика со средним баллом.",
+        "parameters": [
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -4306,11 +4757,20 @@
         "tags": [
           "Student"
         ],
+        "summary": "Получить оценки ученика по предмету с фильтром по датам (с пагинацией).",
         "parameters": [
           {
             "name": "subjectId",
             "in": "path",
             "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "studentId",
+            "in": "query",
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -4330,6 +4790,22 @@
             "schema": {
               "type": "string",
               "format": "date-time"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -4414,7 +4890,16 @@
         "tags": [
           "Student"
         ],
+        "summary": "Получить расписание ученика.",
         "parameters": [
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
           {
             "name": "startDate",
             "in": "query",
@@ -4513,9 +4998,10 @@
         "tags": [
           "Student"
         ],
+        "summary": "Получить домашние задания ученика с фильтрацией.",
         "parameters": [
           {
-            "name": "SubjectId",
+            "name": "studentId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4523,44 +5009,7 @@
             }
           },
           {
-            "name": "FilterBySubjectId",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "DateFrom",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "FilterByDateFrom",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "DateTo",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "FilterByDateTo",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "Offset",
+            "name": "subjectId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4568,7 +5017,31 @@
             }
           },
           {
-            "name": "Limit",
+            "name": "dateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4657,12 +5130,19 @@
         "tags": [
           "Student"
         ],
-        "summary": "Получить сводку по оценкам ученика за указанный период (средний балл, итоговая, количество отличных/хороших).",
+        "summary": "Получить сводку по оценкам ученика за период.",
         "parameters": [
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
           {
             "name": "periodStart",
             "in": "query",
-            "description": "Начало периода (опционально)",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -4671,7 +5151,6 @@
           {
             "name": "periodEnd",
             "in": "query",
-            "description": "Конец периода (опционально)",
             "schema": {
               "type": "string",
               "format": "date-time"
@@ -4759,7 +5238,17 @@
         "tags": [
           "Student"
         ],
-        "summary": "Получить класс текущего ученика.",
+        "summary": "Получить класс текущего ученика (или указанного).",
+        "parameters": [
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -4814,21 +5303,14 @@
         ],
         "parameters": [
           {
-            "name": "Name",
+            "name": "name",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "FilterByName",
-            "in": "query",
-            "schema": {
-              "type": "boolean"
-            }
-          },
-          {
-            "name": "Offset",
+            "name": "offset",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -4836,7 +5318,7 @@
             }
           },
           {
-            "name": "Limit",
+            "name": "limit",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -5241,7 +5723,6 @@
         "tags": [
           "Subjects"
         ],
-        "summary": "Получить предмет по ID.",
         "parameters": [
           {
             "name": "id",
@@ -5723,10 +6204,19 @@
                     "type": "string",
                     "format": "date-time"
                   },
+                  "validToUpdate": {
+                    "type": "boolean"
+                  },
                   "comment": {
                     "type": "string"
                   },
+                  "commentUpdate": {
+                    "type": "boolean"
+                  },
                   "isPrimary": {
+                    "type": "boolean"
+                  },
+                  "isPrimaryUpdate": {
                     "type": "boolean"
                   }
                 }
@@ -5747,10 +6237,19 @@
                 "validTo": {
                   "style": "form"
                 },
+                "validToUpdate": {
+                  "style": "form"
+                },
                 "comment": {
                   "style": "form"
                 },
+                "commentUpdate": {
+                  "style": "form"
+                },
                 "isPrimary": {
+                  "style": "form"
+                },
+                "isPrimaryUpdate": {
                   "style": "form"
                 }
               }
@@ -5969,17 +6468,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserById_Result"
+                  "$ref": "#/components/schemas/GetCurrentUserInfo_Result"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserById_Result"
+                  "$ref": "#/components/schemas/GetCurrentUserInfo_Result"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetUserById_Result"
+                  "$ref": "#/components/schemas/GetCurrentUserInfo_Result"
                 }
               }
             }
@@ -6056,24 +6555,45 @@
                   "lastName": {
                     "type": "string"
                   },
+                  "lastNameUpdate": {
+                    "type": "boolean"
+                  },
                   "firstName": {
                     "type": "string"
+                  },
+                  "firstNameUpdate": {
+                    "type": "boolean"
                   },
                   "surName": {
                     "type": "string"
                   },
+                  "surNameUpdate": {
+                    "type": "boolean"
+                  },
                   "gender": {
                     "$ref": "#/components/schemas/GenderType"
+                  },
+                  "genderUpdate": {
+                    "type": "boolean"
                   },
                   "birthDay": {
                     "type": "string",
                     "format": "date-time"
                   },
+                  "birthDayUpdate": {
+                    "type": "boolean"
+                  },
                   "email": {
                     "type": "string"
                   },
+                  "emailUpdate": {
+                    "type": "boolean"
+                  },
                   "phone": {
                     "type": "string"
+                  },
+                  "phoneUpdate": {
+                    "type": "boolean"
                   }
                 }
               },
@@ -6081,22 +6601,43 @@
                 "lastName": {
                   "style": "form"
                 },
+                "lastNameUpdate": {
+                  "style": "form"
+                },
                 "firstName": {
+                  "style": "form"
+                },
+                "firstNameUpdate": {
                   "style": "form"
                 },
                 "surName": {
                   "style": "form"
                 },
+                "surNameUpdate": {
+                  "style": "form"
+                },
                 "gender": {
+                  "style": "form"
+                },
+                "genderUpdate": {
                   "style": "form"
                 },
                 "birthDay": {
                   "style": "form"
                 },
+                "birthDayUpdate": {
+                  "style": "form"
+                },
                 "email": {
                   "style": "form"
                 },
+                "emailUpdate": {
+                  "style": "form"
+                },
                 "phone": {
+                  "style": "form"
+                },
+                "phoneUpdate": {
                   "style": "form"
                 }
               }
@@ -6301,7 +6842,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Получить пользователя по ID (доступно администратору/директору).",
+        "summary": "Получить пользователя по ID.",
         "parameters": [
           {
             "name": "id",
@@ -6425,7 +6966,7 @@
         "summary": "Получить список пользователей с фильтрацией.",
         "parameters": [
           {
-            "name": "UserId",
+            "name": "userId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -6433,14 +6974,14 @@
             }
           },
           {
-            "name": "FullName",
+            "name": "fullName",
             "in": "query",
             "schema": {
               "type": "string"
             }
           },
           {
-            "name": "RoleId",
+            "name": "roleId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -6448,14 +6989,14 @@
             }
           },
           {
-            "name": "OnlyNullRole",
+            "name": "filterByRoleId",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "SchoolId",
+            "name": "schoolId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -6463,14 +7004,14 @@
             }
           },
           {
-            "name": "OnlyNullSchoolId",
+            "name": "filterBySchoolId",
             "in": "query",
             "schema": {
               "type": "boolean"
             }
           },
           {
-            "name": "AccountStatusId",
+            "name": "accountStatusId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -6478,7 +7019,14 @@
             }
           },
           {
-            "name": "Offset",
+            "name": "onlyNullRole",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "offset",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -6486,7 +7034,7 @@
             }
           },
           {
-            "name": "Limit",
+            "name": "limit",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -6893,7 +7441,7 @@
         "tags": [
           "Users"
         ],
-        "summary": "Создать нового пользователя администратором (с указанием роли и школы).",
+        "summary": "Создать нового пользователя администратором.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -7725,6 +8273,49 @@
         },
         "additionalProperties": false
       },
+      "GetCurrentUserInfo_Result": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "surName": {
+            "type": "string",
+            "nullable": true
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthDay": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateRegistration": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "GetHomeworkById_Result": {
         "type": "object",
         "properties": {
@@ -7824,6 +8415,139 @@
             "nullable": true
           },
           "uploadedBySurName": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetHomeworks_Result": {
+        "type": "object",
+        "properties": {
+          "homeworkId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lessonDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "lessonTopic": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "teacherLastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "teacherFirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "teacherSurName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classGrade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classLetter": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetLessonById_Result": {
+        "type": "object",
+        "properties": {
+          "lessonId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classGrade": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classLetter": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "teacherId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "teacherLastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "teacherFirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "teacherSurName": {
+            "type": "string",
+            "nullable": true
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "topic": {
+            "type": "string",
+            "nullable": true
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-span"
+          },
+          "roomId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "roomName": {
+            "type": "string",
+            "nullable": true
+          },
+          "locationAddress": {
             "type": "string",
             "nullable": true
           }
@@ -7964,6 +8688,28 @@
         },
         "additionalProperties": false
       },
+      "GetRoomById_Result": {
+        "type": "object",
+        "properties": {
+          "roomId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schoolId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schoolName": {
+            "type": "string",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetRooms_Result": {
         "type": "object",
         "properties": {
@@ -8053,11 +8799,36 @@
             "type": "string",
             "nullable": true
           },
+          "academicYearStart": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "academicYearEnd": {
+            "type": "integer",
+            "format": "int32"
+          },
           "schoolId": {
             "type": "integer",
             "format": "int32"
           },
           "schoolName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classTeacherId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "classTeacherLastName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classTeacherFirstName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classTeacherSurName": {
             "type": "string",
             "nullable": true
           }

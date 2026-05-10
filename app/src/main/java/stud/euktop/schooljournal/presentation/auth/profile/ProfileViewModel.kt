@@ -1,79 +1,68 @@
 package stud.euktop.schooljournal.presentation.auth.profile
 
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import stud.euktop.domain.model.user.Gender
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.binding.ProfileFormActions
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import java.util.Date
 import javax.inject.Inject
 
-/**
- * ViewModel для экрана регистрации.
- *
- * Назначение: управляет валидацией полей профиля и временным хранением данных
- * через AuthCoordinator.
- *
- * Функционал:
- * - State: поля lastName, firstName, surName, gender, birthDay, email, phone
- * - Методы обновления каждого поля
- * - Валидация всех полей через соответствующие валидаторы
- * - onNextClick() – сохраняет профиль через AuthCoordinator.saveProfile
- * - После сохранения отправляет событие Unit для перехода к CreatePasswordFragment
- *
- * @see ProfileFragment
- * @see AuthCoordinator
- */
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val authCoordinator: AuthCoordinator
-) : BaseViewModel<ProfileState, Unit>() {
+    private val authCoordinator: AuthCoordinator,
+    private val routerAuthorization: RouterAuthorization
+) : BaseViewModel<ProfileState, Unit>(), ProfileFormActions {
+
     override fun initState() = ProfileState()
 
-    fun lastNameSet(value: String) {
+    override fun lastNameSet(value: String) {
         _state.update { it.copy(lastName = it.lastName.copy(value)) }
     }
 
-    fun firstNameSet(value: String) {
+    override fun firstNameSet(value: String) {
         _state.update { it.copy(firstName = it.firstName.copy(value)) }
     }
 
-    fun surNameSet(value: String) {
+    override fun surNameSet(value: String) {
         _state.update { it.copy(surName = it.surName.copy(value)) }
     }
 
-    fun genderSet(value: Gender) {
+    override fun genderSet(value: Gender?) {
         _state.update { it.copy(gender = value) }
     }
 
-    fun birthDaySet(value: Date) {
+    override fun birthDaySet(value: Date?) {
         _state.update { it.copy(birthDay = value) }
     }
 
-    fun emailSet(value: String) {
+    override fun emailSet(value: String) {
         _state.update { it.copy(email = it.email.copy(value)) }
     }
 
-    fun phoneSet(value: String) {
+    override fun phoneSet(value: String) {
         _state.update { it.copy(phone = it.phone.copy(value)) }
     }
 
+
     fun onNextClick() {
-        executeLoadingBlockSync(
+        if (!_state.value.isButtonActive()) return
+        executeWithLoadingSync(
+            key = "save_profile",
             block = {
                 authCoordinator.saveProfile(
-                    lastName = state.value.lastName.getValidate(),
-                    firstName = state.value.firstName.getValidate(),
-                    surName = state.value.surName.getValidate(),
-                    gender = state.value.gender ?: Gender.NONE,
-                    birthDay = state.value.birthDay ?: Date(),
-                    email = state.value.email.getValidate(),
-                    phone = state.value.phone.getValidate()
+                    lastName = _state.value.lastName.getValidate(),
+                    firstName = _state.value.firstName.getValidate(),
+                    surName = _state.value.surName.value ?: "",
+                    gender = _state.value.gender ?: Gender.NONE,
+                    birthDay = _state.value.birthDay ?: Date(),
+                    email = _state.value.email.getValidate(),
+                    phone = _state.value.phone.value
                 )
-            }
+            },
+            onSuccess = { routerAuthorization.toCreatePassword() }
         )
-        viewModelScope.launch { _event.emit(Unit) }
     }
 }

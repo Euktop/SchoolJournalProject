@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.School
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.databinding.FragmentClassEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
@@ -34,7 +34,7 @@ class ClassEditFragment : BaseFragment<
     lateinit var navigationManager: NavigationManager
 
     private lateinit var schoolRegister: SchJSearchableSelect.RegisterList<School>
-    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserInfo>
+    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserProfile>
 
     override fun setupUI() {
         binding.apply {
@@ -51,7 +51,7 @@ class ClassEditFragment : BaseFragment<
             schoolRegister.register(childFragmentManager)
             selectSchool.onShowing = { viewModel.loadSchools() }
 
-            val teacherListSafe = ListSafe<UserInfo>(
+            val teacherListSafe = ListSafe<UserProfile>(
                 toText = { it?.fullName ?: "" },
                 onClick = { teacher, _ -> viewModel.updateClassTeacher(teacher) }
             )

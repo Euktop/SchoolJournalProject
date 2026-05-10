@@ -4,8 +4,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
-import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import javax.inject.Inject
 
 /**
@@ -21,40 +20,33 @@ import javax.inject.Inject
  *
  * @see LoginFragment
  * @see LoginState
- * @see LoginEvent
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator,
-    coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager
-) : BaseViewModel<LoginState, LoginEvent>() {
+    private val routerMain: RouterMain
+) : BaseViewModel<LoginState, Unit>() {
+
     override fun initState() = LoginState()
 
     fun emailSet(email: String) {
-        _state.update { it.copy(emailValidator = it.emailValidator.copy(email)) }
+        _state.update { it.copy(email = it.email.copy(email)) }
     }
 
     fun passwordSet(password: String) {
-        _state.update { it.copy(passwordValidator = it.passwordValidator.copy(password)) }
-    }
-
-    init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
+        _state.update { it.copy(password = it.password.copy(password)) }
     }
 
     fun onLoginClick() {
         if (!_state.value.isButtonActive()) return
-        executeCoordinatorAndLoadingSync(
+        executeLoadingBlockSync(
+            key = "login",
             block = {
                 authCoordinator.login(
-                    state.value.emailValidator.value ?: "",
-                    state.value.passwordValidator.value ?: ""
+                    email = _state.value.email.getValidate(),
+                    password = _state.value.password.getValidate()
                 )
-            },
-            onSuccess = { profile ->
-                _event.emit(LoginEvent.NavigateToMain)
-            }
+            }, { routerMain.toMain() }
         )
     }
 }

@@ -1,6 +1,7 @@
 package stud.euktop.schooljournal.presentation.common.utils
 
 import stud.euktop.domain.utils.validation.Validator
+import stud.euktop.domain.utils.validation.ValidatorInterface
 import stud.euktop.uikit.components.input.SchJInput
 
 inline fun SchJInput.setup(
@@ -31,7 +32,7 @@ fun SchJInput.check(focusTrack: FocusTrack, validate: Boolean) {
     this.state = this.state.copy(isErrorVisible = focusTrack.isTouched(this) && !validate)
 }
 
-fun SchJInput.check(focusTrack: FocusTrack, validate: Validator<String, *>) {
+fun SchJInput.check(focusTrack: FocusTrack, validate: ValidatorInterface<String>) {
     check(focusTrack, validate.validate())
     val text = validate.value ?: ""
     if (state.text != text)

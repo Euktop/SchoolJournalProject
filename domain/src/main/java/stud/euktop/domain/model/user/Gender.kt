@@ -4,6 +4,6 @@ package stud.euktop.domain.model.user
  */
 enum class Gender {
     MALE,
-    WOMAN,
+    FEMALE,
     NONE
 }

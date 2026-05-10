@@ -26,7 +26,7 @@ class ApiErrorHandler @Inject constructor() {
             when (e) {
                 is ServerException -> {
                     val errorResponse = parseErrorResponse(e)
-                    failure<T>(mapToDataError(e.statusCode, errorResponse, e.message))
+                    failure(mapToDataError(e.statusCode, errorResponse, e.message))
                 }
                 is IOException -> failure(DataError.NetworkConnection(e.message))
                 else -> failure(DataError.Unknown(e.message))
@@ -101,7 +101,7 @@ class ApiErrorHandler @Inject constructor() {
             HttpURLConnection.HTTP_INTERNAL_ERROR -> DataError.InternalServerError(
                 message ?: "Internal server error"
             )
-
+            HttpURLConnection.HTTP_UNAUTHORIZED -> DataError.Unauthorized(message)
             else -> DataError.HttpError(httpCode, message ?: "Unknown error")
         }
     }

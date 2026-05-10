@@ -1,4 +1,3 @@
-// AuthRepositoryImpl.kt
 package stud.euktop.data.repository
 
 import com.schooljournal.api.AuthorizationApi
@@ -7,10 +6,12 @@ import com.schooljournal.model.LoginRequest
 import com.schooljournal.model.RegisterRequest
 import stud.euktop.data.local.storage.contract.TokenStorage
 import stud.euktop.data.local.storage.contract.UserIdStorage
-import stud.euktop.data.map.*
+import stud.euktop.data.map.toDomain
+import stud.euktop.data.map.toLocalDateTime
+import stud.euktop.data.map.toNetwork
 import stud.euktop.data.utils.ApiErrorHandler
-import stud.euktop.domain.model.user.AccountStatus
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserAuth
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,50 +25,41 @@ class AuthRepositoryImpl @Inject constructor(
     private val errorHandler: ApiErrorHandler
 ) : AuthRepository {
 
-    override suspend fun login(login: String, passwordHash: String): Result<UserInfo> =
+    override suspend fun login(login: String, passwordHash: String): Result<Unit> =
         errorHandler.safeApiCall {
-            val loginResponse = authApi.apiAuthorizationLoginPost(LoginRequest(login, passwordHash))
-            val token = loginResponse.token ?: throw IllegalStateException("Token is null")
-            val userId = loginResponse.userId ?: throw IllegalStateException("UserId is null")
+            val response = authApi.apiAuthorizationLoginPost(LoginRequest(login, passwordHash))
+            val token = response.token ?: throw IllegalStateException("No token")
+            val userId = response.userId ?: throw IllegalStateException("No userId")
             tokenStorage.setToken(token)
             userIdStorage.setUserId(userId)
-            val userDto = usersApi.apiUsersMeGet()
-            val rolesDto = usersApi.apiUsersMeRolesGet()
-            mergeRoles(userDto.toDomain(), rolesDto)
+            val roleIds = response.roles?.map { it.roleId ?: 0 } ?: emptyList()
+            UserAuth(userId, token, roleIds)
         }
 
-    override suspend fun registration(userInfo: UserInfo, password: String): Result<UserInfo> =
+    override suspend fun registration(profile: UserProfile, password: String): Result<Unit> =
         errorHandler.safeApiCall {
             val request = RegisterRequest(
-                lastName = userInfo.lastName,
-                firstName = userInfo.firstName,
-                surName = userInfo.surName ?: "",
-                email = userInfo.email,
+                lastName = profile.lastName,
+                firstName = profile.firstName,
+                surName = profile.surName ?: "",
+                email = profile.email,
                 password = password,
-                gender = userInfo.gender.toNetwork(),
-                birthDay = userInfo.birthday?.toLocalDateTime(),
-                phone = userInfo.phone
+                gender = profile.gender.toNetwork(),
+                birthDay = profile.birthday?.toLocalDateTime(),
+                phone = profile.phone
             )
-            val result = authApi.apiAuthorizationRegisterPost(request)
-            UserInfo(
-                userId = result.userId ?: 0,
-                lastName = result.lastName ?: "",
-                firstName = result.firstName ?: "",
-                surName = result.surName,
-                birthday = result.birthDay?.toDate(),
-                gender = toGender(result.gender),
-                email = result.email ?: "",
-                phone = result.phone,
-                roles = emptyList(),
-                dateRegistration = result.dateRegistration.toDate(),
-                accountStatus = AccountStatus.PENDING
-            )
+            authApi.apiAuthorizationRegisterPost(request)
+            login(profile.email, password).getOrThrow()
         }
 
-    override suspend fun getCurrentUser(): Result<UserInfo> =
+    override suspend fun getCurrentUser(): Result<UserProfile> =
         errorHandler.safeApiCall {
-            val userDto = usersApi.apiUsersMeGet()
-            val rolesDto = usersApi.apiUsersMeRolesGet()
-            mergeRoles(userDto.toDomain(), rolesDto)
+            val roles = usersApi.apiUsersMeRolesGet().map { it.toDomain() }
+            usersApi.apiUsersMeGet().toDomain(roles)
         }
+
+    override suspend fun logout() {
+        tokenStorage.clearAll()
+        userIdStorage.clearAll()
+    }
 }

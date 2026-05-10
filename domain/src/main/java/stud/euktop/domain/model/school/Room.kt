@@ -1,17 +1,23 @@
 package stud.euktop.domain.model.school
 
-import stud.euktop.domain.model.common.BaseModel
-
 /**
  * Учебный кабинет.
  * Принадлежит конкретной школе.
  */
 data class Room(
     val roomId: Int = 0,
-    val school: School,
+    val schoolId: Int,
     val name: String
-) : BaseModel {
-    override val idKey: Int
-        get() = roomId
-
+) {
+    companion object {
+        fun createObject(
+            roomId: Int?,
+            schoolId: Int?,
+            name: String?
+        ) = Room(
+            roomId = roomId ?: 0,
+            schoolId = schoolId ?: 0,
+            name = name ?: ""
+        )
+    }
 }

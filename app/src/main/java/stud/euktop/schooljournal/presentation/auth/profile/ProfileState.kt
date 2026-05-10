@@ -6,25 +6,24 @@ import stud.euktop.domain.utils.validation.NameLetterOnlyValidator
 import stud.euktop.domain.utils.validation.PhoneValidator
 import stud.euktop.domain.utils.validation.Validator
 import stud.euktop.schooljournal.presentation.common.base.BaseState
-import java.text.SimpleDateFormat
+import stud.euktop.schooljournal.presentation.common.binding.ProfileFormState
 import java.util.Date
-import java.util.Locale
 
 
 data class ProfileState(
-    override val isLoading: Boolean = false,
-    val lastName: NameLetterOnlyValidator = NameLetterOnlyValidator(),
-    val firstName: NameLetterOnlyValidator = NameLetterOnlyValidator(),
-    val surName: NameLetterOnlyValidator = NameLetterOnlyValidator(),
-    val gender: Gender? = null,
-    val birthDay: Date? = null,
-    val email: EmailValidator = EmailValidator(),
-    val phone: PhoneValidator = PhoneValidator(),
-) : BaseState<ProfileState>() {
-    val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    override val lastName: NameLetterOnlyValidator = NameLetterOnlyValidator(),
+    override val firstName: NameLetterOnlyValidator = NameLetterOnlyValidator(),
+    override val surName: NameLetterOnlyValidator = NameLetterOnlyValidator(),
+    override val gender: Gender? = null,
+    override val birthDay: Date? = null,
+    override val email: EmailValidator = EmailValidator(),
+    override val phone: PhoneValidator = PhoneValidator(),
+    override val loadingMap: Map<String, Boolean> = emptyMap()
+) : BaseState<ProfileState>(), ProfileFormState {
+    fun isButtonActive(): Boolean =
+        Validator.isAllValidate(lastName, firstName, surName, email, phone)
+                && gender != null && birthDay != null
 
-    fun isButtonActive() = Validator.isAllValidate(lastName, firstName, surName, email, phone)
-            && Validator.isAllNullValidate(gender, birthDay)
-
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    override fun updateLoading(loadingMap: Map<String, Boolean>): ProfileState =
+        copy(loadingMap = loadingMap)
 }

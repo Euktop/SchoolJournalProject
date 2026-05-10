@@ -21,7 +21,7 @@ private val absenceTypes = mutableMapOf(
 
 fun Gender.toMessageId() = when (this) {
     Gender.MALE -> R.string.male
-    Gender.WOMAN -> R.string.woman
+    Gender.FEMALE -> R.string.woman
     Gender.NONE -> R.string.none
 }
 

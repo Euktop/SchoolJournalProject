@@ -1,108 +1,106 @@
-// UserAdminRepositoryImpl.kt
 package stud.euktop.data.repository
 
-import stud.euktop.data.mock.MockDelayService
-import stud.euktop.data.mock.MockUserDataSource
+import com.schooljournal.api.RolesApi
+import com.schooljournal.api.UsersApi
+import com.schooljournal.model.CreateUserRequest
+import stud.euktop.data.map.toDomain
+import stud.euktop.data.map.toLocalDateTime
+import stud.euktop.data.map.toNetwork
+import stud.euktop.data.map.toUserListItem
+import stud.euktop.data.map.toUserProfile
+import stud.euktop.data.utils.ApiErrorHandler
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.UserInfo
-import stud.euktop.domain.model.user.UserInfoFilter
+import stud.euktop.domain.model.user.UserFilter
+import stud.euktop.domain.model.user.UserListItem
+import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.domain.model.user.UserRole
+import stud.euktop.domain.model.user.UserUpdate
 import stud.euktop.domain.repository.UserAdminRepository
-import stud.euktop.domain.utils.loger.logger
-import stud.euktop.domain.utils.loger.toSimpleTag
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserAdminRepositoryImpl @Inject constructor() : UserAdminRepository {
-    private val tag = this.toSimpleTag()
+class UserAdminRepositoryImpl @Inject constructor(
+    private val usersApi: UsersApi,
+    private val rolesApi: RolesApi,
+    private val errorHandler: ApiErrorHandler
+) : UserAdminRepository {
 
-    override suspend fun getUsers(filter: UserInfoFilter): Result<List<UserInfo>> {
-        logger?.i(tag, "getUsers started", "filter=$filter")
-        MockDelayService.delay()
-        return try {
-            val users = MockUserDataSource.getAllUsersWithRoles()
-            logger?.i(tag, "getUsers succeeded", "count=${users.size}")
-            Result.success(users)
-        } catch (e: Exception) {
-            logger?.e(tag, "getUsers failed", e, "filter=$filter")
-            Result.failure(e)
+    override suspend fun getUsers(filter: UserFilter): Result<List<UserListItem>> =
+        errorHandler.safeApiCall {
+            val dtos = usersApi.apiUsersFilterGet(
+                fullName = filter.fullName,
+                roleId = filter.role?.toNetwork(),
+                schoolId = filter.schoolId,
+                accountStatusId = filter.accountStatus?.toNetwork(),
+                offset = filter.pagination.offset,
+                limit = filter.pagination.limit
+            )
+            dtos.map { it.toUserListItem() }
         }
-    }
 
-    override suspend fun getUser(userId: Int): Result<UserInfo> {
-        logger?.i(tag, "getUser started", "userId=$userId")
-        MockDelayService.delay()
-        return try {
-            val user = MockUserDataSource.getUser(userId)
-            if (user != null) {
-                logger?.i(tag, "getUser succeeded", "userId=$userId")
-                Result.success(user)
-            } else {
-                val ex = NoSuchElementException("User not found")
-                logger?.e(tag, "getUser failed", ex, "userId=$userId not found")
-                Result.failure(ex)
+    override suspend fun getUser(userId: Int): Result<UserProfile> =
+        errorHandler.safeApiCall {
+            val userDto = usersApi.apiUsersIdGet(userId)
+            val rolesDto = rolesApi.apiRolesUserUserIdGet(userId)
+            userDto.toUserProfile(rolesDto)
+        }
+
+    override suspend fun addUser(profile: UserProfile, password: String?): Result<UserProfile> =
+        errorHandler.safeApiCall {
+            val request = CreateUserRequest(
+                lastName = profile.lastName,
+                firstName = profile.firstName,
+                surName = profile.surName,
+                gender = profile.gender.toNetwork(),
+                birthDay = profile.birthday?.toLocalDateTime(),
+                email = profile.email,
+                phone = profile.phone,
+            )
+            val result = usersApi.apiUsersAdminPost(request)
+            profile.roles.forEach {
+                addUserRole(result, it.role, it.schoolId)
             }
-        } catch (e: Exception) {
-            logger?.e(tag, "getUser exception", e, "userId=$userId")
-            Result.failure(e)
+            getUser(result).getOrThrow()
         }
+
+    override suspend fun updateUser(update: UserUpdate): Result<UserProfile> =
+        errorHandler.safeApiCall {
+            usersApi.apiUsersIdPatch(
+                id = update.userId,
+                lastName = update.lastName.uValue,
+                firstName = update.firstName.uValue,
+                surName = update.surName.uValue,
+                gender = update.gender.uValue?.toNetwork(),
+                birthDay = update.birthday.uValue?.toLocalDateTime(),
+                email = update.email.uValue,
+                phone = update.phone.uValue
+            )
+            getUser(update.userId).getOrThrow()
+        }
+
+    override suspend fun deleteUser(userId: Int): Result<Unit> =
+        errorHandler.safeApiCall {
+            usersApi.apiUsersIdDelete(userId)
+        }
+
+    override suspend fun addUserRole(
+        userId: Int,
+        role: Role,
+        schoolId: Int?
+    ): Result<UserRole> = errorHandler.safeApiCall {
+        rolesApi.apiRolesUserUserIdRoleRoleIdPost(
+            userId = userId,
+            roleId = role.toNetwork(),
+            schoolId = schoolId
+        ).toDomain()
     }
 
-    override suspend fun addUser(user: UserInfo, password: String?): Result<UserInfo> {
-        logger?.i(tag, "addUser started", "user=$user, password=${if (password != null) "***" else null}")
-        MockDelayService.delay()
-        return try {
-            val newUser = MockUserDataSource.addUser(user, user.roles)
-            logger?.i(tag, "addUser succeeded", "newId=${newUser.userId}")
-            Result.success(newUser)
-        } catch (e: Exception) {
-            logger?.e(tag, "addUser failed", e, "user=$user")
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun updateUser(user: UserInfo): Result<UserInfo> {
-        logger?.i(tag, "updateUser started", "user=$user")
-        MockDelayService.delay()
-        return try {
-            MockUserDataSource.updateUser(user)
-            logger?.i(tag, "updateUser succeeded", "userId=${user.userId}")
-            Result.success(user)
-        } catch (e: Exception) {
-            logger?.e(tag, "updateUser failed", e, "user=$user")
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun deleteUser(userId: Int): Result<Unit> {
-        logger?.i(tag, "deleteUser started", "userId=$userId")
-        MockDelayService.delay()
-        return try {
-            val deleted = MockUserDataSource.deleteUser(userId)
-            if (deleted) {
-                logger?.i(tag, "deleteUser succeeded", "userId=$userId")
-                Result.success(Unit)
-            } else {
-                val ex = NoSuchElementException("User not found")
-                logger?.e(tag, "deleteUser failed", ex, "userId=$userId not found")
-                Result.failure(ex)
-            }
-        } catch (e: Exception) {
-            logger?.e(tag, "deleteUser exception", e, "userId=$userId")
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun getTeachersByRole(role: Role): Result<List<UserInfo>> {
-        logger?.i(tag, "getTeachersByRole started", "role=$role")
-        MockDelayService.delay()
-        return try {
-            val teachers = MockUserDataSource.getTeachersByRole(role)
-            logger?.i(tag, "getTeachersByRole succeeded", "role=$role, count=${teachers.size}")
-            Result.success(teachers)
-        } catch (e: Exception) {
-            logger?.e(tag, "getTeachersByRole failed", e, "role=$role")
-            Result.failure(e)
-        }
+    override suspend fun removeRole(
+        userId: Int,
+        role: Role,
+        schoolId: Int?
+    ): Result<Unit> = errorHandler.safeApiCall {
+        rolesApi.apiRolesUserUserIdRoleRoleIdDelete(userId, role.toNetwork(), schoolId)
     }
 }

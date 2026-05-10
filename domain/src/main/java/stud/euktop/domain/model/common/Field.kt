@@ -1,6 +1,8 @@
 package stud.euktop.domain.model.common
-
-sealed interface Field<out T> {
-    object Null : Field<Nothing>
-    data class Value<T>(val value: T) : Field<T>
+data class Field<T>(
+    val value: T? = null,
+    val isUpdate: Boolean = false
+) {
+    val uValue: T?
+        get() = value?.takeIf { isUpdate }
 }

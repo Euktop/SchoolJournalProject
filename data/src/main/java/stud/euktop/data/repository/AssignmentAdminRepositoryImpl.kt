@@ -1,103 +1,93 @@
-// AssignmentAdminRepositoryImpl.kt
 package stud.euktop.data.repository
 
-import stud.euktop.data.mock.MockAssignmentDataSource
-import stud.euktop.data.mock.MockDelayService
+import com.schooljournal.api.TeacherAssignmentsApi
+import com.schooljournal.model.CreateTeacherAssignmentRequest
+import stud.euktop.data.map.fromDomain
+import stud.euktop.data.map.toDate
+import stud.euktop.data.map.toLocalDateTime
+import stud.euktop.data.map.toTeacherAssignment
+import stud.euktop.data.utils.ApiErrorHandler
+import stud.euktop.domain.model.assignment.AssignmentId
 import stud.euktop.domain.model.assignment.TeacherAssignment
+import stud.euktop.domain.model.assignment.TeacherAssignmentFilter
+import stud.euktop.domain.model.assignment.TeacherAssignmentUpdate
+import stud.euktop.domain.model.common.DataError
 import stud.euktop.domain.repository.AssignmentAdminRepository
-import stud.euktop.domain.utils.loger.logger
-import stud.euktop.domain.utils.loger.toSimpleTag
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AssignmentAdminRepositoryImpl @Inject constructor() : AssignmentAdminRepository {
-    private val tag = this.toSimpleTag()
+class AssignmentAdminRepositoryImpl @Inject constructor(
+    private val assignmentsApi: TeacherAssignmentsApi,
+    private val errorHandler: ApiErrorHandler
+) : AssignmentAdminRepository {
 
-    override suspend fun getTeacherAssignments(): Result<List<TeacherAssignment>> {
-        logger?.i(tag, "getTeacherAssignments started")
-        MockDelayService.delay()
-        return try {
-            val result = MockAssignmentDataSource.getAll()
-            logger?.i(tag, "getTeacherAssignments succeeded", "count=${result.size}")
-            Result.success(result)
-        } catch (e: Exception) {
-            logger?.e(tag, "getTeacherAssignments failed", e)
-            Result.failure(e)
+    override suspend fun getTeacherAssignments(filter: TeacherAssignmentFilter): Result<List<TeacherAssignment>> =
+        errorHandler.safeApiCall {
+            val dtos = assignmentsApi.apiTeacherAssignmentsFilterGet(
+                teacherId = filter.teacherId,
+                classId = filter.classId,
+                subjectId = filter.subjectId,
+                isPrimary = filter.isPrimary,
+                validFrom = filter.validFrom?.toLocalDateTime(),
+                validTo = filter.validTo?.toLocalDateTime(),
+                filterByValidTo = filter.filterByValidTo,
+                offset = filter.pagination.offset,
+                limit = filter.pagination.limit
+            )
+            dtos.map { it.toTeacherAssignment() }
         }
-    }
 
-    override suspend fun getTeacherAssignment(assignmentId: Int): Result<TeacherAssignment> {
-        logger?.i(tag, "getTeacherAssignment started", "assignmentId=$assignmentId")
-        MockDelayService.delay()
-        return try {
-            val assignment = MockAssignmentDataSource.get(assignmentId)
-            if (assignment != null) {
-                logger?.i(tag, "getTeacherAssignment succeeded", "assignmentId=$assignmentId")
-                Result.success(assignment)
-            } else {
-                val ex = NoSuchElementException("Assignment not found")
-                logger?.e(
-                    tag,
-                    "getTeacherAssignment failed",
-                    ex,
-                    "assignmentId=$assignmentId not found"
+    override suspend fun getTeacherAssignment(id: AssignmentId): Result<TeacherAssignment> =
+        errorHandler.safeApiCall {
+            val dtos = assignmentsApi.apiTeacherAssignmentsFilterGet(
+                teacherId = id.teacherId,
+                classId = id.classId,
+                subjectId = id.subjectId,
+                validFrom = id.validFrom.toLocalDateTime()
+            )
+            val assignment = dtos.firstOrNull()
+                ?: throw DataError.RecordNotFound("Teacher assignment not found")
+            assignment.toTeacherAssignment()
+        }
+
+    override suspend fun addTeacherAssignment(assignment: TeacherAssignment): Result<TeacherAssignment> =
+        errorHandler.safeApiCall {
+            val request = CreateTeacherAssignmentRequest().fromDomain(assignment)
+            val result = assignmentsApi.apiTeacherAssignmentsPost(request)
+            getTeacherAssignment(
+                AssignmentId(
+                    teacherId = result.teacherId ?: assignment.assignmentId.teacherId,
+                    classId = result.classId ?: assignment.assignmentId.classId,
+                    subjectId = result.subjectId ?: assignment.assignmentId.subjectId,
+                    validFrom = result.validFrom?.toDate() ?: assignment.assignmentId.validFrom
                 )
-                Result.failure(ex)
-            }
-        } catch (e: Exception) {
-            logger?.e(tag, "getTeacherAssignment exception", e, "assignmentId=$assignmentId")
-            Result.failure(e)
+            ).getOrThrow()
         }
-    }
 
-    override suspend fun addTeacherAssignment(assignment: TeacherAssignment): Result<TeacherAssignment> {
-        logger?.i(tag, "addTeacherAssignment started", "assignment=$assignment")
-        MockDelayService.delay()
-        return try {
-            val newAssignment = MockAssignmentDataSource.add(assignment)
-            logger?.i(tag, "addTeacherAssignment succeeded", "newId=${newAssignment.id}")
-            Result.success(newAssignment)
-        } catch (e: Exception) {
-            logger?.e(tag, "addTeacherAssignment failed", e, "assignment=$assignment")
-            Result.failure(e)
+    override suspend fun updateTeacherAssignment(update: TeacherAssignmentUpdate): Result<TeacherAssignment> =
+        errorHandler.safeApiCall {
+            assignmentsApi.apiTeacherAssignmentsPatch(
+                teacherId = update.id.teacherId,
+                classId = update.id.classId,
+                subjectId = update.id.subjectId,
+                validFrom = update.id.validFrom.toLocalDateTime(),
+                validTo = update.validToDate.uValue?.toLocalDateTime(),
+                isPrimary = update.isPrimary.uValue,
+                comment = update.comment.uValue,
+                commentUpdate = update.comment.isUpdate,
+                validToUpdate = update.validToDate.isUpdate,
+            )
+            getTeacherAssignment(update.id).getOrThrow()
         }
-    }
 
-    override suspend fun updateTeacherAssignment(assignment: TeacherAssignment): Result<TeacherAssignment> {
-        logger?.i(tag, "updateTeacherAssignment started", "assignment=$assignment")
-        MockDelayService.delay()
-        return try {
-            MockAssignmentDataSource.update(assignment)
-            logger?.i(tag, "updateTeacherAssignment succeeded", "assignmentId=${assignment.id}")
-            Result.success(assignment)
-        } catch (e: Exception) {
-            logger?.e(tag, "updateTeacherAssignment failed", e, "assignment=$assignment")
-            Result.failure(e)
+    override suspend fun deleteTeacherAssignment(id: AssignmentId): Result<Unit> =
+        errorHandler.safeApiCall {
+            assignmentsApi.apiTeacherAssignmentsDelete(
+                teacherId = id.teacherId,
+                classId = id.classId,
+                subjectId = id.subjectId,
+                validFrom = id.validFrom.toLocalDateTime()
+            )
         }
-    }
-
-    override suspend fun deleteTeacherAssignment(assignmentId: Int): Result<Unit> {
-        logger?.i(tag, "deleteTeacherAssignment started", "assignmentId=$assignmentId")
-        MockDelayService.delay()
-        return try {
-            val deleted = MockAssignmentDataSource.delete(assignmentId)
-            if (deleted) {
-                logger?.i(tag, "deleteTeacherAssignment succeeded", "assignmentId=$assignmentId")
-                Result.success(Unit)
-            } else {
-                val ex = NoSuchElementException("Assignment not found")
-                logger?.e(
-                    tag,
-                    "deleteTeacherAssignment failed",
-                    ex,
-                    "assignmentId=$assignmentId not found"
-                )
-                Result.failure(ex)
-            }
-        } catch (e: Exception) {
-            logger?.e(tag, "deleteTeacherAssignment exception", e, "assignmentId=$assignmentId")
-            Result.failure(e)
-        }
-    }
 }

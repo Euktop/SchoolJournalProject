@@ -1,7 +1,7 @@
 package stud.euktop.schooljournal.presentation.main.admin.classes
 
 import stud.euktop.domain.model.school.School
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.utils.validation.TextThereValidator
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
@@ -13,9 +13,9 @@ data class ClassEditState(
     val academicYearStart: Int? = null,
     val academicYearEnd: Int? = null,
     val availableSchools: List<School> = emptyList(),
-    val availableTeachers: List<UserInfo> = emptyList(),
+    val availableTeachers: List<UserProfile> = emptyList(),
     val selectedSchool: School? = null,
-    val selectedTeacher: UserInfo? = null
+    val selectedTeacher: UserProfile? = null
 ) : BaseState<ClassEditState>() {
 
     fun isEditMode() = classId != 0

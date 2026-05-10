@@ -1,88 +1,125 @@
 package stud.euktop.data.di
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import stud.euktop.data.repository.*
-import stud.euktop.domain.repository.*
+import stud.euktop.data.BuildConfig
+import stud.euktop.data.mock.repository.AssignmentAdminMockRepositoryImpl
+import stud.euktop.data.mock.repository.AuthMockRepositoryImpl
+import stud.euktop.data.mock.repository.ClassAdminMockRepositoryImpl
+import stud.euktop.data.mock.repository.HomeworkMockRepositoryImpl
+import stud.euktop.data.mock.repository.LessonMarksMockRepositoryImpl
+import stud.euktop.data.mock.repository.LessonMockRepositoryImpl
+import stud.euktop.data.mock.repository.RoomAdminMockRepositoryImpl
+import stud.euktop.data.mock.repository.SchoolAdminMockRepositoryImpl
+import stud.euktop.data.mock.repository.StudentMockRepositoryImpl
+import stud.euktop.data.mock.repository.SubjectAdminMockRepositoryImpl
+import stud.euktop.data.mock.repository.UserAdminMockRepositoryImpl
+import stud.euktop.data.repository.AssignmentAdminRepositoryImpl
+import stud.euktop.data.repository.AuthRepositoryImpl
+import stud.euktop.data.repository.ClassAdminRepositoryImpl
+import stud.euktop.data.repository.HomeworkRepositoryImpl
+import stud.euktop.data.repository.LessonMarksRepositoryImpl
+import stud.euktop.data.repository.LessonRepositoryImpl
+import stud.euktop.data.repository.RoomAdminRepositoryImpl
+import stud.euktop.data.repository.SchoolAdminRepositoryImpl
+import stud.euktop.data.repository.StudentRepositoryImpl
+import stud.euktop.data.repository.SubjectAdminRepositoryImpl
+import stud.euktop.data.repository.UserAdminRepositoryImpl
+import stud.euktop.domain.repository.AssignmentAdminRepository
+import stud.euktop.domain.repository.AuthRepository
+import stud.euktop.domain.repository.ClassAdminRepository
+import stud.euktop.domain.repository.HomeworkRepository
+import stud.euktop.domain.repository.LessonMarksRepository
+import stud.euktop.domain.repository.LessonRepository
+import stud.euktop.domain.repository.RoomAdminRepository
+import stud.euktop.domain.repository.SchoolAdminRepository
+import stud.euktop.domain.repository.StudentRepository
+import stud.euktop.domain.repository.SubjectAdminRepository
+import stud.euktop.domain.repository.UserAdminRepository
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+class RepositoryModule {
+    private fun <T> init(impl: T, mock: T): T = if (BuildConfig.USE_MOCK) mock else impl
 
-    // === Существующие репозитории (без изменений) ===
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindsTeacherRepository(
-        teacherRepositoryImpl: TeacherRepositoryImpl
-    ): TeacherRepository
+    fun provideLessonMarksRepository(
+        impl: LessonMarksRepositoryImpl,
+        mock: LessonMarksMockRepositoryImpl
+    ): LessonMarksRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindsTeacherLessonsRepository(
-        impl: TeacherLessonsRepositoryImpl
-    ): TeacherLessonsRepository
+    fun provideStudentRepository(
+        impl: StudentRepositoryImpl,
+        mock: StudentMockRepositoryImpl
+    ): StudentRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindLessonMarksRepository(
-        impl: LessonMarksRepositoryImpl
-    ): LessonMarksRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindStudentRepository(
-        impl: StudentRepositoryImpl
-    ): StudentRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindAuthRepository(
-        impl: AuthRepositoryImpl
-    ): AuthRepository
+    fun provideAuthRepository(
+        impl: AuthRepositoryImpl,
+        mock: AuthMockRepositoryImpl
+    ): AuthRepository = init(impl = impl, mock = mock)
 
     // === Новые репозитории для административной части ===
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindUserAdminRepository(
-        impl: UserAdminRepositoryImpl
-    ): UserAdminRepository
+    fun provideUserAdminRepository(
+        impl: UserAdminRepositoryImpl,
+        mock: UserAdminMockRepositoryImpl
+    ): UserAdminRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindSchoolAdminRepository(
-        impl: SchoolAdminRepositoryImpl
-    ): SchoolAdminRepository
+    fun provideSchoolAdminRepository(
+        impl: SchoolAdminRepositoryImpl,
+        mock: SchoolAdminMockRepositoryImpl
+    ): SchoolAdminRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindClassAdminRepository(
-        impl: ClassAdminRepositoryImpl
-    ): ClassAdminRepository
+    fun provideClassAdminRepository(
+        impl: ClassAdminRepositoryImpl,
+        mock: ClassAdminMockRepositoryImpl
+    ): ClassAdminRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindSubjectAdminRepository(
-        impl: SubjectAdminRepositoryImpl
-    ): SubjectAdminRepository
+    fun provideSubjectAdminRepository(
+        impl: SubjectAdminRepositoryImpl,
+        mock: SubjectAdminMockRepositoryImpl
+    ): SubjectAdminRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindAssignmentAdminRepository(
-        impl: AssignmentAdminRepositoryImpl
-    ): AssignmentAdminRepository
+    fun provideAssignmentAdminRepository(
+        impl: AssignmentAdminRepositoryImpl,
+        mock: AssignmentAdminMockRepositoryImpl
+    ): AssignmentAdminRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindHomeworkRepository(impl: HomeworkRepositoryImpl): HomeworkRepository
+    fun provideHomeworkRepository(
+        impl: HomeworkRepositoryImpl,
+        mock: HomeworkMockRepositoryImpl
+    ): HomeworkRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindLessonRepository(impl: LessonRepositoryImpl): LessonRepository
+    fun provideLessonRepository(
+        impl: LessonRepositoryImpl,
+        mock: LessonMockRepositoryImpl
+    ): LessonRepository = init(impl = impl, mock = mock)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindRoomAdminRepository(impl: RoomAdminRepositoryImpl): RoomAdminRepository
+    fun provideRoomAdminRepository(
+        impl: RoomAdminRepositoryImpl,
+        mock: RoomAdminMockRepositoryImpl
+    ): RoomAdminRepository = init(impl = impl, mock = mock)
 }

@@ -1,11 +1,13 @@
 package stud.euktop.domain.model.school
 
+import stud.euktop.domain.model.common.Pagination
+
 /**
  * Учебный кабинет.
  * Принадлежит конкретной школе.
  */
 data class RoomFilter(
-    val school: School? = null,
-    val schoolFilter: SchoolFilter = SchoolFilter(),
-    val name: String? = null
+    val schoolId: Int? = null,
+    val name: String? = null,
+    val pagination: Pagination = Pagination()
 )

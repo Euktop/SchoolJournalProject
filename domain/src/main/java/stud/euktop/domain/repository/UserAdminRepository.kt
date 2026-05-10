@@ -1,15 +1,26 @@
 package stud.euktop.domain.repository
 
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.RoleSchools
-import stud.euktop.domain.model.user.UserInfo
-import stud.euktop.domain.model.user.UserInfoFilter
+import stud.euktop.domain.model.user.UserFilter
+import stud.euktop.domain.model.user.UserListItem
+import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.domain.model.user.UserRole
+import stud.euktop.domain.model.user.UserUpdate
 
 interface UserAdminRepository {
-    suspend fun getUsers(filter: UserInfoFilter = UserInfoFilter()): Result<List<UserInfo>>
-    suspend fun getUser(userId: Int): Result<UserInfo>
-    suspend fun addUser(user: UserInfo, password: String?): Result<UserInfo>
-    suspend fun updateUser(user: UserInfo): Result<UserInfo>
+    suspend fun getUsers(filter: UserFilter = UserFilter()): Result<List<UserListItem>>
+    suspend fun getUser(userId: Int): Result<UserProfile>
+    suspend fun addUser(profile: UserProfile, password: String?): Result<UserProfile>
+    suspend fun updateUser(update: UserUpdate): Result<UserProfile>
     suspend fun deleteUser(userId: Int): Result<Unit>
-    suspend fun getTeachersByRole(role: Role): Result<List<UserInfo>>
+    suspend fun addUserRole(
+        userId: Int,
+        role: Role,
+        schoolId: Int?
+    ): Result<UserRole>
+    suspend fun removeRole(
+        userId: Int,
+        role: Role,
+        schoolId: Int?
+    ): Result<Unit>
 }

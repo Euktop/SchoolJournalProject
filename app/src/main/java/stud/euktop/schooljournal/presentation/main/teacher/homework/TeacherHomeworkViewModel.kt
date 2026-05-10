@@ -7,7 +7,7 @@ import stud.euktop.domain.model.homework.Homework
 import stud.euktop.domain.model.homework.HomeworkFilter
 import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.school.SubjectFilter
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.HomeworkRepository
 import stud.euktop.domain.repository.SubjectAdminRepository
@@ -69,7 +69,7 @@ class TeacherHomeworkViewModel @Inject constructor(
             description = description,
             attachedFiles = attachedFiles.takeIf { it.isNotBlank() },
             createdAt = Date(),
-            createdByUser = UserInfo(
+            createdByUser = UserProfile(
                 userId = currentUserId
             )
         )

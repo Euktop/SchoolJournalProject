@@ -4,13 +4,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import stud.euktop.data.repository.AuthRepositoryImpl
-import stud.euktop.domain.repository.AuthRepository
-import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHandler
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
-import stud.euktop.schooljournal.presentation.common.navigate.impl.CoordinatorExecImpl
 import stud.euktop.schooljournal.presentation.common.navigate.impl.ErrorHandlerImpl
 import stud.euktop.schooljournal.presentation.common.navigate.impl.NavigationManagerImpl
 import stud.euktop.schooljournal.presentation.common.navigate.impl.RouterImpl
@@ -30,4 +28,12 @@ abstract class NavigationModule {
     @Binds
     @Singleton
     abstract fun bindsRouterSplash(routerSplash: RouterImpl): RouterSplash
+
+    @Binds
+    @Singleton
+    abstract fun bindsRouterMain(routerMain: RouterImpl): RouterMain
+
+    @Binds
+    @Singleton
+    abstract fun bindsRouterAuthorization(routerAuthorization: RouterImpl): RouterAuthorization
 }

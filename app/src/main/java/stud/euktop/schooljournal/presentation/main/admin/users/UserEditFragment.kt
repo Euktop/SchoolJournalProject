@@ -8,7 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.user.AccountStatus
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.RoleSchools
+import stud.euktop.domain.model.user.UserRole
 import stud.euktop.schooljournal.databinding.DialogUserEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
@@ -76,7 +76,7 @@ class UserEditFragment : BaseFragment<
     private fun showRoleSchoolDialog(role: Role? = null, school: School? = null) {
         if (childFragmentManager.findFragmentByTag(RoleSchoolEditDialog.TAG) != null) return
         val dialog = RoleSchoolEditDialog.newInstance(role, school, viewModel) { r, s ->
-            viewModel.addRole(RoleSchools(r, s))
+            viewModel.addRole(UserRole(r, s))
         }
         dialog.show(childFragmentManager, RoleSchoolEditDialog.TAG)
     }

@@ -3,7 +3,7 @@ package stud.euktop.schooljournal.presentation.main.admin.lessons
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.Room
 import stud.euktop.domain.model.school.Subject
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 import java.util.Date
 
@@ -12,7 +12,7 @@ data class LessonEditState(
     val lessonId: Int = 0,
     val selectedClass: ClassInfo? = null,
     val selectedSubject: Subject? = null,
-    val selectedTeacher: UserInfo? = null,
+    val selectedTeacher: UserProfile? = null,
     val date: Date? = null,
     val topic: String = "",
     val startTime: String = "",
@@ -21,7 +21,7 @@ data class LessonEditState(
     val locationAddress: String = "",
     val availableClasses: List<ClassInfo> = emptyList(),
     val availableSubjects: List<Subject> = emptyList(),
-    val availableTeachers: List<UserInfo> = emptyList(),
+    val availableTeachers: List<UserProfile> = emptyList(),
     val availableRooms: List<Room> = emptyList()
 ) : BaseState<LessonEditState>() {
 

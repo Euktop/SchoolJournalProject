@@ -8,7 +8,7 @@ import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.school.SchoolFilter
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.*
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
@@ -45,7 +45,7 @@ class ClassEditViewModel @Inject constructor(
     private fun loadInitialData() {
         executeLoadingBlockSync {
             val schoolsDeferred = async { schoolAdminRepository.getSchools() }
-            val teachersDeferred = async { userAdminRepository.getTeachersByRole(Role.TEACHER) }
+            val teachersDeferred = async { userAdminRepository.getUsersByRole(Role.TEACHER) }
 
             schoolsDeferred.await().onSuccess { schools ->
                 _state.update { it.copy(availableSchools = schools) }
@@ -84,7 +84,7 @@ class ClassEditViewModel @Inject constructor(
         _state.update { it.copy(selectedSchool = school) }
     }
 
-    fun updateClassTeacher(teacher: UserInfo?) {
+    fun updateClassTeacher(teacher: UserProfile?) {
         _state.update { it.copy(selectedTeacher = teacher) }
     }
 

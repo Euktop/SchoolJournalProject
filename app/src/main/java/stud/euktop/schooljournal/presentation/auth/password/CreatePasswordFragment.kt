@@ -4,16 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.schooljournal.Nav1Directions
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentCreatePasswordBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.binding.bindLoading
+import stud.euktop.schooljournal.presentation.common.binding.setupPasswordForm
+import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
-import stud.euktop.schooljournal.presentation.common.utils.check
-import stud.euktop.schooljournal.presentation.common.utils.setup
-import stud.euktop.uikit.components.input.SchJInput
-import javax.inject.Inject
+
 /**
  * Экран создания пароля (финальный шаг регистрации).
  *
@@ -38,49 +36,34 @@ import javax.inject.Inject
  * @see stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
  */
 @AndroidEntryPoint
-class CreatePasswordFragment :
-    BaseFragment<FragmentCreatePasswordBinding, CreatePasswordViewModel, CreatePasswordState, Unit>() {
-    override fun inflateBinding(
-        i: LayoutInflater, c: ViewGroup?
-    ) = FragmentCreatePasswordBinding.inflate(i, c, false)
+class CreatePasswordFragment : BaseFragment<
+        FragmentCreatePasswordBinding,
+        CreatePasswordViewModel,
+        CreatePasswordState,
+        Unit>() {
 
     override val viewModel: CreatePasswordViewModel by viewModels()
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentCreatePasswordBinding.inflate(inflater, container, false)
+
     private val focusTrack = FocusTrack()
+    private lateinit var loadingDelegate: LoadingDelegate<CreatePasswordState>
+
     override fun setupUI() {
-        binding.apply {
-            MatuleInputNewPassword.setup(focusTrack) {
-                viewModel.passwordValidatorSet(it)
-            }
-            MatuleInputRefreshPassword.listener =
-                SchJInput.Listener { viewModel.nextPasswordNextValidatorSet(it) }
-            MatuleButtonSave.setOnClickListener {
-                viewModel.onSaveClick()
-            }
-        }
+        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
+        binding.setupPasswordForm(this, focusTrack, viewModel, viewModel.updateState)
+
+        binding.MatuleButtonSave.bindLoading(
+            loadingDelegate,
+            "register",
+            R.string.saving
+        )
+        binding.MatuleButtonSave.setOnClickListener { viewModel.onSaveClick() }
     }
 
     override fun updateState(state: CreatePasswordState) {
-        binding.apply {
-            MatuleButtonSave.isEnabled = state.isNextActive()
-            MatuleInputNewPassword.apply {
-                val changeValidate = this.state.isErrorVisible != state.passwordValidator.validate()
-                binding.MatuleInputNewPassword.check(focusTrack, state.passwordValidator)
-                if (changeValidate) focusTrack.removeFocus(MatuleInputRefreshPassword)
-            }
-            MatuleInputRefreshPassword.apply {
-                if (state.passwordValidator.validate()) focusTrack.setFocusListener(this)
-                this.state =
-                    this.state.copy(
-                        text = state.nextPasswordNextValidator,
-                        isErrorVisible = focusTrack.isTouched(this) && state.nextPasswordNextValidator == state.passwordValidator.value
-                    )
-            }
-        }
+        binding.MatuleButtonSave.isEnabled = state.isNextActive()
     }
 
-    @Inject
-    internal lateinit var navigationManager: NavigationManager
-    override fun updateEvent(event: Unit) {
-        navigationManager.navigate(NavCommand.ToAction(Nav1Directions.actionGlobalNavMainMain()))
-    }
+    override fun updateEvent(event: Unit) {}
 }

@@ -3,8 +3,8 @@ package stud.euktop.domain.impl
 import stud.euktop.domain.contract.RoleRepository
 import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.common.DataError
-import stud.euktop.domain.model.user.RoleSchools
-import stud.euktop.domain.model.user.UserInfo
+import stud.euktop.domain.model.user.UserRole
+import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,8 +14,8 @@ class RoleRepositoryImpl @Inject constructor(
     private val authRepository: AuthRepository
 ) : RoleRepository {
     // Опционально, можно будет в network сделать, чтобы он делал реальный запрос только раз в 30 минут или пока клиент четко не запросит провести проверку
-    private var cachedProfile: UserInfo? = null
-    private suspend fun getProfile(): UserInfo {
+    private var cachedProfile: UserProfile? = null
+    private suspend fun getProfile(): UserProfile {
         if (cachedProfile == null) {
             val result = authRepository.getCurrentUser()
             cachedProfile = result.getOrNull()
@@ -40,13 +40,13 @@ class RoleRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRoles(): List<RoleSchools> = getProfile().roles
+    override suspend fun getRoles(): List<UserRole> = getProfile().roles
 
     override suspend fun hasRole(role: Role): Boolean {
         return getProfile().roles.any { it.role == role }
     }
 
-    override suspend fun hasRole(role: RoleSchools): Boolean {
+    override suspend fun hasRole(role: UserRole): Boolean {
         return getProfile().roles.contains(role)
     }
 
@@ -58,7 +58,7 @@ class RoleRepositoryImpl @Inject constructor(
 
     override suspend fun getCurrentSchoolId(): Int? {
         val roles = getProfile().roles
-        return roles.firstNotNullOfOrNull { role -> role.school?.schoolId }
+        return roles.firstNotNullOfOrNull { it.schoolId }
     }
 
     override suspend fun canEditUsers(): Boolean = isAdmin() || isDirector()

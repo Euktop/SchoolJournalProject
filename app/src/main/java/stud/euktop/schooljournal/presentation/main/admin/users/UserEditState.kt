@@ -1,9 +1,7 @@
 package stud.euktop.schooljournal.presentation.main.admin.users
 
 import stud.euktop.domain.model.user.AccountStatus
-import stud.euktop.domain.model.school.School
-import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.RoleSchools
+import stud.euktop.domain.model.user.UserRole
 import stud.euktop.domain.utils.validation.EmailValidator
 import stud.euktop.domain.utils.validation.NameLetterOnlyOrNullValidator
 import stud.euktop.domain.utils.validation.NameLetterOnlyValidator
@@ -22,7 +20,7 @@ data class UserEditState(
     val phone: PhoneValidator = PhoneValidator(),
     val password: PasswordNullValidator = PasswordNullValidator(),
     val accountStatus: AccountStatus = AccountStatus.ACTIVE,
-    val selectedRoles: List<RoleSchools> = emptyList()
+    val selectedRoles: List<UserRole> = emptyList()
 ) : BaseState<UserEditState>() {
 
     fun isEditMode() = userId != 0

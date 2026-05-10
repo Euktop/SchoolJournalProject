@@ -3,8 +3,8 @@ package stud.euktop.schooljournal.presentation.common.utils
 import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import stud.euktop.domain.model.user.UserInfo
-import stud.euktop.domain.model.user.UserInfoFilter
+import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.domain.model.user.UserFilter
 import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.filter.subject.SubjectFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.user.UserFilterDialog
@@ -21,10 +21,10 @@ object DomainSelectHelper {
         fragmentManager: FragmentManager,
         repository: UserAdminRepository,
         coordinatorExec: CoordinatorExec,
-        crossinline onSelected: (UserInfo?, UserInfoFilter) -> Unit,
+        crossinline onSelected: (UserProfile?, UserFilter) -> Unit,
         onErrorModel: RepositoryExec,
-        initialSelectedItem: UserInfo? = null,
-        initialFilter: UserInfoFilter = UserInfoFilter(),
+        initialSelectedItem: UserProfile? = null,
+        initialFilter: UserFilter = UserFilter(),
     ) = setupUserSelect(
         select = select,
         fragmentManager = fragmentManager,
@@ -38,7 +38,7 @@ object DomainSelectHelper {
                     null
                 }
 
-                is CoordinatorResult.Success<List<UserInfo>> -> {
+                is CoordinatorResult.Success<List<UserProfile>> -> {
                     result.result
                 }
             }
@@ -52,14 +52,14 @@ object DomainSelectHelper {
     inline fun CoroutineScope.setupUserSelect(
         select: SchJSearchableSelect,
         fragmentManager: FragmentManager,
-        crossinline loadItems: suspend () -> List<UserInfo>?,
-        crossinline onSelected: (UserInfo?, UserInfoFilter) -> Unit,
-        initialSelectedItem: UserInfo? = null,
+        crossinline loadItems: suspend () -> List<UserProfile>?,
+        crossinline onSelected: (UserProfile?, UserFilter) -> Unit,
+        initialSelectedItem: UserProfile? = null,
         onErrorModel: RepositoryExec,
-        initialFilter: UserInfoFilter = UserInfoFilter(),
+        initialFilter: UserFilter = UserFilter(),
     ) {
         var initialFilter = initialFilter
-        var list: List<UserInfo> = emptyList()
+        var list: List<UserProfile> = emptyList()
         setupSearchableSelect(
             select = select,
             fragmentManager = fragmentManager,

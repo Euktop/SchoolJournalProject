@@ -6,10 +6,10 @@ import stud.euktop.domain.utils.validation.Validator
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class LoginState(
-    override val isLoading: Boolean = false,
-    val emailValidator: EmailValidator = EmailValidator(),
-    val passwordValidator: PasswordValidator = PasswordValidator()
+    val email: EmailValidator = EmailValidator(),
+    val password: PasswordValidator = PasswordValidator(),
+    override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<LoginState>() {
-    fun isButtonActive() = Validator.isAllValidate(emailValidator, passwordValidator)
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    fun isButtonActive() = Validator.isAllValidate(email, password)
+    override fun updateLoading(loadingMap: Map<String, Boolean>): LoginState = copy(loadingMap = loadingMap)
 }

@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import stud.euktop.domain.model.user.RoleSchools
+import stud.euktop.domain.model.user.UserRole
 import stud.euktop.uikit.R
 import stud.euktop.uikit.databinding.ItemRoleSchoolBinding
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 
 class RoleSchoolAdapter(
-    private val onDeleteClick: (RoleSchools) -> Unit
-) : ListAdapter<RoleSchools, RoleSchoolAdapter.ViewHolder>(DiffCallback()) {
+    private val onDeleteClick: (UserRole) -> Unit
+) : ListAdapter<UserRole, RoleSchoolAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRoleSchoolBinding.inflate(
@@ -30,8 +30,8 @@ class RoleSchoolAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            role: RoleSchools,
-            onDelete: (RoleSchools) -> Unit
+            role: UserRole,
+            onDelete: (UserRole) -> Unit
         ) {
             val roleText = binding.root.context.getString(role.role.toMessageId())
             val schoolText = role.school?.name ?: binding.root.context.getString(R.string.no_school)
@@ -41,16 +41,16 @@ class RoleSchoolAdapter(
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<RoleSchools>() {
+    class DiffCallback : DiffUtil.ItemCallback<UserRole>() {
         override fun areItemsTheSame(
-            oldItem: RoleSchools,
-            newItem: RoleSchools
+            oldItem: UserRole,
+            newItem: UserRole
         ): Boolean =
             oldItem == newItem
 
         override fun areContentsTheSame(
-            oldItem: RoleSchools,
-            newItem: RoleSchools
+            oldItem: UserRole,
+            newItem: UserRole
         ): Boolean =
             oldItem == newItem
     }

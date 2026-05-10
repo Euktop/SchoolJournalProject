@@ -26,89 +26,9 @@
                 android:text="@string/create_profile"
                 android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:divider="@drawable/div_16"
-                android:dividerPadding="16dp"
-                android:orientation="vertical"
-                android:showDividers="middle">
-
-                <stud.euktop.uikit.components.input.SchJInput
-                    android:id="@+id/firstNameInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/name"
-                    android:inputType="textPersonName"
-                    app:helperText="@string/name"
-                    app:schjTextError="@string/incorrect_name" />
-
-                <stud.euktop.uikit.components.input.SchJInput
-                    android:id="@+id/lastNameInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/lastname"
-                    android:inputType="textPersonName"
-                    app:helperText="@string/lastname"
-                    app:schjTextError="@string/incorrect_lastname" />
-
-                <stud.euktop.uikit.components.input.SchJInput
-                    android:id="@+id/surNameInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/surname"
-                    android:inputType="textPersonName"
-                    app:helperText="@string/surname"
-                    app:schjTextError="@string/incorrect_surname" />
-
-                <stud.euktop.uikit.components.input.SchJInput
-                    android:id="@+id/birthDateInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:cursorVisible="false"
-                    android:hint="@string/birthday"
-                    android:inputType="none"
-                    app:endIconMode="clear_text"
-                    app:helperText="@string/birthday" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        style="@style/Widget.SchJ.TextView.Helper"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gender" />
-
-                    <stud.euktop.uikit.components.input.select.def.SchJSelect
-                        android:id="@+id/genderSelect"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:title="@string/gender" />
-                </LinearLayout>
-
-                <stud.euktop.uikit.components.input.SchJInput
-                    android:id="@+id/phoneInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/telephone"
-                    android:inputType="phone"
-                    app:helperText="@string/telephone"
-                    app:schjTextError="@string/incorrect_phone_number" />
-
-                <stud.euktop.uikit.components.input.SchJInput
-                    android:id="@+id/emailInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress"
-                    app:helperText="@string/email"
-                    app:schjTextError="@string/error_email_invalid" />
-            </LinearLayout>
+            <include
+                android:id="@+id/reg_item"
+                layout="@layout/fragment_item_reg_user" />
 
             <View
                 android:id="@+id/view"

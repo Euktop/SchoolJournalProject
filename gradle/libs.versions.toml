@@ -44,6 +44,7 @@ mobmetricalib = "5.3.8"
 timber = "5.0.1"
 annotation = "1.10.0"
 fragment = "1.8.9"
+pagingRuntime = "3.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -90,6 +91,7 @@ mobmetricalib = { group = "com.yandex.android", name = "mobmetricalib", version.
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "pagingRuntime" }
 
 
 [plugins]

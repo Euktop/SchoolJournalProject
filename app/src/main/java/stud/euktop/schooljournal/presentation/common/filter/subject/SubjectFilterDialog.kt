@@ -31,7 +31,7 @@ class SubjectFilterDialog(
         descriptionInput = FilterFieldBuilder.addText(
             parent = container,
             title = getString(stud.euktop.uikit.R.string.search_description),
-            initialValue = initialFilter.description ?: ""
+            initialValue = initialFilter.name ?: ""
         )
     }
 
@@ -42,7 +42,7 @@ class SubjectFilterDialog(
 
     override fun collectFilter(): SubjectFilter {
         return SubjectFilter(
-            description = descriptionInput.state.text.takeIf { it.isNotBlank() }
+            name = descriptionInput.state.text.takeIf { it.isNotBlank() }
         )
     }
 }
