@@ -11,7 +11,6 @@ import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.HomeworkRepository
 import stud.euktop.domain.repository.SubjectAdminRepository
-import stud.euktop.domain.repository.TeacherRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
@@ -24,7 +23,7 @@ class TeacherHomeworkViewModel @Inject constructor(
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager,
     private val authRepository: AuthRepository,
-    private val teacherRepository: TeacherRepository,
+/*    private val teacherRepository: TeacherRepository,*/
     private val homeworkRepository: HomeworkRepository,
     private val subjectAdminRepository: SubjectAdminRepository
 ) : BaseViewModel<TeacherHomeworkState, TeacherHomeworkEvent>() {

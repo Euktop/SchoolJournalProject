@@ -23,7 +23,7 @@ class UserEditFragment : BaseFragment<
         DialogUserEditBinding,
         UserEditViewModel,
         UserEditState,
-        UserEditEvent
+        Unit
         >() {
 
     override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
@@ -103,7 +103,7 @@ class UserEditFragment : BaseFragment<
         }
     }
 
-    override fun updateEvent(event: UserEditEvent) {
+    override fun updateEvent(event: Unit) {
         when (event) {
             UserEditEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
         }

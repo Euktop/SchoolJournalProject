@@ -27,7 +27,7 @@ class LessonEditFragment : BaseFragment<
         FragmentLessonEditBinding,
         LessonEditViewModel,
         LessonEditState,
-        LessonEditEvent>() {
+        Unit>() {
 
     override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
         FragmentLessonEditBinding.inflate(i, c, false)
@@ -124,7 +124,7 @@ class LessonEditFragment : BaseFragment<
         }
     }
 
-    override fun updateEvent(event: LessonEditEvent) {
+    override fun updateEvent(event: Unit) {
         when (event) {
             LessonEditEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
         }

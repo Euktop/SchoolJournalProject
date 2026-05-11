@@ -3,11 +3,11 @@ package stud.euktop.schooljournal.presentation.main.teacher.teacherLessons
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
-import stud.euktop.domain.repository.TeacherLessonsRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
+
 /**
  * ViewModel для экрана уроков учителя.
  *
@@ -23,7 +23,7 @@ class TeacherLessonsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     coordinatorExec: CoordinatorExec,
     navigationManager: NavigationManager,
-    private val repository: TeacherLessonsRepository
+    /*    private val repository: TeacherLessonsRepository*/
 ) : BaseViewModel<TeacherLessonsState, Unit>() {
     companion object {
         const val CLASS_ID = "classId"
