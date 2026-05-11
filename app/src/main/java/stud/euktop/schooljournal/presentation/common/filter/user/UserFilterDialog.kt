@@ -4,9 +4,9 @@ import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.school.SchoolFilter
 import stud.euktop.domain.model.user.AccountStatus
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.UserFilter
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.base.BaseFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.school.SchoolFilterDialog
@@ -14,42 +14,44 @@ import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import stud.euktop.uikit.components.filter.FilterFieldBuilder
 import stud.euktop.uikit.components.input.SchJInput
-import stud.euktop.uikit.components.input.select.ListSafe
 
 @AndroidEntryPoint
 class UserFilterDialog(
-    initialFilter: UserFilter,
-    onFilterApplied: (UserFilter) -> Unit,
+    initialFilter: AppUserFilter,
+    onFilterApplied: (AppUserFilter) -> Unit,
     onError: (CoordinatorResult.Error) -> Unit
-) : BaseFilterDialog<UserFilterViewModel, UserFilter>(
+) : BaseFilterDialog<UserFilterViewModel, AppUserFilter>(
     initialFilter, onFilterApplied, onError
 ) {
 
     override val viewModel: UserFilterViewModel by viewModels()
 
     private lateinit var fullNameInput: SchJInput
-    private var roleSelect: (FilterFieldBuilder.SelectResult<Role>)? = null
-    private var statusSelect: (FilterFieldBuilder.SelectResult<AccountStatus>)? = null
+    private var roleSelect: FilterFieldBuilder.SelectResult<Role>? = null
     private lateinit var schoolSelect: FilterFieldBuilder.AddSearchableSelectResult<School>
+    private var statusSelect: FilterFieldBuilder.SelectResult<AccountStatus>? = null
 
-    override val setups: List<suspend () -> Unit> =
-        listOf({ setupRoles() }, { setupSchools() }, { setupStatuses() })
+    override val setups: List<suspend () -> Unit> = listOf(
+        { setupRoles() },
+        { setupSchools() },
+        { setupStatuses() }
+    )
 
     private suspend fun setupRoles() {
         viewModel.roles.collect { roles ->
-            roleSelect?.register?.updateItems(roles)
+            roleSelect?.updateItems(roles)
         }
     }
 
     private suspend fun setupSchools() {
         viewModel.schools.collect { schools ->
-            schoolSelect.register.updateItems(schools)
+            schoolSelect.updateItems(schools)
         }
     }
 
     private suspend fun setupStatuses() {
         viewModel.statuses.collect { statuses ->
-            statusSelect?.register?.updateItems(statuses)
+            statusSelect?.updateItems(statuses)
         }
     }
 
@@ -59,46 +61,50 @@ class UserFilterDialog(
             title = getString(R.string.name),
             initialValue = initialFilter.fullName ?: ""
         )
+
         roleSelect = FilterFieldBuilder.addSingleSelect(
             parent = container,
             fragmentManager = childFragmentManager,
             title = getString(R.string.role),
-            items = ListSafe(
-                onClick = { value, _ ->
-                    initialFilter = initialFilter.copy(role = value)
-                },
-                toText = { it?.let { getString(it.toMessageId()) } ?: "" }),
+            items = emptyList(),
+            toText = { it?.let { getString(it.toMessageId()) } ?: "" },
+            onSelected = { role -> initialFilter = initialFilter.copy(role = role) },
             selectedItem = initialFilter.role,
-            onShowing = { viewModel.loadRoles() })
+            onShowing = { viewModel.loadRoles() }
+        )
+
         schoolSelect = FilterFieldBuilder.addSearchableSelect(
             parent = container,
             fragmentManager = childFragmentManager,
             title = getString(R.string.school),
-            items = ListSafe(
-                toText = { it?.name ?: "" },
-                onClick = { it, _ -> initialFilter = initialFilter.copy(school = it) },
-            ),
+            items = emptyList(),
+            toText = { it?.name ?: "" },
+            onSelected = { school -> initialFilter = initialFilter.copy(school = school) },
             initialSelectedItem = initialFilter.school,
             showFilterDialog = {
                 if (parentFragmentManager.findFragmentByTag(SchoolFilterDialog.TAG) != null) return@addSearchableSelect
                 SchoolFilterDialog(
-                    initialFilter.schoolFilter,
-                    { initialFilter = initialFilter.copy(schoolFilter = it) },
-                    onError
+                    initialFilter = initialFilter.schoolFilter ?: SchoolFilter(),
+                    onFilterApplied = { schoolFilter ->
+                        initialFilter = initialFilter.copy(schoolFilter = schoolFilter)
+                        viewModel.loadSchools(schoolFilter)
+                    },
+                    onError = this.onError
                 ).show(parentFragmentManager, SchoolFilterDialog.TAG)
             },
-            onShowing = { viewModel.loadSchools(initialFilter.schoolFilter) },
+            onShowing = { viewModel.loadSchools(initialFilter.schoolFilter ?: SchoolFilter()) }
         )
-        statusSelect = FilterFieldBuilder.addSingleSelect<AccountStatus>(
+
+        statusSelect = FilterFieldBuilder.addSingleSelect(
             parent = container,
             fragmentManager = childFragmentManager,
             title = getString(R.string.status),
-            items = ListSafe(
-                onClick = { v, _ ->
-                    initialFilter = initialFilter.copy(accountStatus = v)
-                },
-                toText = { it?.let { getString(it.toMessageId()) } ?: "" }),
-            onShowing = { viewModel.loadStatuses() })
+            items = emptyList(),
+            toText = { it?.let { getString(it.toMessageId()) } ?: "" },
+            onSelected = { status -> initialFilter = initialFilter.copy(accountStatus = status) },
+            selectedItem = initialFilter.accountStatus,
+            onShowing = { viewModel.loadStatuses() }
+        )
     }
 
     override fun resetFilters() {
@@ -106,15 +112,16 @@ class UserFilterDialog(
         roleSelect?.select?.let { it.state = it.state.copy(selectText = "") }
         schoolSelect.select.state = schoolSelect.select.state.copy(selectText = "")
         statusSelect?.select?.let { it.state = it.state.copy(selectText = "") }
-        initialFilter = UserFilter()
+        initialFilter = AppUserFilter()
     }
 
-    override fun collectFilter(): UserFilter {
+    override fun collectFilter(): AppUserFilter {
         return initialFilter.copy(
-            fullName = fullNameInput.state.text
+            fullName = fullNameInput.state.text.takeIf { it.isNotBlank() }
         )
     }
-    companion object{
+
+    companion object {
         const val TAG = "UserFilterDialog"
     }
 }

@@ -31,3 +31,13 @@ inline fun <STATE : BaseState<STATE>> Fragment.bindDate(
         input.state = input.state.copy(text = date?.let { format.format(it) } ?: "")
     }
 }
+
+fun <STATE : BaseState<STATE>> bindDate(
+    input: SchJInput,
+    viewModel: BaseViewModel<STATE, *>,
+    getter: (STATE) -> Date?,
+    setter: (Date?) -> Unit,
+    format: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+) {
+    TODO()
+}

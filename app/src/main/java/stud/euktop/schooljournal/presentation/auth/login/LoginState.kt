@@ -11,5 +11,5 @@ data class LoginState(
     override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<LoginState>() {
     fun isButtonActive() = Validator.isAllValidate(email, password)
-    override fun updateLoading(loadingMap: Map<String, Boolean>): LoginState = copy(loadingMap = loadingMap)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): LoginState = copy(loadingMap = loadingMap)
 }

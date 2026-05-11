@@ -1,12 +1,10 @@
 package stud.euktop.schooljournal.presentation.main.teacher.teacherClass
 
-import stud.euktop.domain.model.lesson.TeacherClassItem
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class TeacherClassesState(
-    override val isLoading: Boolean = false,
-    val classes: List<TeacherClassItem> = emptyList()
+    val classes: List<TeacherClassItem> = emptyList(),
+    override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<TeacherClassesState>() {
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): TeacherClassesState = copy(loadingMap = loadingMap)
 }
-

@@ -2,14 +2,13 @@ package stud.euktop.uikit.components.filter
 
 import android.content.Context
 import android.util.AttributeSet
-import com.google.android.material.appbar.MaterialToolbar
 import stud.euktop.uikit.R
 
 class SchJFilterToolBar @JvmOverloads constructor(
     context: Context,
     attr: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : MaterialToolbar(context, attr, defStyleAttr) {
+    defStyleAttr: Int = androidx.appcompat.R.attr.toolbarStyle
+) : androidx.appcompat.widget.Toolbar(context, attr, defStyleAttr) {
     init {
         setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {

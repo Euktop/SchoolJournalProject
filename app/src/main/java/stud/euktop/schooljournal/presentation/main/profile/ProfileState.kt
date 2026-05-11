@@ -4,8 +4,10 @@ import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class ProfileState(
-    override val isLoading: Boolean = false,
-    val user: UserProfile? = null
+    val user: UserProfile? = null,
+    override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<ProfileState>() {
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): ProfileState {
+        return copy(loadingMap = loadingMap)
+    }
 }

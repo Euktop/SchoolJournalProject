@@ -50,9 +50,12 @@ class ClassEditViewModel @Inject constructor(
 
     private fun loadClass() {
         withLoadingSync("load") {
-            val classInfo = executeCoordinatorResult { classRepository.getClass(classId) }.await() ?: return@withLoadingSync
-            val school = executeCoordinatorResult { schoolRepository.getSchool(classInfo.schoolId) }.await()
-            val teacher = classInfo.teacherId?.let { executeCoordinatorResult { userRepository.getUser(it) }.await() }
+            val classInfo = executeCoordinatorResult { classRepository.getClass(classId) }.await()
+                ?: return@withLoadingSync
+            val school =
+                executeCoordinatorResult { schoolRepository.getSchool(classInfo.schoolId) }.await()
+            val teacher =
+                classInfo.teacherId?.let { executeCoordinatorResult { userRepository.getUser(it) }.await() }
             _state.update {
                 it.copy(
                     grade = classInfo.grade,
@@ -79,16 +82,38 @@ class ClassEditViewModel @Inject constructor(
 
     fun getTeachersPagingDataFlow(filter: UserFilter): Flow<PagingData<UserProfile>> {
         val teacherFilter = filter.copy(role = Role.TEACHER)
-        return Pager(PagingConfig(pageSize = 20)) { UsersPagingSource(userRepository, teacherFilter) }
+        return Pager(PagingConfig(pageSize = 20)) {
+            UsersPagingSource(
+                userRepository,
+                teacherFilter
+            )
+        }
             .flow.cachedIn(viewModelScope)
     }
 
-    override fun updateGrade(value: Int?) { _state.update { it.copy(grade = value) } }
-    override fun updateLetter(value: String) { _state.update { it.copy(letter = it.letter.copy(value)) } }
-    override fun updateAcademicYearStart(year: Int?) { _state.update { it.copy(academicYearStart = year) } }
-    override fun updateAcademicYearEnd(year: Int?) { _state.update { it.copy(academicYearEnd = year) } }
-    override fun updateSchool(school: School?) { _state.update { it.copy(school = school) } }
-    override fun updateClassTeacher(teacher: UserProfile?) { _state.update { it.copy(classTeacher = teacher) } }
+    override fun updateGrade(value: Int?) {
+        _state.update { it.copy(grade = value) }
+    }
+
+    override fun updateLetter(value: String) {
+        _state.update { it.copy(letter = it.letter.copy(value)) }
+    }
+
+    override fun updateAcademicYearStart(year: Int?) {
+        _state.update { it.copy(academicYearStart = year) }
+    }
+
+    override fun updateAcademicYearEnd(year: Int?) {
+        _state.update { it.copy(academicYearEnd = year) }
+    }
+
+    override fun updateSchool(school: School?) {
+        _state.update { it.copy(school = school) }
+    }
+
+    override fun updateClassTeacher(teacher: UserProfile?) {
+        _state.update { it.copy(classTeacher = teacher) }
+    }
 
     fun save() {
         val state = _state.value
@@ -96,14 +121,31 @@ class ClassEditViewModel @Inject constructor(
         if (isEditMode) {
             val update = ClassInfoUpdate(
                 classId = classId,
-                schoolId = Field(state.school?.schoolId, state.school?.schoolId != state.originalSchoolId),
+                schoolId = Field(
+                    state.school?.schoolId,
+                    state.school?.schoolId != state.originalSchoolId
+                ),
                 grade = Field(state.grade, state.grade != state.originalGrade),
-                letter = Field(state.letter.getValidate(), state.letter.value != state.originalLetter),
-                academicYearStart = Field(state.academicYearStart, state.academicYearStart != state.originalYearStart),
-                academicYearEnd = Field(state.academicYearEnd, state.academicYearEnd != state.originalYearEnd),
-                teacherId = Field(state.classTeacher?.userId, state.classTeacher?.userId != state.originalClassTeacherId)
+                letter = Field(
+                    state.letter.getValidate(),
+                    state.letter.value != state.originalLetter
+                ),
+                academicYearStart = Field(
+                    state.academicYearStart,
+                    state.academicYearStart != state.originalYearStart
+                ),
+                academicYearEnd = Field(
+                    state.academicYearEnd,
+                    state.academicYearEnd != state.originalYearEnd
+                ),
+                teacherId = Field(
+                    state.classTeacher?.userId,
+                    state.classTeacher?.userId != state.originalClassTeacherId
+                )
             )
-            executeWithLoadingSync("save", { classRepository.updateClass(update) }) { routerAdmin.navigateBack() }
+            executeWithLoadingSync(
+                "save",
+                { classRepository.updateClass(update) }) { routerAdmin.navigateBack() }
         } else {
             val school = state.school ?: return
             val newClass = ClassInfo(
@@ -115,9 +157,13 @@ class ClassEditViewModel @Inject constructor(
                 academicYearEnd = state.academicYearEnd!!,
                 teacherId = state.classTeacher?.userId
             )
-            executeWithLoadingSync("save", { classRepository.addClass(newClass) }) { routerAdmin.navigateBack() }
+            executeWithLoadingSync(
+                "save",
+                { classRepository.addClass(newClass) }) { routerAdmin.navigateBack() }
         }
     }
 
-    fun cancel() { routerAdmin.navigateBack() }
+    fun cancel() {
+        routerAdmin.navigateBack()
+    }
 }

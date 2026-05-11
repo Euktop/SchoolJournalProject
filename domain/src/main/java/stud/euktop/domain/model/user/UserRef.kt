@@ -18,5 +18,12 @@ data class UserRef(
             firstName = firstName ?: "",
             surName = surName
         )
+
+        fun createFromUserProfile(userProfile: UserProfile) = UserRef(
+            userId = userProfile.userId,
+            lastName = userProfile.lastName,
+            firstName = userProfile.firstName,
+            surName = userProfile.surName
+        )
     }
 }

@@ -7,6 +7,7 @@ import com.schooljournal.api.ClassesApi
 import com.schooljournal.api.HomeworkApi
 import com.schooljournal.api.LessonsApi
 import com.schooljournal.api.RolesApi
+import com.schooljournal.api.RoomsApi
 import com.schooljournal.api.SchoolsApi
 import com.schooljournal.api.StudentApi
 import com.schooljournal.api.SubjectsApi
@@ -83,4 +84,5 @@ class NetworkClient @Inject constructor(
     fun auditApi(): AuditApi = AuditApi(baseUrl, okHttpClient)
     fun rolesApi(): RolesApi = RolesApi(baseUrl, okHttpClient)
     fun absenceTypesApi(): AbsenceTypesApi = AbsenceTypesApi(baseUrl, okHttpClient)
+    fun roomsApi(): RoomsApi = RoomsApi(baseUrl, okHttpClient)
 }

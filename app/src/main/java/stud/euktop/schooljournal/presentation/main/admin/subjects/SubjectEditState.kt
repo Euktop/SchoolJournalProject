@@ -14,5 +14,5 @@ data class SubjectEditState(
     override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<SubjectEditState>(), SubjectFormState {
     fun isFormValid() = name.validate()
-    override fun updateLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
 }

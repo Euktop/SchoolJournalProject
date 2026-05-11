@@ -1,20 +1,29 @@
 package stud.euktop.schooljournal.presentation.main.admin.users
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.model.common.Pagination
+import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.user.UserFilter
 import stud.euktop.domain.model.user.UserListItem
+import stud.euktop.domain.repository.SchoolAdminRepository
 import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import javax.inject.Inject
 
 @HiltViewModel
 class UsersListViewModel @Inject constructor(
     private val userAdminRepository: UserAdminRepository,
-    private val routerAdmin: RouterAdmin
+    private val schoolRepository: SchoolAdminRepository,
+    private val routerAdmin: RouterAdmin,
+    coordinatorExec: CoordinatorExec
 ) : BaseViewModel<UsersListState, Unit>() {
+    init {
+        executeCoordinator = coordinatorExec
+    }
 
     companion object {
         private const val PAGE_SIZE = 20
@@ -23,7 +32,7 @@ class UsersListViewModel @Inject constructor(
     override fun initState() = UsersListState()
 
     private var currentOffset = 0
-    private var hasMore = true
+    var hasMore = true
 
     fun loadNextPage() {
         if (isLoading("pagination") || !hasMore) return
@@ -53,6 +62,13 @@ class UsersListViewModel @Inject constructor(
         currentOffset = 0
         hasMore = true
         loadNextPage()
+    }
+
+    suspend fun CoroutineScope.getSchoolUserFilter(): School? {
+        return executeCoordinatorResult {
+            _state.value.filter.schoolId?.let { schoolRepository.getSchool(it) }
+                ?: Result.success(null)
+        }.await()
     }
 
     fun deleteUser(userId: Int) {

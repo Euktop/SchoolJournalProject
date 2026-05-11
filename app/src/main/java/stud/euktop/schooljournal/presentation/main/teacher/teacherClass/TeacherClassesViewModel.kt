@@ -2,10 +2,13 @@ package stud.euktop.schooljournal.presentation.main.teacher.teacherClass
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.coordinator.TeacherCoordinator
+import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
+
 /**
  * ViewModel для экрана списка классов учителя.
  *
@@ -18,22 +21,30 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class TeacherClassesViewModel @Inject constructor(
-/*    private val repository: TeacherRepository,*/
-    coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager
+    private val authRepository: AuthRepository,
+    private val teacherCoordinator: TeacherCoordinator,
+    coordinatorExec: CoordinatorExec
 ) : BaseViewModel<TeacherClassesState, Unit>() {
+
     override fun initState() = TeacherClassesState()
 
     init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
+        executeCoordinator = coordinatorExec
         loadClasses()
     }
 
     fun loadClasses() {
-        executeWithCoordinatorAndLoadingSync(
+        executeLoadingBlockSync(
+            key = "load_classes",
             block = {
-                repository.getTeacherClasses()
-            }, { classes ->
+                val currentUser = authRepository.getCurrentUser().getOrNull()
+                return@executeLoadingBlockSync if (currentUser != null) {
+                    teacherCoordinator.getTeacherClasses(currentUser.userId)
+                } else {
+                    CoordinatorResult.Success(emptyList())
+                }
+            },
+            onSuccess = { classes ->
                 _state.update { it.copy(classes = classes) }
             }
         )

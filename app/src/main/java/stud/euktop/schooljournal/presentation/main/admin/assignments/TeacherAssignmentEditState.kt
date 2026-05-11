@@ -25,5 +25,5 @@ data class TeacherAssignmentEditState(
     override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<TeacherAssignmentEditState>() {
     fun isFormValid(): Boolean = teacher != null && classInfo != null && subject != null && validFrom != null
-    override fun updateLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
 }

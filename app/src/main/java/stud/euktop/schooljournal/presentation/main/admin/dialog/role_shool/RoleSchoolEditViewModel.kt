@@ -19,30 +19,31 @@ class RoleSchoolEditViewModel @Inject constructor(
     private val schoolAdminRepository: SchoolAdminRepository,
     private val roleRepository: RoleRepository,
     coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager
 ) : BaseViewModel<RoleSchoolEditState, Unit>() {
 
     private val _schools = MutableStateFlow<List<School>>(emptyList())
     val schools: StateFlow<List<School>> = _schools
 
+    private val _roles = MutableStateFlow<List<Role>>(emptyList())
+    val roles: StateFlow<List<Role>> = _roles
+
     init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
+        executeCoordinator = coordinatorExec
     }
 
     fun loadSchools(filter: SchoolFilter) {
-        executeWithCoordinatorAndLoadingSync(
+        executeWithLoadingSync(
+            key = "load_schools",
             block = { schoolAdminRepository.getSchools(filter) },
             onSuccess = { schools -> _schools.update { schools } }
         )
     }
 
-    private val _role = MutableStateFlow<List<Role>>(emptyList())
-    val role: StateFlow<List<Role>> = _role
-
-    fun loadRole() {
-        executeWithCoordinatorAndLoadingSync(
-            { runCatching { roleRepository.getAvailableRoles() } },
-            { role -> _role.update { role } }
+    fun loadRoles() {
+        executeWithLoadingSync(
+            key = "load_roles",
+            block = { runCatching { roleRepository.getAvailableRoles() } },
+            onSuccess = { roles -> _roles.update { roles } }
         )
     }
 

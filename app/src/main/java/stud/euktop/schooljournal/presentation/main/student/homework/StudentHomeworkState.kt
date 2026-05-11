@@ -1,15 +1,14 @@
-// presentation/main/student/homework/StudentHomeworkState.kt
 package stud.euktop.schooljournal.presentation.main.student.homework
 
 import stud.euktop.domain.model.homework.Homework
-import stud.euktop.domain.model.homework.HomeworkFilter
-import stud.euktop.domain.model.homework.HomeworkFilter2
 import stud.euktop.schooljournal.presentation.common.base.BaseState
+import stud.euktop.schooljournal.presentation.common.filter.homework.AppHomeworkFilter
 
 data class StudentHomeworkState(
-    override val isLoading: Boolean = false,
     val homeworkList: List<Homework> = emptyList(),
-    val filter: HomeworkFilter2 = HomeworkFilter2()
+    val filter: AppHomeworkFilter = AppHomeworkFilter(),
+    override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<StudentHomeworkState>() {
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): StudentHomeworkState =
+        copy(loadingMap = loadingMap)
 }

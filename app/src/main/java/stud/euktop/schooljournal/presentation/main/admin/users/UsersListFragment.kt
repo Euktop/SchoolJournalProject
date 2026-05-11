@@ -3,23 +3,27 @@ package stud.euktop.schooljournal.presentation.main.admin.users
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import stud.euktop.domain.model.user.UserListItem
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
+import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.filter.user.UserFilterDialog
+import stud.euktop.schooljournal.presentation.common.filter.user.toApp
 
 @AndroidEntryPoint
-class UsersListFragment : BaseFragment<
-        FragmentAdminEntityBinding,
-        UsersListViewModel,
-        UsersListState,
-        Unit>() {
+class UsersListFragment :
+    BaseFragment<FragmentAdminEntityBinding, UsersListViewModel, UsersListState, Unit>() {
 
     override val viewModel: UsersListViewModel by viewModels()
     private lateinit var loadingDelegate: LoadingDelegate<UsersListState>
-    private lateinit var adapter: UsersListAdapter
-    private lateinit var scrollListener: PaginationScrollListener
+    private lateinit var adapter: OperationsListAdapter<UserListItem>
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentAdminEntityBinding.inflate(inflater, container, false)
@@ -27,36 +31,47 @@ class UsersListFragment : BaseFragment<
     override fun setupUI() {
         loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
 
-        adapter = UsersListAdapter(
-            onEditClick = { viewModel.editUser(it) },
-            onDeleteClick = { viewModel.deleteUser(it.userId) }
+        adapter = OperationsListAdapter(
+            toText = { "${it.lastName} ${it.firstName} (${it.email})" },
+            onEdit = { viewModel.editUser(it) },
+            onDelete = { viewModel.deleteUser(it.userId) },
+            showContextMenu = true,
+            editOnClick = true
         )
         binding.rvEntity.adapter = adapter
 
-        // Фильтр
+        binding.toolbar.setTitle(R.string.users)
         binding.toolbar.showFilterDialog = { showFilterDialog() }
 
-        // Пагинация
-        scrollListener = PaginationScrollListener { viewModel.loadNextPage() }
-        binding.rvEntity.recyclerView.addOnScrollListener(scrollListener)
+        binding.rvEntity.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+                if (!viewModel.isLoading("pagination") && viewModel.hasMore && lastVisible >= adapter.itemCount - 2) {
+                    viewModel.loadNextPage()
+                }
+            }
+        })
 
-        // Загружаем первую страницу
         viewModel.loadNextPage()
+    }
+
+    private fun showFilterDialog() {
+        lifecycleScope.launch {
+            viewModel.apply {
+                val school = getSchoolUserFilter()
+                UserFilterDialog(
+                    initialFilter = viewModel.state.value.filter.toApp(school),
+                    onFilterApplied = { viewModel.applyFilter(it.toDomainFilter()) },
+                    onError = viewModel.onError
+                ).show(childFragmentManager, "user_filter")
+            }
+        }
     }
 
     override fun updateState(state: UsersListState) {
         adapter.submitList(state.users)
-        binding.rvEntity.update() // обновляем empty view
-    }
-
-    private fun showFilterDialog() {
-        if (parentFragmentManager.findFragmentByTag("user_filter") != null) return
-        val dialog = UserFilterDialog(
-            initialFilter = viewModel.state.value.filter,
-            onFilterApplied = { viewModel.applyFilter(it) },
-            onError = viewModel.onError
-        )
-        dialog.show(parentFragmentManager, "user_filter")
+        binding.rvEntity.update()
     }
 
     override fun updateEvent(event: Unit) {}

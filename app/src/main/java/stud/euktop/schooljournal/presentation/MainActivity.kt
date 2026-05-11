@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -68,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 if (navController.previousBackStackEntry == null) {
                     val activity = WeakReference(this@MainActivity)
                     isDismissed = true
-                    SnackBarMessages(binding.root).message(
+                    SnackBarMessages(binding.root,lifecycleScope).message(
                         MessageParam(
                             R.string.press_again_to_exit,
                             action = {

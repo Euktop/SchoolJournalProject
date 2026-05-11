@@ -19,6 +19,7 @@ import stud.euktop.domain.model.user.UserFilter
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.coordinator.AdminCoordinator
+import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import java.util.Date
 import javax.inject.Inject
@@ -28,7 +29,11 @@ class TeacherAssignmentEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val coordinator: AdminCoordinator,
     private val routerAdmin: RouterAdmin,
+    coordinatorExec: CoordinatorExec
 ) : BaseViewModel<TeacherAssignmentEditState, Unit>() {
+    init {
+        executeCoordinator = coordinatorExec
+    }
 
     private val assignmentId = savedStateHandle.get<AssignmentId>("assignmentId")
     private val isEditMode get() = assignmentId != null

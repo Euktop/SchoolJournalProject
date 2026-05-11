@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.model.homework.HomeworkFilter
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -22,8 +23,8 @@ class TeacherHomeworkListFragment : BaseFragment<
         TeacherHomeworkState,
         TeacherHomeworkEvent>() {
 
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentTeacherHomeworkListBinding.inflate(i, c, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentTeacherHomeworkListBinding.inflate(inflater, container, false)
 
     override val viewModel: TeacherHomeworkViewModel by viewModels()
 
@@ -40,9 +41,7 @@ class TeacherHomeworkListFragment : BaseFragment<
             navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkEditFragment))
         }
         adapter = TeacherHomeworkAdapter { homework ->
-            val bundle = Bundle().apply {
-                putInt("homeworkId", homework.homeworkId)
-            }
+            val bundle = Bundle().apply { putInt("homeworkId", homework.homeworkId) }
             navigationManager.navigate(
                 NavCommand.ToDestination(R.id.teacherHomeworkEditFragment, args = bundle)
             )
@@ -57,31 +56,25 @@ class TeacherHomeworkListFragment : BaseFragment<
 
     override fun updateEvent(event: TeacherHomeworkEvent) {
         when (event) {
-            is TeacherHomeworkEvent.NavigateToAdd -> {
+            TeacherHomeworkEvent.NavigateToAdd -> {
                 navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkEditFragment))
             }
-
             is TeacherHomeworkEvent.EditHomework -> {
-                val bundle = Bundle().apply {
-                    putInt("homeworkId", event.homeworkId)
-                }
+                val bundle = Bundle().apply { putInt("homeworkId", event.homeworkId) }
                 navigationManager.navigate(
                     NavCommand.ToDestination(R.id.teacherHomeworkEditFragment, args = bundle)
                 )
             }
-
             TeacherHomeworkEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
         }
     }
 
-    fun showFilterDialog() {
+    private fun showFilterDialog() {
         if (parentFragmentManager.findFragmentByTag("filter") != null) return
         val dialog = HomeworkFilterDialog(
             initialFilter = viewModel.state.value.homeworkFilter,
             onFilterApplied = { filter -> viewModel.applyFilter(filter) },
-            onError = { error ->
-                messages.message(MessageParam(error.messageId))
-            }
+            onError = { error -> messages.message(MessageParam(error.messageId)) }
         )
         dialog.show(parentFragmentManager, "filter")
     }

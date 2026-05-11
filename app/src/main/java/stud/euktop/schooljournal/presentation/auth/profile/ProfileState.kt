@@ -24,6 +24,6 @@ data class ProfileState(
         Validator.isAllValidate(lastName, firstName, surName, email, phone)
                 && gender != null && birthDay != null
 
-    override fun updateLoading(loadingMap: Map<String, Boolean>): ProfileState =
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): ProfileState =
         copy(loadingMap = loadingMap)
 }

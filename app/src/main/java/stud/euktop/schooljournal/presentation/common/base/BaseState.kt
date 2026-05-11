@@ -5,7 +5,6 @@ package stud.euktop.schooljournal.presentation.common.base
  * @param T тип конкретного состояния (для ковариантного copy)
  */
 abstract class BaseState<T : BaseState<T>> {
-
     /** Карта загрузок: ключ операции -> true/false */
     abstract val loadingMap: Map<String, Boolean>
 
@@ -25,9 +24,9 @@ abstract class BaseState<T : BaseState<T>> {
     fun withLoading(key: String, isLoading: Boolean): T {
         val map = loadingMap.toMutableMap()
         map[key] = isLoading
-        return updateLoading(map)
+        return updateIsLoading(map)
     }
 
-    abstract fun updateLoading(loadingMap: Map<String, Boolean>): T
+    abstract fun updateIsLoading(loadingMap: Map<String, Boolean>): T
 
 }

@@ -15,7 +15,7 @@ class MessageDelegate(
     private val rootView: View,
     private val lifecycleOwner: LifecycleOwner,
     private val messageEventFlow: SharedFlow<MessageEvent>,
-    private val messageDisplayer: MessageDisplayer = SnackBarMessages(rootView)
+    private val messageDisplayer: MessageDisplayer = SnackBarMessages(rootView,lifecycleOwner.lifecycleScope)
 ) {
 
     init {

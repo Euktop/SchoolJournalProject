@@ -24,7 +24,7 @@ inline fun <T> Fragment.observeState(
 
 fun <VM : BaseViewModel<*, *>> Fragment.observeMessage(
     viewModel: VM,
-    message: MessageDisplayer = SnackBarMessages(this.requireView())
+    message: MessageDisplayer = SnackBarMessages(this.requireView(),lifecycleScope)
 ) {
     MessageDelegate(this.requireView(), viewLifecycleOwner, viewModel.messageEvent, message)
 }

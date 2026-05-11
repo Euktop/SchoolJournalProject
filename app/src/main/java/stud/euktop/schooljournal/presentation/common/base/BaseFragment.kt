@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
 import stud.euktop.schooljournal.presentation.common.delegate.BindingDelegate
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageDisplayer
@@ -59,7 +60,7 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        messages = SnackBarMessages(binding.root)
+        messages = SnackBarMessages(binding.root,lifecycleScope)
         observeMessage(viewModel, messages)
         observeViewModel()
     }

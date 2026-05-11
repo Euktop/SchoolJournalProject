@@ -81,4 +81,8 @@ internal object DataModule {
     @Provides
     @Singleton
     fun provideAbsenceTypesApi(client: NetworkClient) = client.absenceTypesApi()
+
+    @Provides
+    @Singleton
+    fun provideRoomsApi(client: NetworkClient) = client.roomsApi()
 }

@@ -6,38 +6,28 @@ import kotlinx.coroutines.flow.update
 import stud.euktop.domain.repository.StudentRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
-/**
- * ViewModel для детального экрана предмета.
- *
- * Назначение: загружает историю оценок по предмету.
- *
- * Функционал:
- * - Извлечение subjectId из SavedStateHandle
- * - State: marks (List<StudentSubjectMark>), isLoading
- * - loadDetails() – вызов StudentRepository.getSubjectMarks(studentId, subjectId)
- */
+
 @HiltViewModel
 class StudentSubjectDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager,
-    private val studentRepository: StudentRepository
+    private val studentRepository: StudentRepository,
+    coordinatorExec: CoordinatorExec
 ) : BaseViewModel<StudentSubjectDetailState, Unit>() {
 
-    private val subjectId = savedStateHandle.get<Int>("subjectId") ?: 1
+    private val subjectId = savedStateHandle.get<Int>("subjectId") ?: 0
 
     override fun initState() = StudentSubjectDetailState()
 
     init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
+        executeCoordinator = coordinatorExec
         loadDetails()
     }
 
-    fun loadDetails() {
-        executeWithCoordinatorAndLoadingSync(
-            block = { studentRepository.getSubjectMarks(1, subjectId) },
+    private fun loadDetails() {
+        executeWithLoadingSync(
+            key = "load_marks",
+            block = { studentRepository.getSubjectMarks(subjectId) },
             onSuccess = { marks -> _state.update { it.copy(marks = marks) } }
         )
     }

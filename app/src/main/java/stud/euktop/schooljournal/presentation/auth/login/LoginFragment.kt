@@ -3,6 +3,7 @@ package stud.euktop.schooljournal.presentation.auth.login
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.databinding.ActivityLoginBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.binding.bindForm
@@ -12,6 +13,7 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.Navigatio
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<ActivityLoginBinding, LoginViewModel, LoginState, Unit>() {
 
     @Inject

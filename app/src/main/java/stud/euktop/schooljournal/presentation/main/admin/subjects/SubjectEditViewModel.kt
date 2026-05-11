@@ -10,6 +10,7 @@ import stud.euktop.domain.model.school.SubjectUpdate
 import stud.euktop.domain.repository.SubjectAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.contract.action.SubjectFormActions
+import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import javax.inject.Inject
 
@@ -17,9 +18,12 @@ import javax.inject.Inject
 class SubjectEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: SubjectAdminRepository,
-    private val routerAdmin: RouterAdmin
+    private val routerAdmin: RouterAdmin,
+    coordinatorExec: CoordinatorExec
 ) : BaseViewModel<SubjectEditState, Unit>(), SubjectFormActions {
-
+    init {
+        executeCoordinator = coordinatorExec
+    }
     private val subjectId: Int = savedStateHandle["subjectId"] ?: 0
     private val isEditMode get() = subjectId != 0
 

@@ -1,21 +1,20 @@
 package stud.euktop.schooljournal.presentation.main.admin.users
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.user.AccountStatus
-import stud.euktop.domain.model.school.School
-import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.UserRole
 import stud.euktop.schooljournal.databinding.DialogUserEditBinding
+import stud.euktop.schooljournal.presentation.common.adapter.ListSelectAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
+import stud.euktop.schooljournal.presentation.common.binding.bindForm
+import stud.euktop.schooljournal.presentation.common.binding.toInit
+import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
-import stud.euktop.schooljournal.presentation.common.utils.*
+import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import stud.euktop.schooljournal.presentation.main.admin.dialog.role_shool.RoleSchoolEditDialog
-import stud.euktop.uikit.components.input.select.ListSafe
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,93 +22,75 @@ class UserEditFragment : BaseFragment<
         DialogUserEditBinding,
         UserEditViewModel,
         UserEditState,
-        Unit
-        >() {
+        Unit>() {
 
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        DialogUserEditBinding.inflate(i, c, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        DialogUserEditBinding.inflate(inflater, container, false)
 
     override val viewModel: UserEditViewModel by viewModels()
-
     private val focusTrack = FocusTrack()
+    private lateinit var loadingDelegate: LoadingDelegate<UserEditState>
 
     @Inject
     lateinit var navigationManager: NavigationManager
 
+    private lateinit var rolesAdapter: RoleSchoolAdapter
+
     override fun setupUI() {
-        binding.apply {
-            inputLastName.setup(focusTrack) { viewModel.updateLastName(it) }
-            inputFirstName.setup(focusTrack) { viewModel.updateFirstName(it) }
-            inputSurName.setup(focusTrack) { viewModel.updateSurName(it) }
-            inputEmail.setup(focusTrack) { viewModel.updateEmail(it) }
-            inputPhone.setup(focusTrack) { viewModel.updatePhone(it) }
-            inputPassword.setup(focusTrack) { viewModel.updatePassword(it) }
+        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
 
-            if (viewModel.canEditFull()) {
-                selectStatus.RegisterList(
-                    items = ListSafe(
-                        values = AccountStatus.entries.toList(),
-                        toText = { it?.let { requireContext().getString(it.toMessageId()) } ?: "" },
-                        onClick = { status, _ ->
-                            viewModel.updateAccountStatus(status ?: AccountStatus.ACTIVE)
-                        }
-                    )
-                ).register(childFragmentManager)
-            } else {
-                selectStatus.visibility = View.GONE
-            }
-
-            val rolesAdapter = RoleSchoolAdapter(
-                onDeleteClick = { role ->
-                    viewModel.removeRole(role)
-                }
-            )
-            rvRoles.adapter = rolesAdapter
-
-            btnAddRole.setOnClickListener { showRoleSchoolDialog() }
-
-            saveCancel.btnSave.setOnClickListener { viewModel.save() }
-            saveCancel.btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
+        // Bind текстовых полей через bindForm
+        bindForm(focusTrack, viewModel) {
+            field(binding.inputLastName, { it.lastName }, viewModel::updateLastName)
+            field(binding.inputFirstName, { it.firstName }, viewModel::updateFirstName)
+            field(binding.inputSurName, { it.surName }, viewModel::updateSurName)
+            field(binding.inputEmail, { it.email }, viewModel::updateEmail)
+            field(binding.inputPhone, { it.phone }, viewModel::updatePhone)
+            field(binding.inputPassword, { it.password }, viewModel::updatePassword)
         }
+
+        val statusAdapter = ListSelectAdapter<AccountStatus>(
+            toText = { status ->
+                status?.let { requireContext().getString(it.toMessageId()) } ?: ""
+            },
+            onItemSelected = { status ->
+                if (status != null) viewModel.updateAccountStatus(status)
+            }
+        )
+        statusAdapter.submitList(AccountStatus.entries.toList())
+        binding.selectStatus.attach(statusAdapter, statusAdapter, childFragmentManager)
+
+        rolesAdapter = RoleSchoolAdapter { role ->
+            viewModel.removeRole(role)
+        }
+        binding.rvRoles.adapter = rolesAdapter
+
+        binding.btnAddRole.setOnClickListener {
+            showRoleSchoolDialog()
+        }
+
+        binding.saveCancel.toInit(loadingDelegate, viewModel::save, viewModel::cancel)
     }
 
-    private fun showRoleSchoolDialog(role: Role? = null, school: School? = null) {
+    private fun showRoleSchoolDialog() {
         if (childFragmentManager.findFragmentByTag(RoleSchoolEditDialog.TAG) != null) return
-        val dialog = RoleSchoolEditDialog.newInstance(role, school, viewModel) { r, s ->
-            viewModel.addRole(UserRole(r, s))
-        }
+        val dialog = RoleSchoolEditDialog.newInstance(
+            onError = viewModel,
+            onSuccess = { role, school ->
+                viewModel.addRole(role, school?.schoolId)
+            }
+        )
         dialog.show(childFragmentManager, RoleSchoolEditDialog.TAG)
     }
 
     override fun updateState(state: UserEditState) {
-        binding.apply {
-            inputChecks(
-                focusTrack,
-                inputLastName to state.lastName,
-                inputFirstName to state.firstName,
-                inputSurName to state.surName,
-                inputEmail to state.email,
-                inputPhone to state.phone,
-                inputPassword to state.password
-            )
-
-            if (viewModel.canEditFull()) {
-                selectStatus.state = selectStatus.state.copy(
-                    selectText = requireContext().getString(state.accountStatus.toMessageId())
-                )
-            }
-            binding.rvRoles.submitList(state.selectedRoles)
-            saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isLoading
-        }
+        // Обновляем отображаемый текст статуса
+        binding.selectStatus.state = binding.selectStatus.state.copy(
+            selectText = requireContext().getString(state.accountStatus.toMessageId())
+        )
+        rolesAdapter.submitList(state.selectedRoles)
+        binding.saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
     }
 
-    override fun updateEvent(event: Unit) {
-        when (event) {
-            UserEditEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
-        }
-    }
-
-    companion object {
-        private const val TAG = "UserEditFragment"
-    }
+    override fun updateEvent(event: Unit) {}
 }

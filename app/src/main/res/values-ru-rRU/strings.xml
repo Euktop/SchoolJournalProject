@@ -97,4 +97,12 @@
     <string name="edit_profile">Редактировать профиль</string>
     <string name="not_specified">Не указано</string>
     <string name="no_school">без школы</string>
+    <string name="homework_assignments">Домашние задания</string>
+    <string name="logging_in">Выполняем вход</string>
+    <string name="saving">Сохранение</string>
+    <string name="not_granted">Нет доступа</string>
+    <string name="class_name">Имя класса</string>
+    <string name="valid_period">Действительный в период</string>
+    <string name="subjects">Предметы</string>
+    <string name="assignments">Разрешения</string>
 </resources>

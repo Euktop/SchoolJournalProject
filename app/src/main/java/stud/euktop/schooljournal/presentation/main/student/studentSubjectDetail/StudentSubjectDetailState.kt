@@ -4,8 +4,8 @@ import stud.euktop.domain.model.attendance.StudentSubjectMark
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class StudentSubjectDetailState(
-    override val isLoading: Boolean = false,
-    val marks: List<StudentSubjectMark> = emptyList()
+    val marks: List<StudentSubjectMark> = emptyList(),
+    override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<StudentSubjectDetailState>() {
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): StudentSubjectDetailState = copy(loadingMap = loadingMap)
 }

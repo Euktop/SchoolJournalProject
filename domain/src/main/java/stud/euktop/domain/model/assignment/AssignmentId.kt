@@ -7,4 +7,4 @@ data class AssignmentId(
     val classId: Int,
     val subjectId: Int,
     val validFrom: Date
-)
+) : java.io.Serializable

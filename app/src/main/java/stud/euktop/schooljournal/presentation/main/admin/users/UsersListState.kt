@@ -9,5 +9,5 @@ data class UsersListState(
     val filter: UserFilter = UserFilter(),
     override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<UsersListState>() {
-    override fun updateLoading(loadingMap: Map<String, Boolean>): UsersListState = copy(loadingMap = loadingMap)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
 }

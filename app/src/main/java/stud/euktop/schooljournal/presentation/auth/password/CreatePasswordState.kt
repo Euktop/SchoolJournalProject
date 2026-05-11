@@ -13,6 +13,6 @@ data class CreatePasswordState(
     fun isNextActive() =
         Validator.isAllValidate(password) && password.value == confirmPassword
 
-    override fun updateLoading(loadingMap: Map<String, Boolean>): CreatePasswordState =
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): CreatePasswordState =
         copy(loadingMap = loadingMap)
 }

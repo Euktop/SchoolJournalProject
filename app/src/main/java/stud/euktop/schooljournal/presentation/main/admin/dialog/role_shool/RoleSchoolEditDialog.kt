@@ -18,18 +18,16 @@ import stud.euktop.domain.model.user.Role
 import stud.euktop.schooljournal.presentation.common.filter.school.SchoolFilterDialog
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.RepositoryExec
-import stud.euktop.uikit.R
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
+import stud.euktop.uikit.R
 import stud.euktop.uikit.components.filter.FilterFieldBuilder
-import stud.euktop.uikit.components.filter.FilterFieldBuilder.AddSearchableSelectResult
-import stud.euktop.uikit.components.input.select.ListSafe
 
 @AndroidEntryPoint
 class RoleSchoolEditDialog : DialogFragment(), RepositoryExec {
     private val viewModel: RoleSchoolEditViewModel by viewModels()
 
     private lateinit var roleSelect: FilterFieldBuilder.SelectResult<Role>
-    private lateinit var schoolSelect: AddSearchableSelectResult<School>
+    private lateinit var schoolSelect: FilterFieldBuilder.AddSearchableSelectResult<School>
     private var schoolFilter: SchoolFilter = SchoolFilter()
     var selectedRole: Role? = null
     var selectedSchool: School? = null
@@ -41,60 +39,66 @@ class RoleSchoolEditDialog : DialogFragment(), RepositoryExec {
             setPadding(50, 30, 50, 30)
         }
 
-
-        val roleListSafe = ListSafe<Role>(
-            toText = { it?.let { requireContext().getString(it.toMessageId()) } ?: "" },
-            onClick = { role, _ ->
-                selectedRole = role
-                if (role == Role.ADMIN) schoolSelect.select.visibility = View.GONE
-            })
+        // ----- Роль (обычный селект) -----
         roleSelect = FilterFieldBuilder.addSingleSelect(
             parent = binding,
             fragmentManager = childFragmentManager,
             title = getString(R.string.role),
-            items = roleListSafe,
+            items = emptyList(),
+            toText = { it?.let { requireContext().getString(it.toMessageId()) } ?: "" },
+            onSelected = { role ->
+                selectedRole = role
+                if (role == Role.ADMIN) {
+                    schoolSelect.select.visibility = View.GONE
+                } else {
+                    schoolSelect.select.visibility = View.VISIBLE
+                }
+            },
             selectedItem = arguments?.getSerializable(ARG_ROLE, Role::class.java),
-            onShowing = { viewModel.loadRole() }
+            onShowing = { viewModel.loadRoles() }
         )
 
-        val schoolListSafe = ListSafe(
-            values = viewModel.schools.value,
-            toText = { it?.name ?: "" },
-            onClick = { school, _ -> selectedSchool = school })
+        // ----- Школа (поисковый селект) -----
         schoolSelect = FilterFieldBuilder.addSearchableSelect(
             parent = binding,
             fragmentManager = childFragmentManager,
             title = getString(R.string.school),
-            items = schoolListSafe,
-            onShowing = { viewModel.loadSchools(schoolFilter) },
+            items = emptyList(),
+            toText = { it?.name ?: "" },
+            onSelected = { school -> selectedSchool = school },
+            initialSelectedItem = null,
             showFilterDialog = {
                 if (parentFragmentManager.findFragmentByTag(SchoolFilterDialog.TAG) != null) return@addSearchableSelect
                 SchoolFilterDialog(
-                    schoolFilter, {
-                        schoolFilter = it
+                    schoolFilter,
+                    { newFilter ->
+                        schoolFilter = newFilter
                         viewModel.loadSchools(schoolFilter)
-                    }, onError
+                    },
+                    onError
                 ).show(parentFragmentManager, SchoolFilterDialog.TAG)
-            }).apply {
-            select.apply {
-                state = state.copy(selectText = arguments?.getString(ARG_SCHOOL_NAME))
-            }
+            },
+            onShowing = { viewModel.loadSchools(schoolFilter) }
+        )
+        // Устанавливаем начальный текст школы из аргументов (если есть)
+        arguments?.getString(ARG_SCHOOL_NAME)?.let { name ->
+            schoolSelect.select.state = schoolSelect.select.state.copy(selectText = name)
         }
 
-
-        // Подписываемся на обновления школ
+        // Подписка на обновление списка школ из ViewModel
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.schools.collect { schools ->
-                    schoolSelect.register.updateItems(schools)
+                    schoolSelect.updateItems(schools)
                 }
             }
         }
 
+        // Подписка на обновление списка ролей
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.role.collect { roles ->
-                    roleSelect.register.updateItems(roles)
+                viewModel.roles.collect { roles ->
+                    roleSelect.updateItems(roles)
                 }
             }
         }

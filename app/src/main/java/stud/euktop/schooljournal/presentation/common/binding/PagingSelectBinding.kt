@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.presentation.common.adapter.PagingSelectAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.utils.observeState
 import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
 
 fun <T : Any> SchJSearchableSelect.setupPagingSelect(
@@ -61,8 +62,7 @@ fun <T : Any, F> SchJSearchableSelect.bindPagingSelect(
                 pagingDataProvider(filter)
             }.collectLatest { pagingData ->
                 val adapter = PagingSelectAdapter(
-                    toText = toText,
-                    onItemSelected = onSelected
+                    toText = toText, onItemSelected = onSelected
                 )
                 attach(adapter, adapter, fragmentManager, title, onFilterClick)
                 adapter.submitData(pagingData)
@@ -105,16 +105,13 @@ fun <STATE : BaseState<STATE>, T : Any, FILTER : Any> bindPagingSelect(
             getPagingDataFlow(filter)
         }.collectLatest { pagingData ->
             val adapter = PagingSelectAdapter(
-                toText = toText,
-                onItemSelected = onSelected
+                toText = toText, onItemSelected = onSelected
             )
             select.attach(adapter, adapter, fragmentManager, title, onFilterClick)
             adapter.submitData(pagingData)
         }
     }
-
-    // Синхронизация отображаемого текста с выбранным значением в состоянии
-    observeState(viewModel.state, lifecycleOwner) { state ->
+    lifecycleOwner.observeState(viewModel.state, lifecycleOwner) { state ->
         val value = getSelectedValue(state)
         select.state = select.state.copy(selectText = toText(value))
     }

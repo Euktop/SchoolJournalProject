@@ -16,7 +16,6 @@ import stud.euktop.schooljournal.presentation.common.message.contract.MessagePar
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
-import stud.euktop.schooljournal.presentation.main.admin.users.UserEditViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -24,11 +23,10 @@ class ProfileFragment : BaseFragment<
         FragmentProfileBinding,
         ProfileViewModel,
         ProfileState,
-        Unit
-        >() {
+        Unit>() {
 
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentProfileBinding.inflate(i, c, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentProfileBinding.inflate(inflater, container, false)
 
     override val viewModel: ProfileViewModel by viewModels()
 
@@ -38,9 +36,7 @@ class ProfileFragment : BaseFragment<
     override fun setupUI() {
         binding.btnEditProfile.setOnClickListener {
             val currentUser = viewModel.state.value.user ?: return@setOnClickListener
-            val bundle = Bundle().apply {
-                putInt(UserEditViewModel.KEY_USER_ID, currentUser.userId)
-            }
+            val bundle = Bundle().apply { putInt("userId", currentUser.userId) }
             navigationManager.navigate(
                 NavCommand.ToDestination(R.id.userEditFragment, args = bundle)
             )
@@ -57,7 +53,7 @@ class ProfileFragment : BaseFragment<
 
     private fun updateUI(user: UserProfile) {
         binding.apply {
-            tvUserName.text = user.fullName
+            tvUserName.text = "${user.lastName} ${user.firstName} ${user.surName ?: ""}".trim()
             tvEmail.text = user.email
             tvPhone.text = user.phone ?: getString(R.string.not_specified)
             tvBirthday.text = user.birthday?.toBaseString() ?: getString(R.string.not_specified)
@@ -67,14 +63,14 @@ class ProfileFragment : BaseFragment<
             tvInitials.text = initials
 
             rolesContainer.removeAllViews()
-            user.roles.forEach { roleSchool ->
+            user.roles.forEach { role ->
                 val chip = Chip(requireContext()).apply {
-                    text = when (roleSchool.role) {
+                    text = when (role.role) {
                         Role.ADMIN -> getString(R.string.administrator)
                         else -> {
-                            val schoolName =
-                                roleSchool.school?.name ?: getString(R.string.no_school)
-                            "${getString(roleSchool.role.toMessageId())} ($schoolName)"
+                            val schoolIdText =
+                                role.schoolId?.let { "Школа $it" } ?: getString(R.string.no_school)
+                            "${getString(role.role.toMessageId())} ($schoolIdText)"
                         }
                     }
                     isClickable = false

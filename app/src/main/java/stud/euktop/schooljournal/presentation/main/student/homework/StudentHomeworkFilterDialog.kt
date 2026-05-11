@@ -3,21 +3,23 @@ package stud.euktop.schooljournal.presentation.main.student.homework
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.homework.HomeworkFilter2
 import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.model.school.SubjectFilter
+import stud.euktop.domain.utils.baseDateFormat
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.base.BaseFilterDialog
+import stud.euktop.schooljournal.presentation.common.filter.homework.AppHomeworkFilter
+import stud.euktop.schooljournal.presentation.common.filter.subject.SubjectFilterDialog
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.uikit.components.filter.FilterFieldBuilder
-import stud.euktop.uikit.components.input.select.ListSafe
 import java.util.Date
 
 @AndroidEntryPoint
 class StudentHomeworkFilterDialog(
-    initialFilter: HomeworkFilter2,
-    onFilterApplied: (HomeworkFilter2) -> Unit,
+    initialFilter: AppHomeworkFilter,
+    onFilterApplied: (AppHomeworkFilter) -> Unit,
     onError: (CoordinatorResult.Error) -> Unit
-) : BaseFilterDialog<StudentHomeworkFilterViewModel, HomeworkFilter2>(
+) : BaseFilterDialog<StudentHomeworkFilterViewModel, AppHomeworkFilter>(
     initialFilter, onFilterApplied, onError
 ) {
 
@@ -25,7 +27,7 @@ class StudentHomeworkFilterDialog(
 
     private lateinit var subjectSelectResult: FilterFieldBuilder.AddSearchableSelectResult<Subject>
     private lateinit var dateRangeResult: FilterFieldBuilder.DateRangeResult
-    private var selectedSubject: Subject? = null
+    private var selectedSubject: Subject? = initialFilter.subject
     private var dateFrom: Date? = initialFilter.createdFrom
     private var dateTo: Date? = initialFilter.createdTo
 
@@ -33,7 +35,7 @@ class StudentHomeworkFilterDialog(
 
     private suspend fun setupSubjects() {
         viewModel.subjects.collect { subjects ->
-            subjectSelectResult.register.updateItems(subjects)
+            subjectSelectResult.updateItems(subjects)
         }
     }
 
@@ -42,22 +44,42 @@ class StudentHomeworkFilterDialog(
             parent = container,
             fragmentManager = childFragmentManager,
             title = getString(R.string.subject),
-            items = ListSafe(
-                values = emptyList(),
-                toText = { it?.name ?: "" },
-                onClick = { subject, _ -> selectedSubject = subject }
-            ),
-            onShowing = { viewModel.loadSubjects() },
-            initialSelectedItem = null
+            items = emptyList(),
+            toText = { it?.name ?: "" },
+            onSelected = { subject ->
+                selectedSubject = subject
+                initialFilter = initialFilter.copy(subject = subject)
+            },
+            initialSelectedItem = initialFilter.subject,
+            onShowing = { viewModel.loadSubjects(initialFilter.subjectFilter ?: SubjectFilter()) },
+            showFilterDialog = {
+                if (parentFragmentManager.findFragmentByTag(SubjectFilterDialog.TAG) != null) return@addSearchableSelect
+                val dialog = SubjectFilterDialog(
+                    initialFilter = initialFilter.subjectFilter ?: SubjectFilter(),
+                    onFilterApplied = { subjectFilter ->
+                        initialFilter = initialFilter.copy(subjectFilter = subjectFilter)
+                        viewModel.loadSubjects(subjectFilter)
+                    },
+                    onError = this.onError
+                )
+                dialog.show(parentFragmentManager, SubjectFilterDialog.TAG)
+            }
         )
 
         dateRangeResult = FilterFieldBuilder.addDateRange(
             parent = container,
             title = getString(R.string.date_create),
+            dateFormat = baseDateFormat,
             fromDate = dateFrom,
             toDate = dateTo,
-            onFromDateSelected = { date -> dateFrom = date },
-            onToDateSelected = { date -> dateTo = date }
+            onFromDateSelected = { date ->
+                dateFrom = date
+                initialFilter = initialFilter.copy(createdFrom = date)
+            },
+            onToDateSelected = { date ->
+                dateTo = date
+                initialFilter = initialFilter.copy(createdTo = date)
+            }
         )
     }
 
@@ -68,14 +90,14 @@ class StudentHomeworkFilterDialog(
         selectedSubject = null
         dateFrom = null
         dateTo = null
+        initialFilter = AppHomeworkFilter()
     }
 
-    override fun collectFilter(): HomeworkFilter2 {
-        return HomeworkFilter2(
-            subjectId = selectedSubject?.subjectId,
+    override fun collectFilter(): AppHomeworkFilter {
+        return initialFilter.copy(
+            subject = selectedSubject,
             createdFrom = dateFrom,
-            createdTo = dateTo,
-            classId = initialFilter.classId // сохраняем classId из начального фильтра
+            createdTo = dateTo
         )
     }
 }

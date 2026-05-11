@@ -5,18 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.lesson.Lesson
+import stud.euktop.domain.model.lesson.LessonFull
 import stud.euktop.domain.utils.toBaseString
-import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkEditBinding
+import stud.euktop.schooljournal.presentation.common.adapter.ListSelectAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
+import stud.euktop.schooljournal.presentation.common.binding.bindForm
+import stud.euktop.schooljournal.presentation.common.binding.toInit
+import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
-import stud.euktop.schooljournal.presentation.common.utils.*
-import stud.euktop.uikit.R as R1
-import stud.euktop.uikit.components.input.select.ListSafe
-import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.schooljournal.presentation.common.utils.check
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -26,17 +26,17 @@ class TeacherHomeworkEditFragment : BaseFragment<
         TeacherHomeworkState,
         TeacherHomeworkEvent>() {
 
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentTeacherHomeworkEditBinding.inflate(i, c, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentTeacherHomeworkEditBinding.inflate(inflater, container, false)
 
     override val viewModel: TeacherHomeworkViewModel by viewModels()
-
     private val focusTrack = FocusTrack()
+    private lateinit var loadingDelegate: LoadingDelegate<TeacherHomeworkState>
 
     @Inject
     lateinit var navigationManager: NavigationManager
 
-    private lateinit var lessonRegister: SchJSearchableSelect.RegisterList<Lesson>
+    private lateinit var lessonAdapter: ListSelectAdapter<LessonFull>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,76 +47,40 @@ class TeacherHomeworkEditFragment : BaseFragment<
     }
 
     override fun setupUI() {
-        binding.apply {
-            inputDescription.setup(focusTrack) { viewModel.updateDescription(it) }
-            inputAttachedFiles.setup(focusTrack) { viewModel.updateAttachedFiles(it) }
+        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
 
-            val lessonListSafe = ListSafe<Lesson>(
-                toText = { lesson -> lesson?.name ?: "" },
-                onClick = { lesson, _ -> viewModel.selectLesson(lesson?.lessonId) }
-            )
-            lessonRegister = selectLesson.RegisterList(lessonListSafe)
-            lessonRegister.register(childFragmentManager)
-            // При открытии диалога обновляем список (но данные уже загружены)
-            selectLesson.onShowing =
-                { lessonRegister.updateItems(viewModel.state.value.availableLessons) }
-
-            buttonsSaveCancel.btnSave.setOnClickListener {
-                val selectedLesson = viewModel.state.value.selectedLesson
-                if (selectedLesson == null) {
-                    messages.message(MessageParam(R1.string.error_no_lesson_selected))
-                    return@setOnClickListener
-                }
-                if (viewModel.state.value.isEditMode) {
-                    viewModel.updateHomework(
-                        homeworkId = viewModel.state.value.editingHomeworkId,
-                        description = inputDescription.state.text,
-                        attachedFiles = inputAttachedFiles.state.text,
-                        lessonId = selectedLesson.lessonId
-                    )
-                } else {
-                    viewModel.addHomework(
-                        description = inputDescription.state.text,
-                        attachedFiles = inputAttachedFiles.state.text,
-                        lessonId = selectedLesson.lessonId
-                    )
-                }
-            }
-            buttonsSaveCancel.btnCancel.setOnClickListener {
-                navigationManager.navigate(NavCommand.Back)
-            }
+        bindForm(focusTrack, viewModel) {
+            field(binding.inputDescription, { it.description }, viewModel::updateDescription)
         }
+
+        lessonAdapter = ListSelectAdapter(
+            toText = { lesson -> "${lesson?.subject?.name} - ${lesson?.startTime}" },
+            onItemSelected = { lesson -> viewModel.selectLesson(lesson?.lessonId) }
+        )
+        binding.selectLesson.attach(lessonAdapter, lessonAdapter, childFragmentManager)
+
+        binding.selectLesson.onShowing = {
+            lessonAdapter.submitList(viewModel.state.value.availableLessons)
+        }
+
+        binding.buttonsSaveCancel.toInit(loadingDelegate, viewModel::save, viewModel::cancel)
     }
 
     override fun updateState(state: TeacherHomeworkState) {
-        binding.apply {
-            inputDescription.check(focusTrack, state.description)
+        binding.inputDescription.check(focusTrack, state.description)
 
-            lessonRegister.updateItems(state.availableLessons)
+        val selectedText = state.selectedLesson?.let {
+            "${it.subject.name} - ${it.startTime} (${it.date.toBaseString()})"
+        } ?: ""
+        binding.selectLesson.state = binding.selectLesson.state.copy(selectText = selectedText)
 
-            val selectedLessonText = state.selectedLesson?.let { lesson ->
-                "${lesson.subject.name} - ${lesson.classInfo.name} (${lesson.date.toBaseString()})"
-            } ?: ""
-            selectLesson.state = selectLesson.state.copy(
-                title = getString(R1.string.lesson),
-                selectText = selectedLessonText
-            )
-
-            if (state.isEditMode) {
-                inputDescription.state =
-                    inputDescription.state.copy(text = state.description.value ?: "")
-                inputAttachedFiles.state = inputAttachedFiles.state.copy(text = state.attachedFiles)
-            }
-
-            buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isLoading
-        }
+        binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
     }
 
     override fun updateEvent(event: TeacherHomeworkEvent) {
         when (event) {
-            is TeacherHomeworkEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
-            is TeacherHomeworkEvent.EditHomework -> {}
-            is TeacherHomeworkEvent.NavigateToAdd -> {}
+            TeacherHomeworkEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
+            else -> {}
         }
     }
 }

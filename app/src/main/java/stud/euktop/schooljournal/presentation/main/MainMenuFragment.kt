@@ -85,7 +85,6 @@ class MainMenuFragment : Fragment() {
             navigationManager.navigate(NavCommand.ToDestination(R.id.studentHomeworkListFragment))
         }
 
-        // Новая кнопка для редактирования урока (администратор/директор)
         binding.btnLessonEdit.setOnClickListener {
             findNavController().navigate(R.id.lessonEditFragment)
         }

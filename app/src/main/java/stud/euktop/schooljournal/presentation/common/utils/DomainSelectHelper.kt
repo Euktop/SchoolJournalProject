@@ -3,16 +3,23 @@ package stud.euktop.schooljournal.presentation.common.utils
 import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import stud.euktop.domain.model.user.UserProfile
-import stud.euktop.domain.model.user.UserFilter
+import stud.euktop.domain.model.user.UserListItem
 import stud.euktop.domain.repository.UserAdminRepository
-import stud.euktop.schooljournal.presentation.common.filter.subject.SubjectFilterDialog
+import stud.euktop.schooljournal.presentation.common.filter.user.AppUserFilter
 import stud.euktop.schooljournal.presentation.common.filter.user.UserFilterDialog
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.RepositoryExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.uikit.components.input.select.ListSafe
+import stud.euktop.uikit.components.adapter.SchJTextAdapter
+import stud.euktop.uikit.components.input.select.content.SelectableAdapter
 import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+
+fun UserListItem.fullName(): String = buildString {
+    append(lastName)
+    append(" ")
+    append(firstName)
+    surName?.let { append(" ").append(it) }
+}.trim()
 
 object DomainSelectHelper {
 
@@ -21,10 +28,10 @@ object DomainSelectHelper {
         fragmentManager: FragmentManager,
         repository: UserAdminRepository,
         coordinatorExec: CoordinatorExec,
-        crossinline onSelected: (UserProfile?, UserFilter) -> Unit,
+        crossinline onSelected: (UserListItem?, AppUserFilter) -> Unit,
         onErrorModel: RepositoryExec,
-        initialSelectedItem: UserProfile? = null,
-        initialFilter: UserFilter = UserFilter(),
+        initialSelectedItem: UserListItem? = null,
+        initialFilter: AppUserFilter = AppUserFilter(),
     ) = setupUserSelect(
         select = select,
         fragmentManager = fragmentManager,
@@ -38,10 +45,8 @@ object DomainSelectHelper {
                     null
                 }
 
-                is CoordinatorResult.Success<List<UserProfile>> -> {
-                    result.result
-                }
-            }
+                is CoordinatorResult.Success<List<UserListItem>> -> result.result
+            } ?: emptyList()
         },
         onSelected = onSelected,
         initialSelectedItem = initialSelectedItem,
@@ -52,35 +57,32 @@ object DomainSelectHelper {
     inline fun CoroutineScope.setupUserSelect(
         select: SchJSearchableSelect,
         fragmentManager: FragmentManager,
-        crossinline loadItems: suspend () -> List<UserProfile>?,
-        crossinline onSelected: (UserProfile?, UserFilter) -> Unit,
-        initialSelectedItem: UserProfile? = null,
+        noinline loadItems: suspend () -> List<UserListItem>,
+        crossinline onSelected: (UserListItem?, AppUserFilter) -> Unit,
+        initialSelectedItem: UserListItem? = null,
         onErrorModel: RepositoryExec,
-        initialFilter: UserFilter = UserFilter(),
+        initialFilter: AppUserFilter = AppUserFilter(),
     ) {
-        var initialFilter = initialFilter
-        var list: List<UserProfile> = emptyList()
+        var currentFilter = initialFilter
         setupSearchableSelect(
             select = select,
             fragmentManager = fragmentManager,
-            loadItems = {
-                val result = loadItems()
-                if (result != null) list = result
-                list
-            },
-            toText = { it?.fullName ?: "" },
-            onSelected = { onSelected(it, initialFilter) },
+            loadItems = loadItems,
+            toText = { it?.fullName() ?: "" },
+            onSelected = { item -> onSelected(item, currentFilter) },
             showFilterDialog = {
                 if (fragmentManager.findFragmentByTag(UserFilterDialog.TAG) != null) return@setupSearchableSelect
                 val dialog = UserFilterDialog(
-                    initialFilter, { initialFilter = it }, onErrorModel.onError
+                    currentFilter, { newFilter ->
+                        currentFilter = newFilter
+                        // можно перезагрузить список, если нужно
+                    }, onErrorModel.onError
                 )
-                dialog.show(fragmentManager, SubjectFilterDialog.TAG)
+                dialog.show(fragmentManager, UserFilterDialog.TAG)
             },
             initialSelectedItem = initialSelectedItem
         )
     }
-
 
     fun <T : Any> CoroutineScope.setupSearchableSelect(
         select: SchJSearchableSelect,
@@ -90,44 +92,30 @@ object DomainSelectHelper {
         onSelected: (T?) -> Unit,
         showFilterDialog: (() -> Unit)? = null,
         initialSelectedItem: T? = null
-    ): SchJSearchableSelect.RegisterList<T> {
-        var register: SchJSearchableSelect.RegisterList<T>? = null
-        val itemsSafe = ListSafe<T>(
-            toText = toText, onClick = { item, _ -> onSelected(item) })
-        register = addSearchableSelect(
-            select = select,
-            fragmentManager = fragmentManager,
-            items = itemsSafe,
-            initialSelectedItem = initialSelectedItem,
-            showFilterDialog = showFilterDialog,
-            onShowing = {
-                launch {
-                    register?.updateItems(loadItems())
-                }
-            })
-        return register
-    }
+    ) {
+        var adapter: SchJTextAdapter<T>? = null
+        select.onShowing = {
+            launch {
+                val items = loadItems()
+                adapter = SchJTextAdapter(object : SchJTextAdapter.Listener<T> {
+                    override fun onClick(value: T) {
+                        onSelected(value)
+                        select.state = select.state.copy(selectText = toText(value))
+                    }
 
-    fun <T : Any> addSearchableSelect(
-        select: SchJSearchableSelect,
-        fragmentManager: FragmentManager,
-        items: ListSafe<T> = ListSafe(),
-        initialSelectedItem: T? = null,
-        showFilterDialog: (() -> Unit)? = null,
-        onShowing: (() -> Unit)? = null,
-    ): SchJSearchableSelect.RegisterList<T> {
-        fun updateText(v: T) {
-            select.state = select.state.copy(selectText = items.toText(v))
+                    override fun toText(value: T): String = toText(value)
+                    override fun isEquals(value1: T, value2: T): Boolean = value1 == value2
+                })
+                adapter.submitList(items)
+                select.attach(adapter, object : SelectableAdapter<T> {
+                    override var onItemSelected: (T?) -> Unit = onSelected
+                    override val toText: (value: T?) -> String = toText
+                }, fragmentManager, "", showFilterDialog)
+            }
         }
-
-        val register = select.RegisterList(items, showFilterDialog).apply {
-            register(fragmentManager)
-        }
-        select.onShowing = onShowing
-
+        // Устанавливаем начальный текст, если есть
         if (initialSelectedItem != null) {
-            updateText(initialSelectedItem)
+            select.state = select.state.copy(selectText = toText(initialSelectedItem))
         }
-        return register
     }
 }

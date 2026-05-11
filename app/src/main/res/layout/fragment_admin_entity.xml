@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="stud.euktop.schooljournal.presentation.main.admin.panel.AdminEntityFragment">
 
-    <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
-        android:id="@+id/rvEntity"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:padding="8dp" />
+        android:orientation="vertical">
+
+        <stud.euktop.uikit.components.filter.SchJFilterToolBar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorSurface"
+            app:menu="@menu/menu_filter"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="@string/homework_assignments" />
+        <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
+            android:id="@+id/rvEntity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="8dp" />
+    </LinearLayout>
 </FrameLayout>

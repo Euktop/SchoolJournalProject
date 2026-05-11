@@ -1,5 +1,7 @@
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
+import android.os.Bundle
+import stud.euktop.domain.model.assignment.AssignmentId
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.Nav1Directions
 import stud.euktop.schooljournal.R
@@ -59,5 +61,34 @@ class RouterImpl @Inject constructor(
 
     override suspend fun toCancelCreatePassword() {
         navigationManager.navigate(NavCommand.Back)
+    }
+
+    override fun navigateBack() {
+        navigationManager.navigate(NavCommand.Back)
+    }
+
+    override fun toEditUser(userId: Int) {
+        val bundle = Bundle().apply { putInt("userId", userId) }
+        navigationManager.navigate(NavCommand.ToDestination(R.id.userEditFragment, bundle))
+    }
+
+    override fun toEditClass(classId: Int) {
+        val bundle = Bundle().apply { putInt("classId", classId) }
+        navigationManager.navigate(NavCommand.ToDestination(R.id.classEditFragment, bundle))
+    }
+
+    override fun toEditSubject(subjectId: Int) {
+        val bundle = Bundle().apply { putInt("subjectId", subjectId) }
+        navigationManager.navigate(NavCommand.ToDestination(R.id.subjectEditFragment, bundle))
+    }
+
+    override fun toEditAssignment(assignmentId: AssignmentId) {
+        val bundle = Bundle().apply { putSerializable("assignmentId", assignmentId) }
+        navigationManager.navigate(
+            NavCommand.ToDestination(
+                R.id.teacherAssignmentEditFragment,
+                bundle
+            )
+        )
     }
 }

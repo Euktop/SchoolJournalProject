@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.update
 import stud.euktop.domain.repository.LessonMarksRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
+
 /**
  * ViewModel для экрана оценок за урок.
  *
@@ -22,7 +22,6 @@ import javax.inject.Inject
 class LessonMarksViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager,
     private val repository: LessonMarksRepository
 ) : BaseViewModel<LessonMarksState, Unit>() {
     companion object {
@@ -34,12 +33,13 @@ class LessonMarksViewModel @Inject constructor(
     override fun initState() = LessonMarksState()
 
     init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
+        executeCoordinator = coordinatorExec
         loadMarks()
     }
 
     fun loadMarks() {
-        executeWithCoordinatorAndLoadingSync(
+        executeWithLoadingSync(
+            key = "load_marks",
             block = { repository.getMarks(lessonId) },
             onSuccess = { marks -> _state.update { it.copy(marks = marks) } }
         )

@@ -1,26 +1,25 @@
-// presentation/common/filter/class/ClassFilterDialog.kt
 package stud.euktop.schooljournal.presentation.common.filter.classes
 
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.school.ClassInfoFilter
 import stud.euktop.domain.model.school.School
-import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.domain.model.school.SchoolFilter
+import stud.euktop.domain.model.user.UserFilter
+import stud.euktop.domain.model.user.UserListItem
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.base.BaseFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.school.SchoolFilterDialog
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.uikit.components.filter.FilterFieldBuilder
 import stud.euktop.uikit.components.input.SchJInput
-import stud.euktop.uikit.components.input.select.ListSafe
 
 @AndroidEntryPoint
 class ClassFilterDialog(
-    initialFilter: ClassInfoFilter,
-    onFilterApplied: (ClassInfoFilter) -> Unit,
+    initialFilter: AppClassInfoFilter,
+    onFilterApplied: (AppClassInfoFilter) -> Unit,
     onError: (CoordinatorResult.Error) -> Unit
-) : BaseFilterDialog<ClassFilterViewModel, ClassInfoFilter>(
+) : BaseFilterDialog<ClassFilterViewModel, AppClassInfoFilter>(
     initialFilter, onFilterApplied, onError
 ) {
 
@@ -32,7 +31,7 @@ class ClassFilterDialog(
 
     private lateinit var schoolSelectResult: FilterFieldBuilder.AddSearchableSelectResult<School>
     private lateinit var classSearchInput: SchJInput
-    private lateinit var teacherSelectResult: FilterFieldBuilder.AddSearchableSelectResult<UserProfile>
+    private lateinit var teacherSelectResult: FilterFieldBuilder.AddSearchableSelectResult<UserListItem>
     private lateinit var yearStartInput: SchJInput
     private lateinit var yearEndInput: SchJInput
 
@@ -43,31 +42,32 @@ class ClassFilterDialog(
 
     private suspend fun setupSchools() {
         viewModel.schools.collect { schools ->
-            schoolSelectResult.register.updateItems(schools)
+            schoolSelectResult.updateItems(schools)
         }
     }
 
     private suspend fun setupTeachers() {
         viewModel.teachers.collect { teachers ->
-            teacherSelectResult.register.updateItems(teachers)
+            teacherSelectResult.updateItems(teachers)
         }
     }
 
     override fun setupFilterFields(container: LinearLayout) {
-        // Выбор школы
+        // Выбор школы (исправленный вызов addSearchableSelect)
         schoolSelectResult = FilterFieldBuilder.addSearchableSelect(
             parent = container,
             fragmentManager = childFragmentManager,
             title = getString(R.string.school),
-            items = ListSafe(
-                toText = { it?.name ?: "" },
-                onClick = { school, _ -> initialFilter = initialFilter.copy(school = school) }
-            ),
+            items = emptyList(),  // начальный пустой список, обновится через updateItems
+            toText = { it?.name ?: "" },
+            onSelected = { school ->
+                initialFilter = initialFilter.copy(school = school)
+            },
             initialSelectedItem = initialFilter.school,
             showFilterDialog = {
                 if (parentFragmentManager.findFragmentByTag(SchoolFilterDialog.TAG) != null) return@addSearchableSelect
                 val dialog = SchoolFilterDialog(
-                    initialFilter = initialFilter.schoolFilter,
+                    initialFilter = initialFilter.schoolFilter ?: SchoolFilter(),
                     onFilterApplied = { schoolFilter ->
                         initialFilter = initialFilter.copy(schoolFilter = schoolFilter)
                         viewModel.loadSchools(schoolFilter)
@@ -76,7 +76,7 @@ class ClassFilterDialog(
                 )
                 dialog.show(parentFragmentManager, SchoolFilterDialog.TAG)
             },
-            onShowing = { viewModel.loadSchools(initialFilter.schoolFilter) }
+            onShowing = { viewModel.loadSchools(initialFilter.schoolFilter ?: SchoolFilter()) }
         )
 
         // Поиск класса (строка, например "5А")
@@ -86,17 +86,18 @@ class ClassFilterDialog(
             initialValue = initialFilter.query ?: ""
         )
 
-        // Выбор учителя
+        // Выбор учителя (исправленный вызов addSearchableSelect)
         teacherSelectResult = FilterFieldBuilder.addSearchableSelect(
             parent = container,
             fragmentManager = childFragmentManager,
             title = getString(R.string.class_teacher),
-            items = ListSafe(
-                toText = { it?.fullName ?: "" },
-                onClick = { teacher, _ -> initialFilter = initialFilter.copy(teacher = teacher) }
-            ),
+            items = emptyList(),
+            toText = { user -> user?.let { "${it.lastName} ${it.firstName}" } ?: "" },
+            onSelected = { teacher ->
+                initialFilter = initialFilter.copy(teacher = teacher)
+            },
             initialSelectedItem = initialFilter.teacher,
-            onShowing = { viewModel.loadTeachers(initialFilter.teacherFilter) }
+            onShowing = { viewModel.loadTeachers(initialFilter.teacherFilter ?: UserFilter()) }
         )
 
         // Год начала
@@ -120,10 +121,10 @@ class ClassFilterDialog(
         teacherSelectResult.select.state = teacherSelectResult.select.state.copy(selectText = "")
         yearStartInput.state = yearStartInput.state.copy(text = "")
         yearEndInput.state = yearEndInput.state.copy(text = "")
-        initialFilter = ClassInfoFilter()
+        initialFilter = AppClassInfoFilter()
     }
 
-    override fun collectFilter(): ClassInfoFilter {
+    override fun collectFilter(): AppClassInfoFilter {
         return initialFilter.copy(
             query = classSearchInput.state.text.takeIf { it.isNotBlank() },
             academicYearStart = yearStartInput.state.text.toIntOrNull(),

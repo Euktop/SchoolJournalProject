@@ -20,6 +20,7 @@ import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.filter.school.SchoolFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.user.UserFilterDialog
+import stud.euktop.schooljournal.presentation.common.filter.user.toApp
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import stud.euktop.schooljournal.presentation.common.utils.check
 
@@ -96,8 +97,8 @@ class ClassEditFragment :
 
     private fun showTeacherFilterDialog() {
         UserFilterDialog(
-            initialFilter = teacherFilterFlow.value,
-            onFilterApplied = { teacherFilterFlow.value = it },
+            initialFilter = teacherFilterFlow.value.toApp(viewModel.state.value.school),
+            onFilterApplied = { teacherFilterFlow.value = it.toDomainFilter() },
             onError = viewModel.onError
         ).show(childFragmentManager, "teacher_filter")
     }

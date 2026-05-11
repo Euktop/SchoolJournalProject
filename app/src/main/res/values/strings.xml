@@ -102,8 +102,11 @@
     <string name="not_specified">Not specified</string>
     <string name="no_school">without school</string>
     <string name="homework_assignments">Homework assignments</string>
-    <string name="logging_in">Выполняем вход</string>
-    <string name="saving">Сохранение</string>
-    <string name="not_granted">Нет доступа</string>
-    <string name="class_name">Имя класса</string>
+    <string name="logging_in">Logging in</string>
+    <string name="saving">Saving</string>
+    <string name="not_granted">No access</string>
+    <string name="class_name">Class name</string>
+    <string name="valid_period">Valid during the period</string>
+    <string name="subjects">Subjects</string>
+    <string name="assignments">Assignments</string>
 </resources>

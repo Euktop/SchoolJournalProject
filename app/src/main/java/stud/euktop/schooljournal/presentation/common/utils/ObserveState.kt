@@ -21,3 +21,4 @@ inline fun <T> LifecycleOwner.observeState(
 ) {
     observeState(stateFlow, block)
 }
+

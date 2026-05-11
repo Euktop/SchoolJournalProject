@@ -28,5 +28,5 @@ data class ClassEditState(
         else -> true
     }
 
-    override fun updateLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
 }

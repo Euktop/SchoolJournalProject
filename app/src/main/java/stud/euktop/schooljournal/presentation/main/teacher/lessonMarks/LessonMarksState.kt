@@ -4,9 +4,10 @@ import stud.euktop.domain.model.attendance.StudentMarkItem
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 
 data class LessonMarksState(
-    override val isLoading: Boolean = false,
-    val marks: List<StudentMarkItem> = emptyList()
+    val marks: List<StudentMarkItem> = emptyList(),
+    override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<LessonMarksState>() {
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    override fun updateIsLoading(loadingMap: Map<String, Boolean>): LessonMarksState =
+        copy(loadingMap = loadingMap)
 }
 

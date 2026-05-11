@@ -108,8 +108,8 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
         )
     }
 
-    protected inline fun <T> CoroutineScope.executeCoordinatorResult(
-        crossinline block: suspend () -> Result<T>
+    protected fun <T> CoroutineScope.executeCoordinatorResult(
+        block: suspend () -> Result<T>
     ) =
         async {
             val result = executeCoordinator.exec { block() }

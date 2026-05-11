@@ -58,13 +58,36 @@ class SchJStatefulRecyclerView @JvmOverloads constructor(
         update()
     }
 
+    private val observer = object : RecyclerView.AdapterDataObserver() {
+        override fun onChanged() {
+            update()
+        }
+
+        override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+            update()
+        }
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            update()
+        }
+
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+            update()
+        }
+
+        override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+            update()
+        }
+    }
     var adapter: RecyclerView.Adapter<*>?
         get() {
             update()
             return binding.recyclerView.adapter
         }
         set(value) {
+            binding.recyclerView.adapter?.unregisterAdapterDataObserver(observer)
             binding.recyclerView.adapter = value
+            binding.recyclerView.adapter?.registerAdapterDataObserver(observer)
             update()
         }
     val recyclerView
