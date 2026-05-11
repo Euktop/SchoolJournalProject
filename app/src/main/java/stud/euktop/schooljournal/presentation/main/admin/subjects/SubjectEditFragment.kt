@@ -1,4 +1,3 @@
-// presentation/main/admin/subjects/SubjectEditFragment.kt
 package stud.euktop.schooljournal.presentation.main.admin.subjects
 
 import android.view.LayoutInflater
@@ -7,50 +6,39 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.databinding.FragmentSubjectEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.binding.bindForm
+import stud.euktop.schooljournal.presentation.common.binding.toInit
+import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
-import stud.euktop.schooljournal.presentation.common.utils.check
-import stud.euktop.schooljournal.presentation.common.utils.setup
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SubjectEditFragment : BaseFragment<
         FragmentSubjectEditBinding,
         SubjectEditViewModel,
         SubjectEditState,
-        SubjectEditEvent
-        >() {
-
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentSubjectEditBinding.inflate(i, c, false)
+        Unit>() {
 
     override val viewModel: SubjectEditViewModel by viewModels()
-
     private val focusTrack = FocusTrack()
+    private lateinit var loadingDelegate: LoadingDelegate<SubjectEditState>
 
-    @Inject
-    lateinit var navigationManager: NavigationManager
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentSubjectEditBinding.inflate(inflater, container, false)
 
     override fun setupUI() {
-        binding.apply {
-            inputName.setup(focusTrack) { viewModel.updateName(it) }
-            inputDescription.setup(focusTrack) { viewModel.updateDescription(it) }
-            buttonsSaveCancel.btnSave.setOnClickListener { viewModel.save() }
-            buttonsSaveCancel.btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
+        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
+
+        bindForm(focusTrack, viewModel) {
+            field(binding.inputName, { it.name }, viewModel::updateName)
+            field(binding.inputDescription, { it.description }, viewModel::updateDescription)
         }
+
+        binding.buttonsSaveCancel.toInit(loadingDelegate, viewModel::save, viewModel::cancel)
     }
 
     override fun updateState(state: SubjectEditState) {
-        binding.apply {
-            inputName.check(focusTrack, state.name)
-            buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
-        }
+        binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
     }
 
-    override fun updateEvent(event: SubjectEditEvent) {
-        when (event) {
-            SubjectEditEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
-        }
-    }
+    override fun updateEvent(event: Unit) {}
 }

@@ -1,6 +1,7 @@
 package stud.euktop.schooljournal.presentation.common.binding
 
 import androidx.fragment.app.Fragment
+import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.utils.validation.ValidatorInterface
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel

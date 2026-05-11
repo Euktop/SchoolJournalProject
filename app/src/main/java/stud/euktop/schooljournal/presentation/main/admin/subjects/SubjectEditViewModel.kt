@@ -1,75 +1,95 @@
+// presentation/main/admin/subjects/SubjectEditViewModel.kt
 package stud.euktop.schooljournal.presentation.main.admin.subjects
 
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.model.school.SubjectUpdate
 import stud.euktop.domain.repository.SubjectAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
-import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.contract.action.SubjectFormActions
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import javax.inject.Inject
 
 @HiltViewModel
 class SubjectEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager,
-    private val subjectAdminRepository: SubjectAdminRepository
-) : BaseViewModel<SubjectEditState, SubjectEditEvent>() {
+    private val repository: SubjectAdminRepository,
+    private val routerAdmin: RouterAdmin
+) : BaseViewModel<SubjectEditState, Unit>(), SubjectFormActions {
 
-    companion object {
-        const val KEY_SUBJECT_ID = "subjectId"
-    }
+    private val subjectId: Int = savedStateHandle["subjectId"] ?: 0
+    private val isEditMode get() = subjectId != 0
 
-    private val subjectId: Int = savedStateHandle[KEY_SUBJECT_ID] ?: 0
+    override fun initState() = SubjectEditState()
 
     init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
-        if (subjectId != 0) loadSubject()
+        if (isEditMode) loadSubject()
     }
 
-    override fun initState() = SubjectEditState(subjectId = subjectId)
-
     private fun loadSubject() {
-        executeWithCoordinatorAndLoadingSync(
-            block = { subjectAdminRepository.getSubject(subjectId) },
+        executeWithLoadingSync(
+            key = "load",
+            block = { repository.getSubject(subjectId) },
             onSuccess = { subject ->
                 _state.update {
                     it.copy(
-                        subjectId = subject.subjectId,
                         name = it.name.copy(subject.name),
-                        description = subject.description ?: ""
+                        description = it.description.copy(subject.description ?: ""),
+                        originalName = subject.name,
+                        originalDescription = subject.description
                     )
                 }
             }
         )
     }
 
-    fun updateName(value: String) {
+    override fun updateName(value: String) {
         _state.update { it.copy(name = it.name.copy(value)) }
     }
 
-    fun updateDescription(value: String) {
-        _state.update { it.copy(description = value) }
+    override fun updateDescription(value: String) {
+        _state.update { it.copy(description = it.description.copy(value)) }
     }
 
     fun save() {
+        if (!_state.value.isFormValid()) return
         val state = _state.value
-        if (!state.isFormValid()) return
 
-        val subject = Subject(
-            subjectId = state.subjectId,
-            name = state.name.getValidate(),
-            description = state.description.takeIf { it.isNotBlank() }
-        )
+        if (isEditMode) {
+            val nameChanged = state.name.value != state.originalName
+            val descriptionChanged = state.description.value != state.originalDescription
 
-        executeWithCoordinatorAndLoadingSync(
-            block = {
-                if (state.isEditMode()) subjectAdminRepository.updateSubject(subject)
-                else subjectAdminRepository.addSubject(subject)
-            },
-            onSuccess = { _event.emit(SubjectEditEvent.NavigateBack) }
-        )
+            val update = SubjectUpdate(
+                subjectId = subjectId,
+                name = Field(state.name.getValidate(), nameChanged),
+                description = Field(
+                    state.description.getValidate().takeIf { it.isNotBlank() },
+                    descriptionChanged
+                )
+            )
+            executeWithLoadingSync(
+                key = "save",
+                block = { repository.updateSubject(update) },
+                onSuccess = { routerAdmin.navigateBack() }
+            )
+        } else {
+            val subject = Subject(
+                subjectId = 0,
+                name = state.name.getValidate(),
+                description = state.description.getValidate().takeIf { it.isNotBlank() }
+            )
+            executeWithLoadingSync(
+                key = "save",
+                block = { repository.addSubject(subject) },
+                onSuccess = { routerAdmin.navigateBack() }
+            )
+        }
+    }
+
+    fun cancel() {
+        routerAdmin.navigateBack()
     }
 }

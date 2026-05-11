@@ -8,7 +8,7 @@ sealed interface CoordinatorResult<out T> {
     ) : CoordinatorResult<T>
 
     data class Error(
-        val navCommand: NavCommand,
-        @param: StringRes val messageId: Int
+        val navAction: () -> Unit,
+        @param:StringRes val messageId: Int
     ) : CoordinatorResult<Nothing>
 }

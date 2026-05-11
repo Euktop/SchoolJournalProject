@@ -1,20 +1,18 @@
 // presentation/main/admin/subjects/SubjectEditState.kt
 package stud.euktop.schooljournal.presentation.main.admin.subjects
 
+import stud.euktop.domain.utils.validation.EmptyValidator
 import stud.euktop.domain.utils.validation.TextThereValidator
-import stud.euktop.domain.utils.validation.Validator
 import stud.euktop.schooljournal.presentation.common.base.BaseState
+import stud.euktop.schooljournal.presentation.common.contract.state.SubjectFormState
 
 data class SubjectEditState(
-    override val isLoading: Boolean = false,
-    val subjectId: Int = 0,
-    val name: TextThereValidator = TextThereValidator(),
-    val description: String = ""
-) : BaseState<SubjectEditState>() {
-
-    fun isEditMode() = subjectId != 0
-
-    fun isFormValid(): Boolean = Validator.isAllValidate(name)
-
-    override fun updateIsLoading(isLoading: Boolean) = copy(isLoading = isLoading)
+    override val name: TextThereValidator = TextThereValidator(),
+    override val description: EmptyValidator<String> = EmptyValidator(),
+    val originalName: String = "",
+    val originalDescription: String? = null,
+    override val loadingMap: Map<String, Boolean> = emptyMap()
+) : BaseState<SubjectEditState>(), SubjectFormState {
+    fun isFormValid() = name.validate()
+    override fun updateLoading(loadingMap: Map<String, Boolean>) = copy(loadingMap = loadingMap)
 }

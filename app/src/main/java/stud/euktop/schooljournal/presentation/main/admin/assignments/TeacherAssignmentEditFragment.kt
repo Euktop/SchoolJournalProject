@@ -1,136 +1,129 @@
 package stud.euktop.schooljournal.presentation.main.admin.assignments
 
-import android.app.DatePickerDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.school.ClassInfo
-import stud.euktop.domain.model.school.Subject
-import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherAssignmentEditBinding
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
-import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
-import stud.euktop.schooljournal.presentation.main.admin.common.base.BaseEditFragment
-import stud.euktop.uikit.components.datePicker.SchJDatePicker
-import stud.euktop.uikit.components.input.select.ListSafe
-import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
-import javax.inject.Inject
+import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.binding.bindDate
+import stud.euktop.schooljournal.presentation.common.binding.bindPagingSelect
+import stud.euktop.schooljournal.presentation.common.binding.toInit
+import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @AndroidEntryPoint
 class TeacherAssignmentEditFragment :
-    BaseEditFragment<
+    BaseFragment<
             FragmentTeacherAssignmentEditBinding,
             TeacherAssignmentEditViewModel,
-            TeacherAssignmentEditState
+            TeacherAssignmentEditState,
+            Unit
             >() {
 
-    @Inject
-    override lateinit var navigationManager: NavigationManager
-
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentTeacherAssignmentEditBinding.inflate(i, c, false)
-
     override val viewModel: TeacherAssignmentEditViewModel by viewModels()
+    private lateinit var loadingDelegate: LoadingDelegate<TeacherAssignmentEditState>
+    private val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
 
-    private val focusTrack = FocusTrack()
-    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserProfile>
-    private lateinit var classRegister: SchJSearchableSelect.RegisterList<ClassInfo>
-    private lateinit var subjectRegister: SchJSearchableSelect.RegisterList<Subject>
-    private var fromDateDialog: DatePickerDialog? = null
-    private var toDateDialog: DatePickerDialog? = null
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentTeacherAssignmentEditBinding.inflate(inflater, container, false)
 
     override fun setupUI() {
-        binding.apply {
-            // Учитель
-            val teacherListSafe = ListSafe<UserProfile>(
-                toText = { it?.let { "${it.lastName} ${it.firstName}" } ?: "" },
-                onClick = { teacher, _ -> viewModel.updateTeacher(teacher) }
-            )
-            teacherRegister = selectTeacher.RegisterList(teacherListSafe)
-            teacherRegister.register(childFragmentManager)
-            selectTeacher.onShowing = { viewModel.loadTeachers("") }
+        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
 
-            // Класс
-            val classListSafe = ListSafe<ClassInfo>(
-                toText = { it?.name ?: "" },
-                onClick = { classInfo, _ -> viewModel.updateClass(classInfo) }
-            )
-            classRegister = selectClass.RegisterList(classListSafe)
-            classRegister.register(childFragmentManager)
-            selectClass.onShowing = { viewModel.loadClasses("") }
+        // Учитель
+        bindPagingSelect(
+            select = binding.selectTeacher,
+            viewModel = viewModel,
+            title = getString(R.string.teacher),
+            filterFlow = viewModel.teacherFilterFlow,
+            getPagingDataFlow = viewModel::getTeachersPagingDataFlow,
+            getSelectedValue = { it.teacher },
+            toText = { it?.let { "${it.lastName} ${it.firstName}" } ?: "" },
+            onSelected = viewModel::updateTeacher,
+            onFilterClick = { /* можно добавить фильтр учителей */ },
+            fragmentManager = childFragmentManager,
+            lifecycleOwner = viewLifecycleOwner
+        )
 
-            // Предмет
-            val subjectListSafe = ListSafe<Subject>(
-                toText = { it?.name ?: "" },
-                onClick = { subject, _ -> viewModel.updateSubject(subject) }
-            )
-            subjectRegister = selectSubject.RegisterList(subjectListSafe)
-            subjectRegister.register(childFragmentManager)
-            selectSubject.onShowing = { viewModel.loadSubjects("") }
+        // Класс
+        bindPagingSelect(
+            select = binding.selectClass,
+            viewModel = viewModel,
+            title = getString(R.string.class_name),
+            filterFlow = viewModel.classFilterFlow,
+            getPagingDataFlow = viewModel::getClassesPagingDataFlow,
+            getSelectedValue = { it.classInfo },
+            toText = { it?.let { "${it.grade}${it.letter}" } ?: "" },
+            onSelected = viewModel::updateClass,
+            onFilterClick = { /* фильтр классов */ },
+            fragmentManager = childFragmentManager,
+            lifecycleOwner = viewLifecycleOwner
+        )
 
-            inputValidFrom.setOnClickListener {
-                showDatePicker(true)
-            }
-            inputValidTo.setOnClickListener {
-                showDatePicker(false)
-            }
+        // Предмет
+        bindPagingSelect(
+            select = binding.selectSubject,
+            viewModel = viewModel,
+            title = getString(R.string.subject),
+            filterFlow = viewModel.subjectFilterFlow,
+            getPagingDataFlow = viewModel::getSubjectsPagingDataFlow,
+            getSelectedValue = { it.subject },
+            toText = { it?.name ?: "" },
+            onSelected = viewModel::updateSubject,
+            onFilterClick = { /* фильтр предметов */ },
+            fragmentManager = childFragmentManager,
+            lifecycleOwner = viewLifecycleOwner
+        )
 
-            chkIsPrimary.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.updateIsPrimary(isChecked)
-            }
+        // Дата начала
+        bindDate(
+            input = binding.inputValidFrom,
+            viewModel = viewModel,
+            getter = { it.validFrom },
+            setter = viewModel::updateValidFrom,
+            format = dateFormat
+        )
 
-            buttonsSaveCancel.btnSave.setOnClickListener { viewModel.save() }
-            buttonsSaveCancel.btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
+        // Дата окончания
+        bindDate(
+            input = binding.inputValidTo,
+            viewModel = viewModel,
+            getter = { it.validTo },
+            setter = viewModel::updateValidTo,
+            format = dateFormat
+        )
+
+        // Чекбокс "Основной"
+        binding.chkIsPrimary.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateIsPrimary(isChecked)
         }
-    }
 
-    private fun showDatePicker(isFrom: Boolean) {
-        val currentDate =
-            if (isFrom) viewModel.state.value.validFrom else viewModel.state.value.validTo
-        val datePicker = SchJDatePicker(
-            context = requireContext(),
-            onDateSelected = { selectedDate ->
-                if (isFrom) viewModel.updateValidFrom(selectedDate)
-                else viewModel.updateValidTo(selectedDate)
-            }
-        ).apply {
-            state = state.copy(selectedDate = currentDate)
-        }
-        if (isFrom) fromDateDialog?.dismiss()
-        else toDateDialog?.dismiss()
-        if (isFrom) fromDateDialog = datePicker
-        else toDateDialog = datePicker
-        datePicker.showUnique()
+        // Кнопки Сохранить/Отмена
+        binding.buttonsSaveCancel.toInit(loadingDelegate, viewModel::save, viewModel::cancel)
     }
 
     override fun updateState(state: TeacherAssignmentEditState) {
-        binding.apply {
-            teacherRegister.updateItems(state.availableTeachers)
-            classRegister.updateItems(state.availableClasses)
-            subjectRegister.updateItems(state.availableSubjects)
-
-            selectTeacher.state = selectTeacher.state.copy(
-                selectText = state.teacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
-            )
-            selectClass.state = selectClass.state.copy(
-                selectText = state.classInfo?.let { "${it.grade}${it.letter} (${it.school.name})" }
-                    ?: ""
-            )
-            selectSubject.state = selectSubject.state.copy(
-                selectText = state.subject?.name ?: ""
-            )
-
-            inputValidFrom.state = inputValidFrom.state.copy(
-                text = state.validFrom?.let { state.dateFormat.format(it) } ?: ""
-            )
-            inputValidTo.state = inputValidTo.state.copy(
-                text = state.validTo?.let { state.dateFormat.format(it) } ?: ""
-            )
-            chkIsPrimary.isChecked = state.isPrimary
-
-            buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isLoading
-        }
+        binding.selectTeacher.state = binding.selectTeacher.state.copy(
+            selectText = state.teacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
+        )
+        binding.selectClass.state = binding.selectClass.state.copy(
+            selectText = state.classInfo?.let { "${it.grade}${it.letter}" } ?: ""
+        )
+        binding.selectSubject.state = binding.selectSubject.state.copy(
+            selectText = state.subject?.name ?: ""
+        )
+        binding.inputValidFrom.state = binding.inputValidFrom.state.copy(
+            text = state.validFrom?.let { dateFormat.format(it) } ?: ""
+        )
+        binding.inputValidTo.state = binding.inputValidTo.state.copy(
+            text = state.validTo?.let { dateFormat.format(it) } ?: ""
+        )
+        binding.chkIsPrimary.isChecked = state.isPrimary
+        binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
     }
+
+    override fun updateEvent(event: Unit) { /* не используется */ }
 }

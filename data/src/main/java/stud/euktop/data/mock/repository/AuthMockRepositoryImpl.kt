@@ -4,7 +4,6 @@ package stud.euktop.data.mock.repository
 import stud.euktop.data.mock.data.MockDelayService
 import stud.euktop.data.mock.data.MockUserDataSource
 import stud.euktop.domain.model.common.DataError
-import stud.euktop.domain.model.user.UserAuth
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.model.user.UserRole
 import stud.euktop.domain.repository.AuthRepository
@@ -16,18 +15,18 @@ import javax.inject.Singleton
 class AuthMockRepositoryImpl @Inject constructor() : AuthRepository {
     private var currentUser: UserProfile? = MockUserDataSource.currentUser
 
-    override suspend fun login(login: String, passwordHash: String): Result<UserAuth> {
+    override suspend fun login(login: String, passwordHash: String): Result<Unit> {
         MockDelayService.delay()
         val user = currentUser ?: return Result.failure(DataError.UserNotFound("User not found"))
-        return Result.success(UserAuth(user.userId, "mock-token", listOf(1)))
+        return Result.success(Unit)
     }
 
-    override suspend fun registration(profile: UserProfile, password: String): Result<UserAuth> {
+    override suspend fun registration(profile: UserProfile, password: String): Result<Unit> {
         MockDelayService.delay()
         val roles = profile.roles.map { UserRole(it.role, it.schoolId, Date()) }
         val created = MockUserDataSource.addUser(profile, roles)
         currentUser = created
-        return Result.success(UserAuth(created.userId, "mock-token", roles.map { it.role.ordinal }))
+        return Result.success(Unit)
     }
 
     override suspend fun getCurrentUser(): Result<UserProfile> {

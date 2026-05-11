@@ -3,6 +3,7 @@ package stud.euktop.schooljournal.presentation.common.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,7 +15,6 @@ import stud.euktop.schooljournal.presentation.common.message.contract.MessagePar
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.RepositoryExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 
 abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(), RepositoryExec {
 
@@ -22,6 +22,7 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
 
     protected val _state = MutableStateFlow(initState())
     val state = _state.asStateFlow()
+    fun isLoading(key: String) = _state.value.isLoading(key)
 
     protected val _event = MutableSharedFlow<EVENT>()
     val event = _event.asSharedFlow()
@@ -35,7 +36,7 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
                 MessageEvent.Message(
                     MessageParam(
                         message = result.messageId,
-                        action = { executeCoordinator.navigationManager.navigate(result.navCommand) }
+                        action = { result.navAction() }
                     )
                 )
             )
@@ -57,6 +58,17 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
             block()
         } finally {
             stopLoading(key)
+        }
+    }
+
+    protected fun withLoadingSync(key: String, block: suspend CoroutineScope.() -> Unit) {
+        viewModelScope.launch {
+            startLoading(key)
+            try {
+                block()
+            } finally {
+                stopLoading(key)
+            }
         }
     }
 
@@ -91,10 +103,22 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
         noinline onSuccess: suspend (T) -> Unit
     ) {
         executeCoordinator(
-            block = { executeCoordinator.coordinatorExec.exec { block() } },
+            block = { executeCoordinator.exec { block() } },
             onSuccess = onSuccess
         )
     }
+
+    protected inline fun <T> CoroutineScope.executeCoordinatorResult(
+        crossinline block: suspend () -> Result<T>
+    ) =
+        async {
+            val result = executeCoordinator.exec { block() }
+            when (result) {
+                is CoordinatorResult.Success -> return@async result.result
+                is CoordinatorResult.Error -> onError.invoke(result)
+            }
+            return@async null
+        }
 
     protected suspend inline fun <T> executeCoordinator(
         block: suspend () -> CoordinatorResult<T>,
@@ -120,10 +144,5 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
     ) = viewModelScope.launch { executeLoadingBlock(key, block, onSuccess) }
 
     // ========== Координатор (инициализируется извне) ==========
-    protected lateinit var executeCoordinator: ExecuteCoordinator
-
-    protected data class ExecuteCoordinator(
-        val coordinatorExec: CoordinatorExec,
-        val navigationManager: NavigationManager
-    )
+    protected lateinit var executeCoordinator: CoordinatorExec
 }

@@ -104,4 +104,6 @@
     <string name="homework_assignments">Homework assignments</string>
     <string name="logging_in">Выполняем вход</string>
     <string name="saving">Сохранение</string>
+    <string name="not_granted">Нет доступа</string>
+    <string name="class_name">Имя класса</string>
 </resources>

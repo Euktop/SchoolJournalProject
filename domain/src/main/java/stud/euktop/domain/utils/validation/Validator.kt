@@ -18,8 +18,8 @@ abstract class Validator<T, V : Validator<T, V>> : ValidatorInterface<T> {
     }
 
     companion object {
-        fun isAllValidate(vararg values: Validator<*, *>) =
-            values.all { it.validate() }
+        fun isAllValidate(vararg values: Validator<*, *>?) =
+            values.all { it?.validate() == true }
 
         fun isAllNullValidate(vararg values: Any?) = values.all { it != null }
     }

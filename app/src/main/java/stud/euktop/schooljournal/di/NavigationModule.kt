@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHandler
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
@@ -36,4 +37,8 @@ abstract class NavigationModule {
     @Binds
     @Singleton
     abstract fun bindsRouterAuthorization(routerAuthorization: RouterImpl): RouterAuthorization
+
+    @Binds
+    @Singleton
+    abstract fun bindsRouterAdmin(routerAdmin: RouterImpl): RouterAdmin
 }

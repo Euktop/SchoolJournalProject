@@ -1,134 +1,123 @@
 package stud.euktop.schooljournal.presentation.main.admin.classes
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.update
+import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.model.school.ClassInfo
-import stud.euktop.domain.model.user.Role
+import stud.euktop.domain.model.school.ClassInfoUpdate
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.school.SchoolFilter
+import stud.euktop.domain.model.user.Role
+import stud.euktop.domain.model.user.UserFilter
 import stud.euktop.domain.model.user.UserProfile
-import stud.euktop.domain.repository.*
-import stud.euktop.schooljournal.R
+import stud.euktop.domain.repository.ClassAdminRepository
+import stud.euktop.domain.repository.SchoolAdminRepository
+import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
-import stud.euktop.schooljournal.presentation.common.message.MessageEvent
-import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
+import stud.euktop.schooljournal.presentation.common.contract.action.ClassFormActions
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
+import stud.euktop.schooljournal.presentation.common.paging.SchoolsPagingSource
+import stud.euktop.schooljournal.presentation.common.paging.UsersPagingSource
 import javax.inject.Inject
 
 @HiltViewModel
 class ClassEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    coordinatorExec: CoordinatorExec,
-    navigationManager: NavigationManager,
-    private val schoolAdminRepository: SchoolAdminRepository,
-    private val userAdminRepository: UserAdminRepository,
-    private val classAdminRepository: ClassAdminRepository
-) : BaseViewModel<ClassEditState, ClassEditEvent>() {
+    private val classRepository: ClassAdminRepository,
+    private val schoolRepository: SchoolAdminRepository,
+    private val userRepository: UserAdminRepository,
+    private val routerAdmin: RouterAdmin,
+    coordinatorExec: CoordinatorExec
+) : BaseViewModel<ClassEditState, Unit>(), ClassFormActions {
 
-    companion object {
-        const val KEY_CLASS_ID = "classId"
-    }
+    private val classId: Int = savedStateHandle["classId"] ?: 0
+    private val isEditMode get() = classId != 0
 
-    private val classId: Int = savedStateHandle[KEY_CLASS_ID] ?: 0
+    override fun initState() = ClassEditState()
 
     init {
-        executeCoordinator = ExecuteCoordinator(coordinatorExec, navigationManager)
-        loadInitialData()
-        if (classId != 0) loadClass()
+        executeCoordinator = coordinatorExec
+        if (isEditMode) loadClass()
     }
 
-    override fun initState() = ClassEditState(classId = classId)
-
-    private fun loadInitialData() {
-        executeLoadingBlockSync {
-            val schoolsDeferred = async { schoolAdminRepository.getSchools() }
-            val teachersDeferred = async { userAdminRepository.getUsersByRole(Role.TEACHER) }
-
-            schoolsDeferred.await().onSuccess { schools ->
-                _state.update { it.copy(availableSchools = schools) }
-            }.onFailure {
-                _messageEvent.tryEmit(MessageEvent.Message(MessageParam(R.string.error_load_schools)))
-            }
-            teachersDeferred.await().onSuccess { teachers ->
-                _state.update { it.copy(availableTeachers = teachers) }
-            }.onFailure {
-                _messageEvent.tryEmit(MessageEvent.Message(MessageParam(R.string.error_load_teachers)))
+    private fun loadClass() {
+        withLoadingSync("load") {
+            val classInfo = executeCoordinatorResult { classRepository.getClass(classId) }.await() ?: return@withLoadingSync
+            val school = executeCoordinatorResult { schoolRepository.getSchool(classInfo.schoolId) }.await()
+            val teacher = classInfo.teacherId?.let { executeCoordinatorResult { userRepository.getUser(it) }.await() }
+            _state.update {
+                it.copy(
+                    grade = classInfo.grade,
+                    letter = it.letter.copy(classInfo.letter),
+                    academicYearStart = classInfo.academicYearStart,
+                    academicYearEnd = classInfo.academicYearEnd,
+                    school = school,
+                    classTeacher = teacher,
+                    originalGrade = classInfo.grade,
+                    originalLetter = classInfo.letter,
+                    originalYearStart = classInfo.academicYearStart,
+                    originalYearEnd = classInfo.academicYearEnd,
+                    originalSchoolId = classInfo.schoolId,
+                    originalClassTeacherId = teacher?.userId
+                )
             }
         }
     }
 
-    private fun loadClass() {
-        executeWithCoordinatorAndLoadingSync(
-            block = { classAdminRepository.getClass(classId) },
-            onSuccess = { classInfo ->
-                val school = classInfo.school
-                val teacher = classInfo.teacher
-                _state.update {
-                    it.copy(
-                        classId = classInfo.classId,
-                        grade = classInfo.grade,
-                        letter = it.letter.copy(classInfo.letter),
-                        academicYearStart = classInfo.academicYearStart,
-                        academicYearEnd = classInfo.academicYearEnd,
-                        selectedSchool = school,
-                        selectedTeacher = teacher
-                    )
-                }
-            })
+    fun getSchoolsPagingDataFlow(filter: SchoolFilter): Flow<PagingData<School>> {
+        return Pager(PagingConfig(pageSize = 20)) { SchoolsPagingSource(schoolRepository, filter) }
+            .flow.cachedIn(viewModelScope)
     }
 
-    fun updateSchool(school: School?) {
-        _state.update { it.copy(selectedSchool = school) }
+    fun getTeachersPagingDataFlow(filter: UserFilter): Flow<PagingData<UserProfile>> {
+        val teacherFilter = filter.copy(role = Role.TEACHER)
+        return Pager(PagingConfig(pageSize = 20)) { UsersPagingSource(userRepository, teacherFilter) }
+            .flow.cachedIn(viewModelScope)
     }
 
-    fun updateClassTeacher(teacher: UserProfile?) {
-        _state.update { it.copy(selectedTeacher = teacher) }
-    }
-
-    fun loadSchools(query: SchoolFilter = SchoolFilter()) {
-        executeWithCoordinatorAndLoadingSync(
-            block = { schoolAdminRepository.getSchools(query) },
-            onSuccess = { schools ->
-                _state.update { it.copy(availableSchools = schools) }
-            })
-    }
-
-    fun updateGrade(grade: Int?) {
-        _state.update { it.copy(grade = grade) }
-    }
-
-    fun updateLetter(letter: String) {
-        _state.update { it.copy(letter = it.letter.copy(letter)) }
-    }
-
-    fun updateAcademicYearStart(year: Int?) {
-        _state.update { it.copy(academicYearStart = year) }
-    }
-
-    fun updateAcademicYearEnd(year: Int?) {
-        _state.update { it.copy(academicYearEnd = year) }
-    }
+    override fun updateGrade(value: Int?) { _state.update { it.copy(grade = value) } }
+    override fun updateLetter(value: String) { _state.update { it.copy(letter = it.letter.copy(value)) } }
+    override fun updateAcademicYearStart(year: Int?) { _state.update { it.copy(academicYearStart = year) } }
+    override fun updateAcademicYearEnd(year: Int?) { _state.update { it.copy(academicYearEnd = year) } }
+    override fun updateSchool(school: School?) { _state.update { it.copy(school = school) } }
+    override fun updateClassTeacher(teacher: UserProfile?) { _state.update { it.copy(classTeacher = teacher) } }
 
     fun save() {
         val state = _state.value
         if (!state.isFormValid()) return
-
-        val school = state.selectedSchool ?: return
-        val classInfo = ClassInfo(
-            classId = state.classId,
-            school = school,
-            grade = state.grade!!,
-            letter = state.letter.getValidate(),
-            academicYearStart = state.academicYearStart!!,
-            academicYearEnd = state.academicYearEnd!!,
-            teacher = state.selectedTeacher
-        )
-        executeWithCoordinatorAndLoadingSync(block = {
-            if (state.isEditMode()) classAdminRepository.updateClass(classInfo)
-            else classAdminRepository.addClass(classInfo)
-        }, onSuccess = { _event.emit(ClassEditEvent.NavigateBack) })
+        if (isEditMode) {
+            val update = ClassInfoUpdate(
+                classId = classId,
+                schoolId = Field(state.school?.schoolId, state.school?.schoolId != state.originalSchoolId),
+                grade = Field(state.grade, state.grade != state.originalGrade),
+                letter = Field(state.letter.getValidate(), state.letter.value != state.originalLetter),
+                academicYearStart = Field(state.academicYearStart, state.academicYearStart != state.originalYearStart),
+                academicYearEnd = Field(state.academicYearEnd, state.academicYearEnd != state.originalYearEnd),
+                teacherId = Field(state.classTeacher?.userId, state.classTeacher?.userId != state.originalClassTeacherId)
+            )
+            executeWithLoadingSync("save", { classRepository.updateClass(update) }) { routerAdmin.navigateBack() }
+        } else {
+            val school = state.school ?: return
+            val newClass = ClassInfo(
+                classId = 0,
+                schoolId = school.schoolId,
+                grade = state.grade!!,
+                letter = state.letter.getValidate(),
+                academicYearStart = state.academicYearStart!!,
+                academicYearEnd = state.academicYearEnd!!,
+                teacherId = state.classTeacher?.userId
+            )
+            executeWithLoadingSync("save", { classRepository.addClass(newClass) }) { routerAdmin.navigateBack() }
+        }
     }
+
+    fun cancel() { routerAdmin.navigateBack() }
 }

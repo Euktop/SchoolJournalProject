@@ -5,17 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import stud.euktop.uikit.R
-import stud.euktop.uikit.components.adapter.SchJTextAdapter
-import stud.euktop.uikit.components.bottomsheet.SchJBottomSheet
 import stud.euktop.uikit.databinding.DialogSearchableSelectBinding
 
-class SchJSearchableSelectDialog<T>(
-    private val config: SchJSearchableSelectDialogConfig<T>
-) : SchJBottomSheet() {
+class SchJSearchableSelectDialog(
+    private val adapter: RecyclerView.Adapter<*>,
+    private val title: String,
+    private val onFilterClick: (() -> Unit)?,
+    private val onDismiss: () -> Unit
+) : BottomSheetDialogFragment() {
 
-    private var adapter: SchJTextAdapter<T>? = null
-    private lateinit var binding: DialogSearchableSelectBinding
+    private var binding: DialogSearchableSelectBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,48 +25,40 @@ class SchJSearchableSelectDialog<T>(
         savedInstanceState: Bundle?
     ): View {
         binding = DialogSearchableSelectBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupViews()
         dialog?.window?.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT
         )
-    }
-
-    private fun setupViews() {
-        binding.toolbar.apply {
-            title = config.title
-            setNavigationOnClickListener { dismiss() }
-            showFilterDialog = config.showFilterDialog
-            menu?.findItem(R.id.action_filter)?.isVisible = config.showFilterDialog != null
-        }
-
-        adapter = SchJTextAdapter(object : SchJTextAdapter.Listener<T> {
-            override fun onClick(value: T) {
-                config.items.onClick(value, true)
-                dismiss()
+        binding?.apply {
+            toolbar.title = title
+            toolbar.setNavigationOnClickListener { dismiss() }
+            if (onFilterClick != null) {
+                toolbar.menu?.findItem(R.id.action_filter)?.isVisible = true
+                toolbar.setOnMenuItemClickListener { menuItem ->
+                    if (menuItem.itemId == R.id.action_filter) {
+                        onFilterClick.invoke()
+                        true
+                    } else false
+                }
+            } else {
+                toolbar.menu?.findItem(R.id.action_filter)?.isVisible = false
             }
-
-            override fun toText(value: T): String = config.items.toText(value)
-            override fun isEquals(value1: T, value2: T): Boolean = value1 == value2
-        })
-        binding.recyclerView.adapter = adapter
-        binding.toolbar.showFilterDialog = config.showFilterDialog
-        updateConfig(config.items.values)
-    }
-
-    fun updateConfig(newItems: List<T>) {
-        adapter?.submitList(newItems) {
-            binding.recyclerView.update()
+            recyclerView.adapter = this@SchJSearchableSelectDialog.adapter
         }
     }
 
     override fun onDestroyView() {
-        adapter = null
+        binding = null
         super.onDestroyView()
+    }
+
+    override fun onDismiss(dialog: android.content.DialogInterface) {
+        super.onDismiss(dialog)
+        onDismiss()
     }
 }

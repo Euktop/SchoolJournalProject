@@ -4,95 +4,124 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.school.School
-import stud.euktop.domain.model.user.UserProfile
+import kotlinx.coroutines.flow.MutableStateFlow
+import stud.euktop.domain.model.school.SchoolFilter
+import stud.euktop.domain.model.user.UserFilter
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentClassEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
-import stud.euktop.schooljournal.presentation.common.utils.*
-import stud.euktop.uikit.components.input.select.ListSafe
-import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
-import javax.inject.Inject
+import stud.euktop.schooljournal.presentation.common.binding.bindForm
+import stud.euktop.schooljournal.presentation.common.binding.bindIntField
+import stud.euktop.schooljournal.presentation.common.binding.bindPagingSelect
+import stud.euktop.schooljournal.presentation.common.binding.bindYearRange
+import stud.euktop.schooljournal.presentation.common.binding.checkInt
+import stud.euktop.schooljournal.presentation.common.binding.checkYearRange
+import stud.euktop.schooljournal.presentation.common.binding.toInit
+import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
+import stud.euktop.schooljournal.presentation.common.filter.school.SchoolFilterDialog
+import stud.euktop.schooljournal.presentation.common.filter.user.UserFilterDialog
+import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.schooljournal.presentation.common.utils.check
 
 @AndroidEntryPoint
-class ClassEditFragment : BaseFragment<
-        FragmentClassEditBinding,
-        ClassEditViewModel,
-        ClassEditState,
-        ClassEditEvent
-        >() {
-
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentClassEditBinding.inflate(i, c, false)
+class ClassEditFragment :
+    BaseFragment<FragmentClassEditBinding, ClassEditViewModel, ClassEditState, Unit>() {
 
     override val viewModel: ClassEditViewModel by viewModels()
-
     private val focusTrack = FocusTrack()
+    private lateinit var loadingDelegate: LoadingDelegate<ClassEditState>
 
-    @Inject
-    lateinit var navigationManager: NavigationManager
+    private val schoolFilterFlow = MutableStateFlow(SchoolFilter())
+    private val teacherFilterFlow = MutableStateFlow(UserFilter())
 
-    private lateinit var schoolRegister: SchJSearchableSelect.RegisterList<School>
-    private lateinit var teacherRegister: SchJSearchableSelect.RegisterList<UserProfile>
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentClassEditBinding.inflate(inflater, container, false)
 
     override fun setupUI() {
-        binding.apply {
-            inputGrade.setup(focusTrack) { value -> viewModel.updateGrade(value.toIntOrNull()) }
-            inputLetter.setup(focusTrack) { viewModel.updateLetter(it) }
-            inputYearStart.setup(focusTrack) { value -> viewModel.updateAcademicYearStart(value.toIntOrNull()) }
-            inputYearEnd.setup(focusTrack) { value -> viewModel.updateAcademicYearEnd(value.toIntOrNull()) }
+        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
 
-            val schoolListSafe = ListSafe<School>(
-                toText = { it?.name ?: "" },
-                onClick = { school, _ -> viewModel.updateSchool(school) }
-            )
-            schoolRegister = selectSchool.RegisterList(schoolListSafe)
-            schoolRegister.register(childFragmentManager)
-            selectSchool.onShowing = { viewModel.loadSchools() }
-
-            val teacherListSafe = ListSafe<UserProfile>(
-                toText = { it?.fullName ?: "" },
-                onClick = { teacher, _ -> viewModel.updateClassTeacher(teacher) }
-            )
-            teacherRegister = selectClassTeacher.RegisterList(teacherListSafe)
-            teacherRegister.register(childFragmentManager)
-
-            buttonsSaveCancel.btnSave.setOnClickListener { viewModel.save() }
-            buttonsSaveCancel.btnCancel.setOnClickListener { navigationManager.navigate(NavCommand.Back) }
+        bindForm(focusTrack, viewModel) {
+            field(binding.inputLetter, { it.letter }, viewModel::updateLetter)
         }
+
+        binding.inputGrade.bindIntField(focusTrack, viewModel::updateGrade)
+
+        bindYearRange(
+            startInput = binding.inputYearStart,
+            endInput = binding.inputYearEnd,
+            focusTrack = focusTrack
+        ) { range ->
+            viewModel.updateAcademicYearStart(range.start)
+            viewModel.updateAcademicYearEnd(range.end)
+        }
+
+        bindPagingSelect(
+            select = binding.selectSchool,
+            viewModel = viewModel,
+            title = getString(R.string.school),
+            filterFlow = schoolFilterFlow,
+            getPagingDataFlow = viewModel::getSchoolsPagingDataFlow,
+            getSelectedValue = { it.school },
+            toText = { it?.name ?: "" },
+            onSelected = viewModel::updateSchool,
+            onFilterClick = { showSchoolFilterDialog() },
+            fragmentManager = childFragmentManager,
+            lifecycleOwner = viewLifecycleOwner
+        )
+
+        bindPagingSelect(
+            select = binding.selectClassTeacher,
+            viewModel = viewModel,
+            title = getString(R.string.class_teacher),
+            filterFlow = teacherFilterFlow,
+            getPagingDataFlow = viewModel::getTeachersPagingDataFlow,
+            getSelectedValue = { it.classTeacher },
+            toText = { it?.let { "${it.lastName} ${it.firstName}" } ?: "" },
+            onSelected = viewModel::updateClassTeacher,
+            onFilterClick = { showTeacherFilterDialog() },
+            fragmentManager = childFragmentManager,
+            lifecycleOwner = viewLifecycleOwner
+        )
+
+        binding.buttonsSaveCancel.toInit(loadingDelegate, viewModel::save, viewModel::cancel)
+    }
+
+    private fun showSchoolFilterDialog() {
+        SchoolFilterDialog(
+            initialFilter = schoolFilterFlow.value,
+            onFilterApplied = { schoolFilterFlow.value = it },
+            onError = viewModel.onError
+        ).show(childFragmentManager, "school_filter")
+    }
+
+    private fun showTeacherFilterDialog() {
+        UserFilterDialog(
+            initialFilter = teacherFilterFlow.value,
+            onFilterApplied = { teacherFilterFlow.value = it },
+            onError = viewModel.onError
+        ).show(childFragmentManager, "teacher_filter")
     }
 
     override fun updateState(state: ClassEditState) {
-        binding.apply {
-            inputChecks(focusTrack, inputLetter to state.letter)
-            val gradeValid = state.grade != null && state.grade in 1..11
-            inputGrade.check(focusTrack, gradeValid)
-            val start = state.academicYearStart
-            val end = state.academicYearEnd
-            inputYearStart.check(focusTrack, start != null && start > 0)
-            inputYearEnd.check(
-                focusTrack,
-                end != null && end > 0 && (start == null || end >= start)
-            )
+        binding.inputLetter.check(focusTrack, state.letter.validate())
+        binding.inputGrade.checkInt(focusTrack, state.grade, state.grade in 1..11)
 
-            schoolRegister.updateItems(state.availableSchools)
-            teacherRegister.updateItems(state.availableTeachers)
+        val yearsValid = checkYearRange(
+            binding.inputYearStart,
+            binding.inputYearEnd,
+            focusTrack,
+            state.academicYearStart,
+            state.academicYearEnd
+        )
+        val formValid = state.letter.validate() && (state.grade in 1..11) && yearsValid
+        binding.selectSchool.state =
+            binding.selectSchool.state.copy(selectText = state.school?.name ?: "")
+        binding.selectClassTeacher.state =
+            binding.selectClassTeacher.state.copy(selectText = state.classTeacher?.let { "${it.lastName} ${it.firstName}" }
+                ?: "")
 
-            selectSchool.state = selectSchool.state.copy(
-                selectText = state.selectedSchool?.name ?: ""
-            )
-            selectClassTeacher.state = selectClassTeacher.state.copy(
-                selectText = state.selectedTeacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
-            )
-
-            buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isLoading
-        }
+        binding.buttonsSaveCancel.btnSave.isEnabled = formValid
     }
 
-    override fun updateEvent(event: ClassEditEvent) {
-        when (event) {
-            ClassEditEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
-        }
-    }
+    override fun updateEvent(event: Unit) {}
 }

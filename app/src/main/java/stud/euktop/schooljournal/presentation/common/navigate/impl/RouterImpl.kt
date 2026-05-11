@@ -5,6 +5,7 @@ import stud.euktop.schooljournal.Nav1Directions
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
@@ -15,7 +16,7 @@ import javax.inject.Singleton
 class RouterImpl @Inject constructor(
     private val navigationManager: NavigationManager,
     private val authRepository: AuthRepository
-) : RouterSplash, RouterMain, RouterAuthorization {
+) : RouterSplash, RouterMain, RouterAuthorization, RouterAdmin {
 
     override suspend fun navigateAfterSplash() {
         if (authRepository.getCurrentUser().isSuccess) {
