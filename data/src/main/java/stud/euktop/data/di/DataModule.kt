@@ -110,4 +110,8 @@ internal object DataModule {
     @Provides
     @Singleton
     fun provideRoomsApi(client: NetworkClient) = client.roomsApi()
+
+    @Provides
+    @Singleton
+    fun provideGradesApi(client: NetworkClient) = client.gradeApi()
 }

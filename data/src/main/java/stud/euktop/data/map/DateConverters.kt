@@ -5,7 +5,12 @@ import java.time.ZoneId
 import java.util.Date
 
 internal fun LocalDateTime?.toDate(): Date =
-    if (this == null) Date() else Date.from(this.atZone(ZoneId.systemDefault()).toInstant())
+    this?.let { local ->
+        val instant = local.atZone(ZoneId.of("UTC")).toInstant()
+        Date.from(instant)
+    } ?: Date()
 
 internal fun Date?.toLocalDateTime(): LocalDateTime =
-    (this ?: Date()).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+    this?.let { date ->
+        LocalDateTime.ofInstant(date.toInstant(), ZoneId.of("UTC"))
+    } ?: LocalDateTime.now(ZoneId.of("UTC"))

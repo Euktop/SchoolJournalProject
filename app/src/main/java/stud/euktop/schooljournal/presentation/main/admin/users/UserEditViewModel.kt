@@ -10,6 +10,7 @@ import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.model.user.UserUpdate
 import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.coordinator.AdminCoordinator
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import javax.inject.Inject
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class UserEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val userRepository: UserAdminRepository,
+    private val adminCoordinator: AdminCoordinator,
     private val routerAdmin: RouterAdmin,
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<UserEditState, Unit>() {
@@ -32,11 +34,14 @@ class UserEditViewModel @Inject constructor(
         if (isEditMode) loadUser()
     }
 
+    // Загрузка пользователя (основные данные + роли)
     private fun loadUser() {
         executeWithLoadingSync(
             key = "load",
             block = { userRepository.getUser(userId) },
             onSuccess = { user ->
+                // Преобразуем роли в RoleWithSchool
+                val roles = user.roles.map { RoleWithSchool(it.role, it.schoolId) }
                 _state.update {
                     it.copy(
                         lastName = it.lastName.copy(user.lastName),
@@ -45,50 +50,49 @@ class UserEditViewModel @Inject constructor(
                         email = it.email.copy(user.email),
                         phone = it.phone.copy(user.phone ?: ""),
                         accountStatus = user.accountStatus,
-                        selectedRoles = user.roles.map { RoleWithSchool(it.role, it.schoolId) }
+                        selectedRoles = roles,
+                        // originalRoles не нужны – изменения отправляются сразу
                     )
                 }
             }
         )
     }
 
-    fun updateLastName(value: String) {
-        _state.update { it.copy(lastName = it.lastName.copy(value)) }
-    }
+    // Обновление основных данных (без ролей)
+    fun updateLastName(value: String) { _state.update { it.copy(lastName = it.lastName.copy(value)) } }
+    fun updateFirstName(value: String) { _state.update { it.copy(firstName = it.firstName.copy(value)) } }
+    fun updateSurName(value: String) { _state.update { it.copy(surName = it.surName.copy(value)) } }
+    fun updateEmail(value: String) { _state.update { it.copy(email = it.email.copy(value)) } }
+    fun updatePhone(value: String) { _state.update { it.copy(phone = it.phone.copy(value)) } }
+    fun updatePassword(value: String) { _state.update { it.copy(password = it.password.copy(value)) } }
+    fun updateAccountStatus(status: AccountStatus) { _state.update { it.copy(accountStatus = status) } }
 
-    fun updateFirstName(value: String) {
-        _state.update { it.copy(firstName = it.firstName.copy(value)) }
-    }
-
-    fun updateSurName(value: String) {
-        _state.update { it.copy(surName = it.surName.copy(value)) }
-    }
-
-    fun updateEmail(value: String) {
-        _state.update { it.copy(email = it.email.copy(value)) }
-    }
-
-    fun updatePhone(value: String) {
-        _state.update { it.copy(phone = it.phone.copy(value)) }
-    }
-
-    fun updatePassword(value: String) {
-        _state.update { it.copy(password = it.password.copy(value)) }
-    }
-
-    fun updateAccountStatus(status: AccountStatus) {
-        _state.update { it.copy(accountStatus = status) }
-    }
-
+    // Добавление роли (мгновенно на сервер)
     fun addRole(role: Role, schoolId: Int?) {
-        val newRole = RoleWithSchool(role, schoolId)
-        _state.update { it.copy(selectedRoles = it.selectedRoles + newRole) }
+        executeLoadingBlockSync(
+            key = "add_role",
+            block = { adminCoordinator.addUserRole(userId, role, schoolId) },
+            onSuccess = { userRole ->
+                // Добавляем новую роль в локальный список
+                val newRole = RoleWithSchool(role, schoolId)
+                _state.update { it.copy(selectedRoles = it.selectedRoles + newRole) }
+            }
+        )
     }
 
+    // Удаление роли (мгновенно на сервер)
     fun removeRole(role: RoleWithSchool) {
-        _state.update { it.copy(selectedRoles = it.selectedRoles.filter { it != role }) }
+        // Перед удалением показываем диалог подтверждения (фрагмент сам вызывает этот метод после подтверждения)
+        executeLoadingBlockSync(
+            key = "remove_role",
+            block = { adminCoordinator.removeUserRole(userId, role.role, role.schoolId) },
+            onSuccess = {
+                _state.update { it.copy(selectedRoles = it.selectedRoles.filter { it != role }) }
+            }
+        )
     }
 
+    // Сохранение основных данных (ФИО, email, телефон, статус, пароль)
     fun save() {
         val state = _state.value
         if (!state.isFormValid()) return
@@ -102,9 +106,7 @@ class UserEditViewModel @Inject constructor(
                 phone = Field(state.phone.value, true),
                 accountStatus = Field(state.accountStatus, true)
             )
-            executeWithLoadingSync(
-                "save",
-                { userRepository.updateUser(update) }) { routerAdmin.navigateBack() }
+            executeWithLoadingSync("save", { userRepository.updateUser(update) }) { routerAdmin.navigateBack() }
         } else {
             val profile = UserProfile.createObject(
                 lastName = state.lastName.getValidate(),
@@ -114,14 +116,7 @@ class UserEditViewModel @Inject constructor(
                 phone = state.phone.value,
                 accountStatus = state.accountStatus
             )
-            executeWithLoadingSync(
-                "save",
-                {
-                    userRepository.addUser(
-                        profile,
-                        state.password.value
-                    )
-                }) { routerAdmin.navigateBack() }
+            executeWithLoadingSync("save", { userRepository.addUser(profile, state.password.value) }) { routerAdmin.navigateBack() }
         }
     }
 

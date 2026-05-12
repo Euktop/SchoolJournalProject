@@ -8,6 +8,7 @@ import stud.euktop.data.BuildConfig
 import stud.euktop.data.mock.repository.AssignmentAdminMockRepositoryImpl
 import stud.euktop.data.mock.repository.AuthMockRepositoryImpl
 import stud.euktop.data.mock.repository.ClassAdminMockRepositoryImpl
+import stud.euktop.data.mock.repository.GradeMockRepositoryImpl
 import stud.euktop.data.mock.repository.HomeworkMockRepositoryImpl
 import stud.euktop.data.mock.repository.LessonMarksMockRepositoryImpl
 import stud.euktop.data.mock.repository.LessonMockRepositoryImpl
@@ -19,6 +20,7 @@ import stud.euktop.data.mock.repository.UserAdminMockRepositoryImpl
 import stud.euktop.data.repository.AssignmentAdminRepositoryImpl
 import stud.euktop.data.repository.AuthRepositoryImpl
 import stud.euktop.data.repository.ClassAdminRepositoryImpl
+import stud.euktop.data.repository.GradeRepositoryImpl
 import stud.euktop.data.repository.HomeworkRepositoryImpl
 import stud.euktop.data.repository.LessonMarksRepositoryImpl
 import stud.euktop.data.repository.LessonRepositoryImpl
@@ -30,6 +32,7 @@ import stud.euktop.data.repository.UserAdminRepositoryImpl
 import stud.euktop.domain.repository.AssignmentAdminRepository
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.ClassAdminRepository
+import stud.euktop.domain.repository.GradeRepository
 import stud.euktop.domain.repository.HomeworkRepository
 import stud.euktop.domain.repository.LessonMarksRepository
 import stud.euktop.domain.repository.LessonRepository
@@ -51,6 +54,13 @@ class RepositoryModule {
         impl: LessonMarksRepositoryImpl,
         mock: LessonMarksMockRepositoryImpl
     ): LessonMarksRepository = init(impl = impl, mock = mock)
+
+    @Provides
+    @Singleton
+    fun provideGradeRepository(
+        impl: GradeRepositoryImpl,
+        mock: GradeMockRepositoryImpl,
+    ): GradeRepository = init(impl = impl, mock = mock)
 
     @Provides
     @Singleton

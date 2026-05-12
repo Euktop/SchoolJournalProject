@@ -9,6 +9,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import stud.euktop.data.local.storage.contract.TokenStorage
 import stud.euktop.data.local.storage.contract.UserIdStorage
 import javax.inject.Inject
@@ -23,15 +25,20 @@ class SessionStorageImpl @Inject constructor(
 
     private val tokenKey = stringPreferencesKey("token")
     private val userIdKey = intPreferencesKey("user_id")
+    private val mutex = Mutex()
 
-    private suspend fun <T> Preferences.Key<T>.getValue(): T? = context.dataStore.data.first()[this]
+    private suspend fun <T> Preferences.Key<T>.getValue(): T? = mutex.withLock {
+        context.dataStore.data.first()[this]
+    }
 
     private suspend fun <T> Preferences.Key<T>.setValue(value: T?) {
-        context.dataStore.edit { preferences ->
-            if (value == null) {
-                preferences.remove(this)
-            } else {
-                preferences[this] = value
+        mutex.withLock {
+            context.dataStore.edit { preferences ->
+                if (value == null) {
+                    preferences.remove(this)
+                } else {
+                    preferences[this] = value
+                }
             }
         }
     }
@@ -43,6 +50,8 @@ class SessionStorageImpl @Inject constructor(
     override suspend fun setUserId(userId: Int?) = userIdKey.setValue(userId)
 
     override suspend fun clearAll() {
-        context.dataStore.edit { it.clear() }
+        mutex.withLock {
+            context.dataStore.edit { it.clear() }
+        }
     }
 }

@@ -49,25 +49,29 @@ class UserEditFragment : BaseFragment<
             field(binding.inputPassword, { it.password }, viewModel::updatePassword)
         }
 
+        // Статус (SchJSelect) – без изменений
         val statusAdapter = ListSelectAdapter<AccountStatus>(
             toText = { status ->
-                status?.let { requireContext().getString(it.toMessageId()) } ?: ""
+                status?.let { requireContext().getString(status.toMessageId()) } ?: ""
             },
-            onItemSelected = { status ->
-                if (status != null) viewModel.updateAccountStatus(status)
-            }
+            onItemSelected = { status -> if (status != null) viewModel.updateAccountStatus(status) }
         )
         statusAdapter.submitList(AccountStatus.entries.toList())
         binding.selectStatus.attach(statusAdapter, statusAdapter, childFragmentManager)
 
+        // Адаптер для ролей – с диалогом подтверждения удаления
         rolesAdapter = RoleSchoolAdapter { role ->
-            viewModel.removeRole(role)
+            // Показать диалог подтверждения перед удалением
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                .setTitle("Удаление роли")
+                .setMessage("Вы уверены, что хотите удалить роль ${requireContext().getString(role.role.toMessageId())}?")
+                .setPositiveButton("Удалить") { _, _ -> viewModel.removeRole(role) }
+                .setNegativeButton("Отмена", null)
+                .show()
         }
         binding.rvRoles.adapter = rolesAdapter
 
-        binding.btnAddRole.setOnClickListener {
-            showRoleSchoolDialog()
-        }
+        binding.btnAddRole.setOnClickListener { showRoleSchoolDialog() }
 
         binding.saveCancel.toInit(loadingDelegate, viewModel::save, viewModel::cancel)
     }
@@ -84,7 +88,6 @@ class UserEditFragment : BaseFragment<
     }
 
     override fun updateState(state: UserEditState) {
-        // Обновляем отображаемый текст статуса
         binding.selectStatus.state = binding.selectStatus.state.copy(
             selectText = requireContext().getString(state.accountStatus.toMessageId())
         )

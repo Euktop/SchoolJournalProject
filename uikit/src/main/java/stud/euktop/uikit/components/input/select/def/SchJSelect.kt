@@ -33,6 +33,7 @@ class SchJSelect @JvmOverloads constructor(
             dialog?.dismiss()
             state = state.copy(selectText = select.toText(it))
         }
+        this.select = select
         this.adapter = adapter
         this.fragmentManager = fragmentManager
         this.dialog?.dismiss()

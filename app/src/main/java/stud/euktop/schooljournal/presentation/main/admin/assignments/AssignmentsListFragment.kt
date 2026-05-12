@@ -3,6 +3,8 @@ package stud.euktop.schooljournal.presentation.main.admin.assignments
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +45,7 @@ class AssignmentsListFragment : BaseFragment<
 
         binding.toolbar.setTitle(R.string.assignments)
         binding.toolbar.showFilterDialog = { showFilterDialog() }
+        binding.toolbar.setupWithNavController(findNavController())
 
         binding.rvEntity.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

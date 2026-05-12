@@ -7,4 +7,8 @@ enum class AbsenceTypes {
         G2 -> 2; G3 -> 3; G4 -> 4; G5 -> 5;
         else -> null
     }
+
+    fun getAbsenceTypeId() = when (this) {
+        IRRESPECTABLE -> 0; ILL -> 1; RESPECTABLE -> 2; else -> null
+    }
 }

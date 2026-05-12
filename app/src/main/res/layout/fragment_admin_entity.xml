@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="stud.euktop.schooljournal.presentation.main.admin.panel.AdminEntityFragment">
+    tools:context="stud.euktop.schooljournal.presentation.main.admin.panel.AdminPanelFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,6 +19,7 @@
             app:menu="@menu/menu_filter"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:title="@string/homework_assignments" />
+
         <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
             android:id="@+id/rvEntity"
             android:layout_width="match_parent"
