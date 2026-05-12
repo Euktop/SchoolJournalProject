@@ -6,4 +6,6 @@ interface RouterAuthorization {
     suspend fun toCancelCreatePassword()
     suspend fun toLogin()
     suspend fun toSuccessCreate()
+    suspend fun toSuccessChangePassword()
+    suspend fun toCancelChangePassword()
 }

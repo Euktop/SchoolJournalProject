@@ -17,6 +17,20 @@ class ProfileViewModel @Inject constructor(
 
     init {
         executeCoordinator = coordinatorExec
+        onResume()
+    }
+
+    fun logout() {
+        executeWithLoadingSync(
+            "logout",
+            { Result.success(authRepository.logout()) },
+            {
+                loadCurrentUser()
+            }
+        )
+    }
+
+    fun onResume() {
         loadCurrentUser()
     }
 

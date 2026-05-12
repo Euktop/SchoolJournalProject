@@ -1,4 +1,3 @@
-// data/src/main/java/stud/euktop/data/mock/repository/LessonMockRepositoryImpl.kt
 package stud.euktop.data.mock.repository
 
 import stud.euktop.data.mock.data.MockClassDataSource
@@ -8,6 +7,7 @@ import stud.euktop.data.mock.data.MockRoomDataSource
 import stud.euktop.data.mock.data.MockSubjectDataSource
 import stud.euktop.data.mock.data.MockUserDataSource
 import stud.euktop.data.mock.util.filterParam
+import stud.euktop.data.utils.ApiErrorHandler
 import stud.euktop.domain.model.lesson.Lesson
 import stud.euktop.domain.model.lesson.LessonFilter
 import stud.euktop.domain.model.lesson.LessonFull
@@ -20,7 +20,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LessonMockRepositoryImpl @Inject constructor() : LessonRepository {
+class LessonMockRepositoryImpl @Inject constructor(
+    private val apiErrorHandler: ApiErrorHandler
+) : LessonRepository {
     private val tag = this.toSimpleTag()
 
     private suspend fun enrichToFull(lesson: Lesson): LessonFull {
@@ -47,25 +49,17 @@ class LessonMockRepositoryImpl @Inject constructor() : LessonRepository {
 
     override suspend fun getLesson(lessonId: Int): Result<LessonFull> {
         logger?.i(tag, "getLesson started", "lessonId=$lessonId")
-        MockDelayService.delay()
-        return try {
-            val lesson = MockLessonDataSource.getLesson(lessonId)
-            if (lesson != null) {
-                val full = enrichToFull(lesson)
-                Result.success(full)
-            } else {
-                Result.failure(NoSuchElementException("Lesson not found"))
-            }
-        } catch (e: Exception) {
-            logger?.e(tag, "getLesson failed", e)
-            Result.failure(e)
+        return apiErrorHandler.safeApiCall {
+            MockDelayService.delay()
+            val lesson = MockLessonDataSource.getLesson(lessonId) ?: throw NoSuchElementException("Lesson not found")
+            enrichToFull(lesson)
         }
     }
 
     override suspend fun getLessons(filter: LessonFilter): Result<List<LessonFull>> {
         logger?.i(tag, "getLessons started", "filter=$filter")
-        MockDelayService.delay()
-        return try {
+        return apiErrorHandler.safeApiCall {
+            MockDelayService.delay()
             val all = MockLessonDataSource.getAll()
             val filtered = all.filter { lesson ->
                 filterParam(
@@ -79,33 +73,25 @@ class LessonMockRepositoryImpl @Inject constructor() : LessonRepository {
             }
             val paged = filtered.drop(filter.pagination.offset ?: 0)
                 .take(filter.pagination.limit ?: Int.MAX_VALUE)
-            val fullList = paged.map { enrichToFull(it) }
-            Result.success(fullList)
-        } catch (e: Exception) {
-            logger?.e(tag, "getLessons failed", e)
-            Result.failure(e)
+            paged.map { enrichToFull(it) }
         }
     }
 
     override suspend fun addLesson(lesson: Lesson): Result<LessonFull> {
         logger?.i(tag, "addLesson started", "lesson=$lesson")
-        MockDelayService.delay()
-        return try {
+        return apiErrorHandler.safeApiCall {
+            MockDelayService.delay()
             val newLesson = MockLessonDataSource.addLesson(lesson)
-            val full = enrichToFull(newLesson)
-            Result.success(full)
-        } catch (e: Exception) {
-            logger?.e(tag, "addLesson failed", e)
-            Result.failure(e)
+            enrichToFull(newLesson)
         }
     }
 
     override suspend fun updateLesson(update: LessonUpdate): Result<Lesson> {
         logger?.i(tag, "updateLesson started", "update=$update")
-        MockDelayService.delay()
-        return try {
+        return apiErrorHandler.safeApiCall {
+            MockDelayService.delay()
             val existing = MockLessonDataSource.getLesson(update.lessonId)
-                ?: return Result.failure(NoSuchElementException("Lesson not found"))
+                ?: throw NoSuchElementException("Lesson not found")
             val updated = existing.copy(
                 classId = update.classId.uValue ?: existing.classId,
                 subjectId = update.subjectId.uValue ?: existing.subjectId,
@@ -118,23 +104,15 @@ class LessonMockRepositoryImpl @Inject constructor() : LessonRepository {
                 locationAddress = update.locationAddress.uValue ?: existing.locationAddress
             )
             MockLessonDataSource.updateLesson(updated)
-            Result.success(updated)
-        } catch (e: Exception) {
-            logger?.e(tag, "updateLesson failed", e)
-            Result.failure(e)
+            updated
         }
     }
 
     override suspend fun deleteLesson(lessonId: Int): Result<Unit> {
         logger?.i(tag, "deleteLesson started", "lessonId=$lessonId")
-        MockDelayService.delay()
-        return try {
-            val deleted = MockLessonDataSource.deleteLesson(lessonId)
-            if (deleted) Result.success(Unit)
-            else Result.failure(NoSuchElementException("Lesson not found"))
-        } catch (e: Exception) {
-            logger?.e(tag, "deleteLesson failed", e)
-            Result.failure(e)
+        return apiErrorHandler.safeApiCall {
+            MockDelayService.delay()
+            if (!MockLessonDataSource.deleteLesson(lessonId)) throw NoSuchElementException("Lesson not found")
         }
     }
 }

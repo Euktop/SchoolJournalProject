@@ -7,6 +7,7 @@ interface Logger {
 }
 
 var logger: Logger? = object : Logger {
+
     override fun i(tag: String, action: String, data: String?) {
         log("INFO", tag, action, data)
     }
@@ -34,6 +35,15 @@ var logger: Logger? = object : Logger {
         val message = "$event -- $message"
         print("$logType:[$tag]: $event -- $message $")
     }
+}
+    set(value) {
+        field = value
+        loggers.forEach { it(value) }
+    }
+private val loggers: MutableList<(Logger?) -> Unit> = mutableListOf()
+
+fun addLoggerChangeListener(listener: (Logger?) -> Unit) {
+    loggers.add { listener(it) }
 }
 
 fun <T : Any> T.toSimpleTag() = this::class.java.simpleName ?: this::class.java.canonicalName!!

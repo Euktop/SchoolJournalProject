@@ -96,6 +96,15 @@
                 app:schJButtonType="BIG" />
 
             <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/change_password"
+                app:schJButtonClass="PRIMARY"
+                app:schJButtonType="BIG" />
+
+            <stud.euktop.uikit.components.button.SchJButton
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

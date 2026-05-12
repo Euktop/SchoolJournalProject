@@ -37,7 +37,7 @@ abstract class Validator<T, V : Validator<T, V>> : ValidatorInterface<T> {
      * Переопределите для предоставления подробного сообщения об ошибке валидации.
      * @return сообщение, описывающее причину невалидности значения, или `null`
      */
-    protected open fun getValidationErrorMessage(value: T?): String? = null
+    open fun getValidationErrorMessage(value: T?): String? = null
 
     companion object {
         fun isAllValidate(vararg values: Validator<*, *>?) =

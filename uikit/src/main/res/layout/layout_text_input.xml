@@ -20,10 +20,11 @@
         android:id="@+id/inputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:endIconMode="none">
+        >
 
-        <stud.euktop.uikit.components.input.SchJTextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText"
+            style="@style/Widget.SchJ.Input.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"

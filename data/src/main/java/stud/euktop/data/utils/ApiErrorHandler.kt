@@ -20,7 +20,9 @@ class ApiErrorHandler @Inject constructor() {
 
     suspend fun <T> safeApiCall(block: suspend () -> T): Result<T> {
         return try {
-            Result.success(block())
+            val result = block()
+            logSuccess(result)   // логируем успешный результат
+            Result.success(result)
         } catch (e: Exception) {
             logger?.e("ExecuteResponse", "ErrorResponse", e)
             when (e) {
@@ -28,10 +30,46 @@ class ApiErrorHandler @Inject constructor() {
                     val errorResponse = parseErrorResponse(e)
                     failure(mapToDataError(e.statusCode, errorResponse, e.message))
                 }
+
                 is IOException -> failure(DataError.NetworkConnection(e.message))
                 else -> failure(DataError.Unknown(e.message))
             }
         }
+    }
+
+    private fun <T> logSuccess(result: T) {
+        if (logger == null) return
+        val logTag = "ApiSuccess"
+        val logAction = "Response"
+
+        val data = when (result) {
+            null -> "null"
+            is Collection<*> -> {
+                val size = result.size
+                val sample = if (size > 0) {
+                    val firstItems = result.take(3).joinToString(limit = 100) {
+                        it?.toString()?.take(50) ?: "null"
+                    }
+                    " | sample: [$firstItems]"
+                } else ""
+                "List(size=$size)$sample"
+            }
+
+            is Map<*, *> -> {
+                "Map(size=${result.size})"
+            }
+
+            is Array<*> -> {
+                "Array(length=${result.size})"
+            }
+
+            else -> {
+                val str = result.toString()
+                if (str.length > 200) str.take(200) + "…" else str
+            }
+        }
+
+        logger?.i(logTag, logAction, data = data)
     }
 
     private fun parseErrorResponse(e: Exception): ErrorResponse? {
@@ -101,6 +139,7 @@ class ApiErrorHandler @Inject constructor() {
             HttpURLConnection.HTTP_INTERNAL_ERROR -> DataError.InternalServerError(
                 message ?: "Internal server error"
             )
+
             HttpURLConnection.HTTP_UNAUTHORIZED -> DataError.Unauthorized(message)
             else -> DataError.HttpError(httpCode, message ?: "Unknown error")
         }

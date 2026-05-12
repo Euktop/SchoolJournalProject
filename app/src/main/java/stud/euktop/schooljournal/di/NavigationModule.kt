@@ -8,6 +8,7 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterError
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
 import stud.euktop.schooljournal.presentation.common.navigate.impl.ErrorHandlerImpl
@@ -41,4 +42,8 @@ abstract class NavigationModule {
     @Binds
     @Singleton
     abstract fun bindsRouterAdmin(routerAdmin: RouterImpl): RouterAdmin
+
+    @Binds
+    @Singleton
+    abstract fun bindsRouterError(routerError: RouterImpl): RouterError
 }

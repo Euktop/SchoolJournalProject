@@ -19,6 +19,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.openapitools.client.infrastructure.Serializer
 import stud.euktop.network.interceptor.AuthTokenInterceptor
+import stud.euktop.network.interceptor.NetworkLoggingInterceptor
 import stud.euktop.network.interceptor.TokenProvider
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -60,6 +61,7 @@ class NetworkClient @Inject constructor(
             .sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
             .hostnameVerifier { _, _ -> true }
             .addInterceptor(AuthTokenInterceptor(tokenProvider))
+            .addInterceptor(NetworkLoggingInterceptor())
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })

@@ -44,6 +44,9 @@ class ProfileFragment : BaseFragment<
         binding.btnLogout.setOnClickListener {
             messages.message(MessageParam(R.string.logout_message) {})
         }
+        binding.btnChangePassword.setOnClickListener {
+            navigationManager.navigate(NavCommand.ToDestination(R.id.changePasswordFragment))
+        }
     }
 
     override fun updateState(state: ProfileState) {

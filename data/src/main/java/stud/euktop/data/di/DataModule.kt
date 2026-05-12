@@ -10,6 +10,9 @@ import stud.euktop.network.NetworkClient
 import stud.euktop.network.NetworkConfig
 import stud.euktop.network.api.SchoolJournalClientApi
 import stud.euktop.network.interceptor.TokenProvider
+import stud.euktop.network.util.Logger
+import stud.euktop.network.util.logger
+import stud.euktop.network.util.toSimpleTag
 import javax.inject.Singleton
 
 @Module
@@ -24,7 +27,29 @@ internal object DataModule {
 
     @Provides
     @Singleton
-    fun provideNetworkConfig() = NetworkConfig("https://192.168.1.136:7191/")
+    fun provideNetworkConfig(): NetworkConfig {
+        logger = object : Logger {
+            override fun i(tag: String, action: String, data: String?) {
+                stud.euktop.domain.utils.loger.logger?.i(tag, action, data)
+            }
+
+            override fun d(tag: String, action: String, data: String?) {
+                stud.euktop.domain.utils.loger.logger?.d(tag, action, data)
+            }
+
+            override fun e(
+                tag: String,
+                action: String,
+                throwable: Throwable?,
+                data: String?
+            ) {
+                stud.euktop.domain.utils.loger.logger?.e(tag, action, throwable, data)
+            }
+
+        }
+        stud.euktop.domain.utils.loger.logger?.i(toSimpleTag(), "INIT LOGGER")
+        return NetworkConfig("https://192.168.0.109:7191/")
+    }
 
 
     @Provides

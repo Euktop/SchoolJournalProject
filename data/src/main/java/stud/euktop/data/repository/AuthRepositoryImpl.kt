@@ -58,8 +58,16 @@ class AuthRepositoryImpl @Inject constructor(
             usersApi.apiUsersMeGet().toDomain(roles)
         }
 
-    override suspend fun logout() {
+    override suspend fun logout(): Result<Unit> {
         tokenStorage.clearAll()
         userIdStorage.clearAll()
+        return Result.success(Unit)
     }
+
+    override suspend fun changePassword(oldPassword: String, newPassword: String): Result<Unit> =
+        errorHandler.safeApiCall {
+            val userId =
+                userIdStorage.getUserId() ?: throw IllegalStateException("No user logged in")
+            usersApi.apiUsersIdPasswordPatch(userId, oldPassword, newPassword)
+        }
 }

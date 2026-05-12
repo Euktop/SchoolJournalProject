@@ -2,6 +2,7 @@ package stud.euktop.schooljournal.presentation.common.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -40,6 +41,8 @@ class OperationsListAdapter<T>(
         fun bind(item: T) {
             currentItem = item
             binding.tvEntityName.text = toText(item)
+            binding.btnEdit.visibility = View.GONE
+            binding.btnDelete.visibility = View.GONE
             binding.btnEdit.setOnClickListener { onEdit(item) }
             binding.btnDelete.setOnClickListener { onDelete(item) }
             if (showContextMenu) {

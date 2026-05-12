@@ -17,7 +17,7 @@ class App : Application() {
                 data: String?,
                 block: (Timber.Tree, String) -> Unit
             ) = block(
-                Timber.tag(tag),
+                Timber.tag("MY_TAG_$tag"),
                 if (data.isNullOrEmpty()) action else "$action --- $data"
             )
 

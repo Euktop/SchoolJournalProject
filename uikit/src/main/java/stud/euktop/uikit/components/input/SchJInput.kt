@@ -24,7 +24,6 @@ class SchJInput @JvmOverloads constructor(
         orientation = VERTICAL
     }
 
-
     override fun setOnClickListener(l: OnClickListener?) {
         super.setOnClickListener(l)
         schJBase.binding.editText.setOnTouchListener { _, event ->
@@ -87,8 +86,7 @@ class SchJInput @JvmOverloads constructor(
                 state = State(
                     text = getString(R.styleable.SchJInput_android_text) ?: state.text,
                     textHint = getString(R.styleable.SchJInput_android_hint) ?: state.textHint,
-                    textHelper = getString(R.styleable.SchJInput_helperText)
-                        ?: state.textHelper,
+                    textHelper = getString(R.styleable.SchJInput_helperText) ?: state.textHelper,
                     endIconMode = getInt(R.styleable.SchJInput_endIconMode, state.endIconMode),
                     textError = getString(R.styleable.SchJInput_schjTextError) ?: state.textError,
                     isErrorVisible = getBoolean(
@@ -104,6 +102,7 @@ class SchJInput @JvmOverloads constructor(
             }
         }
     }
+
     val editText get() = schJBase.binding.inputLayout.editText
 
     fun interface Listener {
