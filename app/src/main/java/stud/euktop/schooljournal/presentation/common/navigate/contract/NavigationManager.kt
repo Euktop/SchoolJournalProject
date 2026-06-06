@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
  * @author 12345 (номер участника)
  * @since 15-05-2026
  */
+@Deprecated("Используй роутер")
 interface NavigationManager {
 
     /**

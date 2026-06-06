@@ -1,9 +1,12 @@
+@file:Suppress("DEPRECATION")
+
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
-import android.os.Bundle
 import stud.euktop.domain.model.assignment.AssignmentId
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.Nav1Directions
+import stud.euktop.schooljournal.NavAuthDirections
+import stud.euktop.schooljournal.NavMainMainDirections
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
@@ -11,7 +14,11 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdm
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterError
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMainMenu
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterProfile
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,7 +26,8 @@ import javax.inject.Singleton
 class RouterImpl @Inject constructor(
     private val navigationManager: NavigationManager,
     private val authRepository: AuthRepository
-) : RouterSplash, RouterMain, RouterAuthorization, RouterAdmin, RouterError {
+) : RouterSplash, RouterMain, RouterAuthorization, RouterAdmin, RouterError,
+    RouterMainMenu, RouterProfile, RouterStudent, RouterTeacher {
 
     override suspend fun navigateAfterSplash() {
         if (authRepository.getCurrentUser().isSuccess) {
@@ -38,7 +46,7 @@ class RouterImpl @Inject constructor(
     override suspend fun toCreateProfile() {
         navigationManager.navigate(
             NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()),
-            NavCommand.ToDestination(R.id.profileFragment)
+            NavCommand.ToDestination(R.id.authProfileFragment) // Переход внутри nav_auth
         )
     }
 
@@ -50,65 +58,86 @@ class RouterImpl @Inject constructor(
     }
 
     override suspend fun toLogin() {
+        // actionGlobalToOnboarding уже ведет в nav_auth, который стартует с loginFragment.
+        // Дополнительный ToDestination(R.id.loginFragment) избыточен.
         navigationManager.navigate(
-            NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()),
-            NavCommand.ToDestination(R.id.loginFragment)
+            NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding())
         )
     }
 
-    override suspend fun toSuccessCreate() {
-        toMain()
-    }
-
-    override suspend fun toSuccessChangePassword() {
-        navigateBack()
-    }
-
-    override suspend fun toCancelChangePassword() {
-        navigateBack()
-    }
+    override suspend fun toSuccessCreate() = toMain()
+    override suspend fun toSuccessChangePassword() = navigateBack()
+    override suspend fun toCancelChangePassword() = navigateBack()
 
     override suspend fun toCancelCreatePassword() {
         navigationManager.navigate(NavCommand.Back)
     }
 
+    override fun toChangePassword() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalChangePassword()))
+
+    override fun toStudentSubjectDetail(subjectId: Int) = navigationManager.navigate(
+        NavCommand.ToAction(
+            NavMainMainDirections.actionGlobalStudentSubjectDetail(subjectId)
+        )
+    )
+
+    override fun toTeacherHomeworkEdit() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherHomeworkEdit())) // homeworkId имеет defaultValue=0 в XML
+
+    override fun toTeacherHomeworkEdit(homeworkId: Int) = navigationManager.navigate(
+        NavCommand.ToAction(
+            NavMainMainDirections.actionGlobalTeacherHomeworkEdit(homeworkId)
+        )
+    )
+
+    override fun toTeacherLessons(classId: Int, subjectId: Int) = navigationManager.navigate(
+        NavCommand.ToAction(
+            NavMainMainDirections.actionGlobalTeacherLessons(
+                classId,
+                subjectId
+            )
+        )
+    )
+
+
     override fun navigateBack() {
         navigationManager.navigate(NavCommand.Back)
     }
 
+    // --- Переходы с аргументами теперь используют NavDirections ---
+
     override fun toEditUser(userId: Int) {
-        val bundle = Bundle().apply { putInt("userId", userId) }
-        navigationManager.navigate(NavCommand.ToDestination(R.id.userEditFragment, bundle))
-    }
-
-    override fun toEditClass(classId: Int) {
-        val bundle = Bundle().apply { putInt("classId", classId) }
-        navigationManager.navigate(NavCommand.ToDestination(R.id.classEditFragment, bundle))
-    }
-
-    override fun toEditSubject(subjectId: Int) {
-        val bundle = Bundle().apply { putInt("subjectId", subjectId) }
-        navigationManager.navigate(NavCommand.ToDestination(R.id.subjectEditFragment, bundle))
-    }
-
-    override fun toEditAssignment(assignmentId: AssignmentId) {
-        val bundle = Bundle().apply { putSerializable("assignmentId", assignmentId) }
         navigationManager.navigate(
-            NavCommand.ToDestination(
-                R.id.teacherAssignmentEditFragment,
-                bundle
-            )
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalUserEdit(userId))
         )
     }
 
-    override fun onUnauthorized(): () -> Unit = {
+    override fun toEditClass(classId: Int) {
         navigationManager.navigate(
-            NavCommand.ToDestination(
-                R.id.nav_auth,
-                popUpTo = R.id.splashFragment,
-                inclusive = true
-            ),
-            NavCommand.ToDestination(R.id.loginFragment)
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalClassEdit(classId))
+        )
+    }
+
+    override fun toEditSubject(subjectId: Int) {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalSubjectEdit(subjectId))
+        )
+    }
+
+    override fun toEditAssignment(assignmentId: AssignmentId) {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherAssignmentEdit(assignmentId))
+        )
+    }
+
+    // --- Обработка ошибок ---
+
+    override fun onUnauthorized(): () -> Unit = {
+        // Глобальный экшен action_global_to_onboarding в nav1 уже настроен на
+        // переход к nav_auth с popUpTo="@id/splashFragment" и inclusive="true".
+        navigationManager.navigate(
+            NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding())
         )
     }
 
@@ -146,4 +175,54 @@ class RouterImpl @Inject constructor(
     override fun onMultiplePrimaryTeachers(): () -> Unit = { /* остаться */ }
     override fun onPermissionOutOfRange(): () -> Unit = { /* остаться */ }
     override fun onDefault(): () -> Unit = { navigationManager.navigate(NavCommand.Back) }
+    override fun toTeacherClasses() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherClasses()))
+
+    override fun toStudentSubjects() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalStudentSubjects()))
+
+    override fun toAdminPanel() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalAdminPanel()))
+
+    override fun toAuthProfile() =
+        navigationManager.navigate(NavCommand.ToAction(NavAuthDirections.actionGlobalToAuthProfile()))
+
+    override fun toStudentSubjectDetail() = navigationManager.navigate(
+        NavCommand.ToAction(
+            NavMainMainDirections.actionGlobalStudentSubjectDetail()
+        )
+    ) // 0 - заглушка, если ID не важен
+
+    override fun toNavAuth() =
+        navigationManager.navigate(NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()))
+
+    override fun toNavAuthWithProfile() = navigationManager.navigate(
+        NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()),
+        NavCommand.ToAction(NavAuthDirections.actionGlobalToAuthProfile())
+    )
+
+    override fun toNavAuthWithCreatePassword() = navigationManager.navigate(
+        NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()),
+        NavCommand.ToAction(NavAuthDirections.actionGlobalToCreatePassword())
+    )
+
+    override fun toLessonMarks(lessonId: Int) = navigationManager.navigate(
+        NavCommand.ToAction(
+            NavMainMainDirections.actionGlobalLessonMarks(lessonId)
+        )
+    )
+
+    override fun toTeacherHomeworkList() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherHomeworkList()))
+
+    override fun toStudentHomeworkList() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalStudentHomeworkList()))
+
+    override fun toStudentSchedule() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalStudentSchedule()))
+
+    override fun toLessonEdit() =
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalLessonEdit()))
+
+
 }

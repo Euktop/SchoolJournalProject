@@ -1,16 +1,13 @@
 package stud.euktop.schooljournal.presentation.main.student.studentSubjects
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import javax.inject.Inject
 
@@ -47,16 +44,11 @@ class StudentSubjectsFragment : BaseFragment<
     @Inject
     internal lateinit var navigationManager: NavigationManager
 
+    @Inject internal lateinit var router: RouterStudent
+
     override fun setupUI() {
         binding.rvSubjects.adapter = StudentSubjectAdapter { item ->
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    destId = R.id.studentSubjectDetailFragment,
-                    args = Bundle().apply {
-                        putInt("subjectId", item.subjectId)
-                    }
-                )
-            )
+            router.toStudentSubjectDetail(item.subjectId)
         }
     }
 

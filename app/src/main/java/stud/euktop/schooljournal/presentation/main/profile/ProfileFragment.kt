@@ -1,6 +1,5 @@
 package stud.euktop.schooljournal.presentation.main.profile
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -13,8 +12,7 @@ import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterProfile
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import javax.inject.Inject
 
@@ -31,21 +29,18 @@ class ProfileFragment : BaseFragment<
     override val viewModel: ProfileViewModel by viewModels()
 
     @Inject
-    lateinit var navigationManager: NavigationManager
+    lateinit var router: RouterProfile
 
     override fun setupUI() {
         binding.btnEditProfile.setOnClickListener {
             val currentUser = viewModel.state.value.user ?: return@setOnClickListener
-            val bundle = Bundle().apply { putInt("userId", currentUser.userId) }
-            navigationManager.navigate(
-                NavCommand.ToDestination(R.id.userEditFragment, args = bundle)
-            )
+            router.toEditUser(currentUser.userId)
         }
         binding.btnLogout.setOnClickListener {
             messages.message(MessageParam(R.string.logout_message) {})
         }
         binding.btnChangePassword.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.changePasswordFragment))
+            router.toChangePassword()
         }
     }
 

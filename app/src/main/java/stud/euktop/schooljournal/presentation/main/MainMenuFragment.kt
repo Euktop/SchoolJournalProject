@@ -5,13 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentMainMenuBinding
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
-import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMainMenu
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,66 +28,26 @@ class MainMenuFragment : Fragment() {
         return binding.root
     }
 
+    @Inject
+    lateinit var router: RouterMainMenu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnTeacherClasses.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.teacherClassesFragment))
-        }
-        binding.btnStudentSubjects.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.studentSubjectsFragment))
-        }
-        binding.btnAdminPanel.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.adminPanelFragment))
-        }
-        binding.btnProfile.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.profileFragment))
-        }
-        binding.btnStudentDetail.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.studentSubjectDetailFragment))
-        }
-        binding.btnLogin.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.nav_auth))
-        }
-        binding.btnProfileRegistration.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(R.id.nav_auth),
-                NavCommand.ToDestination(R.id.profileFragment)
-            )
-        }
-        binding.btnCreatePassword.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(R.id.nav_auth),
-                NavCommand.ToDestination(R.id.createPasswordFragment)
-            )
-        }
-        binding.btnSchools.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.adminPanelFragment))
-        }
-        binding.btnRooms.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.adminPanelFragment))
-        }
-        binding.btnLessonMarks.setOnClickListener {
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    R.id.lessonMarksFragment,
-                    args = Bundle().apply { putInt(LessonMarksViewModel.LESSON_ID_KEY, 101) }
-                )
-            )
-        }
-        binding.btnHomework.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkListFragment))
-        }
-        binding.btnStudentHomework.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.studentHomeworkListFragment))
-        }
-
-        binding.btnLessonEdit.setOnClickListener {
-            findNavController().navigate(R.id.lessonEditFragment)
-        }
-        binding.btnStudentSchedule.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.studentScheduleFragment))
-        }
+        binding.btnTeacherClasses.setOnClickListener { router.toTeacherClasses() }
+        binding.btnStudentSubjects.setOnClickListener { router.toStudentSubjects() }
+        binding.btnAdminPanel.setOnClickListener { router.toAdminPanel() }
+        binding.btnProfile.setOnClickListener { router.toAuthProfile() }
+        binding.btnStudentDetail.setOnClickListener { router.toStudentSubjectDetail() }
+        binding.btnLogin.setOnClickListener { router.toNavAuth() }
+        binding.btnProfileRegistration.setOnClickListener { router.toNavAuthWithProfile() }
+        binding.btnCreatePassword.setOnClickListener { router.toNavAuthWithCreatePassword() }
+        binding.btnSchools.setOnClickListener { router.toAdminPanel() }
+        binding.btnRooms.setOnClickListener { router.toAdminPanel() }
+        binding.btnLessonMarks.setOnClickListener { router.toLessonMarks(101) }
+        binding.btnHomework.setOnClickListener { router.toTeacherHomeworkList() }
+        binding.btnStudentHomework.setOnClickListener { router.toStudentHomeworkList() }
+        binding.btnLessonEdit.setOnClickListener { router.toLessonEdit() }
+        binding.btnStudentSchedule.setOnClickListener { router.toStudentSchedule() }
     }
 
     override fun onDestroyView() {

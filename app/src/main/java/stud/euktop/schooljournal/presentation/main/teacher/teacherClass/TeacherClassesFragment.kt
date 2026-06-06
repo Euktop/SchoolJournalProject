@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.databinding.FragmentTeacherClassesBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import stud.euktop.schooljournal.presentation.main.teacher.teacherLessons.TeacherLessonsViewModel
 import javax.inject.Inject
@@ -41,6 +42,8 @@ class TeacherClassesFragment : BaseFragment<
         >() {
     @Inject
     internal lateinit var navigationManager: NavigationManager
+    @Inject internal lateinit var router: RouterTeacher
+
     override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
         FragmentTeacherClassesBinding.inflate(i, c, false)
 
@@ -48,15 +51,7 @@ class TeacherClassesFragment : BaseFragment<
 
     override fun setupUI() {
         binding.rvClasses.adapter = TeacherClassAdapter { item ->
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    destId = R.id.teacherLessonsFragment,
-                    args = Bundle().apply {
-                        putInt(TeacherLessonsViewModel.CLASS_ID, item.classId)
-                        putInt(TeacherLessonsViewModel.SUBJECT_ID, item.subjectId)
-                    }
-                )
-            )
+            router.toTeacherLessons(item.classId, item.subjectId)
         }
         viewModel.loadClasses()
     }

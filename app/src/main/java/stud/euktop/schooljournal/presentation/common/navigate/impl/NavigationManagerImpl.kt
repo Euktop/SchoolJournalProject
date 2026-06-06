@@ -54,10 +54,11 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
                 val description = when (cmd) {
                     is NavCommand.ToDestination -> {
                         val name = resourceName(cmd.destId)
-                        "ToDestination($name, args=${cmd.args})"
+                        "ToDestination($name)"
                     }
                     is NavCommand.Back -> "Back"
                     is NavCommand.ToAction -> cmd.directions::class.simpleName
+                    is NavCommand.PopUpTo -> "PopUpTo(${cmd.destinationId}, inclusive=${cmd.inclusive})"
                 }
                 it.d(toSimpleTag(), "Navigate", description)
             }
@@ -65,12 +66,14 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
             // Определяем, какой NavController должен обработать команду
             val (nav, key) = when (cmd) {
                 is NavCommand.ToDestination -> {
-                    val targetKey = cmd.targetKey ?: "main"
+                    // Переходы по ID destination всегда выполняются в главном контроллере
+                    val targetKey = "main"
                     controllers[targetKey] to targetKey
                 }
-                // Для Back и ToAction используем последний зарегистрированный контроллер или главный
+                // Для Back, ToAction и PopUpTo используем последний активный контроллер или главный
                 is NavCommand.ToAction,
-                is NavCommand.Back -> {
+                is NavCommand.Back,
+                is NavCommand.PopUpTo -> {
                     val nav = controllers.values.lastOrNull() ?: controllers["main"]
                     nav to null
                 }
@@ -106,18 +109,8 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
     private fun execute(nav: NavController, command: NavCommand) {
         when (command) {
             is NavCommand.ToDestination -> {
-                val navOptions = if (command.popUpTo != null) {
-                    NavOptions.Builder()
-                        .setPopUpTo(command.popUpTo, command.inclusive)
-                        .setEnterAnim(R.anim.slide_in_right)
-                        .setExitAnim(R.anim.slide_out_left)
-                        .setPopEnterAnim(R.anim.slide_in_left)
-                        .setPopExitAnim(R.anim.slide_out_right)
-                        .build()
-                } else {
-                    defaultNavOptions
-                }
-                nav.navigate(command.destId, command.args, navOptions)
+                // Используем defaultNavOptions, так как popUpTo и args теперь задаются через XML (ToAction)
+                nav.navigate(command.destId, null, defaultNavOptions)
                 logger?.i(toSimpleTag(), "execute", "Переход к destination id=${command.destId}")
             }
             NavCommand.Back -> {
@@ -125,8 +118,14 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
                 logger?.i(toSimpleTag(), "execute", "Выполнен Back")
             }
             is NavCommand.ToAction -> {
+                // NavDirections уже содержит все настройки (popUpTo, args, анимации) из XML
                 nav.navigate(command.directions)
                 logger?.i(toSimpleTag(), "execute", "Выполнен ToAction: ${command.directions::class.simpleName}")
+            }
+            is NavCommand.PopUpTo -> {
+                // Очищаем back stack до указанного destination
+                nav.popBackStack(command.destinationId, command.inclusive)
+                logger?.i(toSimpleTag(), "execute", "Выполнен PopUpTo до ${command.destinationId}")
             }
         }
     }

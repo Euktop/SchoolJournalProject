@@ -10,7 +10,11 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdm
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterError
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMainMenu
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterProfile
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import stud.euktop.schooljournal.presentation.common.navigate.impl.ErrorHandlerImpl
 import stud.euktop.schooljournal.presentation.common.navigate.impl.NavigationManagerImpl
 import stud.euktop.schooljournal.presentation.common.navigate.impl.RouterImpl
@@ -46,4 +50,17 @@ abstract class NavigationModule {
     @Binds
     @Singleton
     abstract fun bindsRouterError(routerError: RouterImpl): RouterError
+
+    @Binds
+    @Singleton
+    abstract fun bindRouterMainMenu(impl: RouterImpl): RouterMainMenu
+    @Binds
+    @Singleton
+    abstract fun bindRouterProfile(impl: RouterImpl): RouterProfile
+    @Binds
+    @Singleton
+    abstract fun bindRouterStudent(impl: RouterImpl): RouterStudent
+    @Binds
+    @Singleton
+    abstract fun bindRouterTeacher(impl: RouterImpl): RouterTeacher
 }

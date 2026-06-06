@@ -71,7 +71,12 @@
         android:id="@+id/studentSubjectDetailFragment"
         android:name="stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentSubjectDetailFragment"
         android:label="Детали предмета"
-        tools:layout="@layout/fragment_student_subject_detail" />
+        tools:layout="@layout/fragment_student_subject_detail">
+        <argument
+            android:name="subjectId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
     <!-- Административная панель -->
     <fragment
@@ -82,7 +87,7 @@
 
     <!-- Профиль -->
     <fragment
-        android:id="@+id/profileFragment"
+        android:id="@+id/authProfileFragment"
         android:name="stud.euktop.schooljournal.presentation.main.profile.ProfileFragment"
         android:label="Профиль"
         tools:layout="@layout/fragment_profile" />
@@ -120,8 +125,7 @@
         android:label="@string/edit_assignment">
         <argument
             android:name="assignmentId"
-            android:defaultValue="0"
-            app:argType="integer" />
+            app:argType="stud.euktop.domain.model.assignment.AssignmentId" />
     </fragment>
     <fragment
         android:id="@+id/teacherHomeworkListFragment"
@@ -144,4 +148,21 @@
         android:name="stud.euktop.schooljournal.presentation.main.student.homework.StudentHomeworkListFragment"
         android:label="Домашние задания"
         tools:layout="@layout/fragment_student_homework_list" />
+
+    <action android:id="@+id/action_global_user_edit" app:destination="@id/userEditFragment" />
+    <action android:id="@+id/action_global_class_edit" app:destination="@id/classEditFragment" />
+    <action android:id="@+id/action_global_subject_edit" app:destination="@id/subjectEditFragment" />
+    <action android:id="@+id/action_global_teacher_assignment_edit" app:destination="@id/teacherAssignmentEditFragment" />
+    <action android:id="@+id/action_global_teacher_classes" app:destination="@id/teacherClassesFragment" />
+    <action android:id="@+id/action_global_student_subjects" app:destination="@id/studentSubjectsFragment" />
+    <action android:id="@+id/action_global_admin_panel" app:destination="@id/adminPanelFragment" />
+    <action android:id="@+id/action_global_student_subject_detail" app:destination="@id/studentSubjectDetailFragment" />
+    <action android:id="@+id/action_global_lesson_marks" app:destination="@id/lessonMarksFragment" />
+    <action android:id="@+id/action_global_teacher_homework_list" app:destination="@id/teacherHomeworkListFragment" />
+    <action android:id="@+id/action_global_student_homework_list" app:destination="@id/studentHomeworkListFragment" />
+    <action android:id="@+id/action_global_student_schedule" app:destination="@id/studentScheduleFragment" />
+    <action android:id="@+id/action_global_lesson_edit" app:destination="@id/lessonEditFragment" />
+    <action android:id="@+id/action_global_change_password" app:destination="@id/changePasswordFragment" />
+    <action android:id="@+id/action_global_teacher_homework_edit" app:destination="@id/teacherHomeworkEditFragment" />
+    <action android:id="@+id/action_global_teacher_lessons" app:destination="@id/teacherLessonsFragment" />
 </navigation>

@@ -1,18 +1,14 @@
 package stud.euktop.schooljournal.presentation.main.teacher.teacherLessons
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherLessonsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.filter.lesson.LessonFilterDialog
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import stud.euktop.schooljournal.presentation.common.utils.submitList
-import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -26,22 +22,14 @@ class TeacherLessonsFragment : BaseFragment<
         FragmentTeacherLessonsBinding.inflate(inflater, container, false)
 
     @Inject
-    lateinit var navigationManager: NavigationManager
+    lateinit var router: RouterTeacher
 
     override val viewModel: TeacherLessonsViewModel by viewModels()
 
     override fun setupUI() {
         binding.rvLessons.adapter = TeacherLessonsAdapter { lesson ->
-            navigationManager.navigate(
-                NavCommand.ToDestination(
-                    destId = R.id.lessonMarksFragment,
-                    args = Bundle().apply {
-                        putInt(LessonMarksViewModel.LESSON_ID_KEY, lesson.lessonId)
-                    }
-                )
-            )
+            router.toLessonMarks(lesson.lessonId)
         }
-
         binding.toolbar.showFilterDialog = { showFilterDialog() }
     }
 

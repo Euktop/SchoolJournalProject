@@ -1,18 +1,15 @@
 package stud.euktop.schooljournal.presentation.main.teacher.homework
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.homework.HomeworkFilter
-import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.filter.homework.HomeworkFilterDialog
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import javax.inject.Inject
 
@@ -31,42 +28,31 @@ class TeacherHomeworkListFragment : BaseFragment<
     @Inject
     lateinit var navigationManager: NavigationManager
 
+    @Inject lateinit var router: RouterTeacher
+
     private lateinit var adapter: TeacherHomeworkAdapter
 
     override fun setupUI() {
-        binding.toolbar.setNavigationOnClickListener {
-            navigationManager.navigate(NavCommand.Back)
-        }
-        binding.fabAddHomework.setOnClickListener {
-            navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkEditFragment))
-        }
+        binding.toolbar.setNavigationOnClickListener { router.navigateBack() }
+        binding.fabAddHomework.setOnClickListener { router.toTeacherHomeworkEdit() }
+
         adapter = TeacherHomeworkAdapter { homework ->
-            val bundle = Bundle().apply { putInt("homeworkId", homework.homeworkId) }
-            navigationManager.navigate(
-                NavCommand.ToDestination(R.id.teacherHomeworkEditFragment, args = bundle)
-            )
+            router.toTeacherHomeworkEdit(homework.homeworkId)
         }
         binding.toolbar.showFilterDialog = { showFilterDialog() }
         binding.rvHomeworkList.adapter = adapter
     }
 
-    override fun updateState(state: TeacherHomeworkState) {
-        binding.rvHomeworkList.submitList(state.homeworkList)
-    }
-
     override fun updateEvent(event: TeacherHomeworkEvent) {
         when (event) {
-            TeacherHomeworkEvent.NavigateToAdd -> {
-                navigationManager.navigate(NavCommand.ToDestination(R.id.teacherHomeworkEditFragment))
-            }
-            is TeacherHomeworkEvent.EditHomework -> {
-                val bundle = Bundle().apply { putInt("homeworkId", event.homeworkId) }
-                navigationManager.navigate(
-                    NavCommand.ToDestination(R.id.teacherHomeworkEditFragment, args = bundle)
-                )
-            }
-            TeacherHomeworkEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
+            TeacherHomeworkEvent.NavigateToAdd -> router.toTeacherHomeworkEdit()
+            is TeacherHomeworkEvent.EditHomework -> router.toTeacherHomeworkEdit(event.homeworkId)
+            TeacherHomeworkEvent.NavigateBack -> router.navigateBack()
         }
+    }
+
+    override fun updateState(state: TeacherHomeworkState) {
+        binding.rvHomeworkList.submitList(state.homeworkList)
     }
 
     private fun showFilterDialog() {
