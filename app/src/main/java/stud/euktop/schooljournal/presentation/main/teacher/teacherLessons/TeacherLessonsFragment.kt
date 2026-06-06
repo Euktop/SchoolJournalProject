@@ -8,42 +8,27 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherLessonsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.filter.lesson.LessonFilterDialog
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksViewModel
 import javax.inject.Inject
 
-/**
- * Экран списка уроков по выбранному классу и предмету (учитель).
- *
- * Назначение: отображает все уроки (Lessons) для заданных classId и subjectId.
- *
- * Роли: TEACHER
- *
- * Функционал:
- * - Получение аргументов навигации (classId, subjectId) из SavedStateHandle
- * - Загрузка списка уроков через TeacherLessonsRepository.getLessons()
- * - Отображение уроков в RecyclerView с датой, темой, временем, кабинетом, учителем
- * - При клике на урок переход к экрану LessonMarksFragment с передачей lessonId
- * - Pull-to-refresh (опционально)
- *
- * @see TeacherLessonsViewModel
- */
 @AndroidEntryPoint
 class TeacherLessonsFragment : BaseFragment<
         FragmentTeacherLessonsBinding,
         TeacherLessonsViewModel,
         TeacherLessonsState,
-        Unit
-        >() {
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentTeacherLessonsBinding.inflate(i, c, false)
+        Unit>() {
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentTeacherLessonsBinding.inflate(inflater, container, false)
 
     @Inject
     lateinit var navigationManager: NavigationManager
+
     override val viewModel: TeacherLessonsViewModel by viewModels()
-    private var adapter: TeacherLessonsAdapter? = null
 
     override fun setupUI() {
         binding.rvLessons.adapter = TeacherLessonsAdapter { lesson ->
@@ -56,6 +41,18 @@ class TeacherLessonsFragment : BaseFragment<
                 )
             )
         }
+
+        binding.toolbar.showFilterDialog = { showFilterDialog() }
+    }
+
+    private fun showFilterDialog() {
+        if (parentFragmentManager.findFragmentByTag("lesson_filter") != null) return
+        val dialog = LessonFilterDialog(
+            initialFilter = viewModel.state.value.filter,
+            onFilterApplied = { filter -> viewModel.applyFilter(filter) },
+            onError = viewModel.onError
+        )
+        dialog.show(parentFragmentManager, "lesson_filter")
     }
 
     override fun updateState(state: TeacherLessonsState) {

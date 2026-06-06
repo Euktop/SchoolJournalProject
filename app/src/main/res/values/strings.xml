@@ -144,5 +144,8 @@
     <string name="repeat_new_password">Repeat the new password</string>
     <string name="password_changed">Password successfully changed</string>
     <string name="change_password">Change password</string>
+    <string name="period">Period</string>
+    <string name="grades">Grades</string>
+    <string name="lessons">Занятия</string>
 
 </resources>

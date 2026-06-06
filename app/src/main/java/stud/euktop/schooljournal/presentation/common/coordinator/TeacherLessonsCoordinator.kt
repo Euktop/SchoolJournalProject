@@ -18,24 +18,30 @@ class TeacherLessonsCoordinator @Inject constructor(
 
     suspend fun getLessons(
         classId: Int,
-        subjectId: Int
-    ): CoordinatorResult<List<TeacherLessonItem>> =
-        coordinatorExec.exec {
-            runCatching {
-                val filter = LessonFilter(classId = classId, subjectId = subjectId)
-                val lessons = lessonRepository.getLessons(filter).getOrThrow()
-                lessons.map { lesson ->
-                    val teacher = userRepository.getUser(lesson.lessonId).getOrNull()
-                    TeacherLessonItem(
-                        lessonId = lesson.lessonId,
-                        date = lesson.date,
-                        topic = lesson.topic,
-                        startTime = lesson.startTime,
-                        endTime = lesson.endTime,
-                        roomName = lesson.room?.name,
-                        teacherName = teacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
-                    )
-                }
+        subjectId: Int,
+        dateFrom: java.util.Date? = null,
+        dateTo: java.util.Date? = null
+    ): CoordinatorResult<List<TeacherLessonItem>> = coordinatorExec.exec {
+        runCatching {
+            val filter = LessonFilter(
+                classId = classId,
+                subjectId = subjectId,
+                dateFrom = dateFrom,
+                dateTo = dateTo
+            )
+            val lessons = lessonRepository.getLessons(filter).getOrThrow()
+            lessons.map { lesson ->
+                val teacher = userRepository.getUser(lesson.teacher.userId).getOrNull()
+                TeacherLessonItem(
+                    lessonId = lesson.lessonId,
+                    date = lesson.date,
+                    topic = lesson.topic,
+                    startTime = lesson.startTime,
+                    endTime = lesson.endTime,
+                    roomName = lesson.room?.name,
+                    teacherName = teacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
+                )
             }
         }
+    }
 }

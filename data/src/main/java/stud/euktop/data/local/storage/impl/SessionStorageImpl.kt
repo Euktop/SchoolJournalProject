@@ -16,7 +16,7 @@ import stud.euktop.data.local.storage.contract.UserIdStorage
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("session")
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("")
 
 @Singleton
 class SessionStorageImpl @Inject constructor(

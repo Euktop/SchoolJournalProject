@@ -1,39 +1,25 @@
+// presentation/main/student/studentSubjectDetail/StudentSubjectDetailFragment.kt
 package stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.utils.toBaseString
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectDetailBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.utils.submitList
-import stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentMarkAdapter
+import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
+import stud.euktop.schooljournal.presentation.common.filter.grade.GradeFilterDialog
 import stud.euktop.uikit.components.lineChart.SchJLineChartState
 import stud.euktop.uikit.components.lineChart.SchJLinePoint
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-/**
- * Детальный экран успеваемости по предмету (ученик).
- *
- * Назначение: отображает динамику успеваемости (график) и список всех оценок/пропусков
- * по выбранному предмету.
- *
- * Роли: STUDENT, PARENT
- *
- * Функционал:
- * - Получение subjectId из аргументов навигации
- * - Загрузка списка оценок через StudentRepository.getSubjectMarks(studentId, subjectId)
- * - Построение линейного графика (SchJLineChart) по датам (значения 2-5, пропуски = 0)
- * - Отображение списка оценок в RecyclerView: дата, оценка/код пропуска, комментарий
- * - Обработка пустого состояния (если нет оценок)
- *
- * @see StudentSubjectDetailViewModel
- */
-//stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentSubjectDetailFragment
 @AndroidEntryPoint
 class StudentSubjectDetailFragment : BaseFragment<
         FragmentStudentSubjectDetailBinding,
@@ -41,28 +27,50 @@ class StudentSubjectDetailFragment : BaseFragment<
         StudentSubjectDetailState,
         Unit>() {
 
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentStudentSubjectDetailBinding.inflate(i, c, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentStudentSubjectDetailBinding.inflate(inflater, container, false)
 
     override val viewModel: StudentSubjectDetailViewModel by viewModels()
 
+    private lateinit var adapter: StudentMarkPagingAdapter
+    private lateinit var loadingDelegate: LoadingDelegate<StudentSubjectDetailState>
+
     override fun setupUI() {
-        binding.rvMarks.adapter = StudentMarkAdapter { /* клик по оценке не нужен */ }
+        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
+
+        adapter = StudentMarkPagingAdapter { /* клик по оценке не нужен */ }
+        binding.rvMarks.adapter = adapter
+
+        // Подписка на PagingData
+        lifecycleScope.launch {
+            viewModel.pagingDataFlow.collectLatest { pagingData ->
+                adapter.submitData(pagingData)
+            }
+        }
+
+        // Кнопка фильтра (можно добавить на toolbar)
+        binding.toolbar.showFilterDialog = { showFilterDialog() }
+        binding.toolbar.setupWithNavController(findNavController())
+    }
+
+    private fun showFilterDialog() {
+        GradeFilterDialog(
+            initialFilter = viewModel.filterFlow.value,
+            onFilterApplied = { filter -> viewModel.applyFilter(filter) },
+            onError = viewModel.onError
+        ).show(childFragmentManager, "grade_filter")
     }
 
     @SuppressLint("SimpleDateFormat")
     override fun updateState(state: StudentSubjectDetailState) {
         binding.lcProgress.state = SchJLineChartState(
-            points = state.marks.sortedBy {
-                it.date
-            }.mapIndexed { _, mark ->
+            points = state.aggregatedMarks.sortedBy { it.date }.map { aggregated ->
                 SchJLinePoint(
-                    label = SimpleDateFormat("dd.MM", Locale.getDefault()).format(mark.date),
-                    value = mark.absenceCode?.getGrade()?.toFloat() ?: 0.0f
+                    label = SimpleDateFormat("dd.MM", Locale.getDefault()).format(aggregated.date),
+                    value = aggregated.averageMark?.toFloat() ?: 0f
                 )
             }
         )
-        binding.rvMarks.submitList(state.marks)
     }
 
     override fun updateEvent(event: Unit) {}

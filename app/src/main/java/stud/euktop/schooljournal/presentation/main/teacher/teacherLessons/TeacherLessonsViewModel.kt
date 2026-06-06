@@ -5,25 +5,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.coordinator.TeacherLessonsCoordinator
+import stud.euktop.schooljournal.presentation.common.filter.lesson.AppLessonFilter
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import javax.inject.Inject
 
-/**
- * ViewModel для экрана уроков учителя.
- *
- * Назначение: загружает уроки по переданным classId и subjectId.
- *
- * Функционал:
- * - Извлечение аргументов (classId, subjectId) из SavedStateHandle
- * - State: lessons (List<TeacherLessonItem>), isLoading
- * - loadLessons() – вызов TeacherLessonsRepository.getLessons()
- */
 @HiltViewModel
 class TeacherLessonsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val coordinator: TeacherLessonsCoordinator,
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<TeacherLessonsState, Unit>() {
+
     companion object {
         const val CLASS_ID = "classId"
         const val SUBJECT_ID = "subjectId"
@@ -39,10 +31,16 @@ class TeacherLessonsViewModel @Inject constructor(
         loadLessons()
     }
 
-    fun loadLessons() {
+    fun applyFilter(filter: AppLessonFilter) {
+        _state.update { it.copy(filter = filter, lessons = emptyList()) }
+        loadLessons()
+    }
+
+    private fun loadLessons() {
+        val filter = _state.value.filter
         executeLoadingBlockSync(
             key = "load_lessons",
-            block = { coordinator.getLessons(classId, subjectId) },
+            block = { coordinator.getLessons(classId, subjectId, filter.dateFrom, filter.dateTo) },
             onSuccess = { lessons -> _state.update { it.copy(lessons = lessons) } }
         )
     }

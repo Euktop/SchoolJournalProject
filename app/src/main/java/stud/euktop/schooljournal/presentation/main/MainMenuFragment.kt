@@ -88,8 +88,8 @@ class MainMenuFragment : Fragment() {
         binding.btnLessonEdit.setOnClickListener {
             findNavController().navigate(R.id.lessonEditFragment)
         }
-        binding.testConnection.setOnClickListener {
-
+        binding.btnStudentSchedule.setOnClickListener {
+            navigationManager.navigate(NavCommand.ToDestination(R.id.studentScheduleFragment))
         }
     }
 

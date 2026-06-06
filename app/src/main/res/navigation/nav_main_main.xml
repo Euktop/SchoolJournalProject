@@ -11,6 +11,11 @@
         tools:layout="@layout/fragment_change_password" />
     <!-- Главное меню -->
     <fragment
+        android:id="@+id/studentScheduleFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.student.schedule.StudentScheduleFragment"
+        android:label="Расписание"
+        tools:layout="@layout/fragment_student_schedule" />
+    <fragment
         android:id="@+id/mainMenuFragment"
         android:name="stud.euktop.schooljournal.presentation.main.MainMenuFragment"
         android:label="Главное меню"

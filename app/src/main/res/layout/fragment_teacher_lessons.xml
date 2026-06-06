@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="stud.euktop.schooljournal.presentation.main.teacher.teacherLessons.TeacherLessonsFragment">
-
+    <stud.euktop.uikit.components.filter.SchJFilterToolBar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:menu="@menu/menu_filter"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title="@string/lessons" />
     <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
         android:id="@+id/rvLessons"
         android:layout_width="match_parent"

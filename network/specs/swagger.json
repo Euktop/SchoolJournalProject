@@ -5130,7 +5130,7 @@
         "tags": [
           "Student"
         ],
-        "summary": "Получить сводку по оценкам ученика за период.",
+        "summary": "Получить сводку по оценкам ученика за период (средний балл, итоговая, количество оценок).",
         "parameters": [
           {
             "name": "studentId",
@@ -5183,6 +5183,237 @@
                   "items": {
                     "$ref": "#/components/schemas/GetStudentGradesSummary_Result"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
+    "/api/Student/marks-aggregated": {
+      "get": {
+        "tags": [
+          "Student"
+        ],
+        "summary": "Получить агрегированные оценки по предмету (средний балл, количество, первая/последняя дата).",
+        "parameters": [
+          {
+            "name": "subjectId",
+            "in": "query",
+            "description": "ID предмета.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "studentId",
+            "in": "query",
+            "description": "ID ученика (опционально, по умолчанию текущий).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Начало периода (опционально).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Конец периода (опционально).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "maxPoints",
+            "in": "query",
+            "description": "Максимальное количество точек (опционально, для ограничения количества записей).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetStudentMarksAggregated_Result"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetStudentMarksAggregated_Result"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetStudentMarksAggregated_Result"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
+    "/api/Student/overall-average": {
+      "get": {
+        "tags": [
+          "Student"
+        ],
+        "summary": "Получить общую успеваемость ученика за период (средний балл, количество оценок, хороших, отличных).",
+        "parameters": [
+          {
+            "name": "studentId",
+            "in": "query",
+            "description": "ID ученика (опционально, по умолчанию текущий).",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Начало периода (опционально).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Конец периода (опционально).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStudentOverallAverage_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStudentOverallAverage_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStudentOverallAverage_Result"
                 }
               }
             }
@@ -8920,6 +9151,37 @@
         },
         "additionalProperties": false
       },
+      "GetStudentMarksAggregated_Result": {
+        "type": "object",
+        "properties": {
+          "periodStart": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "gradesCount": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "firstDateInPeriod": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "lastDateInPeriod": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetStudentMarksBySubject_Result": {
         "type": "object",
         "properties": {
@@ -8947,6 +9209,32 @@
           "enteredAt": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetStudentOverallAverage_Result": {
+        "type": "object",
+        "properties": {
+          "totalAverage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalGrades": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "goodGrades": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "excellentGrades": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false

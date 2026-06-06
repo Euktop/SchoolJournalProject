@@ -140,4 +140,6 @@
     <string name="repeat_new_password">Повторите новый пароль</string>
     <string name="password_changed">Пароль успешно изменён</string>
     <string name="change_password">Сменить пароль</string>
+    <string name="period">Период</string>
+    <string name="grades">Оценки</string>
 </resources>
