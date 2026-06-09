@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.ClassInfoUpdate
@@ -145,7 +146,7 @@ class ClassEditViewModel @Inject constructor(
             )
             executeWithLoadingSync(
                 "save",
-                { classRepository.updateClass(update) }) { routerAdmin.navigateBack() }
+                { classRepository.updateClass(update) }) { routerAdmin.toBack() }
         } else {
             val school = state.school ?: return
             val newClass = ClassInfo(
@@ -159,11 +160,13 @@ class ClassEditViewModel @Inject constructor(
             )
             executeWithLoadingSync(
                 "save",
-                { classRepository.addClass(newClass) }) { routerAdmin.navigateBack() }
+                { classRepository.addClass(newClass) }) { routerAdmin.toBack() }
         }
     }
 
     fun cancel() {
-        routerAdmin.navigateBack()
+        viewModelScope.launch {
+            routerAdmin.toBack()
+        }
     }
 }

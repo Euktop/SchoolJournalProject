@@ -1,12 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="stud.euktop.schooljournal.presentation.main.student.studentSubjects.StudentSubjectsFragment">
+    android:background="@color/color_bg_primary"
+    android:orientation="vertical">
 
-    <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
-        android:id="@+id/rvSubjects"
+    <!-- Top App Bar -->
+    <stud.euktop.uikit.components.filter.SchJFilterToolBar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</FrameLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_bg_secondary"
+        app:menu="@menu/menu_notifications"
+        app:navigationIcon="@null"
+        app:title="@string/my_subjects"
+        app:titleTextColor="@color/color_text_accent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Summary Dashboard Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/color_accent_inactive"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/average_mark_for_quarter"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvOverallAverage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/color_text_primary"
+                        android:textSize="40sp"
+                        android:textStyle="bold"
+                        tools:text="4.72" />
+
+                    <stud.euktop.uikit.components.button.SchJButton
+                        android:id="@+id/btnDelta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="+0.15 к прошлой неделе"
+                        app:schJButtonClass="TERTIARY"
+                        app:schJButtonType="CHIPS" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Subjects List -->
+            <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
+                android:id="@+id/rvSubjects"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Stats Chip Row -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <stud.euktop.uikit.components.button.SchJButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="@string/quarter_1"
+                        app:schJButtonClass="SECONDARY"
+                        app:schJButtonType="CHIPS" />
+
+                    <stud.euktop.uikit.components.button.SchJButton
+                        android:id="@+id/btnAbsences"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:text="Пропуски: 4"
+                        app:schJButtonClass="TERTIARY"
+                        app:schJButtonType="CHIPS" />
+
+                    <stud.euktop.uikit.components.button.SchJButton
+                        android:id="@+id/btnDebts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Долги: 0"
+                        app:schJButtonClass="TERTIARY"
+                        app:schJButtonType="CHIPS" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

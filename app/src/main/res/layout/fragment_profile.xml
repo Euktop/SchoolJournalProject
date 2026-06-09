@@ -1,118 +1,360 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="stud.euktop.schooljournal.presentation.main.userInfo.ProfileFragment">
+    android:orientation="vertical"
+    android:background="@color/color_bg_primary"
+    tools:context=".presentation.main.profile.ProfileFragment">
+
+    <!-- TopAppBar -->
+    <stud.euktop.uikit.components.filter.SchJFilterToolBar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_bg_primary"
+        app:menu="@menu/menu_notifications"
+        app:navigationIcon="@null"
+        app:title="SchoolJournal"
+        app:titleTextColor="@color/color_text_accent" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:orientation="vertical">
 
+            <!-- Hero Section with Mesh Background -->
             <FrameLayout
-                android:id="@+id/avatarContainer"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/circle_bg_accent" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvInitials"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
-                android:textColor="@color/color_text_on_accent"
-                tools:text="ИИ" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp"
+                    android:background="@drawable/bg_profile_mesh" />
 
-            <TextView
-                android:id="@+id/tvUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
-                android:textColor="@color/color_text_primary"
-                tools:text="Иванов Иван" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tvEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
-                android:textColor="@color/color_text_secondary"
-                tools:text="ivanov@school.ru" />
+                    <!-- Avatar with Edit Button -->
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
 
-            <TextView
-                android:id="@+id/tvPhone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
-                android:textColor="@color/color_text_secondary"
-                tools:text="+71234567890" />
+                        <TextView
+                            android:id="@+id/tvInitials"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:background="@drawable/circle_bg_accent"
+                            android:gravity="center"
+                            android:textColor="@color/color_text_on_accent"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            tools:text="ИП" />
 
-            <TextView
-                android:id="@+id/tvBirthday"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
-                android:textColor="@color/color_text_secondary"
-                tools:text="01.01.2000" />
+                        <ImageView
+                            android:id="@+id/btnEditAvatar"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="bottom|end"
+                            android:background="@drawable/circle_bg_primary"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_edit"
+                            app:tint="@color/color_text_on_accent" />
+                    </FrameLayout>
 
-            <TextView
-                android:id="@+id/tvGender"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
-                android:textColor="@color/color_text_secondary"
-                tools:text="Мужской" />
+                    <!-- User Name -->
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
+                        android:textColor="@color/color_text_primary"
+                        tools:text="Иван Петров" />
 
+                    <!-- Role Chip -->
+                    <TextView
+                        android:id="@+id/tvRole"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_chip_secondary"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary"
+                        tools:text="Учитель" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- Bento Info Cards -->
             <LinearLayout
-                android:id="@+id/rolesContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="horizontal" />
-
-            <stud.euktop.uikit.components.button.SchJButton
-                android:id="@+id/btnEditProfile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/edit_profile"
-                app:schJButtonClass="PRIMARY"
-                app:schJButtonType="BIG" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <stud.euktop.uikit.components.button.SchJButton
-                android:id="@+id/btnChangePassword"
+                <!-- Card 1: Contacts -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/color_bg_primary"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/color_stroke_default"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Email -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_icon_container"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_mail" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/email_title"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                    android:textColor="@color/color_text_secondary" />
+
+                                <TextView
+                                    android:id="@+id/tvEmail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                                    android:textColor="@color/color_text_primary"
+                                    tools:text="ivan@school.edu" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="16dp"
+                            android:background="@color/color_divider" />
+
+                        <!-- Phone -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_icon_container"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_call" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/phone_title"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                    android:textColor="@color/color_text_secondary" />
+
+                                <TextView
+                                    android:id="@+id/tvPhone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                                    android:textColor="@color/color_text_primary"
+                                    tools:text="+7 999 123-45-67" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <Space android:layout_width="match_parent" android:layout_height="12dp" />
+
+                <!-- Card 2: School & Bio -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/color_bg_primary"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/color_stroke_default"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- School -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_icon_container"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_domain" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/school_title"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                    android:textColor="@color/color_text_secondary" />
+
+                                <TextView
+                                    android:id="@+id/tvSchool"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                                    android:textColor="@color/color_text_primary"
+                                    tools:text="Гимназия №1" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginVertical="16dp"
+                            android:background="@color/color_divider" />
+
+                        <!-- Birthday -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/bg_icon_container"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_cake" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/birthday_title"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                    android:textColor="@color/color_text_secondary" />
+
+                                <TextView
+                                    android:id="@+id/tvBirthday"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                                    android:textColor="@color/color_text_primary"
+                                    tools:text="15.05.1985" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/change_password"
-                app:schJButtonClass="PRIMARY"
-                app:schJButtonType="BIG" />
+                android:orientation="vertical"
+                android:padding="16dp">
 
-            <stud.euktop.uikit.components.button.SchJButton
-                android:id="@+id/btnLogout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/exit"
-                app:schJButtonClass="SECONDARY"
-                app:schJButtonType="BIG" />
+                <stud.euktop.uikit.components.button.SchJButton
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_profile"
+                    app:schJButtonClass="PRIMARY"
+                    app:schJButtonType="BIG" />
 
+                <stud.euktop.uikit.components.button.SchJButton
+                    android:id="@+id/btnChangePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/change_password"
+                    app:schJButtonClass="SECONDARY"
+                    app:schJButtonType="BIG" />
+
+                <!-- Logout Button (Custom to support Error color) -->
+                <LinearLayout
+                    android:id="@+id/btnLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_logout" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/exit"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title3.Bold"
+                        android:textColor="@color/color_error" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+</LinearLayout>

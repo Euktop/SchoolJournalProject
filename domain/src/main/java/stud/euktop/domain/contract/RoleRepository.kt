@@ -20,4 +20,5 @@ interface RoleRepository {
     suspend fun canViewAdminPanel(): Boolean
 
     suspend fun canEditUser(userId: Int): Boolean
+    suspend fun getCurrentRole(): Role?
 }

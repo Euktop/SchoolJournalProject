@@ -66,8 +66,11 @@ class RouterImpl @Inject constructor(
     }
 
     override suspend fun toSuccessCreate() = toMain()
-    override suspend fun toSuccessChangePassword() = navigateBack()
-    override suspend fun toCancelChangePassword() = navigateBack()
+    override suspend fun toSuccessChangePassword() = toBack()
+    override suspend fun toCancelChangePassword() = toBack()
+    override suspend fun toAfterSelectRole() {
+        toMain()
+    }
 
     override suspend fun toCancelCreatePassword() {
         navigationManager.navigate(NavCommand.Back)
@@ -75,6 +78,10 @@ class RouterImpl @Inject constructor(
 
     override fun toChangePassword() =
         navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalChangePassword()))
+
+    override fun toLogout() {
+        navigationManager.navigate(NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()))
+    }
 
     override fun toStudentSubjectDetail(subjectId: Int) = navigationManager.navigate(
         NavCommand.ToAction(
@@ -100,10 +107,6 @@ class RouterImpl @Inject constructor(
         )
     )
 
-
-    override fun navigateBack() {
-        navigationManager.navigate(NavCommand.Back)
-    }
 
     // --- Переходы с аргументами теперь используют NavDirections ---
 
@@ -223,6 +226,14 @@ class RouterImpl @Inject constructor(
 
     override fun toLessonEdit() =
         navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalLessonEdit()))
+
+    override fun toSelectRole() {
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalSelectRole()))
+    }
+
+    override suspend fun toBack() {
+        navigationManager.navigate(NavCommand.Back)
+    }
 
 
 }

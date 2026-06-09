@@ -2,6 +2,7 @@ package stud.euktop.schooljournal.presentation.auth.common.impl
 
 import stud.euktop.domain.model.user.AccountStatus
 import stud.euktop.domain.model.user.Gender
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
@@ -70,5 +71,13 @@ class AuthCoordinatorImpl @Inject constructor(
 
     override suspend fun getUser(): CoordinatorResult<UserProfile> {
         return coordinatorExec.exec { authRepository.getCurrentUser() }
+    }
+
+    override suspend fun getRoles(): CoordinatorResult<List<Role>> {
+        return coordinatorExec.exec { authRepository.getRoles() }
+    }
+
+    override suspend fun saveRole(role: Role): CoordinatorResult<Unit> {
+        return coordinatorExec.exec { authRepository.saveRole(role) }
     }
 }

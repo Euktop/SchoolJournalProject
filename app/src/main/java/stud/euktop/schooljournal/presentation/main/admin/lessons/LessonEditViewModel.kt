@@ -1,8 +1,10 @@
 package stud.euktop.schooljournal.presentation.main.admin.lessons
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.model.lesson.Lesson
 import stud.euktop.domain.model.lesson.LessonUpdate
@@ -137,7 +139,7 @@ class LessonEditViewModel @Inject constructor(
             )
             executeWithLoadingSync(
                 "save",
-                { lessonRepository.updateLesson(update) }) { routerAdmin.navigateBack() }
+                { lessonRepository.updateLesson(update) }) { routerAdmin.toBack() }
         } else {
             val lesson = Lesson(
                 classId = state.selectedClass!!.classId,
@@ -152,11 +154,13 @@ class LessonEditViewModel @Inject constructor(
             )
             executeWithLoadingSync(
                 "save",
-                { lessonRepository.addLesson(lesson) }) { routerAdmin.navigateBack() }
+                { lessonRepository.addLesson(lesson) }) { routerAdmin.toBack() }
         }
     }
 
     fun cancel() {
-        routerAdmin.navigateBack()
+        viewModelScope.launch {
+            routerAdmin.toBack()
+        }
     }
 }

@@ -1,13 +1,14 @@
 package stud.euktop.schooljournal.presentation.main.student.studentSubjects
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import stud.euktop.domain.model.attendance.StudentSubjectSummary
-import stud.euktop.schooljournal.R
-import stud.euktop.uikit.components.button.SchJButtonState
+import stud.euktop.schooljournal.presentation.common.utils.SubjectIconProvider
+import stud.euktop.uikit.R
 import stud.euktop.uikit.databinding.ItemStudentSubjectBinding
 
 class StudentSubjectAdapter(private val onItemClick: (StudentSubjectSummary) -> Unit) :
@@ -30,23 +31,34 @@ class StudentSubjectAdapter(private val onItemClick: (StudentSubjectSummary) -> 
 
     class ViewHolder(private val binding: ItemStudentSubjectBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
         fun bind(item: StudentSubjectSummary) {
+            val context = binding.root.context
+
+            // Название и преподаватель
             binding.tvSubjectName.text = item.subjectName
-            binding.tvAverageMark.text =
-                binding.root.context.getString(
-                    R.string.average_mark_format,
-                    (item.averageMark ?: 0.0)
-                )
+            binding.tvTeacherName.text = item.teacherName?.let {
+                context.getString(R.string.teacher_format, it)
+            } ?: context.getString(R.string.teacher_not_specified)
+
+            binding.ivSubjectIcon.setImageResource(
+                SubjectIconProvider.getIcon(item.subjectId)
+            )
+
+            // Бейдж среднего балла
+            binding.tvAverageMark.text = item.averageMark?.let { String.format("%.1f", it) } ?: "—"
+
+            // Итоговая оценка
             if (item.finalMark != null) {
-                binding.btnFinalMark.visibility = android.view.View.VISIBLE
-                binding.btnFinalMark.text = item.finalMark.toString()
-                binding.btnFinalMark.state = SchJButtonState(
-                    buttonType = SchJButtonState.ButtonType.CHIPS,
-                    buttonClass = SchJButtonState.ButtonClass.PRIMARY
-                )
+                binding.tvFinalMark.visibility = View.VISIBLE
+                binding.tvFinalMark.text = context.getString(R.string.result_format, item.finalMark)
             } else {
-                binding.btnFinalMark.visibility = android.view.View.GONE
+                binding.tvFinalMark.visibility = View.GONE
             }
+
+            // Прогресс-бар
+            val progress = ((item.averageMark ?: 0.0) / 5.0 * 100).toInt()
+            binding.progressBar.progress = progress
         }
     }
 

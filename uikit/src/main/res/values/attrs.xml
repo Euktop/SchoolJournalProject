@@ -28,7 +28,7 @@
             <enum name="PRIMARY" value="0" />
             <enum name="INACTIVE" value="1" />
             <enum name="SECONDARY" value="2" />
-            <enum name="TETRIARY" value="3" />
+            <enum name="TERTIARY" value="3" />
             <enum name="SELECT" value="4" />
             <enum name="UNSELECT" value="5" />
         </attr>

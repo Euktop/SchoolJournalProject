@@ -44,7 +44,20 @@ class SchJInput @JvmOverloads constructor(
             binding.apply {
                 editText.apply {
                     isCursorVisible = state.isCursorVisible
-                    setText(state.text)
+
+                    val currentText = text?.toString() ?: ""
+                    if (currentText != state.text) {
+                        val cursorPosition = selectionStart
+                        setText(state.text)
+
+                        val newCursorPos = when {
+                            cursorPosition < 0 -> state.text.length
+                            cursorPosition > state.text.length -> state.text.length
+                            else -> cursorPosition
+                        }
+                        setSelection(newCursorPos)
+                    }
+
                     hint = state.textHint
                     inputType = state.inputType
                 }

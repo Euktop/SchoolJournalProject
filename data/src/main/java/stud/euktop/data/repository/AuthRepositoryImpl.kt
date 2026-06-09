@@ -4,12 +4,14 @@ import com.schooljournal.api.AuthorizationApi
 import com.schooljournal.api.UsersApi
 import com.schooljournal.model.LoginRequest
 import com.schooljournal.model.RegisterRequest
+import stud.euktop.data.local.storage.contract.RoleStorage
 import stud.euktop.data.local.storage.contract.TokenStorage
 import stud.euktop.data.local.storage.contract.UserIdStorage
 import stud.euktop.data.map.toDomain
 import stud.euktop.data.map.toLocalDateTime
 import stud.euktop.data.map.toNetwork
 import stud.euktop.data.utils.ApiErrorHandler
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserAuth
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
@@ -22,6 +24,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val usersApi: UsersApi,
     private val tokenStorage: TokenStorage,
     private val userIdStorage: UserIdStorage,
+    private val roleStorage: RoleStorage,
     private val errorHandler: ApiErrorHandler
 ) : AuthRepository {
 
@@ -61,6 +64,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun logout(): Result<Unit> {
         tokenStorage.clearAll()
         userIdStorage.clearAll()
+        roleStorage.clearAll()
         return Result.success(Unit)
     }
 
@@ -70,4 +74,26 @@ class AuthRepositoryImpl @Inject constructor(
                 userIdStorage.getUserId() ?: throw IllegalStateException("No user logged in")
             usersApi.apiUsersIdPasswordPatch(userId, oldPassword, newPassword)
         }
+
+    override suspend fun getRoles(): Result<List<Role>> {
+        return getCurrentUser().fold(
+            onSuccess = { it ->
+                Result.success(it.roles.map { it.role }.distinct())
+            }, onFailure = {
+                Result.failure(it)
+            }
+        )
+    }
+
+    override suspend fun saveRole(role: Role): Result<Unit> {
+        return errorHandler.safeApiCall {
+            roleStorage.saveRole(role)
+        }
+    }
+
+    override suspend fun getSaveRole(): Result<Role?> {
+        return errorHandler.safeApiCall {
+            roleStorage.getRole()
+        }
+    }
 }

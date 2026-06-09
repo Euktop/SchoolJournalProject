@@ -1,24 +1,15 @@
-// presentation/main/student/studentSubjectDetail/StudentSubjectDetailFragment.kt
 package stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectDetailBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
-import stud.euktop.schooljournal.presentation.common.filter.grade.GradeFilterDialog
-import stud.euktop.uikit.components.lineChart.SchJLineChartState
-import stud.euktop.uikit.components.lineChart.SchJLinePoint
-import java.text.SimpleDateFormat
-import java.util.Locale
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StudentSubjectDetailFragment : BaseFragment<
@@ -27,50 +18,47 @@ class StudentSubjectDetailFragment : BaseFragment<
         StudentSubjectDetailState,
         Unit>() {
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentStudentSubjectDetailBinding.inflate(inflater, container, false)
+    @Inject
+    internal lateinit var router: RouterStudent
+
+    private val gradeAdapter by lazy {
+        StudentSubjectGradeAdapter { viewModel.onGradeClick(it) }
+    }
+
+    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
+        FragmentStudentSubjectDetailBinding.inflate(i, c, false)
 
     override val viewModel: StudentSubjectDetailViewModel by viewModels()
 
-    private lateinit var adapter: StudentMarkPagingAdapter
-    private lateinit var loadingDelegate: LoadingDelegate<StudentSubjectDetailState>
-
     override fun setupUI() {
-        loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
+        binding.rvGrades.adapter = gradeAdapter
 
-        adapter = StudentMarkPagingAdapter { /* клик по оценке не нужен */ }
-        binding.rvMarks.adapter = adapter
+        binding.toolbar.setNavigationOnClickListener { viewModel.onBackClick() }
+        binding.tvAllGrades.setOnClickListener { viewModel.onAllGradesClick() }
 
-        // Подписка на PagingData
-        lifecycleScope.launch {
-            viewModel.pagingDataFlow.collectLatest { pagingData ->
-                adapter.submitData(pagingData)
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.position?.let(viewModel::onTabSelected)
             }
-        }
 
-        // Кнопка фильтра (можно добавить на toolbar)
-        binding.toolbar.showFilterDialog = { showFilterDialog() }
-        binding.toolbar.setupWithNavController(findNavController())
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
-    private fun showFilterDialog() {
-        GradeFilterDialog(
-            initialFilter = viewModel.filterFlow.value,
-            onFilterApplied = { filter -> viewModel.applyFilter(filter) },
-            onError = viewModel.onError
-        ).show(childFragmentManager, "grade_filter")
-    }
-
-    @SuppressLint("SimpleDateFormat")
     override fun updateState(state: StudentSubjectDetailState) {
-        binding.lcProgress.state = SchJLineChartState(
-            points = state.aggregatedMarks.sortedBy { it.date }.map { aggregated ->
-                SchJLinePoint(
-                    label = SimpleDateFormat("dd.MM", Locale.getDefault()).format(aggregated.date),
-                    value = aggregated.averageMark?.toFloat() ?: 0f
-                )
-            }
-        )
+        binding.toolbar.title = state.subjectName
+        binding.tvTeacherName.text = state.teacherName
+        binding.tvAverageMark.text = state.averageMark
+        binding.tvTrend.text = state.trend
+        binding.tvNextLesson.text = state.nextLesson
+
+        // Переключение табов
+        binding.containerGrades.visibility = if (state.selectedTab == 0) View.VISIBLE else View.GONE
+        binding.containerHomework.visibility =
+            if (state.selectedTab == 1) View.VISIBLE else View.GONE
+
+        gradeAdapter.submitList(state.grades)
     }
 
     override fun updateEvent(event: Unit) {}

@@ -13,12 +13,50 @@
     <color name="color_text_secondary">#939396</color>
     <color name="color_text_tertiary">#7E7E9A</color>
     <color name="color_text_on_accent">#FFFFFF</color>
+    <color name="color_text_on_accent_alter">#D1E0FC</color>
     <color name="color_text_accent">@color/color_accent</color>
     <color name="color_icon_default">#B8C1CC</color>
     <color name="color_divider">#F4F4F4</color>
     <color name="transparent">#00000000</color>
     <color name="color_overlay">#99000000</color>
+    <color name="color_accent_bg">#881A6FEE</color>
+
 
     <color name="color_input_stroke_error">#FD3535</color>
     <color name="color_input_bg_error">#19FD3535</color>
+
+    <!-- Grade Badges Colors -->
+    <color name="color_grade_5_bg">#1A6FEE</color>
+    <color name="color_grade_5_text">#FFFFFF</color>
+    <color name="color_grade_4_bg">#D9E2FF</color>
+    <color name="color_grade_4_text">#0057C4</color>
+    <color name="color_grade_3_bg">#FFF3E0</color>
+    <color name="color_grade_3_text">#E65100</color>
+    <color name="color_grade_2_bg">#FFDAD6</color>
+    <color name="color_grade_2_text">#93000A</color>
+    <color name="color_grade_absent_bg">#FFDAD6</color>
+    <color name="color_grade_absent_text">#93000A</color>
+    <color name="color_grade_empty_bg">#E6E7F2</color>
+    <color name="color_grade_empty_text">#727786</color>
+
+    <!-- Новые цвета для дашборда и бейджей -->
+    <color name="color_primary_fixed">#D9E2FF</color>
+    <color name="color_on_primary_fixed">#001944</color>
+    <color name="color_tertiary_container">#C55100</color>
+    <color name="color_on_tertiary_container">#FFFDFF</color>
+    <color name="color_surface_container_highest">#E1E2ED</color>
+    <color name="color_outline_variant">#C2C6D7</color>
+
+
+    <color name="background">#FAF8FF</color>
+    <color name="surface">#FAF8FF</color>
+    <color name="primary">#0057C4</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="surface_container">#ECEDF8</color>
+    <color name="surface_container_low">#F2F3FE</color>
+    <color name="outline_variant">#C2C6D7</color>
+    <color name="on_surface_variant">#424754</color>
+    <color name="primary_container">#1A6FEE</color>
+    <color name="on_primary_container">#FFFDFF</color>
+    <color name="on_surface">#191B23</color>
 </resources>

@@ -1,6 +1,6 @@
 package stud.euktop.schooljournal.presentation.common.navigate.contract
 
-interface RouterAuthorization {
+interface RouterAuthorization : RouterBack {
     suspend fun toCreateProfile()
     suspend fun toCreatePassword()
     suspend fun toCancelCreatePassword()
@@ -8,4 +8,5 @@ interface RouterAuthorization {
     suspend fun toSuccessCreate()
     suspend fun toSuccessChangePassword()
     suspend fun toCancelChangePassword()
+    suspend fun toAfterSelectRole()
 }

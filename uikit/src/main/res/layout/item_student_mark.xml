@@ -1,31 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_item_card"
     android:gravity="center_vertical"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:orientation="horizontal"
+    android:padding="16dp">
 
+    <!-- Avatar Placeholder -->
+    <FrameLayout
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/bg_avatar_placeholder">
+
+        <TextView
+            android:id="@+id/tvInitials"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/TextAppearance.SchJ.Title3.Bold"
+            android:textColor="@color/color_text_secondary"
+            tools:text="АА" />
+    </FrameLayout>
+
+    <!-- Student Name -->
     <TextView
-        android:id="@+id/tv_student_name"
+        android:id="@+id/tvStudentName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_weight="1"
-        android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+        android:textAppearance="@style/TextAppearance.SchJ.Title3.Regular"
         android:textColor="@color/color_text_primary"
-        tools:text="Алексеев А.А." />
+        tools:text="Алексеев А." />
 
-    <stud.euktop.uikit.components.button.SchJButton
-        android:id="@+id/btn_mark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:focusable="false"
-        app:schJButtonType="CHIPS"
-        tools:text="5"
-        app:schJButtonClass="PRIMARY" />
+    <!-- Grade Badge -->
+    <TextView
+        android:id="@+id/tvGradeBadge"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_grade_badge"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
+        tools:text="5" />
+
+    <!-- Edit Button -->
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_edit" />
+
 </LinearLayout>

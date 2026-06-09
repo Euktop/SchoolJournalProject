@@ -1,14 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_bg_primary"
     tools:context="stud.euktop.schooljournal.presentation.main.teacher.teacherClass.TeacherClassesFragment">
 
-    <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
-        android:id="@+id/rvClasses"
+    <!-- TopAppBar -->
+    <stud.euktop.uikit.components.filter.SchJFilterToolBar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_bg_primary"
+        app:menu="@menu/menu_filter"
+        app:navigationIcon="@null"
+        app:title="Мои классы"
+        app:titleTextColor="@color/color_text_accent" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:padding="8dp" />
-</FrameLayout>
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Welcome Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="@color/color_bg_primary"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/color_stroke_default"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvGreeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary"
+                        tools:text="Добрый день, Александр Сергеевич" />
+
+                    <TextView
+                        android:id="@+id/tvLessonsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title2.SemiBold"
+                        android:textColor="@color/color_text_primary"
+                        tools:text="Сегодня у вас 4 занятия" />
+
+                    <!-- Чипы (пока статические) -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <stud.euktop.uikit.components.button.SchJButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1-я смена"
+                            app:schJButtonClass="TERTIARY"
+                            app:schJButtonType="CHIPS" />
+
+                        <stud.euktop.uikit.components.button.SchJButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Экзаменационный период"
+                            app:schJButtonClass="TERTIARY"
+                            app:schJButtonType="CHIPS" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Classes List -->
+            <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
+                android:id="@+id/rvClasses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

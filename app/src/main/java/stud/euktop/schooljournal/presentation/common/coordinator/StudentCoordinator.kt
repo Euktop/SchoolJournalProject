@@ -81,5 +81,4 @@ class StudentCoordinator @Inject constructor(
         endDate: Date? = null
     ): CoordinatorResult<StudentOverallAverage> =
         coordinatorExec.exec { studentRepository.getOverallAverage(studentId, startDate, endDate) }
-
 }

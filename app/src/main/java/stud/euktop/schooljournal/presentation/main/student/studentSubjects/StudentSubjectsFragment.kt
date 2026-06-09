@@ -6,12 +6,10 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import javax.inject.Inject
 
-//stud.euktop.schooljournal.presentation.main.student.studentSubjects.StudentSubjectsFragment
 /**
  * Экран списка предметов ученика с успеваемостью.
  *
@@ -40,9 +38,6 @@ class StudentSubjectsFragment : BaseFragment<
         FragmentStudentSubjectsBinding.inflate(i, c, false)
 
     override val viewModel: StudentSubjectsViewModel by viewModels()
-
-    @Inject
-    internal lateinit var navigationManager: NavigationManager
 
     @Inject internal lateinit var router: RouterStudent
 

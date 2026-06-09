@@ -1,17 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.auth.userInfo.ProfileFragment">
+    android:orientation="vertical"
+    android:background="@color/background"
+    tools:context=".presentation.auth.profile.ProfileFragment">
 
+    <!-- Header Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:background="@color/surface"
+        android:elevation="2dp">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            app:tint="@color/on_surface" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/create_profile"
+            android:textAppearance="@style/TextAppearance.SchJ.Title2"
+            android:textColor="@color/primary"
+            android:layout_marginStart="16dp"/>
+
+    </LinearLayout>
+
+    <!-- Main Content (ScrollView) -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:fillViewport="true"
-        tools:ignore="UselessParent">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,16 +53,52 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="44dp"
-                android:text="@string/create_profile"
-                android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold" />
+            <!-- Hero Illustration / Branding -->
 
+            <!-- Section 1 Title -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Личные данные"
+                android:textAppearance="@style/TextAppearance.SchJ.Headline"
+                android:textColor="@color/on_surface_variant"
+                android:layout_marginBottom="16dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/bottom_border" />
+
+            <!-- Include Form Fields -->
             <include
                 android:id="@+id/reg_item"
                 layout="@layout/fragment_item_reg_user" />
+
+            <!-- Privacy Consent -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp"
+                android:background="@drawable/rounded_xl_background_light"
+                android:elevation="1dp">
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/privacyCheckBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:buttonTint="@color/primary"
+                    android:padding="0dp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/i_agree_to_the_terms_of_use_and_privacy_policy"
+                    android:textColor="@color/on_surface_variant"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="2dp" />
+            </LinearLayout>
 
             <View
                 android:id="@+id/view"
@@ -37,13 +107,25 @@
                 android:layout_weight="1"
                 android:minHeight="32dp" />
 
-            <stud.euktop.uikit.components.button.SchJButton
-                android:id="@+id/nextButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/next"
-                app:schJButtonClass="PRIMARY"
-                app:schJButtonType="BIG" />
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+
+    <!-- Fixed Bottom Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingTop="24dp"
+        android:background="@drawable/gradient_top_to_bottom_transparent">
+
+        <stud.euktop.uikit.components.button.SchJButton
+            android:id="@+id/nextButton"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/next"
+            app:schJButtonClass="PRIMARY"
+            app:schJButtonType="BIG" />
+    </LinearLayout>
+
+</LinearLayout>

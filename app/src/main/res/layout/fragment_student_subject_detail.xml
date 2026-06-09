@@ -1,37 +1,337 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="stud.euktop.schooljournal.presentation.main.student.studentSubjectDetail.StudentSubjectDetailFragment">
+    android:background="@color/color_bg_primary"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <!-- TopAppBar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_bg_primary"
+        app:menu="@menu/menu_notifications_only"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="@color/color_text_accent"
+        app:titleTextColor="@color/color_text_accent"
+        tools:title="Математика" />
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:ignore="UselessParent">
+        android:fillViewport="true">
 
-        <stud.euktop.uikit.components.filter.SchJFilterToolBar
-            android:id="@+id/toolbar"
-            app:menu="@menu/menu_filter"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="@string/grades"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorSurface" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="24dp">
 
-        <stud.euktop.uikit.components.lineChart.SchJLineChart
-            android:id="@+id/lcProgress"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            <!-- Header Info Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardBackgroundColor="@color/color_bg_primary"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/color_stroke_default"
+                app:strokeWidth="1dp">
 
-        <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
-            android:id="@+id/rvMarks"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1" />
-    </LinearLayout>
-</FrameLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- Декоративная иконка в углу -->
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="top|end"
+                        android:layout_margin="16dp"
+                        android:alpha="0.1"
+                        android:src="@drawable/ic_functions" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <!-- Левая часть: Преподаватель -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/subject_detail_teacher_label"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                android:textColor="@color/color_text_secondary" />
+
+                            <TextView
+                                android:id="@+id/tvTeacherName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:textAppearance="@style/TextAppearance.SchJ.Title2.SemiBold"
+                                android:textColor="@color/color_text_primary"
+                                tools:text="Иванова Елена Петровна" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/ic_calendar"
+                                    app:tint="@color/color_text_accent" />
+
+                                <TextView
+                                    android:id="@+id/tvNextLesson"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                    android:textColor="@color/color_text_secondary"
+                                    tools:text="Ближайший урок: Пн, 09:00" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <!-- Правая часть: Средний балл -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/subject_detail_average_label"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                android:textColor="@color/color_text_secondary" />
+
+                            <TextView
+                                android:id="@+id/tvAverageMark"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold"
+                                android:textColor="@color/color_text_accent"
+                                android:textSize="42sp"
+                                tools:text="4.15" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:src="@drawable/ic_trending_up"
+                                    app:tint="#C55100" />
+
+                                <TextView
+                                    android:id="@+id/tvTrend"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:textAppearance="@style/TextAppearance.SchJ.Caption2.Medium"
+                                    android:textColor="#C55100"
+                                    tools:text="+0.12 за неделю" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- TabLayout -->
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/transparent"
+                app:tabIndicatorColor="@color/color_accent"
+                app:tabSelectedTextColor="@color/color_text_accent"
+                app:tabTextColor="@color/color_text_secondary">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subject_detail_tab_grades" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/subject_detail_tab_homework" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <!-- Container: Grades Tab -->
+            <LinearLayout
+                android:id="@+id/containerGrades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- График успеваемости (SchJLineChart) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardBackgroundColor="@color/color_bg_primary"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/color_stroke_default"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/subject_detail_grades_trend"
+                                android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                                android:textColor="@color/color_text_primary" />
+
+                            <stud.euktop.uikit.components.button.SchJButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/subject_detail_period_month"
+                                app:schJButtonClass="TERTIARY"
+                                app:schJButtonType="CHIPS" />
+                        </LinearLayout>
+
+                        <stud.euktop.uikit.components.lineChart.SchJLineChart
+                            android:id="@+id/chartTrend"
+                            android:layout_width="match_parent"
+                            android:layout_height="192dp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Заголовок списка оценок -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/subject_detail_recent_grades"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvAllGrades"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/subject_detail_all_grades"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Medium"
+                        android:textColor="@color/color_text_accent" />
+                </LinearLayout>
+
+                <!-- Список оценок -->
+                <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
+                    android:id="@+id/rvGrades"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+
+                <!-- Прогноз оценки -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="@color/color_accent"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/subject_detail_forecast_title"
+                                android:textAppearance="@style/TextAppearance.SchJ.Headline.SemiBold"
+                                android:textColor="@color/color_text_on_accent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:alpha="0.9"
+                                android:text="@string/subject_detail_forecast_desc"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                android:textColor="@color/color_text_on_accent" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_analytics" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+
+            <!-- Container: Homework Tab (пока пустой, TODO) -->
+            <LinearLayout
+                android:id="@+id/containerHomework"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TODO: Список домашних заданий"
+                    android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                    android:textColor="@color/color_text_secondary" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

@@ -1,42 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/color_bg_primary"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    android:layout_margin="8dp">
+    app:cardElevation="0dp"
+    app:strokeColor="@color/color_outline_variant"
+    app:strokeWidth="1dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
-        <TextView
-            android:id="@+id/tvSubjectName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
-            android:textColor="@color/color_text_primary" />
+        android:padding="12dp">
+
+        <!-- Top: Icon, Name/Teacher, Badges -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
-            <TextView
-                android:id="@+id/tvAverageMark"
+            android:orientation="horizontal">
+
+            <!-- Left: Icon + Text -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
-                android:textColor="@color/color_text_secondary" />
-            <stud.euktop.uikit.components.button.SchJButton
-                android:id="@+id/btnFinalMark"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_subject_icon">
+
+                    <ImageView
+                        android:id="@+id/ivSubjectIcon"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        tools:src="@drawable/ic_calculate" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvSubjectName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title2.SemiBold"
+                        android:textColor="@color/color_text_primary"
+                        tools:text="Математика" />
+
+                    <TextView
+                        android:id="@+id/tvTeacherName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary"
+                        tools:text="Преподаватель: Смирнова А.В." />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Right: Badges -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                app:schJButtonType="CHIPS"
-                app:schJButtonClass="PRIMARY" />
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvAverageMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_tertiary"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                    android:textColor="@color/color_on_tertiary_container"
+                    tools:text="4.5" />
+
+                <TextView
+                    android:id="@+id/tvFinalMark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_badge_primary_fixed"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:textAppearance="@style/TextAppearance.SchJ.Caption.Bold"
+                    android:textColor="@color/color_on_primary_fixed"
+                    tools:text="Итог: 5" />
+            </LinearLayout>
         </LinearLayout>
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_marginTop="16dp"
+            android:max="100"
+            android:progressDrawable="@drawable/progress_bar_horizontal"
+            tools:progress="90" />
+
+        <!-- Attendance -->
+        <TextView
+            android:id="@+id/tvAttendance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="end"
+            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+            android:textColor="@color/color_text_secondary"
+            tools:text="Посещаемость: 98%" />
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

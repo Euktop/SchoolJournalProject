@@ -1,8 +1,10 @@
 package stud.euktop.schooljournal.presentation.main.admin.users
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.model.user.AccountStatus
 import stud.euktop.domain.model.user.Role
@@ -59,13 +61,33 @@ class UserEditViewModel @Inject constructor(
     }
 
     // Обновление основных данных (без ролей)
-    fun updateLastName(value: String) { _state.update { it.copy(lastName = it.lastName.copy(value)) } }
-    fun updateFirstName(value: String) { _state.update { it.copy(firstName = it.firstName.copy(value)) } }
-    fun updateSurName(value: String) { _state.update { it.copy(surName = it.surName.copy(value)) } }
-    fun updateEmail(value: String) { _state.update { it.copy(email = it.email.copy(value)) } }
-    fun updatePhone(value: String) { _state.update { it.copy(phone = it.phone.copy(value)) } }
-    fun updatePassword(value: String) { _state.update { it.copy(password = it.password.copy(value)) } }
-    fun updateAccountStatus(status: AccountStatus) { _state.update { it.copy(accountStatus = status) } }
+    fun updateLastName(value: String) {
+        _state.update { it.copy(lastName = it.lastName.copy(value)) }
+    }
+
+    fun updateFirstName(value: String) {
+        _state.update { it.copy(firstName = it.firstName.copy(value)) }
+    }
+
+    fun updateSurName(value: String) {
+        _state.update { it.copy(surName = it.surName.copy(value)) }
+    }
+
+    fun updateEmail(value: String) {
+        _state.update { it.copy(email = it.email.copy(value)) }
+    }
+
+    fun updatePhone(value: String) {
+        _state.update { it.copy(phone = it.phone.copy(value)) }
+    }
+
+    fun updatePassword(value: String) {
+        _state.update { it.copy(password = it.password.copy(value)) }
+    }
+
+    fun updateAccountStatus(status: AccountStatus) {
+        _state.update { it.copy(accountStatus = status) }
+    }
 
     // Добавление роли (мгновенно на сервер)
     fun addRole(role: Role, schoolId: Int?) {
@@ -106,7 +128,9 @@ class UserEditViewModel @Inject constructor(
                 phone = Field(state.phone.value, true),
                 accountStatus = Field(state.accountStatus, true)
             )
-            executeWithLoadingSync("save", { userRepository.updateUser(update) }) { routerAdmin.navigateBack() }
+            executeWithLoadingSync(
+                "save",
+                { userRepository.updateUser(update) }) { routerAdmin.toBack() }
         } else {
             val profile = UserProfile.createObject(
                 lastName = state.lastName.getValidate(),
@@ -116,11 +140,15 @@ class UserEditViewModel @Inject constructor(
                 phone = state.phone.value,
                 accountStatus = state.accountStatus
             )
-            executeWithLoadingSync("save", { userRepository.addUser(profile, state.password.value) }) { routerAdmin.navigateBack() }
+            executeWithLoadingSync(
+                "save",
+                { userRepository.addUser(profile, state.password.value) }) { routerAdmin.toBack() }
         }
     }
 
     fun cancel() {
-        routerAdmin.navigateBack()
+        viewModelScope.launch {
+            routerAdmin.toBack()
+        }
     }
 }

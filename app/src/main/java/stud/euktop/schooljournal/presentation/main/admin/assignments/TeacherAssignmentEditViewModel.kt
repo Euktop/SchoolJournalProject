@@ -1,11 +1,13 @@
 package stud.euktop.schooljournal.presentation.main.admin.assignments
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import stud.euktop.domain.model.assignment.AssignmentId
 import stud.euktop.domain.model.assignment.TeacherAssignment
 import stud.euktop.domain.model.assignment.TeacherAssignmentUpdate
@@ -118,7 +120,7 @@ class TeacherAssignmentEditViewModel @Inject constructor(
             executeLoadingBlockSync(
                 key = "save",
                 block = { coordinator.updateTeacherAssignment(update) },
-                onSuccess = { routerAdmin.navigateBack() }
+                onSuccess = { routerAdmin.toBack() }
             )
         } else {
             val assignment = TeacherAssignment(
@@ -134,12 +136,14 @@ class TeacherAssignmentEditViewModel @Inject constructor(
             executeLoadingBlockSync(
                 key = "save",
                 block = { coordinator.addTeacherAssignment(assignment) },
-                onSuccess = { routerAdmin.navigateBack() }
+                onSuccess = { routerAdmin.toBack() }
             )
         }
     }
 
     fun cancel() {
-        routerAdmin.navigateBack()
+        viewModelScope.launch {
+            routerAdmin.toBack()
+        }
     }
 }

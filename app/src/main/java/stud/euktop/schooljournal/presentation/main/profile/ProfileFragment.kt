@@ -3,15 +3,12 @@ package stud.euktop.schooljournal.presentation.main.profile
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
-import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterProfile
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import javax.inject.Inject
@@ -36,11 +33,17 @@ class ProfileFragment : BaseFragment<
             val currentUser = viewModel.state.value.user ?: return@setOnClickListener
             router.toEditUser(currentUser.userId)
         }
-        binding.btnLogout.setOnClickListener {
-            messages.message(MessageParam(R.string.logout_message) {})
-        }
+
         binding.btnChangePassword.setOnClickListener {
             router.toChangePassword()
+        }
+
+        binding.btnLogout.setOnClickListener {
+            viewModel.logout()
+        }
+
+        binding.btnEditAvatar.setOnClickListener {
+            // TODO: Открыть диалог выбора фото или перехода в редактирование аватара
         }
     }
 
@@ -51,31 +54,25 @@ class ProfileFragment : BaseFragment<
 
     private fun updateUI(user: UserProfile) {
         binding.apply {
-            tvUserName.text = "${user.lastName} ${user.firstName} ${user.surName ?: ""}".trim()
-            tvEmail.text = user.email
-            tvPhone.text = user.phone ?: getString(R.string.not_specified)
-            tvBirthday.text = user.birthday?.toBaseString() ?: getString(R.string.not_specified)
-            tvGender.text = user.gender.toMessageId().let { getString(it) }
-            val initials =
-                "${user.firstName.firstOrNull()}${user.lastName.firstOrNull()}".uppercase()
+            // Имя и инициалы
+            tvUserName.text = "${user.lastName} ${user.firstName}".trim()
+            val initials = "${user.firstName.firstOrNull()}${user.lastName.firstOrNull()}".uppercase()
             tvInitials.text = initials
 
-            rolesContainer.removeAllViews()
-            user.roles.forEach { role ->
-                val chip = Chip(requireContext()).apply {
-                    text = when (role.role) {
-                        Role.ADMIN -> getString(R.string.administrator)
-                        else -> {
-                            val schoolIdText =
-                                role.schoolId?.let { "Школа $it" } ?: getString(R.string.no_school)
-                            "${getString(role.role.toMessageId())} ($schoolIdText)"
-                        }
-                    }
-                    isClickable = false
-                    isCheckable = false
-                }
-                rolesContainer.addView(chip)
-            }
+            // Роль (берем первую роль из списка)
+            val role = user.roles.firstOrNull()?.role
+            tvRole.text = role?.let { getString(it.toMessageId()) } ?: getString(R.string.not_specified)
+
+            // Контакты
+            tvEmail.text = user.email
+            tvPhone.text = user.phone ?: getString(R.string.not_specified)
+
+            // Школа (пока заглушка, так как в UserProfile нет названия школы)
+            // TODO: Добавить загрузку названия школы через SchoolAdminRepository
+            tvSchool.text = getString(R.string.not_specified)
+
+            // Дата рождения
+            tvBirthday.text = user.birthday?.toBaseString() ?: getString(R.string.not_specified)
         }
     }
 

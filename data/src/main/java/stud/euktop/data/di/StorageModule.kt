@@ -4,6 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import stud.euktop.data.local.storage.contract.RoleStorage
 import stud.euktop.data.local.storage.contract.TokenStorage
 import stud.euktop.data.local.storage.contract.UserIdStorage
 import stud.euktop.data.local.storage.impl.SessionStorageImpl
@@ -19,4 +20,8 @@ internal abstract class StorageModule {
     @Binds
     @Singleton
     abstract fun bindUserIdStorage(impl: SessionStorageImpl): UserIdStorage
+
+    @Binds
+    @Singleton
+    abstract fun bindRoleStorage(impl: SessionStorageImpl): RoleStorage
 }

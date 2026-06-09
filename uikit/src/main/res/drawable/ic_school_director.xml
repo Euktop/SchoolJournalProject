@@ -1,0 +1,31 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Силуэт директора (голова) — Смещен влево -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M9,8m-3.5,0a3.5,3.5 0,1 1,7 0a3.5,3.5 0,1 1,-7 0" />
+
+    <!-- Силуэт директора (туловище) -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M9,13.5c-2.5,0 -4.5,1.2 -4.5,3.5v3h9v-3c0,-2.3 -2,-3.5 -4.5,-3.5z" />
+
+    <!-- Академическая шапка (верхний ромб) — Символ школы -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M18,7.5l4,2l-4,2l-4,-2z" />
+
+    <!-- Академическая шапка (низ и кисточка) -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M15.5,10.5v2.5c0,1 1,1.5 2.5,1.5s2.5,-0.5 2.5,-1.5v,-2.5z" />
+
+    <!-- Кисточка шапки -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M14.2,9.8h0.6v3.5h-0.6z" />
+</vector>

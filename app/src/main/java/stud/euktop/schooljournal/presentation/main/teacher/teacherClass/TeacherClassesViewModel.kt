@@ -9,16 +9,6 @@ import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import javax.inject.Inject
 
-/**
- * ViewModel для экрана списка классов учителя.
- *
- * Назначение: загружает данные о классах и предметах учителя.
- *
- * Функционал:
- * - State: classes (List<TeacherClassItem>), isLoading
- * - loadClasses() – вызов TeacherRepository.getTeacherClasses()
- * - Обновление state при успешной загрузке
- */
 @HiltViewModel
 class TeacherClassesViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -30,7 +20,19 @@ class TeacherClassesViewModel @Inject constructor(
 
     init {
         executeCoordinator = coordinatorExec
+        loadCurrentUser()
         loadClasses()
+    }
+
+    private fun loadCurrentUser() {
+        executeWithLoadingSync(
+            key = "load_user",
+            block = { authRepository.getCurrentUser() },
+            onSuccess = { user ->
+                val fullName = "${user.firstName} ${user.lastName}".trim()
+                _state.update { it.copy(teacherName = fullName) }
+            }
+        )
     }
 
     fun loadClasses() {

@@ -8,9 +8,30 @@ import stud.euktop.domain.utils.toDate
 
 internal object MockStudentDataSource {
     val studentSubjectsSummary = listOf(
-        StudentSubjectSummary(1, "Математика", 4.5, 5),
-        StudentSubjectSummary(2, "Русский язык", 3.8, 4),
-        StudentSubjectSummary(3, "Физика", 4.2, 4)
+        StudentSubjectSummary(
+            subjectId = 1,
+            subjectName = "Алгебра",
+            averageMark = 4.9,
+            finalMark = 5,
+            teacherName = "Смирнова О.П.",
+            attendancePercent = 98
+        ),
+        StudentSubjectSummary(
+            subjectId = 2,
+            subjectName = "Литература",
+            averageMark = 4.5,
+            finalMark = 4,
+            teacherName = "Иванова М.А.",
+            attendancePercent = 78
+        ),
+        StudentSubjectSummary(
+            subjectId = 3,
+            subjectName = "Физика",
+            averageMark = 3.8,
+            finalMark = 4,
+            teacherName = "Петров С.В.",
+            attendancePercent = 88
+        )
     )
 
     val studentSubjectMarks = listOf(
@@ -33,5 +54,6 @@ internal object MockStudentDataSource {
     )
 
     fun getSubjectsSummary(studentId: Int): List<StudentSubjectSummary> = studentSubjectsSummary
-    fun getSubjectMarks(studentId: Int, subjectId: Int): List<StudentSubjectMark> = studentSubjectMarks
+    fun getSubjectMarks(studentId: Int, subjectId: Int): List<StudentSubjectMark> =
+        studentSubjectMarks
 }

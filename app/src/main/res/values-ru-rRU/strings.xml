@@ -142,4 +142,12 @@
     <string name="change_password">Сменить пароль</string>
     <string name="period">Период</string>
     <string name="grades">Оценки</string>
+    <string name="lessons">Занятия</string>
+    <string name="prepod">Преподаватель: %1$s</string>
+    <string name="prepod_not">Преподаватель не указан</string>
+    <string name="good_day">Добрый день</string>
+    <string name="good_day_format">Добрый день, %1$s</string>
+    <string name="lessons_today_format">Сегодня у вас %1$d занятий</string>
+    <string name="room_not_specified">Кабинет не указан</string>
+    <string name="forget_password">Забыли пароль?</string>
 </resources>

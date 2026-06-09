@@ -1,40 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="12dp">
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/color_bg_secondary"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp">
 
-    <TextView
-        android:id="@+id/tvDate"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
-        android:textColor="@color/color_text_primary"
-        tools:text="28.04.2026" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-    <stud.euktop.uikit.components.button.SchJButton
-        android:id="@+id/btnMark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        android:focusable="false"
-        app:schJButtonClass="PRIMARY"
-        app:schJButtonType="CHIPS"
-        tools:text="5" />
+        <!-- Квадрат с оценкой -->
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_grade_square">
 
-    <TextView
-        android:id="@+id/tvComment"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="end"
-        android:text="@string/good"
-        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
-        android:textColor="@color/color_text_secondary" />
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvMarkValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
+                android:textColor="@color/color_text_accent"
+                tools:text="5" />
+        </FrameLayout>
+
+        <!-- Центр: Название и тема -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvWorkTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                android:textColor="@color/color_text_primary"
+                tools:text="Контрольная работа" />
+
+            <TextView
+                android:id="@+id/tvWorkTopic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                android:textColor="@color/color_text_secondary"
+                tools:text="Тема: Тригонометрические функции" />
+        </LinearLayout>
+
+        <!-- Справа: Дата и вес -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.SchJ.Caption.Medium"
+                android:textColor="@color/color_text_primary"
+                tools:text="24 Окт" />
+
+            <TextView
+                android:id="@+id/tvWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.SchJ.Caption2.Bold"
+                android:textColor="@color/color_text_secondary"
+                tools:text="Вес: 2.0" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

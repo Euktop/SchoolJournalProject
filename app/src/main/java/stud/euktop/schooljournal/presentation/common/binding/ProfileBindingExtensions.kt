@@ -56,7 +56,8 @@ fun <STATE, VM> FragmentItemRegUserBinding.setupProfileForm(
             viewModel = viewModel,
             getter = { it.gender },
             toText = { it?.let { fragment.getString(it.toMessageId()) } ?: "" },
-            onSelected = viewModel::genderSet
+            onSelected = viewModel::genderSet,
+            items = Gender.entries
         )
 
         bindDate(

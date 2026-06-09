@@ -4,6 +4,7 @@ import stud.euktop.data.mock.data.MockDelayService
 import stud.euktop.data.mock.data.MockUserDataSource
 import stud.euktop.data.utils.ApiErrorHandler
 import stud.euktop.domain.model.common.DataError
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.model.user.UserRole
 import stud.euktop.domain.repository.AuthRepository
@@ -48,7 +49,18 @@ class AuthMockRepositoryImpl @Inject constructor(
 
     override suspend fun changePassword(oldPassword: String, newPassword: String): Result<Unit> {
         return apiErrorHandler.safeApiCall {
-            // В моке всегда успешно
         }
+    }
+
+    override suspend fun getRoles(): Result<List<Role>> {
+        return Result.success(listOf(Role.ADMIN, Role.TEACHER, Role.STUDENT))
+    }
+
+    override suspend fun saveRole(role: Role): Result<Unit> {
+        return Result.success(Unit)
+    }
+
+    override suspend fun getSaveRole(): Result<Role?> {
+        return Result.success(Role.ADMIN)
     }
 }

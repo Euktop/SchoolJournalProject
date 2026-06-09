@@ -17,7 +17,7 @@ data class SchJButtonState(val buttonType: ButtonType, val buttonClass: ButtonCl
         PRIMARY,
         INACTIVE,
         SECONDARY,
-        TETRIARY,
+        TERTIARY,
         SELECT,
         UNSELECT;
 
@@ -36,7 +36,7 @@ data class SchJButtonState(val buttonType: ButtonType, val buttonClass: ButtonCl
             ButtonClass.PRIMARY, ButtonClass.SELECT -> R.color.color_text_accent
             ButtonClass.INACTIVE -> R.color.color_accent_inactive
             ButtonClass.SECONDARY -> R.color.transparent
-            ButtonClass.UNSELECT, ButtonClass.TETRIARY -> R.color.color_bg_secondary
+            ButtonClass.UNSELECT, ButtonClass.TERTIARY -> R.color.color_bg_secondary
         }
         val stroke = when (this.buttonClass) {
             ButtonClass.SECONDARY -> R.color.color_accent
@@ -85,7 +85,7 @@ data class SchJButtonState(val buttonType: ButtonType, val buttonClass: ButtonCl
                 view.context, when (buttonClass) {
                     ButtonClass.PRIMARY, ButtonClass.INACTIVE, ButtonClass.SELECT -> R.color.color_text_on_accent
                     ButtonClass.SECONDARY -> R.color.color_text_accent
-                    ButtonClass.TETRIARY -> R.color.color_text_primary
+                    ButtonClass.TERTIARY -> R.color.color_text_primary
                     ButtonClass.UNSELECT -> R.color.color_text_tertiary
                 }
             )

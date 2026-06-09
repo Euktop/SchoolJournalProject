@@ -5,5 +5,7 @@ data class TeacherClassItem(
     val grade: Int,
     val letter: String,
     val subjectId: Int,
-    val subjectName: String
+    val subjectName: String,
+    val roomName: String? = null,
+    val studentCount: Int? = null,
 )

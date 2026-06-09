@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/admin/home/AdminHomeFragment.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/admin/home/AdminHomeFragment.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.admin.home&#10;&#10;import android.view.LayoutInflater&#10;import android.view.ViewGroup&#10;import androidx.fragment.app.viewModels&#10;import dagger.hilt.android.AndroidEntryPoint&#10;import stud.euktop.schooljournal.R&#10;import stud.euktop.schooljournal.databinding.FragmentAdminHomeBinding&#10;import stud.euktop.schooljournal.presentation.common.base.BaseFragment&#10;&#10;@AndroidEntryPoint&#10;class AdminHomeFragment : BaseFragment&lt;&#10;        FragmentAdminHomeBinding,&#10;        AdminHomeViewModel,&#10;        AdminHomeState,&#10;        Unit&gt;() {&#10;&#10;    override val viewModel: AdminHomeViewModel by viewModels()&#10;&#10;    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =&#10;        FragmentAdminHomeBinding.inflate(inflater, container, false)&#10;&#10;    override fun setupUI() {&#10;        // TODO: Add UI setup&#10;    }&#10;&#10;    override fun updateState(state: AdminHomeState) {&#10;        // TODO: Update UI based on state&#10;    }&#10;&#10;    override fun updateEvent(event: Unit) {}&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/admin/home/AdminHomeState.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/admin/home/AdminHomeState.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.admin.home&#10;&#10;import stud.euktop.schooljournal.presentation.common.base.BaseState&#10;&#10;data class AdminHomeState(&#10;    override val loadingMap: Map&lt;String, Boolean&gt; = emptyMap()&#10;) : BaseState&lt;AdminHomeState&gt;() {&#10;    override fun updateIsLoading(loadingMap: Map&lt;String, Boolean&gt;): AdminHomeState = &#10;        copy(loadingMap = loadingMap)&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/admin/home/AdminHomeViewModel.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/admin/home/AdminHomeViewModel.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.admin.home&#10;&#10;import dagger.hilt.android.lifecycle.HiltViewModel&#10;import stud.euktop.schooljournal.presentation.common.base.BaseViewModel&#10;import javax.inject.Inject&#10;&#10;@HiltViewModel&#10;class AdminHomeViewModel @Inject constructor() : BaseViewModel&lt;AdminHomeState, Unit&gt;() {&#10;    override fun initState() = AdminHomeState()&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/student/home/StudentHomeFragment.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/student/home/StudentHomeFragment.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.student.home&#10;&#10;import android.view.LayoutInflater&#10;import android.view.ViewGroup&#10;import androidx.fragment.app.viewModels&#10;import dagger.hilt.android.AndroidEntryPoint&#10;import stud.euktop.schooljournal.R&#10;import stud.euktop.schooljournal.databinding.FragmentStudentHomeBinding&#10;import stud.euktop.schooljournal.presentation.common.base.BaseFragment&#10;&#10;@AndroidEntryPoint&#10;class StudentHomeFragment : BaseFragment&lt;&#10;        FragmentStudentHomeBinding,&#10;        StudentHomeViewModel,&#10;        StudentHomeState,&#10;        Unit&gt;() {&#10;&#10;    override val viewModel: StudentHomeViewModel by viewModels()&#10;&#10;    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =&#10;        FragmentStudentHomeBinding.inflate(inflater, container, false)&#10;&#10;    override fun setupUI() {&#10;        // TODO: Add UI setup&#10;    }&#10;&#10;    override fun updateState(state: StudentHomeState) {&#10;        // TODO: Update UI based on state&#10;    }&#10;&#10;    override fun updateEvent(event: Unit) {}&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/student/home/StudentHomeState.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/student/home/StudentHomeState.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.student.home&#10;&#10;import stud.euktop.schooljournal.presentation.common.base.BaseState&#10;&#10;data class StudentHomeState(&#10;    override val loadingMap: Map&lt;String, Boolean&gt; = emptyMap()&#10;) : BaseState&lt;StudentHomeState&gt;() {&#10;    override fun updateIsLoading(loadingMap: Map&lt;String, Boolean&gt;): StudentHomeState = &#10;        copy(loadingMap = loadingMap)&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/student/home/StudentHomeViewModel.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/student/home/StudentHomeViewModel.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.student.home&#10;&#10;import dagger.hilt.android.lifecycle.HiltViewModel&#10;import stud.euktop.schooljournal.presentation.common.base.BaseViewModel&#10;import javax.inject.Inject&#10;&#10;@HiltViewModel&#10;class StudentHomeViewModel @Inject constructor() : BaseViewModel&lt;StudentHomeState, Unit&gt;() {&#10;    override fun initState() = StudentHomeState()&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/teacher/home/TeacherHomeFragment.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/teacher/home/TeacherHomeFragment.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.teacher.home&#10;&#10;import android.view.LayoutInflater&#10;import android.view.ViewGroup&#10;import androidx.fragment.app.viewModels&#10;import dagger.hilt.android.AndroidEntryPoint&#10;import stud.euktop.schooljournal.R&#10;import stud.euktop.schooljournal.databinding.FragmentTeacherHomeBinding&#10;import stud.euktop.schooljournal.presentation.common.base.BaseFragment&#10;&#10;@AndroidEntryPoint&#10;class TeacherHomeFragment : BaseFragment&lt;&#10;        FragmentTeacherHomeBinding,&#10;        TeacherHomeViewModel,&#10;        TeacherHomeState,&#10;        Unit&gt;() {&#10;&#10;    override val viewModel: TeacherHomeViewModel by viewModels()&#10;&#10;    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =&#10;        FragmentTeacherHomeBinding.inflate(inflater, container, false)&#10;&#10;    override fun setupUI() {&#10;        // TODO: Add UI setup&#10;    }&#10;&#10;    override fun updateState(state: TeacherHomeState) {&#10;        // TODO: Update UI based on state&#10;    }&#10;&#10;    override fun updateEvent(event: Unit) {}&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/teacher/home/TeacherHomeState.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/teacher/home/TeacherHomeState.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.teacher.home&#10;&#10;import stud.euktop.schooljournal.presentation.common.base.BaseState&#10;&#10;data class TeacherHomeState(&#10;    override val loadingMap: Map&lt;String, Boolean&gt; = emptyMap()&#10;) : BaseState&lt;TeacherHomeState&gt;() {&#10;    override fun updateIsLoading(loadingMap: Map&lt;String, Boolean&gt;): TeacherHomeState = &#10;        copy(loadingMap = loadingMap)&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/teacher/home/TeacherHomeViewModel.kt">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/java/stud/euktop/schooljournal/presentation/main/teacher/home/TeacherHomeViewModel.kt" />
+              <option name="updatedContent" value="package stud.euktop.schooljournal.presentation.main.teacher.home&#10;&#10;import dagger.hilt.android.lifecycle.HiltViewModel&#10;import stud.euktop.schooljournal.presentation.common.base.BaseViewModel&#10;import javax.inject.Inject&#10;&#10;@HiltViewModel&#10;class TeacherHomeViewModel @Inject constructor() : BaseViewModel&lt;TeacherHomeState, Unit&gt;() {&#10;    override fun initState() = TeacherHomeState()&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_admin_home.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/res/layout/fragment_admin_home.xml" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&#10;    android:layout_width=&quot;match_parent&quot;&#10;    android:layout_height=&quot;match_parent&quot;&gt;&#10;&#10;    &lt;TextView&#10;        android:layout_width=&quot;wrap_content&quot;&#10;        android:layout_height=&quot;wrap_content&quot;&#10;        android:layout_gravity=&quot;center&quot;&#10;        android:text=&quot;Admin Home&quot;&#10;        android:textSize=&quot;20sp&quot; /&gt;&#10;&#10;&lt;/FrameLayout&gt;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_student_home.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/res/layout/fragment_student_home.xml" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&#10;    android:layout_width=&quot;match_parent&quot;&#10;    android:layout_height=&quot;match_parent&quot;&gt;&#10;&#10;    &lt;TextView&#10;        android:layout_width=&quot;wrap_content&quot;&#10;        android:layout_height=&quot;wrap_content&quot;&#10;        android:layout_gravity=&quot;center&quot;&#10;        android:text=&quot;Student Home&quot;&#10;        android:textSize=&quot;20sp&quot; /&gt;&#10;&#10;&lt;/FrameLayout&gt;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/res/layout/fragment_teacher_home.xml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/app/src/main/res/layout/fragment_teacher_home.xml" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#10;&lt;FrameLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&#10;    android:layout_width=&quot;match_parent&quot;&#10;    android:layout_height=&quot;match_parent&quot;&gt;&#10;&#10;    &lt;TextView&#10;        android:layout_width=&quot;wrap_content&quot;&#10;        android:layout_height=&quot;wrap_content&quot;&#10;        android:layout_gravity=&quot;center&quot;&#10;        android:text=&quot;Teacher Home&quot;&#10;        android:textSize=&quot;20sp&quot; /&gt;&#10;&#10;&lt;/FrameLayout&gt;&#10;&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

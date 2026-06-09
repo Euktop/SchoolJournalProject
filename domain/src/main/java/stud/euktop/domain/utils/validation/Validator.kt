@@ -1,6 +1,5 @@
 package stud.euktop.domain.utils.validation
 
-import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
 
 abstract class Validator<T, V : Validator<T, V>> : ValidatorInterface<T> {
@@ -9,17 +8,17 @@ abstract class Validator<T, V : Validator<T, V>> : ValidatorInterface<T> {
         val tag = this.toSimpleTag()
         val valueStr = value?.toSimpleTag().orEmpty()
 
-        logger?.d(tag, "validation_start", "value=$valueStr")
+//        logger?.d(tag, "validation_start", "value=$valueStr")
 
         val result = try {
             _validate(value)
         } catch (e: Exception) {
-            logger?.e(tag, "validation_exception", e, "value=$valueStr")
+//            logger?.e(tag, "validation_exception", e, "value=$valueStr")
             false
         }
 
         if (result) {
-            logger?.d(tag, "validation_success", "value=$valueStr")
+//            logger?.d(tag, "validation_success", "value=$valueStr")
         } else {
             val errorMessage = getValidationErrorMessage(value)
             val data = buildString {
@@ -28,7 +27,7 @@ abstract class Validator<T, V : Validator<T, V>> : ValidatorInterface<T> {
                     append(", reason=$errorMessage")
                 }
             }
-            logger?.e(tag, "validation_failed", data = data)
+//            logger?.e(tag, "validation_failed", data = data)
         }
         return result
     }

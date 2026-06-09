@@ -6,6 +6,7 @@ import stud.euktop.domain.model.user.Gender
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.binding.ProfileFormActions
+import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import java.util.Date
 import javax.inject.Inject
@@ -13,8 +14,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator,
-    private val routerAuthorization: RouterAuthorization
+    private val routerAuthorization: RouterAuthorization,
+    executeCoordinatorExec: CoordinatorExec
 ) : BaseViewModel<ProfileState, Unit>(), ProfileFormActions {
+    init {
+        this.executeCoordinator = executeCoordinatorExec
+    }
 
     override fun initState() = ProfileState()
 
@@ -59,7 +64,7 @@ class ProfileViewModel @Inject constructor(
                     gender = _state.value.gender ?: Gender.NONE,
                     birthDay = _state.value.birthDay ?: Date(),
                     email = _state.value.email.getValidate(),
-                    phone = _state.value.phone.value
+                    phone = _state.value.phone.getValidate()
                 )
             },
             onSuccess = { routerAuthorization.toCreatePassword() }

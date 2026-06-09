@@ -2,8 +2,10 @@
 package stud.euktop.schooljournal.presentation.main.admin.subjects
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.school.SubjectUpdate
@@ -24,6 +26,7 @@ class SubjectEditViewModel @Inject constructor(
     init {
         executeCoordinator = coordinatorExec
     }
+
     private val subjectId: Int = savedStateHandle["subjectId"] ?: 0
     private val isEditMode get() = subjectId != 0
 
@@ -77,7 +80,7 @@ class SubjectEditViewModel @Inject constructor(
             executeWithLoadingSync(
                 key = "save",
                 block = { repository.updateSubject(update) },
-                onSuccess = { routerAdmin.navigateBack() }
+                onSuccess = { routerAdmin.toBack() }
             )
         } else {
             val subject = Subject(
@@ -88,12 +91,14 @@ class SubjectEditViewModel @Inject constructor(
             executeWithLoadingSync(
                 key = "save",
                 block = { repository.addSubject(subject) },
-                onSuccess = { routerAdmin.navigateBack() }
+                onSuccess = { routerAdmin.toBack() }
             )
         }
     }
 
     fun cancel() {
-        routerAdmin.navigateBack()
+        viewModelScope.launch {
+            routerAdmin.toBack()
+        }
     }
 }

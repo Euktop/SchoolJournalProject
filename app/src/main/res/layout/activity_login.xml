@@ -114,6 +114,16 @@
                 android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
                 android:textColor="@color/color_accent" />
 
+            <TextView
+                android:id="@+id/textViewForgetPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="@string/forget_password"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                android:textColor="@color/color_error" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

@@ -1,10 +1,10 @@
 package stud.euktop.domain.impl
 
 import stud.euktop.domain.contract.RoleRepository
-import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.common.DataError
-import stud.euktop.domain.model.user.UserRole
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.domain.model.user.UserRole
 import stud.euktop.domain.repository.AuthRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,6 +33,7 @@ class RoleRepositoryImpl @Inject constructor(
             when (role) {
                 Role.ADMIN,
                 Role.DIRECTOR -> hasAdmin
+
                 Role.TEACHER,
                 Role.STUDENT,
                 Role.PARENT -> hasAdmin || hasDirector
@@ -67,4 +68,8 @@ class RoleRepositoryImpl @Inject constructor(
     override suspend fun canViewAdminPanel(): Boolean = isAdmin() || isDirector()
     override suspend fun canEditUser(userId: Int): Boolean =
         canEditUsers() || getProfile().userId == userId
+
+    override suspend fun getCurrentRole(): Role? {
+        return authRepository.getSaveRole().getOrNull()
+    }
 }

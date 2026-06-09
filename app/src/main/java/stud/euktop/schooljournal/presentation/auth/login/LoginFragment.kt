@@ -9,15 +9,11 @@ import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.binding.bindForm
 import stud.euktop.schooljournal.presentation.common.binding.bindLoading
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<ActivityLoginBinding, LoginViewModel, LoginState, Unit>() {
 
-    @Inject
-    lateinit var navigationManager: NavigationManager
     override val viewModel: LoginViewModel by viewModels()
     override fun inflateBinding(
         inflater: LayoutInflater,
@@ -38,6 +34,8 @@ class LoginFragment : BaseFragment<ActivityLoginBinding, LoginViewModel, LoginSt
             field(binding.MatuleInputPassword, { it.password }, viewModel::passwordSet)
         }
         binding.matuleButtonAuth.setOnClickListener { viewModel.onLoginClick() }
+        binding.textViewRegestration.setOnClickListener { viewModel.onRegClick() }
+        binding.textViewForgetPassword.setOnClickListener { viewModel.onForgetClick() }
     }
 
     override fun updateState(state: LoginState) {

@@ -1,9 +1,15 @@
 package stud.euktop.schooljournal.presentation.auth.login
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.message.MessageEvent
+import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import javax.inject.Inject
 
@@ -24,7 +30,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator,
-    private val routerMain: RouterMain
+    private val routerMain: RouterMain,
+    private val routerAuthorization: RouterAuthorization
 ) : BaseViewModel<LoginState, Unit>() {
 
     override fun initState() = LoginState()
@@ -48,5 +55,25 @@ class LoginViewModel @Inject constructor(
                 )
             }, { routerMain.toMain() }
         )
+    }
+
+    fun onRegClick() {
+        viewModelScope.launch {
+            routerAuthorization.toCreateProfile()
+        }
+    }
+
+    fun onForgetClick() {
+        viewModelScope.launch {
+            _messageEvent.emit(
+                MessageEvent.Message(
+                    MessageParam(
+                        message = R.string.it_is_not_possible_to_reset_the_password_yet,
+                        action = {},
+                        dismiss = {}
+                    )
+                )
+            )
+        }
     }
 }

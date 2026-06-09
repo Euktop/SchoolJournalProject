@@ -1,6 +1,7 @@
 package stud.euktop.schooljournal.presentation.auth.common.contract
 
 import stud.euktop.domain.model.user.Gender
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import java.util.Date
@@ -55,4 +56,6 @@ interface AuthCoordinator {
      * @return UserEntity, если профиль существует и заполнен, иначе null.
      */
     suspend fun getUser(): CoordinatorResult<UserProfile>
+    suspend fun getRoles(): CoordinatorResult<List<Role>>
+    suspend fun saveRole(role: Role): CoordinatorResult<Unit>
 }
