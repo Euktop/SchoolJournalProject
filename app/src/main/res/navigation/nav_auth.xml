@@ -13,7 +13,7 @@
         tools:layout="@layout/activity_login">
         <action
             android:id="@+id/action_loginFragment_to_profileFragment"
-            app:destination="@id/authProfileFragment" />
+            app:destination="@id/mainProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/createPasswordFragment"
@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_create_password">
     </fragment>
     <fragment
-        android:id="@+id/authProfileFragment"
+        android:id="@+id/mainProfileFragment"
         android:name="stud.euktop.schooljournal.presentation.auth.profile.ProfileFragment"
         android:label="fragment_reg"
         tools:layout="@layout/fragment_reg">
@@ -30,6 +30,6 @@
             android:id="@+id/action_profileFragment_to_createPasswordFragment"
             app:destination="@id/createPasswordFragment" />
     </fragment>
-    <action android:id="@+id/action_global_to_auth_profile" app:destination="@id/authProfileFragment" />
+    <action android:id="@+id/action_global_to_auth_profile" app:destination="@id/mainProfileFragment" />
     <action android:id="@+id/action_global_to_create_password" app:destination="@id/createPasswordFragment" />
 </navigation>

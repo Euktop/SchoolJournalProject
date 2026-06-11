@@ -1,32 +1,76 @@
 package stud.euktop.schooljournal.presentation.main.student.home
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentHomeBinding
-import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.base.BaseNavigationFragment
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterProfile
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class StudentHomeFragment : BaseFragment<
-        FragmentStudentHomeBinding,
-        StudentHomeViewModel,
-        StudentHomeState,
-        Unit>() {
+class StudentHomeFragment : BaseNavigationFragment<FragmentStudentHomeBinding>() {
 
-    override val viewModel: StudentHomeViewModel by viewModels()
+    override val screenTag = "student_home"
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        FragmentStudentHomeBinding.inflate(inflater, container, false)
+    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
+        FragmentStudentHomeBinding.inflate(i, c, false)
 
-    override fun setupUI() {
-        // TODO: Add UI setup
+    @Inject
+    lateinit var router: RouterProfile
+
+    private lateinit var navController: NavController
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val navHostFragment = childFragmentManager
+            .findFragmentById(R.id.studentNavHostFragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+        binding.bottomNavigationView.setupWithNavController(navController)
+
+        navHostFragment.childFragmentManager.registerFragmentLifecycleCallbacks(
+            object : FragmentManager.FragmentLifecycleCallbacks() {
+                override fun onFragmentResumed(fm: FragmentManager, fragment: Fragment) {
+                    super.onFragmentResumed(fm, fragment)
+                    if (fragment is DialogFragment) return
+                    val config = (fragment as? ToolbarConfigProvider)?.getToolbarConfig()
+                        ?: ToolbarConfig()
+                    updateToolbar(config)
+                }
+            },
+            false
+        )
     }
 
-    override fun updateState(state: StudentHomeState) {
-        // TODO: Update UI based on state
+    private fun updateToolbar(config: ToolbarConfig) {
+        binding.toolbar.apply {
+            title = config.titleRes?.let { getString(it) } ?: getString(R.string.app_name)
+            menu.clear()
+            inflateMenu(config.menuRes ?: R.menu.menu_home)
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_profile -> router.toProfile()
+                    else -> config.onMenuItemClick?.invoke(menuItem) ?: false
+                }
+                true
+            }
+        }
     }
 
-    override fun updateEvent(event: Unit) {}
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }
-

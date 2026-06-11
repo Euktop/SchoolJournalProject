@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_accent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_account_circle"
+        app:tint="@color/color_text_on_accent" />
+
+    <TextView
+        android:id="@+id/tvDrawerUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.SchJ.Title3.Bold"
+        android:textColor="@color/color_text_on_accent"
+        tools:text="Администратор" />
+
+    <TextView
+        android:id="@+id/tvDrawerUserEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.8"
+        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+        android:textColor="@color/color_text_on_accent"
+        tools:text="admin@school.ru" />
+</LinearLayout>

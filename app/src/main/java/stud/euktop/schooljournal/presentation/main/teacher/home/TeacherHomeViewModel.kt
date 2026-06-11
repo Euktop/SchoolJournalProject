@@ -8,4 +8,3 @@ import javax.inject.Inject
 class TeacherHomeViewModel @Inject constructor() : BaseViewModel<TeacherHomeState, Unit>() {
     override fun initState() = TeacherHomeState()
 }
-

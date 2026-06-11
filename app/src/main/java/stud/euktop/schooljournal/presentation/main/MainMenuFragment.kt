@@ -49,6 +49,10 @@ class MainMenuFragment : Fragment() {
         binding.btnLessonEdit.setOnClickListener { router.toLessonEdit() }
         binding.btnStudentSchedule.setOnClickListener { router.toStudentSchedule() }
         binding.btnSelectRole.setOnClickListener { router.toSelectRole() }
+
+        binding.btnHomeStudent.setOnClickListener { router.toStudentHome() }
+        binding.btnHomeAdmin.setOnClickListener { router.toStudentAdmin() }
+        binding.btnHomeTeacher.setOnClickListener { router.toStudentTeacher() }
     }
 
     override fun onDestroyView() {

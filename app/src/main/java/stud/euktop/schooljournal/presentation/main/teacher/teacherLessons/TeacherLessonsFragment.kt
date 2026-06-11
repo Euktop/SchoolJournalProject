@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherLessonsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.filter.lesson.LessonFilterDialog
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import javax.inject.Inject
 
@@ -16,7 +19,7 @@ class TeacherLessonsFragment : BaseFragment<
         FragmentTeacherLessonsBinding,
         TeacherLessonsViewModel,
         TeacherLessonsState,
-        Unit>() {
+        Unit>(), ToolbarConfigProvider {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentTeacherLessonsBinding.inflate(inflater, container, false)
@@ -30,7 +33,6 @@ class TeacherLessonsFragment : BaseFragment<
         binding.rvLessons.adapter = TeacherLessonsAdapter { lesson ->
             router.toLessonMarks(lesson.lessonId)
         }
-        binding.toolbar.showFilterDialog = { showFilterDialog() }
     }
 
     private fun showFilterDialog() {
@@ -48,4 +50,13 @@ class TeacherLessonsFragment : BaseFragment<
     }
 
     override fun updateEvent(event: Unit) {}
+    override fun getToolbarConfig() = ToolbarConfig(
+        titleRes = R.string.homeworks,
+        menuRes = R.menu.menu_home_filter,
+        onMenuItemClick = {
+            when (it.itemId) {
+                R.id.action_filter -> showFilterDialog()
+            }
+        }
+    )
 }

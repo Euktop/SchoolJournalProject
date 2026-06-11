@@ -80,9 +80,9 @@
     <string name="role_student_desc">View schedule and homework</string>
     <string name="role_teacher">Teacher</string>
     <string name="role_admin">Admin</string>
-    <string name="role_admin_desc">Административные управления</string>
+    <string name="role_admin_desc">Administrative controls</string>
     <string name="role_director">Director</string>
-    <string name="role_director_desc">Управление школой</string>
+    <string name="role_director_desc">School management</string>
     <string name="role_teacher_desc">Manage classes and grades</string>
     <string name="room">Office</string>
     <string name="room_not_specified">Room not specified</string>
@@ -125,4 +125,92 @@
     <string name="valid_from">Start date</string>
     <string name="valid_to">End date</string>
     <string name="weight_format">Weight: %1$s</string>
+    <string name="hello_admin">Hello, %1$s!</string>
+    <string name="full_control">You have full control over the system.</string>
+    <string name="schools_count_label">Schools</string>
+    <string name="active_users_label">Active users</string>
+    <string name="system_overview">System overview</string>
+    <string name="total_students">Total students</string>
+    <string name="total_teachers">Total teachers</string>
+    <string name="system_health">System status</string>
+    <string name="all_services_running">All services are working</string>
+    <string name="recent_logins">Recent logins</string>
+    <string name="generate_report">Generate a report</string>
+    <string name="invite_users">Invite</string>
+    <string name="maintenance">Settings</string>
+    <string name="admin_portal">Admin Portal</string>
+    <string name="academic_year_23_24">2023–24 Academic Year</string>
+    <string name="admin_level_1">Admin Level 1</string>
+    <string name="dashboard">Control panel</string>
+    <string name="institutions">INSTITUTIONS</string>
+    <string name="schools_list">List of schools</string>
+    <string name="edit_school">Edit a school</string>
+    <string name="academic_structure">ACADEMIC STRUCTURE</string>
+    <string name="classes_list">List of classes</string>
+    <string name="subjects_list">List of subjects</string>
+    <string name="system_and_users">SYSTEM AND USERS</string>
+    <!-- Teacher Home -->
+    <string name="hello_teacher">Hello, %1$s!</string>
+    <string name="ready_for_next_lesson">" Are you ready for the next lesson?"</string>
+    <string name="next_lesson">NEXT LESSON</string>
+    <string name="no_next_lesson">No lessons scheduled</string>
+    <string name="teacher_schedule">Teacher\'s schedule</string>
+    <string name="lessons_today">%1$d lessons today</string>
+    <string name="my_classes">My classes</string>
+    <string name="lessons_list">Lesson list</string>
+    <string name="lesson_plan">Class plan</string>
+    <string name="grading">Marking grades</string>
+    <string name="awaiting_review">Waiting for checks</string>
+    <string name="homework_list">Homework list</string>
+    <string name="track_submission">Track homework</string>
+    <string name="create_homework">Create homework</string>
+    <string name="new_assignment">New assignment</string>
+    <string name="analytics">Analytics</string>
+    <string name="class_performance">Class performance</string>
+    <string name="app_settings">App settings</string>
+    <string name="academic_excellence">Academic excellence</string>
+    <string name="be_organized">Be organized and inspire your students.</string>
+
+    <!-- Student Home -->
+    <string name="hello_student">Hello, Student!</string>
+    <string name="good_results">You\'re doing great this quarter.</string>
+    <string name="new_homeworks">New Homework</string>
+    <string name="schedule">Schedule</string>
+    <string name="subjects_count">8 subjects</string>
+    <string name="marks_details">Grade Details</string>
+    <string name="updated_hours_ago">Updated 2 hours ago</string>
+    <string name="homeworks_not_submitted">3 assignments due</string>
+    <string name="performance_stats">Academic Statistics</string>
+    <string name="account_privacy">Account and Privacy</string>
+    <string name="in_15_min">IN 15 MINS</string>
+    <string name="higher_math">Advanced Mathematics</string>
+    <string name="room_and_teacher">Room 402 • Prof. Richardson</string>
+
+    <string name="management">Management</string>
+    <string name="users_section">Users</string>
+    <string name="system">System</string>
+
+    <!-- Admin Home -->
+    <string name="admin_panel">Admin panel</string>
+    <string name="system_management">System management</string>
+
+    <!-- Menu -->
+    <string name="menu_main">Main</string>
+    <string name="menu_management">Management</string>
+    <string name="schools">Школы</string>
+    <string name="classes">Classes</string>
+    <string name="subjects">Subjects</string>
+    <string name="rooms">Кабинеты</string>
+    <string name="assignments">Assignments</string>
+    <string name="menu_users">Users</string>
+    <string name="menu_system">System</string>
+    <string name="audit_log">Журнал аудита</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="welcome_admin_format">Здравствуйте, %1$s!</string>
+    <string name="percent_format" translatable="false">%1$d%%</string>
+    <string name="home">Main</string>
+    <string name="users">Users</string>
+    <string name="profile">Profile</string>
+
 </resources>

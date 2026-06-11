@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960">
+
+    <!-- 1. Голова профиля -->
+    <path
+        android:fillColor="@color/color_text_primary"
+        android:pathData="M400,480Q334,480 287,433Q240,386 240,320Q240,254 287,207Q334,160 400,160Q466,160 513,207Q560,254 560,320Q560,386 513,433Q466,480 400,480Z" />
+
+    <!-- 2. Туловище с аккуратным встроенным вырезом (без багов evenOdd) -->
+    <path
+        android:fillColor="@color/color_text_primary"
+        android:pathData="M120,720L120,640Q120,594 147,557Q174,520 210,500Q258,534 309,553Q360,572 400,572Q440,572 491,553Q542,534 570,500 A180,180 0 0,0 586,720L120,720Z" />
+
+    <!-- 3. Плюс -->
+    <path
+        android:fillColor="@color/color_text_primary"
+        android:pathData="M880,560L760,560L760,440L680,440L680,560L560,560L560,640L680,640L680,760L760,760L760,640L880,640L880,560Z" />
+</vector>

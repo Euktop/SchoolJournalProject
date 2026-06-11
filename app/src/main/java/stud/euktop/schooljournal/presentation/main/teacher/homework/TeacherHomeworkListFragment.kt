@@ -6,12 +6,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.filter.homework.HomeworkFilterDialog
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 import javax.inject.Inject
 
@@ -20,7 +23,7 @@ class TeacherHomeworkListFragment : BaseFragment<
         FragmentTeacherHomeworkListBinding,
         TeacherHomeworkViewModel,
         TeacherHomeworkState,
-        TeacherHomeworkEvent>() {
+        TeacherHomeworkEvent>(), ToolbarConfigProvider {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentTeacherHomeworkListBinding.inflate(inflater, container, false)
@@ -36,17 +39,11 @@ class TeacherHomeworkListFragment : BaseFragment<
     private lateinit var adapter: TeacherHomeworkAdapter
 
     override fun setupUI() {
-        binding.toolbar.setNavigationOnClickListener {
-            lifecycleScope.launch {
-                router.toBack()
-            }
-        }
         binding.fabAddHomework.setOnClickListener { router.toTeacherHomeworkEdit() }
 
         adapter = TeacherHomeworkAdapter { homework ->
             router.toTeacherHomeworkEdit(homework.homeworkId)
         }
-        binding.toolbar.showFilterDialog = { showFilterDialog() }
         binding.rvHomeworkList.adapter = adapter
     }
 
@@ -73,4 +70,14 @@ class TeacherHomeworkListFragment : BaseFragment<
         )
         dialog.show(parentFragmentManager, "filter")
     }
+
+    override fun getToolbarConfig() = ToolbarConfig(
+        titleRes = R.string.homeworks,
+        menuRes = R.menu.menu_home_filter,
+        onMenuItemClick = {
+            when (it.itemId) {
+                R.id.action_filter -> showFilterDialog()
+            }
+        }
+    )
 }

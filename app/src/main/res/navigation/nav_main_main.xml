@@ -3,25 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main_main"
-    app:startDestination="@id/mainMenuFragment">
+    app:startDestination="@id/mainMenuFragment2">
+
     <fragment
         android:id="@+id/changePasswordFragment"
         android:name="stud.euktop.schooljournal.presentation.auth.password.ChangePasswordFragment"
         android:label="Смена пароля"
         tools:layout="@layout/fragment_change_password" />
-    <!-- Главное меню -->
+
+    <!-- Расписание ученика -->
     <fragment
         android:id="@+id/studentScheduleFragment"
         android:name="stud.euktop.schooljournal.presentation.main.student.schedule.StudentScheduleFragment"
         android:label="Расписание"
         tools:layout="@layout/fragment_student_schedule" />
-    <fragment
-        android:id="@+id/mainMenuFragment"
-        android:name="stud.euktop.schooljournal.presentation.main.MainMenuFragment"
-        android:label="Главное меню"
-        tools:layout="@layout/fragment_main_menu" />
 
-    <!-- Учительская цепочка (уже было) -->
+    <!-- Учительская цепочка -->
     <fragment
         android:id="@+id/teacherClassesFragment"
         android:name="stud.euktop.schooljournal.presentation.main.teacher.teacherClass.TeacherClassesFragment"
@@ -50,6 +47,7 @@
             android:name="lessonId"
             app:argType="integer" />
     </fragment>
+
     <fragment
         android:id="@+id/lessonEditFragment"
         android:name="stud.euktop.schooljournal.presentation.main.admin.lessons.LessonEditFragment"
@@ -78,20 +76,14 @@
             app:argType="integer" />
     </fragment>
 
-    <!-- Административная панель -->
-    <fragment
-        android:id="@+id/adminPanelFragment"
-        android:name="stud.euktop.schooljournal.presentation.main.admin.panel.AdminPanelFragment"
-        android:label="Админ панель"
-        tools:layout="@layout/fragment_admin_panel" />
-
     <!-- Профиль -->
     <fragment
-        android:id="@+id/authProfileFragment"
+        android:id="@+id/mainProfileFragment"
         android:name="stud.euktop.schooljournal.presentation.main.profile.ProfileFragment"
         android:label="Профиль"
         tools:layout="@layout/fragment_profile" />
 
+    <!-- Административные редактирования -->
     <fragment
         android:id="@+id/userEditFragment"
         android:name="stud.euktop.schooljournal.presentation.main.admin.users.UserEditFragment"
@@ -101,6 +93,7 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+
     <fragment
         android:id="@+id/classEditFragment"
         android:name="stud.euktop.schooljournal.presentation.main.admin.classes.ClassEditFragment"
@@ -110,6 +103,7 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+
     <fragment
         android:id="@+id/subjectEditFragment"
         android:name="stud.euktop.schooljournal.presentation.main.admin.subjects.SubjectEditFragment"
@@ -119,6 +113,7 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+
     <fragment
         android:id="@+id/teacherAssignmentEditFragment"
         android:name="stud.euktop.schooljournal.presentation.main.admin.assignments.TeacherAssignmentEditFragment"
@@ -127,6 +122,49 @@
             android:name="assignmentId"
             app:argType="stud.euktop.domain.model.assignment.AssignmentId" />
     </fragment>
+
+    <!-- Списки администратора -->
+    <fragment
+        android:id="@+id/schoolsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.schools.SchoolsListFragment"
+        android:label="Schools" />
+
+    <fragment
+        android:id="@+id/classesListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.classes.ClassesListFragment"
+        android:label="Classes" />
+
+    <fragment
+        android:id="@+id/subjectsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.subjects.SubjectsListFragment"
+        android:label="Subjects" />
+
+    <fragment
+        android:id="@+id/roomsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.rooms.RoomsListFragment"
+        android:label="Rooms" />
+
+    <fragment
+        android:id="@+id/assignmentsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.assignments.AssignmentsListFragment"
+        android:label="Assignments" />
+
+    <fragment
+        android:id="@+id/usersListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.users.UsersListFragment"
+        android:label="Users" />
+
+    <fragment
+        android:id="@+id/auditLogFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.audit.AuditLogFragment"
+        android:label="Audit Log" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.settings.SettingsFragment"
+        android:label="Settings" />
+
+    <!-- Учительские ДЗ -->
     <fragment
         android:id="@+id/teacherHomeworkListFragment"
         android:name="stud.euktop.schooljournal.presentation.main.teacher.homework.TeacherHomeworkListFragment"
@@ -143,12 +181,33 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+
+    <!-- Студенческие ДЗ -->
     <fragment
         android:id="@+id/studentHomeworkListFragment"
         android:name="stud.euktop.schooljournal.presentation.main.student.homework.StudentHomeworkListFragment"
         android:label="Домашние задания"
         tools:layout="@layout/fragment_student_homework_list" />
 
+    <!-- Главные контейнеры для ролей -->
+    <fragment
+        android:id="@+id/studentHomeFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.student.home.StudentHomeFragment"
+        android:label="StudentHomeFragment" />
+
+    <fragment
+        android:id="@+id/adminHomeFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.home.AdminHomeFragment"
+        android:label="fragment_admin_home"
+        tools:layout="@layout/fragment_admin_home" />
+
+    <fragment
+        android:id="@+id/teacherHomeFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.home.TeacherHomeFragment"
+        android:label="fragment_teacher_home"
+        tools:layout="@layout/fragment_teacher_home" />
+
+    <!-- Действия (actions) -->
     <action
         android:id="@+id/action_global_user_edit"
         app:destination="@id/userEditFragment" />
@@ -167,9 +226,6 @@
     <action
         android:id="@+id/action_global_student_subjects"
         app:destination="@id/studentSubjectsFragment" />
-    <action
-        android:id="@+id/action_global_admin_panel"
-        app:destination="@id/adminPanelFragment" />
     <action
         android:id="@+id/action_global_student_subject_detail"
         app:destination="@id/studentSubjectDetailFragment" />
@@ -200,9 +256,54 @@
     <action
         android:id="@+id/action_global_select_role"
         app:destination="@id/selectRoleFragment" />
+    <action
+        android:id="@+id/action_global_profile"
+        app:destination="@id/mainProfileFragment" />
+    <action
+        android:id="@+id/action_global_home_student"
+        app:destination="@id/studentHomeFragment" />
+    <action
+        android:id="@+id/action_global_home_admin"
+        app:destination="@id/adminHomeFragment" />
+    <action
+        android:id="@+id/action_global_home_teacher"
+        app:destination="@id/teacherHomeFragment" />
+
+    <action
+        android:id="@+id/action_global_schools_list"
+        app:destination="@id/schoolsListFragment" />
+    <action
+        android:id="@+id/action_global_classes_list"
+        app:destination="@id/classesListFragment" />
+    <action
+        android:id="@+id/action_global_subjects_list"
+        app:destination="@id/subjectsListFragment" />
+    <action
+        android:id="@+id/action_global_rooms_list"
+        app:destination="@id/roomsListFragment" />
+    <action
+        android:id="@+id/action_global_assignments_list"
+        app:destination="@id/assignmentsListFragment" />
+    <action
+        android:id="@+id/action_global_users_list"
+        app:destination="@id/usersListFragment" />
+    <action
+        android:id="@+id/action_global_audit_log"
+        app:destination="@id/auditLogFragment" />
+    <action
+        android:id="@+id/action_global_settings"
+        app:destination="@id/settingsFragment" />
+
+    <!-- Фрагмент выбора роли (если нужен) -->
     <fragment
         android:id="@+id/selectRoleFragment"
         android:name="stud.euktop.schooljournal.presentation.auth.role.SelectRoleFragment"
         android:label="fragment_select_role"
         tools:layout="@layout/fragment_select_role" />
+    <fragment
+        android:id="@+id/mainMenuFragment2"
+        android:name="stud.euktop.schooljournal.presentation.main.MainMenuFragment"
+        android:label="fragment_main_menu"
+        tools:layout="@layout/fragment_main_menu" />
+
 </navigation>

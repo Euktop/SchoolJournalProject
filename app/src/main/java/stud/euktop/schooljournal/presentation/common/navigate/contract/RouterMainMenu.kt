@@ -16,4 +16,7 @@ interface RouterMainMenu {
     fun toStudentSchedule()
     fun toLessonEdit()
     fun toSelectRole()
+    fun toStudentHome()
+    fun toStudentAdmin()
+    fun toStudentTeacher()
 }

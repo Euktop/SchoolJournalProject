@@ -153,6 +153,7 @@
                 android:text="Создать урок (админ)"
                 app:schJButtonClass="PRIMARY"
                 app:schJButtonType="BIG" />
+
             <stud.euktop.uikit.components.button.SchJButton
                 android:id="@+id/btnSelectRole"
                 android:layout_width="match_parent"
@@ -161,12 +162,40 @@
                 android:text="Select Role"
                 app:schJButtonClass="PRIMARY"
                 app:schJButtonType="BIG" />
+
             <stud.euktop.uikit.components.button.SchJButton
                 android:id="@+id/testConnection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="Test Connection"
+                app:schJButtonClass="PRIMARY"
+                app:schJButtonType="BIG" />
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnHomeStudent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Student Home"
+                app:schJButtonClass="PRIMARY"
+                app:schJButtonType="BIG" />
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnHomeAdmin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Admin Home"
+                app:schJButtonClass="PRIMARY"
+                app:schJButtonType="BIG" />
+
+            <stud.euktop.uikit.components.button.SchJButton
+                android:id="@+id/btnHomeTeacher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Teacher Home"
                 app:schJButtonClass="PRIMARY"
                 app:schJButtonType="BIG" />
         </LinearLayout>

@@ -3,11 +3,12 @@ package stud.euktop.schooljournal.presentation.main.student.schedule
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentScheduleBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.submitList
 
 @AndroidEntryPoint
@@ -15,7 +16,7 @@ class StudentScheduleFragment : BaseFragment<
         FragmentStudentScheduleBinding,
         StudentScheduleViewModel,
         StudentScheduleState,
-        Unit>() {
+        Unit>(), ToolbarConfigProvider {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentStudentScheduleBinding.inflate(inflater, container, false)
@@ -25,13 +26,7 @@ class StudentScheduleFragment : BaseFragment<
     private lateinit var adapter: StudentScheduleAdapter
 
     override fun setupUI() {
-        binding.toolbar.setupWithNavController(findNavController())
-        binding.toolbar.showFilterDialog = {
-            // Позже можно добавить фильтр по дате
-        }
-
         adapter = StudentScheduleAdapter { item ->
-            // Можно открыть детали урока, если нужно
         }
         binding.rvSchedule.adapter = adapter
     }
@@ -41,4 +36,15 @@ class StudentScheduleFragment : BaseFragment<
     }
 
     override fun updateEvent(event: Unit) {}
+    override fun getToolbarConfig() = ToolbarConfig(
+        titleRes = stud.euktop.uikit.R.string.schedule,
+        menuRes = R.menu.menu_home_filter,
+        onMenuItemClick = {
+            when (it.itemId) {
+                R.id.action_filter -> {
+
+                }
+            }
+        }
+    )
 }

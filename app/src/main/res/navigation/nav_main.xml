@@ -4,21 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav1"
     app:startDestination="@id/splashFragment">
+
     <fragment
         android:id="@+id/splashFragment"
         android:name="stud.euktop.schooljournal.presentation.auth.splash.SplashFragment"
         android:label="activity_splash"
         tools:layout="@layout/activity_splash" />
+
     <include app:graph="@navigation/nav_auth" />
     <include app:graph="@navigation/nav_main_main" />
+
     <action
         android:id="@+id/action_global_to_onboarding"
         app:destination="@id/nav_auth"
         app:popUpTo="@id/splashFragment"
         app:popUpToInclusive="true" />
+
     <action
         android:id="@+id/action_global_nav_main_main"
         app:destination="@id/nav_main_main"
         app:popUpTo="@id/nav1"
         app:popUpToInclusive="true" />
+
 </navigation>

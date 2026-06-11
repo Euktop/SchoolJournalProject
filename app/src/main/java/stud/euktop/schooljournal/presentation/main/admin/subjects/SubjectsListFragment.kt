@@ -3,8 +3,6 @@ package stud.euktop.schooljournal.presentation.main.admin.subjects
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,13 +13,15 @@ import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapt
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.filter.subject.SubjectFilterDialog
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 
 @AndroidEntryPoint
 class SubjectsListFragment : BaseFragment<
         FragmentAdminEntityBinding,
         SubjectsListViewModel,
         SubjectsListState,
-        Unit>() {
+        Unit>(), ToolbarConfigProvider {
 
     override val viewModel: SubjectsListViewModel by viewModels()
     private lateinit var loadingDelegate: LoadingDelegate<SubjectsListState>
@@ -35,16 +35,12 @@ class SubjectsListFragment : BaseFragment<
 
         adapter = OperationsListAdapter(
             toText = { it.name },
-            onEdit = viewModel::editSubject,
+            onEdit = { viewModel.editSubject(it) },
             onDelete = { viewModel.deleteSubject(it.subjectId) },
             showContextMenu = true,
             editOnClick = true
         )
         binding.rvEntity.adapter = adapter
-
-        binding.toolbar.setTitle(R.string.objects)
-        binding.toolbar.showFilterDialog = { showFilterDialog() }
-        binding.toolbar.setupWithNavController(findNavController())
 
         binding.rvEntity.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -73,4 +69,14 @@ class SubjectsListFragment : BaseFragment<
     }
 
     override fun updateEvent(event: Unit) {}
+
+    override fun getToolbarConfig(): ToolbarConfig = ToolbarConfig(
+        titleRes = R.string.subjects,
+        menuRes = R.menu.menu_home_filter,
+        onMenuItemClick = { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_filter -> showFilterDialog()
+            }
+        }
+    )
 }

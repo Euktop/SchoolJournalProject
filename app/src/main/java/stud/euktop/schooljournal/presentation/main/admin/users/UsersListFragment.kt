@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,10 +16,15 @@ import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.filter.user.UserFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.user.toApp
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 
 @AndroidEntryPoint
-class UsersListFragment :
-    BaseFragment<FragmentAdminEntityBinding, UsersListViewModel, UsersListState, Unit>() {
+class UsersListFragment : BaseFragment<
+        FragmentAdminEntityBinding,
+        UsersListViewModel,
+        UsersListState,
+        Unit>(), ToolbarConfigProvider {
 
     override val viewModel: UsersListViewModel by viewModels()
     private lateinit var loadingDelegate: LoadingDelegate<UsersListState>
@@ -41,10 +44,6 @@ class UsersListFragment :
             editOnClick = true
         )
         binding.rvEntity.adapter = adapter
-
-        binding.toolbar.setTitle(R.string.users)
-        binding.toolbar.showFilterDialog = { showFilterDialog() }
-        binding.toolbar.setupWithNavController(findNavController())
 
         binding.rvEntity.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -78,4 +77,14 @@ class UsersListFragment :
     }
 
     override fun updateEvent(event: Unit) {}
+
+    override fun getToolbarConfig(): ToolbarConfig = ToolbarConfig(
+        titleRes = R.string.users,
+        menuRes = R.menu.menu_home_filter,
+        onMenuItemClick = { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_filter -> showFilterDialog()
+            }
+        }
+    )
 }

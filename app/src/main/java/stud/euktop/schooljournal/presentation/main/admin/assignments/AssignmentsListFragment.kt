@@ -3,8 +3,6 @@ package stud.euktop.schooljournal.presentation.main.admin.assignments
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,13 +14,15 @@ import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.filter.assignment.TeacherAssignmentFilterDialog
 import stud.euktop.schooljournal.presentation.common.filter.assignment.toApp
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 
 @AndroidEntryPoint
 class AssignmentsListFragment : BaseFragment<
         FragmentAdminEntityBinding,
         AssignmentsListViewModel,
         AssignmentsListState,
-        Unit>() {
+        Unit>(), ToolbarConfigProvider {
 
     override val viewModel: AssignmentsListViewModel by viewModels()
     private lateinit var loadingDelegate: LoadingDelegate<AssignmentsListState>
@@ -35,17 +35,13 @@ class AssignmentsListFragment : BaseFragment<
         loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
 
         adapter = OperationsListAdapter(
-            toText = { "Учитель ${it.assignmentId.teacherId} → Класс ${it.assignmentId.classId}" }, // упрощённо
-            onEdit = viewModel::editAssignment,
+            toText = { "Учитель ${it.assignmentId.teacherId} → Класс ${it.assignmentId.classId}" },
+            onEdit = { viewModel.editAssignment(it) },
             onDelete = { viewModel.deleteAssignment(it.assignmentId) },
             showContextMenu = true,
             editOnClick = true
         )
         binding.rvEntity.adapter = adapter
-
-        binding.toolbar.setTitle(R.string.assignments)
-        binding.toolbar.showFilterDialog = { showFilterDialog() }
-        binding.toolbar.setupWithNavController(findNavController())
 
         binding.rvEntity.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -61,9 +57,10 @@ class AssignmentsListFragment : BaseFragment<
     }
 
     private fun showFilterDialog() {
+        val currentFilter = viewModel.state.value.filter
+        val appFilter = currentFilter.toApp(null, null, null)
         TeacherAssignmentFilterDialog(
-            //Нужно сделать то же самое, что и с UserFilter
-            initialFilter = viewModel.state.value.filter.toApp(null, null, null),
+            initialFilter = appFilter,
             onFilterApplied = { viewModel.applyFilter(it.toDomain()) },
             onError = viewModel.onError
         ).show(childFragmentManager, "assignment_filter")
@@ -75,4 +72,14 @@ class AssignmentsListFragment : BaseFragment<
     }
 
     override fun updateEvent(event: Unit) {}
+
+    override fun getToolbarConfig(): ToolbarConfig = ToolbarConfig(
+        titleRes = R.string.assignments,
+        menuRes = R.menu.menu_home_filter,
+        onMenuItemClick = { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_filter -> showFilterDialog()
+            }
+        }
+    )
 }

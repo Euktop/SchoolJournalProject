@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 
@@ -29,4 +30,3 @@ class TeacherHomeFragment : BaseFragment<
 
     override fun updateEvent(event: Unit) {}
 }
-

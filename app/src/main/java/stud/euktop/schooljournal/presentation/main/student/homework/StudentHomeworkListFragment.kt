@@ -4,14 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class StudentHomeworkListFragment :
-    BaseFragment<FragmentStudentHomeworkListBinding, StudentHomeworkViewModel, StudentHomeworkState, Unit>() {
+    BaseFragment<FragmentStudentHomeworkListBinding, StudentHomeworkViewModel, StudentHomeworkState, Unit>(),
+    ToolbarConfigProvider {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentStudentHomeworkListBinding.inflate(inflater, container, false)
@@ -24,8 +28,6 @@ class StudentHomeworkListFragment :
     private lateinit var adapter: StudentHomeworkAdapter
 
     override fun setupUI() {
-        binding.toolbar.showFilterDialog = { showFilterDialog() }
-
         adapter = StudentHomeworkAdapter {}
         binding.rvHomeworkList.adapter = adapter
     }
@@ -45,4 +47,13 @@ class StudentHomeworkListFragment :
     }
 
     override fun updateEvent(event: Unit) {}
+    override fun getToolbarConfig() = ToolbarConfig(
+        titleRes = R.string.homework_assignments,
+        menuRes = R.menu.menu_home_filter,
+        onMenuItemClick = {
+            when (it.itemId) {
+                R.id.action_filter -> showFilterDialog()
+            }
+        }
+    )
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_admin"
+    app:startDestination="@id/adminDashboardFragment">
+
+    <fragment
+        android:id="@+id/adminDashboardFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.dashboard.AdminDashboardFragment"
+        android:label="Dashboard" />
+
+    <fragment
+        android:id="@+id/schoolsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.schools.SchoolsListFragment"
+        android:label="Schools" />
+
+    <fragment
+        android:id="@+id/classesListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.classes.ClassesListFragment"
+        android:label="Classes" />
+
+    <fragment
+        android:id="@+id/subjectsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.subjects.SubjectsListFragment"
+        android:label="Subjects" />
+
+    <fragment
+        android:id="@+id/roomsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.rooms.RoomsListFragment"
+        android:label="Rooms" />
+
+    <fragment
+        android:id="@+id/assignmentsListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.assignments.AssignmentsListFragment"
+        android:label="Assignments" />
+
+    <fragment
+        android:id="@+id/usersListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.users.UsersListFragment"
+        android:label="Users" />
+
+    <fragment
+        android:id="@+id/auditLogFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.audit.AuditLogFragment"
+        android:label="Audit Log" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.settings.SettingsFragment"
+        android:label="Settings" />
+
+    <!-- Действие для перехода на дашборд (очищает весь стек и переходит на Dashboard) -->
+    <action
+        android:id="@+id/action_to_dashboard"
+        app:destination="@id/adminDashboardFragment"
+        app:popUpTo="@id/adminDashboardFragment"
+        app:popUpToInclusive="true" />
+
+    <!-- Остальные действия: просто переход БЕЗ popUpTo, чтобы стек накапливался -->
+    <action
+        android:id="@+id/action_to_schools"
+        app:destination="@id/schoolsListFragment" />
+
+    <action
+        android:id="@+id/action_to_classes"
+        app:destination="@id/classesListFragment" />
+
+    <action
+        android:id="@+id/action_to_subjects"
+        app:destination="@id/subjectsListFragment" />
+
+    <action
+        android:id="@+id/action_to_rooms"
+        app:destination="@id/roomsListFragment" />
+
+    <action
+        android:id="@+id/action_to_assignments"
+        app:destination="@id/assignmentsListFragment" />
+
+    <action
+        android:id="@+id/action_to_users"
+        app:destination="@id/usersListFragment" />
+
+    <action
+        android:id="@+id/action_to_audit"
+        app:destination="@id/auditLogFragment" />
+
+    <action
+        android:id="@+id/action_to_settings"
+        app:destination="@id/settingsFragment" />
+
+</navigation>

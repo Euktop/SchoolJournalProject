@@ -10,15 +10,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <stud.euktop.uikit.components.filter.SchJFilterToolBar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorSurface"
-            app:menu="@menu/menu_filter"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:title="@string/homework_assignments" />
-
         <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
             android:id="@+id/rvHomeworkList"
             android:layout_width="match_parent"

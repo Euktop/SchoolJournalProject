@@ -1,40 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?><!-- res/layout/fragment_teacher_homework_list.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
+        android:id="@+id/rvHomeworkList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
+        android:layout_height="match_parent" />
 
-        <stud.euktop.uikit.components.filter.SchJFilterToolBar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/menu_filter"
-            style="@style/Widget.SchJ.Toolbar"
-            android:paddingHorizontal="8dp"
-            app:title="@string/homeworks" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddHomework"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/color_accent"
+        android:contentDescription="@string/add_homework"
+        android:src="@android:drawable/ic_menu_add"
+        app:tint="@color/color_text_on_accent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddHomework"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/color_accent"
-            android:contentDescription="@string/add_homework"
-            android:src="@android:drawable/ic_menu_add"
-            app:tint="@color/color_text_on_accent" />
-
-        <stud.euktop.uikit.components.recycler.SchJStatefulRecyclerView
-            android:id="@+id/rvHomeworkList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
 </FrameLayout>

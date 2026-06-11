@@ -2,15 +2,18 @@
 
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
+import androidx.navigation.NavDirections
 import stud.euktop.domain.model.assignment.AssignmentId
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.Nav1Directions
+import stud.euktop.schooljournal.NavAdminDirections
 import stud.euktop.schooljournal.NavAuthDirections
 import stud.euktop.schooljournal.NavMainMainDirections
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdminHome
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterError
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
@@ -19,15 +22,16 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterPro
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import stud.euktop.schooljournal.NavMainMainDirections as NMD
 
 @Singleton
 class RouterImpl @Inject constructor(
-    private val navigationManager: NavigationManager,
-    private val authRepository: AuthRepository
-) : RouterSplash, RouterMain, RouterAuthorization, RouterAdmin, RouterError,
-    RouterMainMenu, RouterProfile, RouterStudent, RouterTeacher {
+    private val navigationManager: NavigationManager, private val authRepository: AuthRepository
+) : RouterSplash, RouterMain, RouterAuthorization, RouterAdmin, RouterError, RouterMainMenu,
+    RouterProfile, RouterStudent, RouterTeacher, RouterAdminHome {
 
     override suspend fun navigateAfterSplash() {
         if (authRepository.getCurrentUser().isSuccess) {
@@ -46,7 +50,7 @@ class RouterImpl @Inject constructor(
     override suspend fun toCreateProfile() {
         navigationManager.navigate(
             NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()),
-            NavCommand.ToDestination(R.id.authProfileFragment) // Переход внутри nav_auth
+            NavCommand.ToDestination(R.id.mainProfileFragment) // Переход внутри nav_auth
         )
     }
 
@@ -101,38 +105,11 @@ class RouterImpl @Inject constructor(
     override fun toTeacherLessons(classId: Int, subjectId: Int) = navigationManager.navigate(
         NavCommand.ToAction(
             NavMainMainDirections.actionGlobalTeacherLessons(
-                classId,
-                subjectId
+                classId, subjectId
             )
         )
     )
 
-
-    // --- Переходы с аргументами теперь используют NavDirections ---
-
-    override fun toEditUser(userId: Int) {
-        navigationManager.navigate(
-            NavCommand.ToAction(NavMainMainDirections.actionGlobalUserEdit(userId))
-        )
-    }
-
-    override fun toEditClass(classId: Int) {
-        navigationManager.navigate(
-            NavCommand.ToAction(NavMainMainDirections.actionGlobalClassEdit(classId))
-        )
-    }
-
-    override fun toEditSubject(subjectId: Int) {
-        navigationManager.navigate(
-            NavCommand.ToAction(NavMainMainDirections.actionGlobalSubjectEdit(subjectId))
-        )
-    }
-
-    override fun toEditAssignment(assignmentId: AssignmentId) {
-        navigationManager.navigate(
-            NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherAssignmentEdit(assignmentId))
-        )
-    }
 
     // --- Обработка ошибок ---
 
@@ -184,8 +161,9 @@ class RouterImpl @Inject constructor(
     override fun toStudentSubjects() =
         navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalStudentSubjects()))
 
-    override fun toAdminPanel() =
-        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalAdminPanel()))
+    override fun toAdminPanel() {
+
+    }
 
     override fun toAuthProfile() =
         navigationManager.navigate(NavCommand.ToAction(NavAuthDirections.actionGlobalToAuthProfile()))
@@ -215,6 +193,10 @@ class RouterImpl @Inject constructor(
         )
     )
 
+    private fun nav(navDirections: NavDirections) {
+        navigationManager.navigate(NavCommand.ToAction(navDirections))
+    }
+
     override fun toTeacherHomeworkList() =
         navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherHomeworkList()))
 
@@ -231,9 +213,117 @@ class RouterImpl @Inject constructor(
         navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalSelectRole()))
     }
 
-    override suspend fun toBack() {
-        navigationManager.navigate(NavCommand.Back)
+    override fun toStudentHome() = nav(NMD.actionGlobalHomeStudent())
+
+    override fun toStudentAdmin() = nav(NMD.actionGlobalHomeAdmin())
+
+    override fun toStudentTeacher() = nav(NMD.actionGlobalHomeTeacher())
+
+    override suspend fun toBack() = navigationManager.navigate(NavCommand.Back)
+
+    override fun toDashboard() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToDashboard())
+        )
     }
 
+    override fun toSchoolsList() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToSchools())
+        )
+    }
 
+    override fun toSchoolEdit(schoolId: Int) {
+
+    }
+
+    override fun toClassesList() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToClasses())
+        )
+    }
+
+    override fun toSubjectsList() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToSubjects())
+        )
+    }
+
+    override fun toRoomsList() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToRooms())
+        )
+    }
+
+    override fun toAssignmentsList() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToAssignments())
+        )
+    }
+
+    override fun toUsersList() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToUsers())
+        )
+    }
+
+    override fun toAuditLog() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToAudit())
+        )
+    }
+
+    override fun toSettings() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavAdminDirections.actionToSettings())
+        )
+    }
+
+    override fun toEditAssignment(id: AssignmentId) {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherAssignmentEdit(id))
+        )
+    }
+
+    override fun toEditClass(classId: Int) {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalClassEdit(classId))
+        )
+    }
+
+    override fun toEditSubject(subjectId: Int) {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalSubjectEdit(subjectId))
+        )
+    }
+
+    override fun toEditUser(userId: Int) {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalUserEdit(userId))
+        )
+    }
+
+    override fun toEditSchool(schoolId: Int) {
+        // TODO: реализовать SchoolEditFragment
+        Timber.d("Edit school $schoolId – not implemented")
+    }
+
+    override fun toProfile() {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalProfile())
+        )
+    }
+
+    // ========== RouterAdminHome (дополнительные методы) ==========
+    override fun toGenerateReport() {
+        // TODO: диалог или экран отчёта
+    }
+
+    override fun toInviteUsers() {
+        // TODO: диалог приглашения
+    }
+
+    override fun toMaintenance() {
+        // TODO: диалог обслуживания
+    }
 }
