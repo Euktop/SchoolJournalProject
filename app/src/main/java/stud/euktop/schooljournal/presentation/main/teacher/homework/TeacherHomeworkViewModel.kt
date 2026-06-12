@@ -1,7 +1,9 @@
 package stud.euktop.schooljournal.presentation.main.teacher.homework
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import stud.euktop.domain.model.common.Field
 import stud.euktop.domain.model.homework.Homework
 import stud.euktop.domain.model.homework.HomeworkUpdate
@@ -12,6 +14,7 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.coordinator.HomeworkCoordinator
 import stud.euktop.schooljournal.presentation.common.filter.homework.AppHomeworkFilter
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import java.util.Date
 import javax.inject.Inject
 
@@ -21,6 +24,7 @@ class TeacherHomeworkViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val lessonRepository: LessonRepository,
     private val homeworkRepository: HomeworkRepository,
+    private val routerTeacher: RouterTeacher,
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<TeacherHomeworkState, TeacherHomeworkEvent>() {
 
@@ -35,6 +39,38 @@ class TeacherHomeworkViewModel @Inject constructor(
         executeWithResultLoadingSync("load_user", { authRepository.getCurrentUser() }) { _ ->
             loadAvailableLessons()
             loadHomeworkList()
+        }
+    }
+
+    fun save() {
+        val state = _state.value
+        if (!state.isFormValid()) return
+        if (state.isEditMode) {
+            val update = HomeworkUpdate(
+                homeworkId = state.editingHomeworkId,
+                description = Field(state.description.getValidate(), true)
+            )
+            executeWithResultLoadingSync("save", { homeworkRepository.updateHomework(update) }) {
+                routerTeacher.toBack()  // ← вместо эмиттера
+            }
+        } else {
+            val newHomework = Homework(
+                lessonId = state.selectedLesson!!.lessonId,
+                description = state.description.getValidate(),
+                createdAt = Date(),
+                medias = emptyList(),
+                createdByUserId = 0
+            )
+            executeWithResultLoadingSync("save", { homeworkRepository.addHomework(newHomework) }) {
+                loadHomeworkList()
+                routerTeacher.toBack()  // ← вместо эмиттера
+            }
+        }
+    }
+
+    fun cancel() {
+        viewModelScope.launch {
+            routerTeacher.toBack()
         }
     }
 
@@ -81,32 +117,4 @@ class TeacherHomeworkViewModel @Inject constructor(
             }
         }
     }
-
-    fun save() {
-        val state = _state.value
-        if (!state.isFormValid()) return
-        if (state.isEditMode) {
-            val update = HomeworkUpdate(
-                homeworkId = state.editingHomeworkId,
-                description = Field(state.description.getValidate(), true)
-            )
-            executeWithResultLoadingSync("save", { homeworkRepository.updateHomework(update) }) {
-                _event.tryEmit(TeacherHomeworkEvent.NavigateBack)
-            }
-        } else {
-            val newHomework = Homework(
-                lessonId = state.selectedLesson!!.lessonId,
-                description = state.description.getValidate(),
-                createdAt = Date(),
-                medias = emptyList(),
-                createdByUserId = 0
-            )
-            executeWithResultLoadingSync("save", { homeworkRepository.addHomework(newHomework) }) {
-                loadHomeworkList()  // обновим список после добавления
-                _event.tryEmit(TeacherHomeworkEvent.NavigateBack)
-            }
-        }
-    }
-
-    fun cancel() = _event.tryEmit(TeacherHomeworkEvent.NavigateBack)
 }

@@ -13,11 +13,8 @@ import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.binding.bindForm
 import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
-import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import stud.euktop.schooljournal.presentation.common.utils.check
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class TeacherHomeworkEditFragment : BaseFragment<
@@ -32,9 +29,6 @@ class TeacherHomeworkEditFragment : BaseFragment<
     override val viewModel: TeacherHomeworkViewModel by viewModels()
     private val focusTrack = FocusTrack()
     private lateinit var loadingDelegate: LoadingDelegate<TeacherHomeworkState>
-
-    @Inject
-    lateinit var navigationManager: NavigationManager
 
     private lateinit var lessonAdapter: ListSelectAdapter<LessonFull>
 
@@ -75,12 +69,5 @@ class TeacherHomeworkEditFragment : BaseFragment<
         binding.selectLesson.state = binding.selectLesson.state.copy(selectText = selectedText)
 
         binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
-    }
-
-    override fun updateEvent(event: TeacherHomeworkEvent) {
-        when (event) {
-            TeacherHomeworkEvent.NavigateBack -> navigationManager.navigate(NavCommand.Back)
-            else -> {}
-        }
     }
 }
