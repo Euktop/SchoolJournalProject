@@ -1,26 +1,38 @@
+@file:Suppress("DEPRECATION")
+
 package stud.euktop.schooljournal.presentation.common.navigate.impl
 
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavOptions
+import kotlinx.coroutines.runBlocking
+import stud.euktop.domain.contract.RoleRepository
 import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.navigate.state.NavigationStateManager
 import stud.euktop.uikit.R
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NavigationManagerImpl @Inject constructor() : NavigationManager {
+class NavigationManagerImpl @Inject constructor(
+    private val stateManager: NavigationStateManager,
+    private val roleRepository: RoleRepository,
+) : NavigationManager {
 
     private val controllers = mutableMapOf<String, NavController>()
     private val tasks = ArrayDeque<Pair<String?, NavCommand>>()
 
-    private val defaultNavOptions =
-        NavOptions.Builder().setEnterAnim(R.anim.slide_in_right).setExitAnim(R.anim.slide_out_left)
-            .setPopEnterAnim(R.anim.slide_in_left).setPopExitAnim(R.anim.slide_out_right).build()
+    private val defaultNavOptions = NavOptions.Builder()
+        .setEnterAnim(R.anim.slide_in_right)
+        .setExitAnim(R.anim.slide_out_left)
+        .setPopEnterAnim(R.anim.slide_in_left)
+        .setPopExitAnim(R.anim.slide_out_right)
+        .build()
 
     override fun bindMain(navController: NavController) {
         controllers["main"] = navController
@@ -41,7 +53,7 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
 
     override fun navigate(vararg cmds: NavCommand) {
         cmds.forEach { cmd ->
-            logger?.let {
+            logger?.let { log ->
                 val description = when (cmd) {
                     is NavCommand.ToDestination -> {
                         val name = resourceName(cmd.destId)
@@ -52,7 +64,7 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
                     is NavCommand.ToAction -> cmd.directions::class.simpleName
                     is NavCommand.PopUpTo -> "PopUpTo(${cmd.destinationId}, inclusive=${cmd.inclusive})"
                 }
-                it.d(toSimpleTag(), "Navigate", description)
+                log.d(toSimpleTag(), "Navigate", description)
             }
 
             val (nav, key) = when (cmd) {
@@ -62,7 +74,6 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
                 }
 
                 is NavCommand.ToAction, is NavCommand.Back, is NavCommand.PopUpTo -> {
-                    // Для Back мы будем искать нужный контроллер внутри execute()
                     val nav = controllers.values.lastOrNull() ?: controllers["main"]
                     nav to null
                 }
@@ -94,51 +105,79 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
     }
 
     private fun execute(nav: NavController, command: NavCommand) {
-        when (command) {
-            is NavCommand.ToDestination -> {
-                nav.navigate(command.destId, null, defaultNavOptions)
-                logger?.i(toSimpleTag(), "execute", "Переход к destination id=${command.destId}")
-            }
-
-            NavCommand.Back -> {
-                // УМНАЯ ЛОГИКА BACK:
-                // Ищем контроллер, у которого ЕСТЬ предыдущий экран в стеке.
-                // Ищем с конца (lastOrNull), чтобы приоритет был у вложенных контроллеров.
-                // Если вложенный граф пуст (мы на Dashboard), previousBackStackEntry будет null,
-                // и мы автоматически переключимся на главный контроллер (main), чтобы выйти в MainMenu.
-                val targetNav = controllers.values.lastOrNull { it.previousBackStackEntry != null }
-                    ?: controllers["main"]
-
-                val popped = targetNav?.popBackStack() ?: false
-
-                if (popped) {
-                    logger?.i(toSimpleTag(), "execute", "Выполнен Back")
-                } else {
-                    logger?.e(
+        try {
+            when (command) {
+                is NavCommand.ToDestination -> {
+                    nav.navigate(command.destId, null, defaultNavOptions)
+                    saveCurrentDestination(nav)
+                    logger?.i(
                         toSimpleTag(),
                         "execute",
-                        null,
-                        "Back проигнорирован: достигнут корень графа"
+                        "Переход к destination id=${command.destId}"
+                    )
+                }
+
+                NavCommand.Back -> {
+                    val targetNav =
+                        controllers.values.lastOrNull { it.previousBackStackEntry != null }
+                            ?: controllers["main"]
+                    val popped = targetNav?.popBackStack() ?: false
+                    if (popped) {
+                        saveCurrentDestination(targetNav)
+                        logger?.i(toSimpleTag(), "execute", "Выполнен Back")
+                    } else {
+                        logger?.e(
+                            toSimpleTag(),
+                            "execute",
+                            null,
+                            "Back проигнорирован: достигнут корень графа"
+                        )
+                    }
+                }
+
+                is NavCommand.ToAction -> {
+                    nav.navigate(command.directions)
+                    saveCurrentDestination(nav)
+                    logger?.i(
+                        toSimpleTag(),
+                        "execute",
+                        "Выполнен ToAction: ${command.directions::class.simpleName}"
+                    )
+                }
+
+                is NavCommand.PopUpTo -> {
+                    nav.popBackStack(command.destinationId, command.inclusive)
+                    saveCurrentDestination(nav)
+                    logger?.i(
+                        toSimpleTag(),
+                        "execute",
+                        "Выполнен PopUpTo до ${command.destinationId}"
                     )
                 }
             }
-
-            is NavCommand.ToAction -> {
-                nav.navigate(command.directions)
-                logger?.i(
-                    toSimpleTag(),
-                    "execute",
-                    "Выполнен ToAction: ${command.directions::class.simpleName}"
-                )
-            }
-
-            is NavCommand.PopUpTo -> {
-                nav.popBackStack(command.destinationId, command.inclusive)
-                logger?.i(toSimpleTag(), "execute", "Выполнен PopUpTo до ${command.destinationId}")
-            }
+        } catch (e: IllegalStateException) {
+            Timber.e(e, "Navigation error: ${e.message}")
+            logger?.e(toSimpleTag(), "execute", e, "Ошибка навигации для команды $command")
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Navigation argument error: ${e.message}")
+            logger?.e(toSimpleTag(), "execute", e, "Неверные аргументы навигации для $command")
         }
 
         logBackStack(nav, command::class.simpleName ?: "Unknown")
+    }
+
+    private fun saveCurrentDestination(nav: NavController) {
+        val destination = nav.currentBackStackEntry?.destination?.id
+        val arguments = nav.currentBackStackEntry?.arguments
+        if (destination != null) {
+            runBlocking {
+                val role = roleRepository.getCurrentRole()?.name ?: return@runBlocking
+                stateManager.saveLastDestination(
+                    role = role,
+                    destinationData = NavigationStateManager.DestinationData(destination, arguments)
+                )
+            }
+        }
     }
 
     private fun resourceName(resId: Int): String {
@@ -147,7 +186,10 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
             context?.resources?.getResourceEntryName(resId) ?: resId.toString()
         } catch (e: Exception) {
             logger?.e(
-                toSimpleTag(), "resourceName", e, "Не удалось получить имя ресурса для ID=$resId"
+                toSimpleTag(),
+                "resourceName",
+                e,
+                "Не удалось получить имя ресурса для ID=$resId"
             )
             resId.toString()
         }
@@ -160,6 +202,12 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
         val graph = try {
             nav.graph
         } catch (e: IllegalStateException) {
+            logger?.e(
+                toSimpleTag(),
+                "logBackStack",
+                e,
+                "Не удалось получить NavGraph из-за некорректного состояния навигатора"
+            )
             null
         }
 
@@ -168,6 +216,9 @@ class NavigationManagerImpl @Inject constructor() : NavigationManager {
             return dest.route ?: dest.label?.toString() ?: try {
                 nav.context.resources.getResourceEntryName(dest.id)
             } catch (e: Exception) {
+                logger?.e(
+                    toSimpleTag(), "getDestName", e, "Не удалось получить имя для destination"
+                )
                 "id=${dest.id}"
             }
         }

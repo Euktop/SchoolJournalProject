@@ -30,6 +30,7 @@ class MainMenuFragment : Fragment() {
 
     @Inject
     lateinit var router: RouterMainMenu
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,7 +44,8 @@ class MainMenuFragment : Fragment() {
         binding.btnCreatePassword.setOnClickListener { router.toNavAuthWithCreatePassword() }
         binding.btnSchools.setOnClickListener { router.toMainMenuAdminPanel() }
         binding.btnRooms.setOnClickListener { router.toMainMenuAdminPanel() }
-        binding.btnLessonMarks.setOnClickListener { router.toMainMenuLessonMarks(101) }
+        // Используем константу вместо магического числа
+        binding.btnLessonMarks.setOnClickListener { router.toMainMenuLessonMarks(DEFAULT_LESSON_ID) }
         binding.btnHomework.setOnClickListener { router.toMainMenuTeacherHomeworkList() }
         binding.btnStudentHomework.setOnClickListener { router.toMainMenuStudentHomeworkList() }
         binding.btnLessonEdit.setOnClickListener { router.toMainMenuLessonEdit() }
@@ -58,5 +60,9 @@ class MainMenuFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val DEFAULT_LESSON_ID = 0
     }
 }

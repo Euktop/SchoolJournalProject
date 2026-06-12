@@ -315,4 +315,9 @@
     <string name="def_teacher_dashboard_name">Отсутсвует</string>
     <string name="teacher_my_classes_title">My classes</string>
     <string name="teacher_classes_count">Classes: %d</string>
+    <string name="assignment_format">Учитель %1$d → Класс %2$d</string>
+    <string name="dialog_delete_role_title">Удаление роли</string>
+    <string name="dialog_delete_role_message">Вы уверены, что хотите удалить роль %s?</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Изменить</string>
 </resources>

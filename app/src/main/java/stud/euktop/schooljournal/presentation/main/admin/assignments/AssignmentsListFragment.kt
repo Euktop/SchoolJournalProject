@@ -35,7 +35,14 @@ class AssignmentsListFragment : BaseFragment<
         loadingDelegate = LoadingDelegate(viewModel, viewLifecycleOwner)
 
         adapter = OperationsListAdapter(
-            toText = { "Учитель ${it.assignmentId.teacherId} → Класс ${it.assignmentId.classId}" },
+            toText = { assignment ->
+                // Используем строковый ресурс с форматированием
+                getString(
+                    stud.euktop.uikit.R.string.assignment_format,
+                    assignment.assignmentId.teacherId,
+                    assignment.assignmentId.classId
+                )
+            },
             onEdit = { viewModel.editAssignment(it) },
             onDelete = { viewModel.deleteAssignment(it.assignmentId) },
             showContextMenu = true,

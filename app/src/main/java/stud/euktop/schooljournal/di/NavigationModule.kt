@@ -1,5 +1,11 @@
+@file:Suppress("DEPRECATION")
+
 package stud.euktop.schooljournal.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -21,9 +27,12 @@ import stud.euktop.schooljournal.presentation.common.navigate.impl.NavigationMan
 import stud.euktop.schooljournal.presentation.common.navigate.impl.RouterImpl
 import javax.inject.Singleton
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "navigation")
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class NavigationModule {
+
     @Binds
     @Singleton
     abstract fun bindsErrorHandler(errorHandlerImpl: ErrorHandlerImpl): ErrorHandler
@@ -71,4 +80,5 @@ abstract class NavigationModule {
     @Binds
     @Singleton
     abstract fun bindRouterTeacher(impl: RouterImpl): RouterTeacher
+
 }

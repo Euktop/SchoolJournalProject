@@ -11,11 +11,10 @@ import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.binding.bindForm
 import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import stud.euktop.schooljournal.presentation.main.admin.dialog.role_shool.RoleSchoolEditDialog
-import javax.inject.Inject
+import stud.euktop.uikit.R
 
 @AndroidEntryPoint
 class UserEditFragment : BaseFragment<
@@ -30,9 +29,6 @@ class UserEditFragment : BaseFragment<
     override val viewModel: UserEditViewModel by viewModels()
     private val focusTrack = FocusTrack()
     private lateinit var loadingDelegate: LoadingDelegate<UserEditState>
-
-    @Inject
-    lateinit var navigationManager: NavigationManager
 
     private lateinit var rolesAdapter: RoleSchoolAdapter
 
@@ -59,14 +55,17 @@ class UserEditFragment : BaseFragment<
         statusAdapter.submitList(AccountStatus.entries.toList())
         binding.selectStatus.attach(statusAdapter, statusAdapter, childFragmentManager)
 
-        // Адаптер для ролей – с диалогом подтверждения удаления
         rolesAdapter = RoleSchoolAdapter { role ->
-            // Показать диалог подтверждения перед удалением
             androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle("Удаление роли")
-                .setMessage("Вы уверены, что хотите удалить роль ${requireContext().getString(role.role.toMessageId())}?")
-                .setPositiveButton("Удалить") { _, _ -> viewModel.removeRole(role) }
-                .setNegativeButton("Отмена", null)
+                .setTitle(R.string.dialog_delete_role_title)
+                .setMessage(
+                    getString(
+                        R.string.dialog_delete_role_message,
+                        getString(role.role.toMessageId())
+                    )
+                )
+                .setPositiveButton(R.string.delete) { _, _ -> viewModel.removeRole(role) }
+                .setNegativeButton(R.string.cancel, null)
                 .show()
         }
         binding.rvRoles.adapter = rolesAdapter

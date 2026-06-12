@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import stud.euktop.uikit.R
 import stud.euktop.uikit.databinding.ItemAdminEntityBinding
 
 class OperationsListAdapter<T>(
@@ -56,7 +57,10 @@ class OperationsListAdapter<T>(
 
         private fun showContextMenuForItem(item: T) {
             val context = binding.root.context
-            val options = arrayOf("Редактировать", "Удалить")
+            val options = arrayOf(
+                context.getString(R.string.edit),
+                context.getString(R.string.delete)
+            )
             androidx.appcompat.app.AlertDialog.Builder(context)
                 .setTitle(toText(item))
                 .setItems(options) { _, which ->

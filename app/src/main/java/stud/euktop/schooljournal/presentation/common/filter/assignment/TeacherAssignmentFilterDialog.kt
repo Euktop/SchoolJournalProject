@@ -1,6 +1,7 @@
 package stud.euktop.schooljournal.presentation.common.filter.assignment
 
 import android.widget.LinearLayout
+import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.ClassInfo
@@ -17,7 +18,6 @@ import stud.euktop.schooljournal.presentation.common.filter.user.AppUserFilter
 import stud.euktop.schooljournal.presentation.common.filter.user.UserFilterDialog
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.uikit.components.filter.FilterFieldBuilder
-import stud.euktop.uikit.components.input.SchJInput
 
 @AndroidEntryPoint
 class TeacherAssignmentFilterDialog(
@@ -33,7 +33,7 @@ class TeacherAssignmentFilterDialog(
     private lateinit var teacherSelect: FilterFieldBuilder.AddSearchableSelectResult<UserProfile>
     private lateinit var classSelect: FilterFieldBuilder.AddSearchableSelectResult<ClassInfo>
     private lateinit var subjectSelect: FilterFieldBuilder.AddSearchableSelectResult<Subject>
-    private lateinit var isPrimaryCheck: SchJInput
+    private lateinit var isPrimaryCheckBox: AppCompatCheckBox
     private lateinit var dateRange: FilterFieldBuilder.DateRangeResult
 
     override val setups: List<suspend () -> Unit> = listOf(
@@ -61,7 +61,6 @@ class TeacherAssignmentFilterDialog(
     }
 
     override fun setupFilterFields(container: LinearLayout) {
-        // Учитель (поисковый селект)
         teacherSelect = FilterFieldBuilder.addSearchableSelect(
             parent = container,
             fragmentManager = childFragmentManager,
@@ -86,7 +85,6 @@ class TeacherAssignmentFilterDialog(
             onShowing = { viewModel.loadTeachers() }
         )
 
-        // Класс
         classSelect = FilterFieldBuilder.addSearchableSelect(
             parent = container,
             fragmentManager = childFragmentManager,
@@ -109,7 +107,6 @@ class TeacherAssignmentFilterDialog(
             onShowing = { viewModel.loadClasses() }
         )
 
-        // Предмет
         subjectSelect = FilterFieldBuilder.addSearchableSelect(
             parent = container,
             fragmentManager = childFragmentManager,
@@ -130,16 +127,17 @@ class TeacherAssignmentFilterDialog(
             onShowing = { viewModel.loadSubjects() }
         )
 
-        // Чекбокс "Основной" (используем текстовое поле с чекбоксом, но проще добавить отдельный компонент)
-        // Для простоты сделаем через обычный SchJInput, но можно использовать CheckBox.
-        // Здесь используем FilterFieldBuilder.addText и потом преобразуем.
-        isPrimaryCheck = FilterFieldBuilder.addText(
-            parent = container,
-            title = getString(R.string.is_primary),
-            initialValue = if (initialFilter.isPrimary == true) "Да" else ""
-        )
+        // Чекбокс "Основной" вместо текстового поля
+        isPrimaryCheckBox = AppCompatCheckBox(container.context).apply {
+            text = getString(R.string.is_primary)
+            isChecked = initialFilter.isPrimary == true
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { topMargin = 16 }
+        }
+        container.addView(isPrimaryCheckBox)
 
-        // Диапазон дат
         dateRange = FilterFieldBuilder.addDateRange(
             parent = container,
             title = getString(R.string.valid_period),
@@ -154,7 +152,7 @@ class TeacherAssignmentFilterDialog(
         teacherSelect.select.state = teacherSelect.select.state.copy(selectText = "")
         classSelect.select.state = classSelect.select.state.copy(selectText = "")
         subjectSelect.select.state = subjectSelect.select.state.copy(selectText = "")
-        isPrimaryCheck.state = isPrimaryCheck.state.copy(text = "")
+        isPrimaryCheckBox.isChecked = false
         dateRange.fromInput.state = dateRange.fromInput.state.copy(text = "")
         dateRange.toInput.state = dateRange.toInput.state.copy(text = "")
         initialFilter = AppTeacherAssignmentFilter()
@@ -162,10 +160,7 @@ class TeacherAssignmentFilterDialog(
 
     override fun collectFilter(): AppTeacherAssignmentFilter {
         return initialFilter.copy(
-            isPrimary = when (isPrimaryCheck.state.text.lowercase()) {
-                "да", "true", "1", "yes" -> true
-                else -> null
-            }
+            isPrimary = if (isPrimaryCheckBox.isChecked) true else null
         )
     }
 }

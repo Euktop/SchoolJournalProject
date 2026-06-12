@@ -44,7 +44,7 @@ class TeacherLessonsFragment : BaseFragment<
 
     override fun updateEvent(event: Unit) {}
     override fun getToolbarConfig() = ToolbarConfig(
-        titleRes = R.string.homeworks,
+        titleRes = R.string.lessons,
         menuRes = R.menu.menu_home_filter,
         onMenuItemClick = {
             when (it.itemId) {

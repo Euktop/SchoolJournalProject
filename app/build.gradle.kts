@@ -8,11 +8,7 @@ plugins {
 
 android {
     namespace = "stud.euktop.schooljournal"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "stud.euktop.schooljournal"
@@ -22,15 +18,20 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("boolean", "USE_MOCK", "true")
     }
 
     buildTypes {
+        debug {
+            buildConfigField("boolean", "USE_MOCK", "true")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("boolean", "USE_MOCK", "false")
         }
     }
     compileOptions {
@@ -39,6 +40,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true   // <-- добавлено
     }
 }
 
@@ -70,4 +72,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    implementation(libs.androidx.datastore.preferences)
 }

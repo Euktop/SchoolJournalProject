@@ -3,15 +3,12 @@ package stud.euktop.schooljournal.presentation.main.teacher.homework
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.filter.homework.HomeworkFilterDialog
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
@@ -31,9 +28,6 @@ class TeacherHomeworkListFragment : BaseFragment<
     override val viewModel: TeacherHomeworkViewModel by viewModels()
 
     @Inject
-    lateinit var navigationManager: NavigationManager
-
-    @Inject
     lateinit var router: RouterTeacher
 
     private lateinit var adapter: TeacherHomeworkAdapter
@@ -51,9 +45,6 @@ class TeacherHomeworkListFragment : BaseFragment<
         when (event) {
             TeacherHomeworkEvent.NavigateToAdd -> router.toTeacherHomeworkEdit()
             is TeacherHomeworkEvent.EditHomework -> router.toTeacherHomeworkEdit(event.homeworkId)
-            TeacherHomeworkEvent.NavigateBack -> lifecycleScope.launch {
-                router.toBack()
-            }
         }
     }
 
