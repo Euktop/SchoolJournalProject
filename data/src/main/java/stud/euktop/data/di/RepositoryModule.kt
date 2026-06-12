@@ -17,6 +17,13 @@ class RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideSettingsRepository(
+        impl: SettingsRepositoryImpl,
+        mock: SettingsMockRepositoryImpl
+    ): SettingsRepository = init(impl, mock)
+
+    @Provides
+    @Singleton
     fun provideLessonMarksRepository(
         impl: LessonMarksRepositoryImpl,
         mock: LessonMarksMockRepositoryImpl

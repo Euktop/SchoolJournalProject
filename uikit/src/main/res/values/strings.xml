@@ -263,4 +263,6 @@
     <string name="audit_log_detail">Детали лога</string>
     <string name="edit_room">Редактирование кабинета</string>
     <string name="room_name">Название кабинета</string>
+    <string name="select_language">Выбор языка</string>
+    <string name="language_english">English</string>
 </resources>

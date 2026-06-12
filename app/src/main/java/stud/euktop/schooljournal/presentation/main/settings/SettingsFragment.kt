@@ -2,17 +2,16 @@ package stud.euktop.schooljournal.presentation.main.settings
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.databinding.FragmentSettingsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.uikit.R
 
 @AndroidEntryPoint
-class SettingsFragment : BaseFragment<
-        FragmentSettingsBinding,
-        SettingsViewModel,
-        SettingsState,
-        Unit>() {
+class SettingsFragment :
+    BaseFragment<FragmentSettingsBinding, SettingsViewModel, SettingsState, SettingsEvent>() {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentSettingsBinding.inflate(inflater, container, false)
@@ -20,7 +19,6 @@ class SettingsFragment : BaseFragment<
     override val viewModel: SettingsViewModel by viewModels()
 
     override fun setupUI() {
-        // Переключатели
         binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
             viewModel.toggleDarkTheme(isChecked)
         }
@@ -29,7 +27,6 @@ class SettingsFragment : BaseFragment<
             viewModel.toggleNotifications(isChecked)
         }
 
-        // Кнопки действий
         binding.btnClearCache.setOnClickListener {
             viewModel.clearCache()
         }
@@ -38,9 +35,8 @@ class SettingsFragment : BaseFragment<
             viewModel.openAboutApp()
         }
 
-        // Строка языка (пока заглушка)
         binding.rowLanguage.setOnClickListener {
-            // TODO: Открыть выбор языка
+            showLanguageDialog()
         }
     }
 
@@ -50,5 +46,35 @@ class SettingsFragment : BaseFragment<
         binding.tvLanguageValue.text = state.currentLanguage
     }
 
-    override fun updateEvent(event: Unit) {}
+    override fun updateEvent(event: SettingsEvent) {
+        when (event) {
+            is SettingsEvent.ShowAboutDialog -> showAboutDialog(event.info)
+        }
+    }
+
+    private fun showAboutDialog(info: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.about_app)
+            .setMessage(info)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
+    private fun showLanguageDialog() {
+        val languages = arrayOf(
+            getString(R.string.language_russian),
+            getString(R.string.language_english)
+        )
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.select_language)
+            .setItems(languages) { _, which ->
+                val selected = when (which) {
+                    0 -> getString(R.string.language_russian)
+                    1 -> getString(R.string.language_english)
+                    else -> return@setItems
+                }
+                viewModel.changeLanguage(selected)
+            }
+            .show()
+    }
 }
