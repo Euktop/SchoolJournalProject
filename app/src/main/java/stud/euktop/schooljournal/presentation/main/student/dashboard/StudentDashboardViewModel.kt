@@ -8,6 +8,7 @@ import stud.euktop.domain.repository.StudentRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
+import stud.euktop.uikit.R
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +41,7 @@ class StudentDashboardViewModel @Inject constructor(
             block = { authRepository.getCurrentUser() },
             onSuccess = { user ->
                 val name = "${user.firstName} ${user.lastName}".trim()
-                _state.update { it.copy(studentName = name.ifEmpty { "Ученик" }) }
+                _state.update { it.copy(studentName = name) }
             }
         )
     }
@@ -67,14 +68,30 @@ class StudentDashboardViewModel @Inject constructor(
                 val now = java.util.Date()
                 val nextLesson = schedule.firstOrNull { it.date.after(now) }
 
+                val timeBadge = if (nextLesson != null) {
+                    val diffMinutes = (nextLesson.date.time - now.time) / (60 * 1000)
+                    when {
+                        diffMinutes <= 0 -> {
+                            R.string.time_now to listOf(null)
+                        }
+
+                        diffMinutes < 60 -> {
+                            R.string.time_minutes to listOf(diffMinutes)
+                        }
+
+                        else -> {
+                            R.string.time_hours to listOf(diffMinutes / 60)
+                        }
+                    }
+                } else null
+
                 _state.update {
                     it.copy(
                         lessonsTodayCount = schedule.size,
                         isNextLessonVisible = nextLesson != null,
                         nextLessonName = nextLesson?.subjectName ?: "",
-                        // Сырые данные для форматирования во Fragment
                         nextLessonDetails = "${nextLesson?.roomName.orEmpty()}|${nextLesson?.teacherLastName.orEmpty()}",
-                        nextLessonTime = "СКОРО"
+                        nextLessonTime = timeBadge
                     )
                 }
             }

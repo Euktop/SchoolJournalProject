@@ -265,4 +265,10 @@
     <string name="room_name">Название кабинета</string>
     <string name="select_language">Выбор языка</string>
     <string name="language_english">English</string>
+    <string name="cabinet_format">Каб. %s</string>
+    <string name="professor_format">Проф. %s</string>
+    <string name="separator_bullet"> • </string>
+    <string name="time_now">СЕЙЧАС</string>
+    <string name="time_minutes">ЧЕРЕЗ %d МИН</string>
+    <string name="time_hours">ЧЕРЕЗ %d Ч</string>
 </resources>

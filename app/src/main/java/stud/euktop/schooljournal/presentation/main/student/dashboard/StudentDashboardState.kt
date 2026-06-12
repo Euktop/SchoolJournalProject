@@ -20,7 +20,7 @@ import stud.euktop.schooljournal.presentation.common.base.BaseState
  * @property isNextLessonVisible Флаг, показывающий, есть ли следующий урок.
  */
 data class StudentDashboardState(
-    val studentName: String = "",
+    val studentName: String? = null,
     val newHomeworksCount: Int = 0,
     val averageMark: Double? = null,
     val lessonsTodayCount: Int = 0,
@@ -28,7 +28,7 @@ data class StudentDashboardState(
     val homeworksNotSubmitted: Int = 0,
     val nextLessonName: String = "",
     val nextLessonDetails: String = "",
-    val nextLessonTime: String = "",
+    val nextLessonTime: Pair<Int, List<Any?>>? = null,
     val isNextLessonVisible: Boolean = false,
     override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<StudentDashboardState>() {

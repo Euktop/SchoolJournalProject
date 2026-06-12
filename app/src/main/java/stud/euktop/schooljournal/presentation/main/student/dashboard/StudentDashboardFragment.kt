@@ -14,11 +14,9 @@ import stud.euktop.schooljournal.R as RApp
 import stud.euktop.uikit.R as RUi
 
 @AndroidEntryPoint
-class StudentDashboardFragment : BaseFragment<
-        FragmentStudentDashboardBinding,
-        StudentDashboardViewModel,
-        StudentDashboardState,
-        Unit>(), ToolbarConfigProvider {
+class StudentDashboardFragment :
+    BaseFragment<FragmentStudentDashboardBinding, StudentDashboardViewModel, StudentDashboardState, Unit>(),
+    ToolbarConfigProvider {
 
     override val viewModel: StudentDashboardViewModel by viewModels()
 
@@ -35,7 +33,7 @@ class StudentDashboardFragment : BaseFragment<
 
     override fun updateState(state: StudentDashboardState) {
         // 1. Приветствие
-        binding.tvWelcomeTitle.text = if (state.studentName.isNotEmpty()) {
+        binding.tvWelcomeTitle.text = if (!state.studentName.isNullOrEmpty()) {
             getString(RUi.string.hello_student_format, state.studentName)
         } else {
             getString(RUi.string.hello_student)
@@ -64,20 +62,24 @@ class StudentDashboardFragment : BaseFragment<
         if (state.isNextLessonVisible) {
             binding.tvLessonName.text = state.nextLessonName
 
-            // Форматируем сырые данные из VM ("Каб. 402 • Проф. Ричардсон")
             val parts = state.nextLessonDetails.split("|")
-            val room = parts.getOrNull(0)?.takeIf { it.isNotEmpty() }?.let { "Каб. $it" }
-            val teacher = parts.getOrNull(1)?.takeIf { it.isNotEmpty() }?.let { "Проф. $it" }
-            binding.tvLessonDetails.text = listOfNotNull(room, teacher).joinToString(" • ")
+            val room = parts.getOrNull(0)?.takeIf { it.isNotEmpty() }
+                ?.let { getString(RUi.string.cabinet_format, it) }
+            val teacher = parts.getOrNull(1)?.takeIf { it.isNotEmpty() }
+                ?.let { getString(RUi.string.professor_format, it) }
+            binding.tvLessonDetails.text =
+                listOfNotNull(room, teacher).joinToString(getString(RUi.string.separator_bullet))
 
-            binding.tvTimeBadge.text = state.nextLessonTime
+            binding.tvTimeBadge.text = state.nextLessonTime?.let {
+                context?.getString(it.first, it.second)
+            } ?: ""
+
         }
     }
 
     override fun updateEvent(event: Unit) {}
 
     override fun getToolbarConfig() = ToolbarConfig(
-        titleRes = RUi.string.app_name,
-        menuRes = RApp.menu.menu_home
+        titleRes = RUi.string.app_name, menuRes = RApp.menu.menu_home
     )
 }
