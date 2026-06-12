@@ -8,11 +8,9 @@ import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherLessonsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.filter.lesson.LessonFilterDialog
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.submitList
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class TeacherLessonsFragment : BaseFragment<
@@ -24,15 +22,10 @@ class TeacherLessonsFragment : BaseFragment<
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentTeacherLessonsBinding.inflate(inflater, container, false)
 
-    @Inject
-    lateinit var router: RouterTeacher
-
     override val viewModel: TeacherLessonsViewModel by viewModels()
 
     override fun setupUI() {
-        binding.rvLessons.adapter = TeacherLessonsAdapter { lesson ->
-            router.toLessonMarks(lesson.lessonId)
-        }
+        binding.rvLessons.adapter = TeacherLessonsAdapter(viewModel::onLessonClick)
     }
 
     private fun showFilterDialog() {

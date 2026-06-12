@@ -33,26 +33,26 @@ class MainMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnTeacherClasses.setOnClickListener { router.toTeacherClasses() }
-        binding.btnStudentSubjects.setOnClickListener { router.toStudentSubjects() }
-        binding.btnAdminPanel.setOnClickListener { router.toAdminPanel() }
-        binding.btnProfile.setOnClickListener { router.toAuthProfile() }
+        binding.btnTeacherClasses.setOnClickListener { router.toMainMenuTeacherClasses() }
+        binding.btnStudentSubjects.setOnClickListener { router.toMainMenuStudentSubjects() }
+        binding.btnAdminPanel.setOnClickListener { router.toMainMenuAdminPanel() }
+        binding.btnProfile.setOnClickListener { router.toMainMenuAuthProfile() }
         binding.btnStudentDetail.setOnClickListener { router.toStudentSubjectDetail() }
         binding.btnLogin.setOnClickListener { router.toNavAuth() }
         binding.btnProfileRegistration.setOnClickListener { router.toNavAuthWithProfile() }
         binding.btnCreatePassword.setOnClickListener { router.toNavAuthWithCreatePassword() }
-        binding.btnSchools.setOnClickListener { router.toAdminPanel() }
-        binding.btnRooms.setOnClickListener { router.toAdminPanel() }
-        binding.btnLessonMarks.setOnClickListener { router.toLessonMarks(101) }
-        binding.btnHomework.setOnClickListener { router.toTeacherHomeworkList() }
-        binding.btnStudentHomework.setOnClickListener { router.toStudentHomeworkList() }
-        binding.btnLessonEdit.setOnClickListener { router.toLessonEdit() }
-        binding.btnStudentSchedule.setOnClickListener { router.toStudentSchedule() }
-        binding.btnSelectRole.setOnClickListener { router.toSelectRole() }
+        binding.btnSchools.setOnClickListener { router.toMainMenuAdminPanel() }
+        binding.btnRooms.setOnClickListener { router.toMainMenuAdminPanel() }
+        binding.btnLessonMarks.setOnClickListener { router.toMainMenuLessonMarks(101) }
+        binding.btnHomework.setOnClickListener { router.toMainMenuTeacherHomeworkList() }
+        binding.btnStudentHomework.setOnClickListener { router.toMainMenuStudentHomeworkList() }
+        binding.btnLessonEdit.setOnClickListener { router.toMainMenuLessonEdit() }
+        binding.btnStudentSchedule.setOnClickListener { router.toMainMenuStudentSchedule() }
+        binding.btnSelectRole.setOnClickListener { router.toMainMenuSelectRole() }
 
-        binding.btnHomeStudent.setOnClickListener { router.toStudentHome() }
-        binding.btnHomeAdmin.setOnClickListener { router.toStudentAdmin() }
-        binding.btnHomeTeacher.setOnClickListener { router.toStudentTeacher() }
+        binding.btnHomeStudent.setOnClickListener { router.toMainMenuStudentHome() }
+        binding.btnHomeAdmin.setOnClickListener { router.toMainMenuStudentAdmin() }
+        binding.btnHomeTeacher.setOnClickListener { router.toMainMenuStudentTeacher() }
     }
 
     override fun onDestroyView() {

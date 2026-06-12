@@ -12,15 +12,14 @@ class GradeMockRepositoryImpl @Inject constructor() : GradeRepository {
     private val tag = this::class.java.simpleName
 
     private val addedGrades = mutableListOf<AddGradeRecord>()
-
-    override suspend fun addGrade(
+    override suspend fun setGrade(
         lessonId: Int,
         studentId: Int,
-        absenceTypes: AbsenceTypes,
+        absenceTypes: AbsenceTypes?,
         comment: String?
     ): Result<Unit> {
-        val value = absenceTypes.getGrade()
-        val ab = absenceTypes.getAbsenceTypeId()
+        val value = absenceTypes?.getGrade()
+        val ab = absenceTypes?.getAbsenceTypeId()
         logger?.i(
             tag,
             "addGrade",
@@ -42,6 +41,7 @@ class GradeMockRepositoryImpl @Inject constructor() : GradeRepository {
 
         return Result.success(Unit)
     }
+
 
     private data class AddGradeRecord(
         val lessonId: Int,

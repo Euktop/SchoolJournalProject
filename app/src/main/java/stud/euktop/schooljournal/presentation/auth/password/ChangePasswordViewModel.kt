@@ -6,13 +6,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
 import javax.inject.Inject
 
 @HiltViewModel
 class ChangePasswordViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val routerAuthorization: RouterAuthorization
+    private val routerAuth: RouterAuth
 ) : BaseViewModel<ChangePasswordState, Unit>() {
 
     override fun initState() = ChangePasswordState()
@@ -40,13 +40,13 @@ class ChangePasswordViewModel @Inject constructor(
                     state.newPassword.getValidate()
                 )
             },
-            onSuccess = { routerAuthorization.toSuccessChangePassword() }
+            onSuccess = { routerAuth.toSuccessChangePassword() }
         )
     }
 
     fun cancel() {
         viewModelScope.launch {
-            routerAuthorization.toCancelChangePassword()
+            routerAuth.toCancelChangePassword()
         }
     }
 }

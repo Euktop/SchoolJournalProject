@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/color_bg_primary"
+    android:orientation="vertical"
     tools:context=".presentation.main.profile.ProfileFragment">
 
     <!-- TopAppBar -->
@@ -14,9 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/color_bg_primary"
-        app:menu="@menu/menu_notifications"
+        app:menu="@menu/menu_setting"
         app:navigationIcon="@null"
-        app:title="SchoolJournal"
+        app:title="@string/profile"
         app:titleTextColor="@color/color_text_accent" />
 
     <ScrollView
@@ -84,18 +84,39 @@
                         android:textColor="@color/color_text_primary"
                         tools:text="Иван Петров" />
 
-                    <!-- Role Chip -->
-                    <TextView
-                        android:id="@+id/tvRole"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_chip_secondary"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="4dp"
-                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
-                        android:textColor="@color/color_text_secondary"
-                        tools:text="Учитель" />
+                        android:gravity="center"
+                        android:padding="4dp">
+
+                        <!-- Role Chip -->
+                        <TextView
+                            android:id="@+id/tvRole"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/bg_chip_secondary"
+                            android:paddingVertical="4dp"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="24dp"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary"
+                            tools:text="Учитель" />
+
+                        <ImageView
+                            android:id="@+id/btnEditRole"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="bottom|end"
+                            android:layout_marginStart="-24dp"
+                            android:background="@drawable/bg_circle_accent_inactive"
+                            android:backgroundTint="@color/color_bg_secondary"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_edit"
+                            app:tint="@color/color_text_secondary" />
+                    </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
 
@@ -204,7 +225,9 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <Space android:layout_width="match_parent" android:layout_height="12dp" />
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp" />
 
                 <!-- Card 2: School & Bio -->
                 <com.google.android.material.card.MaterialCardView
@@ -309,8 +332,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:divider="@drawable/div_16"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:showDividers="middle">
 
                 <stud.euktop.uikit.components.button.SchJButton
                     android:id="@+id/btnEditProfile"
@@ -324,7 +349,6 @@
                     android:id="@+id/btnChangePassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:text="@string/change_password"
                     app:schJButtonClass="SECONDARY"
                     app:schJButtonType="BIG" />

@@ -13,7 +13,6 @@ import com.schooljournal.api.SchoolsApi
 import com.schooljournal.api.StudentApi
 import com.schooljournal.api.SubjectsApi
 import com.schooljournal.api.TeacherAssignmentsApi
-import com.schooljournal.api.TestApi
 import com.schooljournal.api.UsersApi
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
@@ -70,9 +69,6 @@ class NetworkClient @Inject constructor(
     }
 
     internal val baseUrl: String = networkConfig.baseUrl
-    internal fun testApi(): TestApi =
-        TestApi(basePath = baseUrl, client = okHttpClient)
-
     fun authorizationApi(): AuthorizationApi = AuthorizationApi(baseUrl, okHttpClient)
     fun classesApi(): ClassesApi = ClassesApi(baseUrl, okHttpClient)
     fun homeworkApi(): HomeworkApi = HomeworkApi(baseUrl, okHttpClient)

@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_home"
         android:title="@string/home" />
     <item
+        android:id="@+id/teacherLessonsFragment"
+        android:icon="@drawable/ic_calendar_month"
+        android:title="@string/schedule" />
+    <item
         android:id="@+id/teacherClassesFragment"
         android:icon="@drawable/ic_menu_book"
         android:title="@string/my_classes" />

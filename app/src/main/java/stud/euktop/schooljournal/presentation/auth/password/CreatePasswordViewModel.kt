@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.update
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.binding.CreatePasswordFormActions
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
 import javax.inject.Inject
 
 /**
@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreatePasswordViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator,
-    private val routerAuthorization: RouterAuthorization
+    private val routerAuth: RouterAuth
 ) : BaseViewModel<CreatePasswordState, Unit>() {
     override fun initState() = CreatePasswordState()
     val updateState = object : CreatePasswordFormActions {
@@ -43,7 +43,7 @@ class CreatePasswordViewModel @Inject constructor(
         executeLoadingBlockSync(
             key = "register",
             block = { authCoordinator.register(_state.value.password.getValidate()) },
-            onSuccess = { routerAuthorization.toSuccessCreate() }
+            onSuccess = { routerAuth.toSuccessCreate() }
         )
     }
 }

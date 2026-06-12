@@ -9,7 +9,7 @@ import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinat
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.message.MessageEvent
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import javax.inject.Inject
 
@@ -31,7 +31,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val authCoordinator: AuthCoordinator,
     private val routerMain: RouterMain,
-    private val routerAuthorization: RouterAuthorization
+    private val routerAuth: RouterAuth
 ) : BaseViewModel<LoginState, Unit>() {
 
     override fun initState() = LoginState()
@@ -59,7 +59,7 @@ class LoginViewModel @Inject constructor(
 
     fun onRegClick() {
         viewModelScope.launch {
-            routerAuthorization.toCreateProfile()
+            routerAuth.toCreateProfile()
         }
     }
 

@@ -43,20 +43,17 @@ class LessonMarksViewModel @Inject constructor(
     }
 
     private fun loadClassAndSubject() {
-        // TODO: Реализовать загрузку названия класса и предмета через LessonRepository.getLesson(lessonId)
-        // Пока захардкодим для мока, чтобы UI сразу выглядел красиво
         _state.update { it.copy(classAndSubject = "5А – Математика") }
     }
 
     fun selectChip(index: Int) {
         _state.update { it.copy(selectedChipIndex = index) }
-        // TODO: В будущем фильтровать список marks в зависимости от выбранного чипа
     }
 
-    fun saveGrade(studentId: Int, absenceTypes: AbsenceTypes, comment: String?) {
+    fun saveGrade(studentId: Int, absenceTypes: AbsenceTypes?, comment: String?) {
         executeWithLoadingSync(
             key = "save_grade",
-            block = { gradeRepository.addGrade(lessonId, studentId, absenceTypes, comment) },
+            block = { gradeRepository.setGrade(lessonId, studentId, absenceTypes, comment) },
             onSuccess = { loadMarks() }
         )
     }

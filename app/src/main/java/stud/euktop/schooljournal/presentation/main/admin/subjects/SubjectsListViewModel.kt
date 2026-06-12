@@ -57,7 +57,7 @@ class SubjectsListViewModel @Inject constructor(
         loadNextPage()
     }
 
-    fun editSubject(subject: Subject) = routerAdmin.toEditSubject(subject.subjectId)
+    fun editSubject(subject: Subject) = routerAdmin.toAdminEditSubject(subject.subjectId)
     fun deleteSubject(subjectId: Int) {
         executeWithLoadingSync(
             "delete",

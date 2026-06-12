@@ -55,7 +55,7 @@ class ClassesListViewModel @Inject constructor(
         loadNextPage()
     }
 
-    fun editClass(classInfo: ClassInfo) = routerAdmin.toEditClass(classInfo.classId)
+    fun editClass(classInfo: ClassInfo) = routerAdmin.toAdminEditClass(classInfo.classId)
     fun deleteClass(classId: Int) {
         executeWithLoadingSync("delete", { classRepository.deleteClass(classId) }) { refresh() }
     }

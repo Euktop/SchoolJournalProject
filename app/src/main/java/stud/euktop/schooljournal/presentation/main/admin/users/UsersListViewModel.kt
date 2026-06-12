@@ -80,7 +80,7 @@ class UsersListViewModel @Inject constructor(
     }
 
     fun editUser(user: UserListItem) {
-        routerAdmin.toEditUser(user.userId)
+        routerAdmin.toAdminEditUser(user.userId)
     }
 
     private fun refresh() {

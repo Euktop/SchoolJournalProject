@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import stud.euktop.data.local.storage.contract.TokenStorage
 import stud.euktop.network.NetworkClient
 import stud.euktop.network.NetworkConfig
-import stud.euktop.network.api.SchoolJournalClientApi
+import stud.euktop.network.api_api.SchoolJournalClientApi
 import stud.euktop.network.interceptor.TokenProvider
 import stud.euktop.network.util.Logger
 import stud.euktop.network.util.logger

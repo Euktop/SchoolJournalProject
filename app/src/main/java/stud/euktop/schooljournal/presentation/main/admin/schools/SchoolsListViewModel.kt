@@ -54,7 +54,7 @@ class SchoolsListViewModel @Inject constructor(
         loadNextPage()
     }
 
-    fun editSchool(school: School) = routerAdmin.toEditSchool(school.schoolId)
+    fun editSchool(school: School) = routerAdmin.toAdminEditSchool(school.schoolId)
     fun deleteSchool(schoolId: Int) {
         executeWithLoadingSync("delete", { schoolRepository.deleteSchool(schoolId) }) { refresh() }
     }

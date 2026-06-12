@@ -156,8 +156,12 @@
     <string name="forget_password">Forgot your password?</string>
     <string name="it_is_not_possible_to_reset_the_password_yet">It is not possible to reset the password yet</string>
     <string name="i_agree_to_the_terms_of_use_and_privacy_policy">I agree to the Terms of Use and Privacy Policy</string>
-    <string name="audit_log">Логи</string>
-    <string name="schools">Школы</string>
+    <string name="audit_log">Logs</string>
+    <string name="schools">School</string>
     <string name="time_range" translatable="false">%1$s - %2$s</string>
     <string name="theme_not_supported">Тема не указана</string>
+    <string name="Hello_teacher_name">Здравствуйте, %1$s!</string>
+    <string name="hello_teacher">Здравствуйте, Учитель!</string>
+    <string name="def_teacher_dashboard_name">N:N, Не указано (Нет названия)</string>
+    <string name="grade_for_lesson">Оценки за урок</string>
 </resources>

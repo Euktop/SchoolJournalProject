@@ -25,11 +25,25 @@ class TeacherDashboardFragment : BaseFragment<
         FragmentTeacherDashboardBinding.inflate(inflater, container, false)
 
     override fun setupUI() {
-        // TODO: Add UI setup
+        binding.btnSchedule.setOnClickListener { viewModel.onScheduleClick() }
+        binding.btnMyClasses.setOnClickListener { viewModel.onMyClassesClick() }
+        binding.btnLessonsList.setOnClickListener { viewModel.onLessonsListClick() }
+        binding.btnGrading.setOnClickListener { viewModel.onGradingClick() }
+        binding.btnHomeworkList.setOnClickListener { viewModel.onHomeworkListClick() }
+        binding.btnCreateHomework.setOnClickListener { viewModel.onCreateHomeworkClick() }
+        binding.btnAnalytics.setOnClickListener { viewModel.onAnalyticsClick() }
+        binding.btnSettings.setOnClickListener { viewModel.onSettingsClick() }
     }
 
     override fun updateState(state: TeacherDashboardState) {
-        // TODO: Update UI based on state
+        binding.tvWelcomeTitle.text = if (state.teacherName.isNotEmpty()) {
+            getString(RApp.string.Hello_teacher_name, state.teacherName)
+        } else {
+            getString(RApp.string.hello_teacher)
+        }
+
+        // 2. Информация о следующем уроке
+        binding.tvNextLesson.text = state.nextLessonInfo.ifEmpty { getString(RApp.string.def_teacher_dashboard_name) }
     }
 
     override fun updateEvent(event: Unit) {}

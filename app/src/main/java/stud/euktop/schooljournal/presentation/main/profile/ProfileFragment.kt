@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.model.school.School
+import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
@@ -14,11 +16,8 @@ import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProfileFragment : BaseFragment<
-        FragmentProfileBinding,
-        ProfileViewModel,
-        ProfileState,
-        Unit>() {
+class ProfileFragment :
+    BaseFragment<FragmentProfileBinding, ProfileViewModel, ProfileState, Unit>() {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         FragmentProfileBinding.inflate(inflater, container, false)
@@ -43,36 +42,36 @@ class ProfileFragment : BaseFragment<
         }
 
         binding.btnEditAvatar.setOnClickListener {
-            // TODO: Открыть диалог выбора фото или перехода в редактирование аватара
+            viewModel.onAvatarClick()
+        }
+        binding.btnEditRole.setOnClickListener {
+            viewModel.onRoleClick()
         }
     }
 
     override fun updateState(state: ProfileState) {
-        val user = state.user ?: return
-        updateUI(user)
+        state.apply {
+            updateUI(user, role, school)
+        }
     }
 
-    private fun updateUI(user: UserProfile) {
+    private fun updateUI(user: UserProfile?, role: Role?, school: School?) {
         binding.apply {
-            // Имя и инициалы
-            tvUserName.text = "${user.lastName} ${user.firstName}".trim()
-            val initials = "${user.firstName.firstOrNull()}${user.lastName.firstOrNull()}".uppercase()
-            tvInitials.text = initials
+            tvUserName.text = user?.let { "${it.lastName} ${it.firstName}".trim() }
+                ?: getString(R.string.not_specified)
+            tvInitials.text =
+                user?.let { "${it.firstName.firstOrNull()}${it.lastName.firstOrNull()}".uppercase() }
+                    ?: getString(R.string.not_specified)
 
-            // Роль (берем первую роль из списка)
-            val role = user.roles.firstOrNull()?.role
-            tvRole.text = role?.let { getString(it.toMessageId()) } ?: getString(R.string.not_specified)
+            tvRole.text =
+                role?.let { getString(it.toMessageId()) } ?: getString(R.string.not_specified)
 
-            // Контакты
-            tvEmail.text = user.email
-            tvPhone.text = user.phone ?: getString(R.string.not_specified)
+            tvEmail.text = user?.email ?: getString(R.string.not_specified)
+            tvPhone.text = user?.phone ?: getString(R.string.not_specified)
 
-            // Школа (пока заглушка, так как в UserProfile нет названия школы)
-            // TODO: Добавить загрузку названия школы через SchoolAdminRepository
-            tvSchool.text = getString(R.string.not_specified)
+            tvSchool.text = school?.name ?: getString(R.string.not_specified)
 
-            // Дата рождения
-            tvBirthday.text = user.birthday?.toBaseString() ?: getString(R.string.not_specified)
+            tvBirthday.text = user?.birthday?.toBaseString() ?: getString(R.string.not_specified)
         }
     }
 

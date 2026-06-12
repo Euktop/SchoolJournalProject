@@ -8,46 +8,15 @@
     android:orientation="vertical"
     tools:context=".presentation.main.settings.SettingsFragment">
 
-    <!-- TopAppBar -->
-    <LinearLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@color/color_bg_primary"
-        android:elevation="2dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp">
-
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:src="@drawable/ic_arrow_back" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_weight="1"
-            android:text="@string/settings"
-            android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold"
-            android:textColor="@color/color_text_accent" />
-
-        <FrameLayout
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_bg_accent">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_account_circle"
-                app:tint="@color/color_text_on_accent" />
-        </FrameLayout>
-    </LinearLayout>
+        android:elevation="8dp"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/settings"
+        app:titleTextColor="@color/color_text_accent" />
 
     <ScrollView
         android:layout_width="match_parent"

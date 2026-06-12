@@ -34,21 +34,17 @@ class TeacherClassAdapter(
         fun bind(item: TeacherClassItem, position: Int) {
             val context = binding.root.context
 
-            // Номер и буква класса
             binding.tvClassGrade.text = context.getString(
                 stud.euktop.schooljournal.R.string.class_grade_letter_format,
                 item.grade,
                 item.letter
             )
 
-            // Название предмета
             binding.tvSubjectName.text = item.subjectName
 
-            // Кабинет (TODO: пока заглушка)
             binding.tvRoomName.text = item.roomName
                 ?: context.getString(R.string.room_not_specified)
 
-            // Цвет иконки класса (чередование)
             val bgDrawable = when (position % 3) {
                 0 -> R.drawable.bg_class_icon_primary
                 1 -> R.drawable.bg_class_icon_tertiary

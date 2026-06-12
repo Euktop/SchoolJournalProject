@@ -1,4 +1,4 @@
-package stud.euktop.network.api
+package stud.euktop.network.api_api
 
 import com.schooljournal.model.ErrorResponse
 import com.schooljournal.model.LoginRequest
@@ -16,7 +16,6 @@ class SchoolJournalClientApi @Inject constructor(
     private val networkClient: NetworkClient
 ) {
     private val authApi = networkClient.authorizationApi()
-    private val testApi = networkClient.testApi()
 
     private suspend inline fun <reified T> result(
         noinline block: suspend () -> T
@@ -38,5 +37,5 @@ class SchoolJournalClientApi @Inject constructor(
         result { authApi.apiAuthorizationLoginPost(LoginRequest(login, passwordHash)) }
 
     suspend fun testMe(): Result<Unit> =
-        result { testApi.apiTestMeGet() }
+        result { Unit }
 }

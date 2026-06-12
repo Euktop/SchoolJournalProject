@@ -239,4 +239,5 @@
         <item quantity="other">%d заданий не сдано</item>
     </plurals>
     <string name="app_name">School Journal</string>
+    <string name="clear_grade">Очистить оценку</string>
 </resources>

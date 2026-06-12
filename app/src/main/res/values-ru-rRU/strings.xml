@@ -150,4 +150,9 @@
     <string name="lessons_today_format">Сегодня у вас %1$d занятий</string>
     <string name="room_not_specified">Кабинет не указан</string>
     <string name="forget_password">Забыли пароль?</string>
+    <string name="it_is_not_possible_to_reset_the_password_yet">Сбросить пароль пока невозможно</string>
+    <string name="i_agree_to_the_terms_of_use_and_privacy_policy">Я согласен с Условиями использования и Политикой конфиденциальности</string>
+    <string name="audit_log">Логи</string>
+    <string name="schools">Школы</string>
+    <string name="theme_not_supported">The subject is not specified</string>
 </resources>

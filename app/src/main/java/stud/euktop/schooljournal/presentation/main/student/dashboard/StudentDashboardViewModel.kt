@@ -118,8 +118,8 @@ class StudentDashboardViewModel @Inject constructor(
     }
 
     // Навигация (вызывается из Fragment)
-    fun onScheduleClick() = routerStudent.toSchedule()
-    fun onSubjectsClick() = routerStudent.toSubjects()
-    fun onHomeworkClick() = routerStudent.toHomework()
-    fun onProfileClick() = routerStudent.toProfile()
+    fun onScheduleClick() = routerStudent.toStudentSchedule()
+    fun onSubjectsClick() = routerStudent.toStudentSubjects()
+    fun onHomeworkClick() = routerStudent.toStudentHomework()
+    fun onProfileClick() = routerStudent.toStudentProfile()
 }

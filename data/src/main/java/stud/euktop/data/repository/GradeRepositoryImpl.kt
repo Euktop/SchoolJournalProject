@@ -1,7 +1,8 @@
 package stud.euktop.data.repository
 
 import com.schooljournal.api.GradesApi
-import com.schooljournal.model.AddGradeRequest
+import com.schooljournal.api.LessonsApi
+import com.schooljournal.api.StudentApi
 import stud.euktop.data.utils.ApiErrorHandler
 import stud.euktop.domain.model.attendance.AbsenceTypes
 import stud.euktop.domain.repository.GradeRepository
@@ -11,23 +12,12 @@ class GradeRepositoryImpl @Inject constructor(
     private val gradesApi: GradesApi,
     private val errorHandler: ApiErrorHandler
 ) : GradeRepository {
-
-    override suspend fun addGrade(
+    override suspend fun setGrade(
         lessonId: Int,
         studentId: Int,
-        absenceTypes: AbsenceTypes,
+        absenceTypes: AbsenceTypes?,
         comment: String?
     ): Result<Unit> = errorHandler.safeApiCall {
-        val grade = absenceTypes.getGrade()
-        val ab = absenceTypes.getAbsenceTypeId()
-        gradesApi.apiGradesPost(
-            AddGradeRequest(
-                lessonId = lessonId,
-                studentId = studentId,
-                value = grade,
-                absenceTypeId = ab,
-                comment = comment
-            )
-        )
+        //TODO("Нужно обновить api")
     }
 }

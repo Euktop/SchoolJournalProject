@@ -8,12 +8,12 @@ import stud.euktop.domain.model.user.Role
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.auth.role.RoleItem.Companion.toItem
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectRoleViewModel @Inject constructor(
-    private val routerAuthorization: RouterAuthorization,
+    private val routerAuth: RouterAuth,
     private val authCoordinator: AuthCoordinator
 ) : BaseViewModel<SelectRoleState, Unit>() {
     init {
@@ -40,7 +40,7 @@ class SelectRoleViewModel @Inject constructor(
 
     fun onBack() {
         viewModelScope.launch {
-            routerAuthorization.toBack()
+            routerAuth.toBack()
         }
     }
 
@@ -48,7 +48,7 @@ class SelectRoleViewModel @Inject constructor(
         val selectedRole = _state.value.selectedRole ?: return
         executeLoadingBlockSync("save_role", { authCoordinator.saveRole(selectedRole) }, {
             viewModelScope.launch {
-                routerAuthorization.toAfterSelectRole()
+                routerAuth.toAfterSelectRole()
             }
         })
     }

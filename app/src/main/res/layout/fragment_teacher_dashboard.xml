@@ -1,16 +1,501 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.main.teacher.dashboard.TeacherDashboardFragment">
+    android:background="@color/color_bg_primary"
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Teacher Dashboard"
-        android:textSize="20sp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</FrameLayout>
+        <!-- 1. Welcome Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardWelcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@color/color_accent"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/tvWelcomeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Здравствуйте, Учитель!"
+                    android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold"
+                    android:textColor="@color/color_text_on_accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Готовы к следующему уроку?"
+                    android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
+                    android:textColor="@color/color_text_on_accent" />
+
+                <!-- Блок "Следующий урок" -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_card_overlay"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <FrameLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_circle_accent_inactive">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_event_upcoming"
+                            app:tint="@color/color_accent" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="СЛЕДУЮЩИЙ УРОК"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption2.Bold"
+                            android:textColor="@color/color_text_on_accent" />
+
+                        <TextView
+                            android:id="@+id/tvNextLesson"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10:30, 5А (Алгебра)"
+                            android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                            android:textColor="@color/color_text_on_accent" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 2. Navigation Grid (Bento Style) -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignBounds"
+            android:columnCount="2"
+            android:useDefaultMargins="true">
+
+            <!-- Расписание -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnSchedule"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_calendar_today"
+                        app:tint="@color/color_text_accent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Расписание учителя"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="4 урока сегодня"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Мои классы -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnMyClasses"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_groups"
+                        app:tint="@color/color_text_accent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Мои классы"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Список классов"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Список уроков -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnLessonsList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_menu_book"
+                        app:tint="@color/color_text_accent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Список уроков"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="План занятий"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Выставление оценок -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnGrading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_grade"
+                        app:tint="@color/color_error" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Выставление оценок"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Ожидают проверки"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Список ДЗ -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnHomeworkList"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_assignment"
+                        app:tint="@color/color_text_secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Список ДЗ"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Отслеживать сдачу"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Создать ДЗ -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnCreateHomework"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_add_task"
+                        app:tint="@color/color_text_accent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Создать ДЗ"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Новое задание"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Аналитика -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnAnalytics"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_analytics"
+                        app:tint="@color/color_text_accent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Аналитика"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Успеваемость класса"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Настройки -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnSettings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_gravity="fill"
+                android:layout_margin="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:src="@drawable/ic_settings"
+                        app:tint="@color/color_text_secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Настройки"
+                        android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Приложения"
+                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                        android:textColor="@color/color_text_secondary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </GridLayout>
+
+        <!-- 3. Atmospheric Visual Element (Нижний блок) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/color_bg_secondary"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Академическое превосходство"
+                    android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
+                    android:textColor="@color/color_text_accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Будьте организованны, вдохновляйте учеников."
+                    android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                    android:textColor="@color/color_text_secondary" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

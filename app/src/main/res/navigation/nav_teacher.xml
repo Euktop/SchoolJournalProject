@@ -21,14 +21,7 @@
         android:id="@+id/teacherLessonsFragment"
         android:name="stud.euktop.schooljournal.presentation.main.teacher.teacherLessons.TeacherLessonsFragment"
         android:label="Уроки"
-        tools:layout="@layout/fragment_teacher_lessons">
-        <argument
-            android:name="classId"
-            app:argType="integer" />
-        <argument
-            android:name="subjectId"
-            app:argType="integer" />
-    </fragment>
+        tools:layout="@layout/fragment_teacher_lessons"/>
 
     <fragment
         android:id="@+id/lessonMarksFragment"

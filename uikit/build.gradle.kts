@@ -31,13 +31,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 }
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    api(libs.flexbox)
     implementation(libs.material)
     implementation(libs.mpandroidchart)
     testImplementation(libs.junit)

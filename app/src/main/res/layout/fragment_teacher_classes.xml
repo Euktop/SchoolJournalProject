@@ -65,27 +65,6 @@
                         tools:text="Сегодня у вас 4 занятия" />
 
                     <!-- Чипы (пока статические) -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal">
-
-                        <stud.euktop.uikit.components.button.SchJButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1-я смена"
-                            app:schJButtonClass="TERTIARY"
-                            app:schJButtonType="CHIPS" />
-
-                        <stud.euktop.uikit.components.button.SchJButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="Экзаменационный период"
-                            app:schJButtonClass="TERTIARY"
-                            app:schJButtonType="CHIPS" />
-                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

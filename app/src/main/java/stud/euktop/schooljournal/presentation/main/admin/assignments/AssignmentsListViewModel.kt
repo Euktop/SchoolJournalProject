@@ -52,7 +52,7 @@ class AssignmentsListViewModel @Inject constructor(
     }
 
     fun editAssignment(assignment: TeacherAssignment) =
-        routerAdmin.toEditAssignment(assignment.assignmentId)
+        routerAdmin.toAdminEditAssignment(assignment.assignmentId)
 
     fun deleteAssignment(assignmentId: AssignmentId) {
         executeWithLoadingSync(

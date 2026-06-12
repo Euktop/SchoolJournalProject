@@ -7,12 +7,14 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.coordinator.TeacherCoordinator
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import javax.inject.Inject
 
 @HiltViewModel
 class TeacherClassesViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val teacherCoordinator: TeacherCoordinator,
+    private val router: RouterTeacher,
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<TeacherClassesState, Unit>() {
 
@@ -50,5 +52,9 @@ class TeacherClassesViewModel @Inject constructor(
                 _state.update { it.copy(classes = classes) }
             }
         )
+    }
+
+    fun onClassClick(item: TeacherClassItem) {
+        router.toTeacherLessons(item.classId, item.subjectId)
     }
 }

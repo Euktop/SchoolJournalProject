@@ -25,38 +25,38 @@ class AdminHomeViewModel @Inject constructor(
     }
 
     fun onDashboardClick() {
-        router.toDashboard()
+        router.toAdminDashboard()
     }
 
     fun onSchoolsClick() {
-        router.toSchoolsList()
+        router.toAdminSchoolsList()
     }
 
     fun onClassesClick() {
-        router.toClassesList()
+        router.toAdminClassesList()
     }
 
     fun onSubjectsClick() {
-        router.toSubjectsList()
+        router.toAdminSubjectsList()
     }
 
     fun onRoomsClick() {
-        router.toRoomsList()
+        router.toAdminRoomsList()
     }
 
     fun onAssignmentsClick() {
-        router.toAssignmentsList()
+        router.toAdminAssignmentsList()
     }
 
     fun onUsersClick() {
-        router.toUsersList()
+        router.toAdminUsersList()
     }
 
     fun onAuditClick() {
-        router.toAuditLog()
+        router.toAdminAuditLog()
     }
 
     fun onSettingsClick() {
-        router.toSettings()
+        router.toAdminSettings()
     }
 }

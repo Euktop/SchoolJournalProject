@@ -8,7 +8,7 @@ import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.auth.common.contract.AuthCoordinator
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuthorization
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
 import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthCoordinatorImpl @Inject constructor(
     private val authRepository: AuthRepository,
-    private val routerAuthorization: RouterAuthorization,
+    private val routerAuth: RouterAuth,
     private val coordinatorExec: CoordinatorExec,
 ) : AuthCoordinator {
 
@@ -58,7 +58,7 @@ class AuthCoordinatorImpl @Inject constructor(
     override suspend fun register(password: String): CoordinatorResult<Unit> {
         val profile = pendingUserProfile
             ?: return CoordinatorResult.Error(
-                navAction = { routerAuthorization.toSuccessCreate() },
+                navAction = { routerAuth.toSuccessCreate() },
                 stud.euktop.schooljournal.R.string.error_empty_body
             )
         return coordinatorExec.exec { authRepository.registration(profile, password) }

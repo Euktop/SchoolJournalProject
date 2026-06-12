@@ -10,10 +10,9 @@ import stud.euktop.uikit.components.button.SchJButtonState
 import stud.euktop.uikit.databinding.LayoutMarkPickerBinding
 
 class SchJMarkPicker @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), SchJState<SchJMarkPickerState> {
+
     var listener: Listener? = null
 
     private val base = object : SchJBaseBinding<LayoutMarkPickerBinding, SchJMarkPickerState>() {
@@ -22,16 +21,25 @@ class SchJMarkPicker @JvmOverloads constructor(
         )
 
         override fun initState() = SchJMarkPickerState()
+
         override fun updateState(state: SchJMarkPickerState) {
             binding.tvStudentName.text = state.studentName
-            buttons?.forEach { (types, button) ->
-                button.state = if (types == state.absenceTypes)
-                    button.state.copy(buttonClass = SchJButtonState.ButtonClass.SELECT)
-                else button.state.copy(buttonClass = SchJButtonState.ButtonClass.UNSELECT)
+
+            // Сбрасываем все кнопки в UNSELECT
+            buttons?.forEach { (_, button) ->
+                button.state = button.state.copy(buttonClass = SchJButtonState.ButtonClass.UNSELECT)
+            }
+
+            // Подсвечиваем выбранную оценку (если она не null)
+            if (state.absenceTypes != null) {
+                buttons?.get(state.absenceTypes)?.let {
+                    it.state = it.state.copy(buttonClass = SchJButtonState.ButtonClass.SELECT)
+                }
             }
         }
 
-        private var buttons: MutableMap<AbsenceTypes, SchJButton>? = null
+        private var buttons: MutableMap<AbsenceTypes?, SchJButton>? = null
+
         override fun setupUI() {
             binding.apply {
                 buttons = mutableMapOf(
@@ -41,11 +49,11 @@ class SchJMarkPicker @JvmOverloads constructor(
                     AbsenceTypes.G5 to btnMark5,
                     AbsenceTypes.IRRESPECTABLE to btnIrrespectable,
                     AbsenceTypes.ILL to btnIll,
-                    AbsenceTypes.RESPECTABLE to btnRespectable
+                    AbsenceTypes.RESPECTABLE to btnRespectable,
+                    null to btnClear // Кнопка очистки соответствует null
                 )
+
                 buttons?.forEach { (types, button) ->
-                    button.state =
-                        button.state.copy(buttonClass = SchJButtonState.ButtonClass.UNSELECT)
                     button.setOnClickListener {
                         listener?.setOnClick(types)
                     }
@@ -57,6 +65,6 @@ class SchJMarkPicker @JvmOverloads constructor(
     override var state: SchJMarkPickerState by base
 
     fun interface Listener {
-        fun setOnClick(absenceType: AbsenceTypes)
+        fun setOnClick(absenceType: AbsenceTypes?) // Изменено на nullable
     }
 }
