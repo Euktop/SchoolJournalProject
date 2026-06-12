@@ -22,7 +22,7 @@ class StudentSubjectsViewModel @Inject constructor(
     }
 
     private fun loadData() {
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "load_subjects",
             block = { studentCoordinator.getSubjectsSummary() },
             onSuccess = { summaries ->
@@ -30,7 +30,7 @@ class StudentSubjectsViewModel @Inject constructor(
             }
         )
 
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "load_overall",
             block = { studentCoordinator.getOverallAverage() },
             onSuccess = { overall ->

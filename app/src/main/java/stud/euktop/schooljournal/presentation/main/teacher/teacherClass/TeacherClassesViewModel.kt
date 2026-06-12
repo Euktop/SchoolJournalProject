@@ -27,7 +27,7 @@ class TeacherClassesViewModel @Inject constructor(
     }
 
     private fun loadCurrentUser() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_user",
             block = { authRepository.getCurrentUser() },
             onSuccess = { user ->
@@ -38,11 +38,11 @@ class TeacherClassesViewModel @Inject constructor(
     }
 
     fun loadClasses() {
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "load_classes",
             block = {
                 val currentUser = authRepository.getCurrentUser().getOrNull()
-                return@executeLoadingBlockSync if (currentUser != null) {
+                return@executeCoordinatorResultLoadingBlockSync if (currentUser != null) {
                     teacherCoordinator.getTeacherClasses(currentUser.userId)
                 } else {
                     CoordinatorResult.Success(emptyList())

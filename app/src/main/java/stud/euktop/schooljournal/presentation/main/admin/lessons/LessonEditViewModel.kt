@@ -48,7 +48,7 @@ class LessonEditViewModel @Inject constructor(
     }
 
     private fun loadLesson() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load",
             block = { lessonRepository.getLesson(lessonId) },
             onSuccess = { full ->
@@ -137,7 +137,7 @@ class LessonEditViewModel @Inject constructor(
                 roomId = Field(state.selectedRoom?.roomId, state.selectedRoom != null),
                 locationAddress = Field(state.locationAddress.takeIf { it.isNotBlank() }, true)
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 "save",
                 { lessonRepository.updateLesson(update) }) { routerAdmin.toBack() }
         } else {
@@ -152,7 +152,7 @@ class LessonEditViewModel @Inject constructor(
                 roomId = state.selectedRoom?.roomId,
                 locationAddress = state.locationAddress.takeIf { it.isNotBlank() }
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 "save",
                 { lessonRepository.addLesson(lesson) }) { routerAdmin.toBack() }
         }

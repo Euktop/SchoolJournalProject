@@ -144,7 +144,7 @@ class ClassEditViewModel @Inject constructor(
                     state.classTeacher?.userId != state.originalClassTeacherId
                 )
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 "save",
                 { classRepository.updateClass(update) }) { routerAdmin.toBack() }
         } else {
@@ -158,7 +158,7 @@ class ClassEditViewModel @Inject constructor(
                 academicYearEnd = state.academicYearEnd!!,
                 teacherId = state.classTeacher?.userId
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 "save",
                 { classRepository.addClass(newClass) }) { routerAdmin.toBack() }
         }

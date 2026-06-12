@@ -31,7 +31,7 @@ class SubjectsListViewModel @Inject constructor(
     fun loadNextPage() {
         if (isLoading("pagination") || !hasMore) return
         val offset = currentOffset
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "pagination",
             block = {
                 subjectRepository.getSubjects(
@@ -59,7 +59,7 @@ class SubjectsListViewModel @Inject constructor(
 
     fun editSubject(subject: Subject) = routerAdmin.toAdminEditSubject(subject.subjectId)
     fun deleteSubject(subjectId: Int) {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             "delete",
             { subjectRepository.deleteSubject(subjectId) }) { refresh() }
     }

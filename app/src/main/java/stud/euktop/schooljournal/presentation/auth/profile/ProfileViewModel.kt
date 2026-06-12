@@ -54,7 +54,7 @@ class ProfileViewModel @Inject constructor(
 
     fun onNextClick() {
         if (!_state.value.isButtonActive()) return
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "save_profile",
             block = {
                 authCoordinator.saveProfile(

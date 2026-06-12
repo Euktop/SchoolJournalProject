@@ -1,29 +1,39 @@
 package stud.euktop.schooljournal.presentation.main.admin.home
 
-import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.coordinator.AdminCoordinator
+import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import javax.inject.Inject
 
 @HiltViewModel
 class AdminHomeViewModel @Inject constructor(
-    private val router: RouterAdmin
-) : ViewModel() {
+    private val coordinator: AdminCoordinator,
+    private val router: RouterAdmin,
+    coordinatorExec: CoordinatorExec
+) : BaseViewModel<AdminHomeState, Unit>() {
 
-    private val _state = MutableStateFlow(AdminHomeState())
-    val state: StateFlow<AdminHomeState> = _state.asStateFlow()
+    override fun initState() = AdminHomeState()
 
     init {
+        executeCoordinator = coordinatorExec
         loadAdminProfile()
     }
 
     private fun loadAdminProfile() {
-
+        executeCoordinatorResultLoadingBlockSync(
+            key = "load_profile", block = { coordinator.getCurrentUser() }) { user ->
+            _state.update {
+                it.copy(
+                    adminName = "${user.firstName} ${user.lastName}".trim(), adminEmail = user.email
+                )
+            }
+        }
     }
 
+    // методы onDashboardClick, onSchoolsClick и т.д. остаются без изменений
     fun onDashboardClick() {
         router.toAdminDashboard()
     }

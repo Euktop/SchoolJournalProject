@@ -38,7 +38,7 @@ class UserEditViewModel @Inject constructor(
 
     // Загрузка пользователя (основные данные + роли)
     private fun loadUser() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load",
             block = { userRepository.getUser(userId) },
             onSuccess = { user ->
@@ -91,7 +91,7 @@ class UserEditViewModel @Inject constructor(
 
     // Добавление роли (мгновенно на сервер)
     fun addRole(role: Role, schoolId: Int?) {
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "add_role",
             block = { adminCoordinator.addUserRole(userId, role, schoolId) },
             onSuccess = { userRole ->
@@ -105,7 +105,7 @@ class UserEditViewModel @Inject constructor(
     // Удаление роли (мгновенно на сервер)
     fun removeRole(role: RoleWithSchool) {
         // Перед удалением показываем диалог подтверждения (фрагмент сам вызывает этот метод после подтверждения)
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "remove_role",
             block = { adminCoordinator.removeUserRole(userId, role.role, role.schoolId) },
             onSuccess = {
@@ -128,7 +128,7 @@ class UserEditViewModel @Inject constructor(
                 phone = Field(state.phone.value, true),
                 accountStatus = Field(state.accountStatus, true)
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 "save",
                 { userRepository.updateUser(update) }) { routerAdmin.toBack() }
         } else {
@@ -140,7 +140,7 @@ class UserEditViewModel @Inject constructor(
                 phone = state.phone.value,
                 accountStatus = state.accountStatus
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 "save",
                 { userRepository.addUser(profile, state.password.value) }) { routerAdmin.toBack() }
         }

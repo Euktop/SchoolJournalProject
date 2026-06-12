@@ -32,7 +32,7 @@ class ChangePasswordViewModel @Inject constructor(
     fun changePassword() {
         val state = _state.value
         if (!state.isFormValid()) return
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "change_password",
             block = {
                 authRepository.changePassword(

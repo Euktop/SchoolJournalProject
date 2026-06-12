@@ -46,7 +46,7 @@ class LoginViewModel @Inject constructor(
 
     fun onLoginClick() {
         if (!_state.value.isButtonActive()) return
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "login",
             block = {
                 authCoordinator.login(

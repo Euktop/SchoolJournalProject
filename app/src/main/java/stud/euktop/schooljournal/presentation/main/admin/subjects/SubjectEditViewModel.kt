@@ -37,7 +37,7 @@ class SubjectEditViewModel @Inject constructor(
     }
 
     private fun loadSubject() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load",
             block = { repository.getSubject(subjectId) },
             onSuccess = { subject ->
@@ -77,7 +77,7 @@ class SubjectEditViewModel @Inject constructor(
                     descriptionChanged
                 )
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 key = "save",
                 block = { repository.updateSubject(update) },
                 onSuccess = { routerAdmin.toBack() }
@@ -88,7 +88,7 @@ class SubjectEditViewModel @Inject constructor(
                 name = state.name.getValidate(),
                 description = state.description.getValidate().takeIf { it.isNotBlank() }
             )
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 key = "save",
                 block = { repository.addSubject(subject) },
                 onSuccess = { routerAdmin.toBack() }

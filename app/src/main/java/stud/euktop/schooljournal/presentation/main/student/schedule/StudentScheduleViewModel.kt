@@ -30,7 +30,7 @@ class StudentScheduleViewModel @Inject constructor(
 
     private fun loadCurrentStudent() {
         viewModelScope.launch {
-            executeWithLoading(
+            executeWithResultLoading(
                 key = "load_student",
                 block = { authRepository.getCurrentUser() },
                 onSuccess = { userInfo ->
@@ -66,7 +66,7 @@ class StudentScheduleViewModel @Inject constructor(
 
     fun loadSchedule() {
         val currentFilter = _state.value.filter
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_schedule",
             block = {
                 studentRepository.getStudentSchedule(

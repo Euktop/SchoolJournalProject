@@ -50,7 +50,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun loadSchoolName() {
         val userId = _state.value.user?.userId ?: return
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_school",
             block = { schoolAdminRepository.getSchool(userId) },
             onSuccess = { school ->
@@ -68,7 +68,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun updateAvatar(uri: Uri) {
         viewModelScope.launch {
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 key = "update_avatar",
                 block = { Result.success(Unit) },
                 onSuccess = { newAvatarUrl ->
@@ -79,7 +79,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun updateRole(newRole: Role) {
         viewModelScope.launch {
-            executeWithLoadingSync(
+            executeWithResultLoadingSync(
                 key = "update_role",
                 block = { authRepository.saveRole(newRole) },
                 onSuccess = {
@@ -89,6 +89,6 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout() {
-        executeWithLoadingSync("logout", { authRepository.logout() }, { routerProfile.toLogout() })
+        executeWithResultLoadingSync("logout", { authRepository.logout() }, { routerProfile.toLogout() })
     }
 }

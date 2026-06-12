@@ -25,7 +25,7 @@ class AuditLogDetailViewModel @Inject constructor(
     }
 
     private fun loadLog() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_log",
             block = { repository.getLogById(logId) }
         ) { log ->

@@ -33,7 +33,7 @@ class SchoolsListViewModel @Inject constructor(
     fun loadNextPage() {
         if (isLoading("pagination") || !hasMore) return
         val offset = currentOffset
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "pagination",
             block = {
                 schoolRepository.getSchools(
@@ -56,7 +56,7 @@ class SchoolsListViewModel @Inject constructor(
 
     fun editSchool(school: School) = routerAdmin.toAdminEditSchool(school.schoolId)
     fun deleteSchool(schoolId: Int) {
-        executeWithLoadingSync("delete", { schoolRepository.deleteSchool(schoolId) }) { refresh() }
+        executeWithResultLoadingSync("delete", { schoolRepository.deleteSchool(schoolId) }) { refresh() }
     }
 
     private fun refresh() {

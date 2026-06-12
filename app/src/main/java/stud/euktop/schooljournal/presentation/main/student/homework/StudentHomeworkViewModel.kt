@@ -35,7 +35,7 @@ class StudentHomeworkViewModel @Inject constructor(
     }
 
     private fun loadCurrentStudent() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_student",
             block = { authRepository.getCurrentUser() },
             onSuccess = { userInfo ->

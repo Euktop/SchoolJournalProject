@@ -40,7 +40,7 @@ class TeacherLessonsViewModel @Inject constructor(
 
     private fun loadLessons() {
         val filter = _state.value.filter
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "load_lessons",
             block = { coordinator.getLessons(classId, subjectId, filter.dateFrom, filter.dateTo) },
             onSuccess = { lessons -> _state.update { it.copy(lessons = lessons) } }

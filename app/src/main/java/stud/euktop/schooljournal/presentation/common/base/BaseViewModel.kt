@@ -73,36 +73,31 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
     }
 
     // Вариант executeWithCoordinator, который автоматически управляет загрузкой по ключу
-    protected suspend inline fun <T> executeWithLoading(
+    protected suspend inline fun <T> executeWithResultLoading(
         key: String,
         crossinline block: suspend () -> Result<T>,
         noinline onSuccess: suspend (T) -> Unit
     ) {
         startLoading(key)
         try {
-            executeWithCoordinator(block, onSuccess)
+            executeWithResult(block, onSuccess)
         } finally {
             stopLoading(key)
         }
     }
 
-    protected inline fun <T> executeWithLoadingSync(
+    protected inline fun <T> executeWithResultLoadingSync(
         key: String,
         crossinline block: suspend () -> Result<T>,
         noinline onSuccess: suspend (T) -> Unit
     ) = viewModelScope.launch {
-        executeWithLoading(key, block, onSuccess)
+        executeWithResultLoading(key, block, onSuccess)
     }
-
-    // ========== Старые методы с isLoading – удалены. ==========
-    // (были executeWithCoordinatorAndLoading и т.п.)
-
-    // ========== Общая обёртка для CoordinatorExec ==========
-    protected suspend inline fun <T> executeWithCoordinator(
+    protected suspend inline fun <T> executeWithResult(
         crossinline block: suspend () -> Result<T>,
         noinline onSuccess: suspend (T) -> Unit
     ) {
-        executeCoordinator(
+        executeCoordinatorResult(
             block = { executeCoordinator.exec { block() } },
             onSuccess = onSuccess
         )
@@ -120,7 +115,7 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
             return@async null
         }
 
-    protected suspend inline fun <T> executeCoordinator(
+    protected suspend inline fun <T> executeCoordinatorResult(
         block: suspend () -> CoordinatorResult<T>,
         onSuccess: suspend (T) -> Unit
     ) {
@@ -131,17 +126,17 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
     }
 
     // ========== Хелпер для блоков без Coordinator ==========
-    protected suspend inline fun <T> CoroutineScope.executeLoadingBlock(
+    protected suspend inline fun <T> CoroutineScope.executeCoordinatorResultLoadingBlock(
         key: String,
         crossinline block: suspend CoroutineScope.() -> CoordinatorResult<T>,
         crossinline onSuccess: suspend (T) -> Unit
-    ) = withLoading(key) { executeCoordinator({ block() }, onSuccess) }
+    ) = withLoading(key) { executeCoordinatorResult({ block() }, onSuccess) }
 
-    protected inline fun <T> executeLoadingBlockSync(
+    protected inline fun <T> executeCoordinatorResultLoadingBlockSync(
         key: String,
         crossinline block: suspend CoroutineScope.() -> CoordinatorResult<T>,
         crossinline onSuccess: suspend (T) -> Unit
-    ) = viewModelScope.launch { executeLoadingBlock(key, block, onSuccess) }
+    ) = viewModelScope.launch { executeCoordinatorResultLoadingBlock(key, block, onSuccess) }
 
     // ========== Координатор (инициализируется извне) ==========
     protected lateinit var executeCoordinator: CoordinatorExec

@@ -34,7 +34,7 @@ class AssignmentsListViewModel @Inject constructor(
         val offset = currentOffset
         val filterWithPagination =
             _state.value.filter.copy(pagination = Pagination(offset, PAGE_SIZE))
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "pagination",
             block = { assignmentRepository.getTeacherAssignments(filterWithPagination) }
         ) { newAssignments ->
@@ -55,7 +55,7 @@ class AssignmentsListViewModel @Inject constructor(
         routerAdmin.toAdminEditAssignment(assignment.assignmentId)
 
     fun deleteAssignment(assignmentId: AssignmentId) {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             "delete",
             { assignmentRepository.deleteTeacherAssignment(assignmentId) }) { refresh() }
     }

@@ -47,7 +47,7 @@ class AuditLogViewModel @Inject constructor(
     }
 
     fun loadStatistics() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "stats",
             block = { repository.getStatistics() },
             onSuccess = { stats -> _state.update { it.copy(statistics = stats) } }

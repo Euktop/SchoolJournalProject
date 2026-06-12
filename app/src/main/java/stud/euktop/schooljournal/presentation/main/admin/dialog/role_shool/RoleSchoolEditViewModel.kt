@@ -11,7 +11,6 @@ import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.repository.SchoolAdminRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +31,7 @@ class RoleSchoolEditViewModel @Inject constructor(
     }
 
     fun loadSchools(filter: SchoolFilter) {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_schools",
             block = { schoolAdminRepository.getSchools(filter) },
             onSuccess = { schools -> _schools.update { schools } }
@@ -40,7 +39,7 @@ class RoleSchoolEditViewModel @Inject constructor(
     }
 
     fun loadRoles() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_roles",
             block = { runCatching { roleRepository.getAvailableRoles() } },
             onSuccess = { roles -> _roles.update { roles } }

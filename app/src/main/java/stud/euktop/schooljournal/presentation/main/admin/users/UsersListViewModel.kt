@@ -37,7 +37,7 @@ class UsersListViewModel @Inject constructor(
     fun loadNextPage() {
         if (isLoading("pagination") || !hasMore) return
         val offset = currentOffset
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "pagination",
             block = {
                 userAdminRepository.getUsers(
@@ -72,7 +72,7 @@ class UsersListViewModel @Inject constructor(
     }
 
     fun deleteUser(userId: Int) {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "delete",
             block = { userAdminRepository.deleteUser(userId) },
             onSuccess = { refresh() }

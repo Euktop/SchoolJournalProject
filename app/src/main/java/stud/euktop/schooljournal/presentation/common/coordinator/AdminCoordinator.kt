@@ -24,6 +24,7 @@ import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.model.user.UserRole
 import stud.euktop.domain.model.user.UserUpdate
 import stud.euktop.domain.repository.AssignmentAdminRepository
+import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.ClassAdminRepository
 import stud.euktop.domain.repository.DashboardRepository
 import stud.euktop.domain.repository.SchoolAdminRepository
@@ -47,7 +48,8 @@ class AdminCoordinator @Inject constructor(
     private val subjectRepository: SubjectAdminRepository,
     private val assignmentRepository: AssignmentAdminRepository,
     private val dashboardRepository: DashboardRepository,
-    private val coordinatorExec: CoordinatorExec
+    private val authRepository: AuthRepository,
+    private val coordinatorExec: CoordinatorExec,
 ) {
 
     // ========== Школы ==========
@@ -159,4 +161,7 @@ class AdminCoordinator @Inject constructor(
 
     suspend fun getDashboardStatistics(): CoordinatorResult<DashboardStatistics> =
         coordinatorExec.exec { dashboardRepository.getStatistics() }
+
+    suspend fun getCurrentUser(): CoordinatorResult<UserProfile> =
+        coordinatorExec.exec { authRepository.getCurrentUser() }
 }

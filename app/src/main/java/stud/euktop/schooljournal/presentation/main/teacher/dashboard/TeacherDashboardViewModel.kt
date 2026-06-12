@@ -29,7 +29,7 @@ class TeacherDashboardViewModel @Inject constructor(
     }
 
     private fun loadProfile() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "profile",
             block = { authRepository.getCurrentUser() },
             onSuccess = { user ->
@@ -41,7 +41,7 @@ class TeacherDashboardViewModel @Inject constructor(
 
     private fun loadNextLesson() {
         // TODO: Реальная реализация - получить следующий урок учителя
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "nextLesson",
             block = { Result.success("") },
             onSuccess = { _ ->
@@ -52,7 +52,7 @@ class TeacherDashboardViewModel @Inject constructor(
 
     private fun loadStatistics() {
         // TODO: Реальная реализация - получить статистику
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "stats",
             block = { Result.success(Unit) },
             onSuccess = { _ ->

@@ -35,7 +35,7 @@ class StudentDashboardViewModel @Inject constructor(
     }
 
     private fun loadProfile() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "profile",
             block = { authRepository.getCurrentUser() },
             onSuccess = { user ->
@@ -55,7 +55,7 @@ class StudentDashboardViewModel @Inject constructor(
             set(java.util.Calendar.SECOND, 59)
         }.time
 
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "schedule",
             block = {
                 studentRepository.getStudentSchedule(
@@ -82,7 +82,7 @@ class StudentDashboardViewModel @Inject constructor(
     }
 
     private fun loadHomeworks() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "homeworks",
             block = { homeworkRepository.getHomeworks(stud.euktop.domain.model.homework.HomeworkFilter()) },
             onSuccess = { homeworks ->
@@ -98,7 +98,7 @@ class StudentDashboardViewModel @Inject constructor(
     }
 
     private fun loadSubjects() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "subjects",
             block = { studentRepository.getSubjectsSummary() },
             onSuccess = { subjects ->
@@ -108,7 +108,7 @@ class StudentDashboardViewModel @Inject constructor(
     }
 
     private fun loadOverallAverage() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "average",
             block = { studentRepository.getOverallAverage() },
             onSuccess = { overall ->

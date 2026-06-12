@@ -35,7 +35,7 @@ class LessonMarksViewModel @Inject constructor(
     }
 
     fun loadMarks() {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "load_marks",
             block = { repository.getMarks(lessonId) },
             onSuccess = { marks -> _state.update { it.copy(marks = marks) } }
@@ -51,7 +51,7 @@ class LessonMarksViewModel @Inject constructor(
     }
 
     fun saveGrade(studentId: Int, absenceTypes: AbsenceTypes?, comment: String?) {
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "save_grade",
             block = { gradeRepository.setGrade(lessonId, studentId, absenceTypes, comment) },
             onSuccess = { loadMarks() }

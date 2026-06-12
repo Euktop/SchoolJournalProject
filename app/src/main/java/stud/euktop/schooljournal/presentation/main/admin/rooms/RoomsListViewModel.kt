@@ -32,7 +32,7 @@ class RoomsListViewModel @Inject constructor(
     fun loadNextPage() {
         if (isLoading("pagination") || !hasMore) return
         val offset = currentOffset
-        executeWithLoadingSync(
+        executeWithResultLoadingSync(
             key = "pagination",
             block = {
                 roomRepository.getRooms(
@@ -55,7 +55,7 @@ class RoomsListViewModel @Inject constructor(
     }
 
     fun deleteRoom(roomId: Int) {
-        executeWithLoadingSync("delete", { roomRepository.deleteRoom(roomId) }) { refresh() }
+        executeWithResultLoadingSync("delete", { roomRepository.deleteRoom(roomId) }) { refresh() }
     }
 
     private fun refresh() {

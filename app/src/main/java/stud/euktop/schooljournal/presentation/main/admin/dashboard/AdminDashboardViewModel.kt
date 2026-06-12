@@ -24,7 +24,7 @@ class AdminDashboardViewModel @Inject constructor(
     private fun loadData() {
         // Зачем нам executeWithLoadingSync если нам даётся уже готовый CoordinatorResult
         // Также нам не нужен coordinatorExec - т.к. координатор сам уже делает
-        executeLoadingBlockSync("load_admin", { coordinator.getDashboardStatistics() }) { stats ->
+        executeCoordinatorResultLoadingBlockSync("load_admin", { coordinator.getDashboardStatistics() }) { stats ->
             _state.update {
                 it.copy(
                     schoolsCount = stats.schoolsCount,

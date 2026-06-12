@@ -21,7 +21,7 @@ class SelectRoleViewModel @Inject constructor(
     }
 
     fun updateRoles() {
-        executeLoadingBlockSync("role", {
+        executeCoordinatorResultLoadingBlockSync("role", {
             authCoordinator.getRoles()
         }) { roles ->
             _state.update { it -> it.copy(roles = roles.map { it.toItem() }) }
@@ -46,7 +46,7 @@ class SelectRoleViewModel @Inject constructor(
 
     fun onContinueClick() {
         val selectedRole = _state.value.selectedRole ?: return
-        executeLoadingBlockSync("save_role", { authCoordinator.saveRole(selectedRole) }, {
+        executeCoordinatorResultLoadingBlockSync("save_role", { authCoordinator.saveRole(selectedRole) }, {
             viewModelScope.launch {
                 routerAuth.toAfterSelectRole()
             }

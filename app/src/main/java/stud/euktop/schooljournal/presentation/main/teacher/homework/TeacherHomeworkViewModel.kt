@@ -32,20 +32,20 @@ class TeacherHomeworkViewModel @Inject constructor(
     }
 
     private fun loadCurrentUser() {
-        executeWithLoadingSync("load_user", { authRepository.getCurrentUser() }) { _ ->
+        executeWithResultLoadingSync("load_user", { authRepository.getCurrentUser() }) { _ ->
             loadAvailableLessons()
             loadHomeworkList()
         }
     }
 
     private fun loadAvailableLessons() {
-        executeWithLoadingSync("load_lessons", { lessonRepository.getLessons() }) { lessons ->
+        executeWithResultLoadingSync("load_lessons", { lessonRepository.getLessons() }) { lessons ->
             _state.update { it.copy(availableLessons = lessons) }
         }
     }
 
     private fun loadHomeworkList() {
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             "load_homework",
             { coordinator.getHomeworksWithDetails(_state.value.homeworkFilter.toDomain()) }) { list ->
             _state.update { it.copy(homeworkList = list) }
@@ -68,7 +68,7 @@ class TeacherHomeworkViewModel @Inject constructor(
 
     fun setEditMode(homeworkId: Int) {
         // загружаем конкретное ДЗ через координатор (или репозиторий)
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             "load_homework_item",
             { coordinator.getHomeworkWithDetails(homeworkId) }) { full ->
             _state.update {
@@ -90,7 +90,7 @@ class TeacherHomeworkViewModel @Inject constructor(
                 homeworkId = state.editingHomeworkId,
                 description = Field(state.description.getValidate(), true)
             )
-            executeWithLoadingSync("save", { homeworkRepository.updateHomework(update) }) {
+            executeWithResultLoadingSync("save", { homeworkRepository.updateHomework(update) }) {
                 _event.tryEmit(TeacherHomeworkEvent.NavigateBack)
             }
         } else {
@@ -101,7 +101,7 @@ class TeacherHomeworkViewModel @Inject constructor(
                 medias = emptyList(),
                 createdByUserId = 0
             )
-            executeWithLoadingSync("save", { homeworkRepository.addHomework(newHomework) }) {
+            executeWithResultLoadingSync("save", { homeworkRepository.addHomework(newHomework) }) {
                 loadHomeworkList()  // обновим список после добавления
                 _event.tryEmit(TeacherHomeworkEvent.NavigateBack)
             }

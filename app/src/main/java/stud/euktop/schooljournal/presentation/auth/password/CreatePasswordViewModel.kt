@@ -40,7 +40,7 @@ class CreatePasswordViewModel @Inject constructor(
 
     fun onSaveClick() {
         if (!_state.value.isNextActive()) return
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "register",
             block = { authCoordinator.register(_state.value.password.getValidate()) },
             onSuccess = { routerAuth.toSuccessCreate() }

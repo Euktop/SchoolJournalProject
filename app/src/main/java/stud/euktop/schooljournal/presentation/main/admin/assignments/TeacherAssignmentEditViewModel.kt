@@ -51,7 +51,7 @@ class TeacherAssignmentEditViewModel @Inject constructor(
     }
 
     private fun loadAssignment() {
-        executeLoadingBlockSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "load",
             block = { coordinator.getTeacherAssignmentFull(assignmentId!!) },
             onSuccess = { assignment ->
@@ -117,7 +117,7 @@ class TeacherAssignmentEditViewModel @Inject constructor(
                 validToDate = Field(state.validTo, state.validTo != state.originalValidTo),
                 isPrimary = Field(state.isPrimary, state.isPrimary != state.originalIsPrimary)
             )
-            executeLoadingBlockSync(
+            executeCoordinatorResultLoadingBlockSync(
                 key = "save",
                 block = { coordinator.updateTeacherAssignment(update) },
                 onSuccess = { routerAdmin.toBack() }
@@ -133,7 +133,7 @@ class TeacherAssignmentEditViewModel @Inject constructor(
                 validToDate = state.validTo,
                 isPrimary = state.isPrimary
             )
-            executeLoadingBlockSync(
+            executeCoordinatorResultLoadingBlockSync(
                 key = "save",
                 block = { coordinator.addTeacherAssignment(assignment) },
                 onSuccess = { routerAdmin.toBack() }
