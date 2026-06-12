@@ -4,7 +4,6 @@ package stud.euktop.schooljournal.presentation.common.navigate.impl
 
 import androidx.navigation.NavDirections
 import stud.euktop.domain.model.assignment.AssignmentId
-import stud.euktop.domain.model.audit.AuditLogListItem
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.Nav1Directions
 import stud.euktop.schooljournal.NavAdminDirections
@@ -262,7 +261,7 @@ class RouterImpl @Inject constructor(
     override fun toAuditLogDetail(id: Int) {
         navigationManager.navigate(
             NavCommand.ToAction(
-                NavAdminDirections.actionToAuditDetail(id)
+                NavMainMainDirections.actionGlobalAuditDetail(id)
             )
         )
     }

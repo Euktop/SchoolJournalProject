@@ -182,6 +182,20 @@
             app:argType="integer" />
     </fragment>
 
+    <fragment
+        android:id="@+id/auditLogDetailFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.audit_detail.AuditLogDetailFragment"
+        android:label="AuditLogDetailFragment">
+        <argument
+            android:name="id"
+            app:argType="kotlin.Int"
+            app:nullable="false" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_audit_detail"
+        app:destination="@id/auditLogDetailFragment" />
+
     <!-- Студенческие ДЗ -->
     <fragment
         android:id="@+id/studentHomeworkListFragment"

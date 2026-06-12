@@ -222,4 +222,24 @@
         <item quantity="other">%d заданий не сдано</item>
     </plurals>
     <string name="app_name">Школьный Дневник</string>
+    <string name="clear_grade">Очистить оценку</string>
+    <string name="user_name_or_id">Имя или ID пользователя</string>
+    <string name="table_name">Имя таблицы</string>
+    <string name="action_types">Типы действий</string>
+    <string name="audit_detail_main">Основная информация</string>
+    <string name="audit_id">ID лога</string>
+    <string name="audit_action_type">Тип действия</string>
+    <string name="audit_table">Таблица</string>
+    <string name="audit_object_id">ID объекта</string>
+    <string name="audit_executor">Исполнитель</string>
+    <string name="audit_event_time">Время события</string>
+    <string name="audit_ip">IP-адрес</string>
+    <string name="audit_data_changes">Изменения данных</string>
+    <string name="audit_old_value">Старое значение</string>
+    <string name="audit_new_value">Новое значение</string>
+    <string name="audit_technical_info">Техническая информация</string>
+    <string name="audit_user_agent">User Agent</string>
+    <string name="audit_request_method">Метод запроса</string>
+    <string name="audit_origin">Источник (Origin)</string>
+    <string name="audit_log_detail">Детали лога</string>
 </resources>

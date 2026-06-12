@@ -1,6 +1,424 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_bg_primary">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/color_bg_primary"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/audit_log_detail"
+        app:titleTextColor="@color/color_text_accent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Основная информация -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/color_stroke_default"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/audit_detail_main"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <!-- ID + ActionType -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/audit_id"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                            android:textColor="@color/color_text_primary"
+                            tools:text="12345" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/audit_action_type"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvActionType"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:background="@drawable/bg_chip_secondary"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption2.Medium"
+                            tools:text="UPDATE" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/audit_table"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvTableName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                            android:textColor="@color/color_text_primary"
+                            tools:text="students_records" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/audit_object_id"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvObjectId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                            android:textColor="@color/color_text_primary"
+                            tools:text="45012" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/audit_executor"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvExecutor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                            android:textColor="@color/color_text_primary"
+                            tools:text="Администратор (UID: 882)" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/audit_event_time"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvEventTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                            android:textColor="@color/color_text_primary"
+                            tools:text="12 окт. 2023, 14:32:15" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/audit_ip"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvIpAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                            android:textColor="@color/color_text_primary"
+                            tools:text="192.168.1.128" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Изменения данных (old / new) -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/color_stroke_default"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/audit_data_changes"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:divider="@drawable/div_16"
+                        android:showDividers="middle">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:text="@string/audit_old_value"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Medium"
+                                android:textColor="@color/color_error" />
+
+                            <TextView
+                                android:id="@+id/tvOldValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/color_bg_tertiary"
+                                android:fontFamily="monospace"
+                                android:padding="12dp"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                android:textColor="@color/color_text_secondary"
+                                tools:text='{\n  "gpa": 3.85,\n  "status": "active"\n}' />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="4dp"
+                                android:text="@string/audit_new_value"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Medium"
+                                android:textColor="@color/color_accent" />
+
+                            <TextView
+                                android:id="@+id/tvNewValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/color_bg_tertiary"
+                                android:fontFamily="monospace"
+                                android:padding="12dp"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                android:textColor="@color/color_text_secondary"
+                                tools:text='{\n  "gpa": 4.00,\n  "status": "active"\n}' />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Техническая информация -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/color_bg_secondary"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/color_stroke_default"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/audit_technical_info"
+                        android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                        android:textColor="@color/color_text_primary" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvUserAgentLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/audit_user_agent"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvUserAgent"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:fontFamily="monospace"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption2.Regular"
+                            android:textColor="@color/color_text_primary"
+                            tools:text="Mozilla/5.0 ..." />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/audit_request_method"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                android:textColor="@color/color_text_secondary" />
+
+                            <TextView
+                                android:id="@+id/tvRequestMethod"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                                android:textColor="@color/color_text_primary"
+                                tools:text="POST /api/v1/students/45012" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/audit_origin"
+                                android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                                android:textColor="@color/color_text_secondary" />
+
+                            <TextView
+                                android:id="@+id/tvOrigin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.SchJ.Text.Medium"
+                                android:textColor="@color/color_text_primary"
+                                tools:text="https://admin.academy.edu" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

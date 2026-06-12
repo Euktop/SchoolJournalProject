@@ -12,7 +12,7 @@ data class AuditLog(
     val eventTime: Instant,
     val ipAddress: String,
     val dataChange: DataChange,                  // old / new значения
-    val userAgent: Int,
+    val userAgent: String,
     val requestMethod: String,                   // например, POST /api/v1/students/45012
     val origin: String,                          // источник запроса
     val technicalInfo: Map<String, String>? = null // дополнительные поля
