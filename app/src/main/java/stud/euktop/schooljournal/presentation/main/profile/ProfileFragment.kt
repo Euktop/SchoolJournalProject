@@ -11,9 +11,7 @@ import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterProfile
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment :
@@ -24,26 +22,23 @@ class ProfileFragment :
 
     override val viewModel: ProfileViewModel by viewModels()
 
-    @Inject
-    lateinit var router: RouterProfile
-
     override fun setupUI() {
         binding.btnEditProfile.setOnClickListener {
-            val currentUser = viewModel.state.value.user ?: return@setOnClickListener
-            router.toEditUser(currentUser.userId)
+            viewModel.buttonProfileClick()
         }
 
         binding.btnChangePassword.setOnClickListener {
-            router.toChangePassword()
+            viewModel.changePasswordClick()
         }
 
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
         }
 
-        binding.btnEditAvatar.setOnClickListener {
-            viewModel.onAvatarClick()
-        }
+        /*        // Кнопка аватара пока не используется – скрываем
+                binding.btnEditAvatar.visibility = View.GONE*/
+
+        // Редактирование роли – открываем SelectRoleFragment
         binding.btnEditRole.setOnClickListener {
             viewModel.onRoleClick()
         }
