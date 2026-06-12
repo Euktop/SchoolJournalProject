@@ -4,60 +4,65 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.google.android.material.tabs.TabLayout
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectDetailBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
+import stud.euktop.uikit.R
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StudentSubjectDetailFragment : BaseFragment<
-        FragmentStudentSubjectDetailBinding,
-        StudentSubjectDetailViewModel,
-        StudentSubjectDetailState,
-        Unit>() {
+class StudentSubjectDetailFragment :
+    BaseFragment<FragmentStudentSubjectDetailBinding, StudentSubjectDetailViewModel, StudentSubjectDetailState, Unit>() {
 
     @Inject
     internal lateinit var router: RouterStudent
 
-    private val gradeAdapter by lazy {
-        StudentSubjectGradeAdapter { viewModel.onGradeClick(it) }
-    }
+    private lateinit var marksAdapter: StudentMarkPagingAdapter
 
-    override fun inflateBinding(i: LayoutInflater, c: ViewGroup?) =
-        FragmentStudentSubjectDetailBinding.inflate(i, c, false)
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
+        FragmentStudentSubjectDetailBinding.inflate(inflater, container, false)
 
     override val viewModel: StudentSubjectDetailViewModel by viewModels()
 
     override fun setupUI() {
-        binding.rvGrades.adapter = gradeAdapter
+        marksAdapter = StudentMarkPagingAdapter()
+        binding.rvGrades.adapter = marksAdapter
 
         binding.toolbar.setNavigationOnClickListener { viewModel.onBackClick() }
-        binding.tvAllGrades.setOnClickListener { viewModel.onAllGradesClick() }
 
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.position?.let(viewModel::onTabSelected)
+        lifecycleScope.launch {
+            viewModel.state.collect { state ->
+                state.marksPagingDataFlow?.collectLatest { pagingData ->
+                    marksAdapter.submitData(pagingData)
+                }
             }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+        }
     }
 
     override fun updateState(state: StudentSubjectDetailState) {
-        binding.toolbar.title = state.subjectName
-        binding.tvTeacherName.text = state.teacherName
-        binding.tvAverageMark.text = state.averageMark
-        binding.tvTrend.text = state.trend
-        binding.tvNextLesson.text = state.nextLesson
+        binding.toolbar.title = state.subjectSummary?.subjectName ?: ""
 
-        binding.containerGrades.visibility = if (state.selectedTab == 0) View.VISIBLE else View.GONE
-        binding.containerHomework.visibility =
-            if (state.selectedTab == 1) View.VISIBLE else View.GONE
+        val teacherName = state.subjectSummary?.teacherName
+        binding.headerInclude.tvTeacherName.text = teacherName?.ifEmpty { null }
+            ?: getString(R.string.subject_detail_teacher_not_specified)
 
-        gradeAdapter.submitList(state.grades)
+        binding.headerInclude.tvAverageMark.text = state.overallAverage?.let {
+            String.format(Locale.getDefault(), "%.2f", it)
+        } ?: getString(R.string.subject_detail_trend_not_available)
+
+        binding.headerInclude.tvTrend.text = state.trendFormatted
+        binding.headerInclude.tvTrend.visibility =
+            if (state.trendFormatted.isEmpty()) View.GONE else View.VISIBLE
+
+        val nextLesson = state.scheduleItems.firstOrNull()
+        binding.headerInclude.tvNextLesson.text = nextLesson?.let {
+            "${it.startTime} - ${it.subjectName}"
+        } ?: getString(R.string.subject_detail_no_next_lesson)
     }
 
     override fun updateEvent(event: Unit) {}

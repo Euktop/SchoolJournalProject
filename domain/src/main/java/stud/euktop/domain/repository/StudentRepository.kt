@@ -7,6 +7,7 @@ import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.student.StudentGradesSummary
 import stud.euktop.domain.model.student.StudentMarksAggregated
 import stud.euktop.domain.model.student.StudentOverallAverage
+import stud.euktop.domain.model.student.SubjectTrend
 import java.util.Date
 
 interface StudentRepository {
@@ -43,4 +44,9 @@ interface StudentRepository {
         startDate: Date? = null,
         endDate: Date? = null
     ): Result<List<StudentScheduleItem>>
+    suspend fun getSubjectTrend(
+        subjectId: Int,
+        studentId: Int? = null,
+        weeks: Int = 2 // за сколько недель сравнивать
+    ): Result<SubjectTrend>
 }

@@ -11,6 +11,7 @@ import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.student.StudentGradesSummary
 import stud.euktop.domain.model.student.StudentMarksAggregated
 import stud.euktop.domain.model.student.StudentOverallAverage
+import stud.euktop.domain.model.student.SubjectTrend
 import stud.euktop.domain.repository.StudentRepository
 import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
@@ -168,5 +169,14 @@ class StudentMockRepositoryImpl @Inject constructor(
                 locationAddress = null
             )
         )
+    }
+
+    override suspend fun getSubjectTrend(
+        subjectId: Int,
+        studentId: Int?,
+        weeks: Int
+    ): Result<SubjectTrend> {
+        // TODO: реальный расчёт через API (например, сравнение среднего за последние weeks недель с предыдущим периодом)
+        return Result.success(SubjectTrend(0.12, true, "+0.12 за неделю"))
     }
 }

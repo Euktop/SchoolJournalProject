@@ -6,6 +6,7 @@ import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.student.StudentGradesSummary
 import stud.euktop.domain.model.student.StudentMarksAggregated
 import stud.euktop.domain.model.student.StudentOverallAverage
+import stud.euktop.domain.model.student.SubjectTrend
 import stud.euktop.domain.repository.StudentRepository
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
@@ -81,4 +82,11 @@ class StudentCoordinator @Inject constructor(
         endDate: Date? = null
     ): CoordinatorResult<StudentOverallAverage> =
         coordinatorExec.exec { studentRepository.getOverallAverage(studentId, startDate, endDate) }
+
+    suspend fun getSubjectTrend(
+        subjectId: Int,
+        studentId: Int? = null,
+        weeks: Int = 2
+    ): CoordinatorResult<SubjectTrend> =
+        coordinatorExec.exec { studentRepository.getSubjectTrend(subjectId, studentId, weeks) }
 }

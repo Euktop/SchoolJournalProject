@@ -129,6 +129,7 @@
     <string name="trend_format">%1$s за неделю</string>
     <string name="valid_from">Дата начала</string>
     <string name="valid_to">Дата окончания</string>
+    <string name="topic_not_specified">Тема не указана</string>
     <string name="weight_format">Вес: %1$s</string>
     <string name="hello_admin">Здравствуйте, %1$s!</string>
     <string name="system_management">Управление системой</string>
@@ -257,4 +258,17 @@
     <string name="error_download">Ошибка скачивания</string>
     <string name="homework_detail_title">Детали задания</string>
     <string name="homework_date_format">Дата: %s</string>
+    <string name="grade_excellent">Отличная работа</string>
+    <string name="grade_good">Хорошая работа</string>
+    <string name="grade_lesson_default">Оценка за урок</string>
+    <string name="all_grades_not_implemented">Список всех оценок пока не доступен</string>
+    <string name="grade_detail_title">Детали оценки</string>
+    <string name="grade_value">Оценка: %d</string>
+    <string name="grade_absence">Отсутствие: %s</string>
+    <string name="grade_comment">Комментарий: %s</string>
+    <string name="subject_detail_teacher_not_specified">Не указан</string>
+    <string name="subject_detail_no_next_lesson">Нет ближайших уроков</string>
+    <string name="subject_detail_trend_not_available">—</string>
+    <string name="subject_detail_homework_coming_soon">Список домашних заданий будет доступен в следующей версии</string>
+    <string name="subject_detail_error_load">Ошибка загрузки данных</string>
 </resources>

@@ -27,9 +27,7 @@ class StudentScheduleFragment : BaseFragment<
     private lateinit var adapter: StudentScheduleAdapter
 
     override fun setupUI() {
-        adapter = StudentScheduleAdapter { item ->
-
-        }
+        adapter = StudentScheduleAdapter {}
         binding.rvSchedule.adapter = adapter
     }
 
