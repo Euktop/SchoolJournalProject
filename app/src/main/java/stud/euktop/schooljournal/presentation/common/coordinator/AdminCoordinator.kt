@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import stud.euktop.domain.model.assignment.AssignmentId
 import stud.euktop.domain.model.assignment.TeacherAssignment
 import stud.euktop.domain.model.assignment.TeacherAssignmentUpdate
+import stud.euktop.domain.model.dashboard.DashboardStatistics
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.ClassInfoFilter
 import stud.euktop.domain.model.school.ClassInfoUpdate
@@ -24,6 +25,7 @@ import stud.euktop.domain.model.user.UserRole
 import stud.euktop.domain.model.user.UserUpdate
 import stud.euktop.domain.repository.AssignmentAdminRepository
 import stud.euktop.domain.repository.ClassAdminRepository
+import stud.euktop.domain.repository.DashboardRepository
 import stud.euktop.domain.repository.SchoolAdminRepository
 import stud.euktop.domain.repository.SubjectAdminRepository
 import stud.euktop.domain.repository.UserAdminRepository
@@ -44,6 +46,7 @@ class AdminCoordinator @Inject constructor(
     private val classRepository: ClassAdminRepository,
     private val subjectRepository: SubjectAdminRepository,
     private val assignmentRepository: AssignmentAdminRepository,
+    private val dashboardRepository: DashboardRepository,
     private val coordinatorExec: CoordinatorExec
 ) {
 
@@ -153,4 +156,7 @@ class AdminCoordinator @Inject constructor(
 
     suspend fun deleteTeacherAssignment(id: AssignmentId): CoordinatorResult<Unit> =
         coordinatorExec.exec { assignmentRepository.deleteTeacherAssignment(id) }
+
+    suspend fun getDashboardStatistics(): CoordinatorResult<DashboardStatistics> =
+        coordinatorExec.exec { dashboardRepository.getStatistics() }
 }

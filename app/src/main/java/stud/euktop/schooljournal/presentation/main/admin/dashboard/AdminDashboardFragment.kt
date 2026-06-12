@@ -21,9 +21,8 @@ class AdminDashboardFragment :
         FragmentAdminDashboardBinding.inflate(inflater, container, false)
 
     override fun setupUI() {
-        binding.btnGenerateReport.setOnClickListener { viewModel.onGenerateReport() }
-        binding.btnInvite.setOnClickListener { viewModel.onInviteUsers() }
-        binding.btnMaintenance.setOnClickListener { viewModel.onMaintenance() }
+        // Кнопки Generate Report, Invite, Maintenance удалены из UI (или закомментированы)
+        // Если они нужны в будущем, их обработчики пока можно убрать.
     }
 
     override fun updateState(state: AdminDashboardState) {
