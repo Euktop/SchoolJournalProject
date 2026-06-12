@@ -33,8 +33,9 @@ class TeacherClassesFragment : BaseFragment<
         }
         binding.tvGreeting.text = greeting
 
-        val lessonsCount = state.classes.size
-        binding.tvLessonsCount.text = getString(R.string.lessons_today_format, lessonsCount)
+        val classesCount = state.classes.size
+        binding.tvClassesCount.text =
+            getString(stud.euktop.uikit.R.string.teacher_classes_count, classesCount)
 
         binding.rvClasses.submitList(state.classes)
     }

@@ -16,7 +16,7 @@
         android:background="@color/color_bg_primary"
         app:menu="@menu/menu_home_filter"
         app:navigationIcon="@null"
-        app:title="Мои классы"
+        app:title="@string/teacher_my_classes_title"
         app:titleTextColor="@color/color_text_accent" />
 
     <androidx.core.widget.NestedScrollView
@@ -56,15 +56,13 @@
                         tools:text="Добрый день, Александр Сергеевич" />
 
                     <TextView
-                        android:id="@+id/tvLessonsCount"
+                        android:id="@+id/tvClassesCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:textAppearance="@style/TextAppearance.SchJ.Title2.SemiBold"
                         android:textColor="@color/color_text_primary"
-                        tools:text="Сегодня у вас 4 занятия" />
-
-                    <!-- Чипы (пока статические) -->
+                        tools:text="Классов: 3" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

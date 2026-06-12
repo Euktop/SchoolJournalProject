@@ -292,4 +292,6 @@
     <string name="teacher_inspire_message">Будьте организованны, вдохновляйте учеников.</string>
     <string name="hello_teacher_name">Здравствуйте %s!</string>
     <string name="def_teacher_dashboard_name">Отсутсвует</string>
+    <string name="teacher_my_classes_title">My classes</string>
+    <string name="teacher_classes_count">Classes: %d</string>
 </resources>

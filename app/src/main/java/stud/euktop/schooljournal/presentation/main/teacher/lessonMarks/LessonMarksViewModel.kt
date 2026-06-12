@@ -31,7 +31,24 @@ class LessonMarksViewModel @Inject constructor(
     init {
         executeCoordinator = coordinatorExec
         loadMarks()
-        loadClassAndSubject()
+        loadLessonInfo()
+    }
+
+    private fun loadLessonInfo() {
+        executeWithResultLoadingSync(
+            key = "lesson_info",
+            block = { lessonRepository.getLesson(lessonId) }
+        ) { lesson ->
+            val info =
+                "${lesson.classInfo.grade}${lesson.classInfo.letter} – ${lesson.subject.name}"
+            _state.update { it.copy(classAndSubject = info) }
+        }
+    }
+
+    init {
+        executeCoordinator = coordinatorExec
+        loadMarks()
+        loadLessonInfo()  // вместо loadClassAndSubject()
     }
 
     fun loadMarks() {
@@ -40,10 +57,6 @@ class LessonMarksViewModel @Inject constructor(
             block = { repository.getMarks(lessonId) },
             onSuccess = { marks -> _state.update { it.copy(marks = marks) } }
         )
-    }
-
-    private fun loadClassAndSubject() {
-        _state.update { it.copy(classAndSubject = "5А – Математика") }
     }
 
     fun selectChip(index: Int) {
