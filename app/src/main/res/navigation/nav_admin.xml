@@ -48,6 +48,15 @@
         android:id="@+id/settingsFragment"
         android:name="stud.euktop.schooljournal.presentation.main.settings.SettingsFragment"
         android:label="Settings" />
+    <fragment
+        android:id="@+id/auditLogDetailFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.audit_detail.AuditLogDetailFragment"
+        android:label="AuditLogDetailFragment">
+        <argument
+            android:name="id"
+            app:argType="kotlin.Int"
+            app:nullable="false" />
+    </fragment>
 
     <!-- Действие для перехода на дашборд (очищает весь стек и переходит на Dashboard) -->
     <action
@@ -88,5 +97,8 @@
     <action
         android:id="@+id/action_to_settings"
         app:destination="@id/settingsFragment" />
+    <action
+        android:id="@+id/action_to_audit_detail"
+        app:destination="@id/auditLogDetailFragment" />
 
 </navigation>

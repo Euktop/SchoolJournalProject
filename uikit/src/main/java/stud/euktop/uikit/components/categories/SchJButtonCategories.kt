@@ -1,13 +1,11 @@
 package stud.euktop.uikit.components.categories
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -23,7 +21,7 @@ class SchJButtonCategories @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RecyclerView(context, attr, defStyleAttr) {
     init {
-        layoutManager = LinearLayoutManager(context, LinearLayout.HORIZONTAL, false)
+        layoutManager = LinearLayoutManager(context, HORIZONTAL, false)
         addItemDecoration(Decoration)
         clipChildren = false
         clipToPadding = false
@@ -98,6 +96,12 @@ class SchJButtonCategories @JvmOverloads constructor(
                 it.first,
                 it.second
             )
+        })
+    }
+
+    fun <T> updateListCategory(list: List<Category<T>>) {
+        (adapter as? ListAdapter<Category<T>, *>)?.submitList(list.map {
+            it
         })
     }
 }

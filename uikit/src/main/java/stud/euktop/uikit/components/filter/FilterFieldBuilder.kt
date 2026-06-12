@@ -38,7 +38,8 @@ object FilterFieldBuilder {
     ) : ListAdapter<T, SimpleListAdapter.ViewHolder>(DiffCallback()), SelectableAdapter<T> {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val binding = ItemListTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                ItemListTextBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return ViewHolder(binding)
         }
 
@@ -52,6 +53,7 @@ object FilterFieldBuilder {
 
         class DiffCallback<T : Any> : DiffUtil.ItemCallback<T>() {
             override fun areItemsTheSame(oldItem: T, newItem: T) = oldItem == newItem
+
             @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(oldItem: T, newItem: T) = oldItem == newItem
         }
@@ -80,7 +82,8 @@ object FilterFieldBuilder {
         selectedItem: T? = null,
         onShowing: (() -> Unit)? = null
     ): SelectResult<T> {
-        val binding = FilterSingleSelectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            FilterSingleSelectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.tvText.text = title
         val select = binding.selectSingle
         val adapter = SimpleListAdapter(toText) { value ->
@@ -113,7 +116,11 @@ object FilterFieldBuilder {
         showFilterDialog: (() -> Unit)? = null,
         onShowing: (() -> Unit)? = null
     ): AddSearchableSelectResult<T> {
-        val binding = FilterSearchableSelectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = FilterSearchableSelectBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         binding.tvTitle.text = title
         val select = binding.selectSearchable
         val adapter = SimpleListAdapter(toText) { value ->
@@ -132,8 +139,19 @@ object FilterFieldBuilder {
 
     data class DateRangeResult(
         val fromInput: SchJInput,
-        val toInput: SchJInput
-    )
+        val toInput: SchJInput,
+        val dateFormatter: SimpleDateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    ) {
+        private fun setTitle(input: SchJInput, date: Date?) {
+            input.state =
+                input.state.copy(text = date?.let {
+                    dateFormatter.format(it)
+                } ?: "")
+        }
+
+        fun setTitleTo(date: Date?) = setTitle(toInput, date)
+        fun setTitleFrom(date: Date?) = setTitle(fromInput, date)
+    }
 
     fun addDateRange(
         parent: LinearLayout,
@@ -144,7 +162,8 @@ object FilterFieldBuilder {
         onFromDateSelected: (Date?) -> Unit = {},
         onToDateSelected: (Date?) -> Unit = {}
     ): DateRangeResult {
-        val binding = FilterDateRangeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            FilterDateRangeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         var dialogRef: DatePickerDialog? = null
 
         fun SchJInput.setupDatePicker(initialDate: Date?, onDateSelected: (Date?) -> Unit) {
@@ -152,7 +171,15 @@ object FilterFieldBuilder {
                 override fun afterTextChanged(s: Editable?) {
                     if (s?.toString().isNullOrEmpty()) onDateSelected(null)
                 }
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
             setOnClickListener {
@@ -179,11 +206,11 @@ object FilterFieldBuilder {
         toInput.setupDatePicker(toDate) { onToDateSelected(it) }
 
         parent.addView(binding.root)
-        return DateRangeResult(fromInput, toInput)
+        return DateRangeResult(fromInput, toInput, dateFormat)
     }
 
     fun <T : Any> addCategories(
-        parent: LinearLayout,
+        parent: ViewGroup,
         title: String,
         items: List<Category<T>>,
         toText: (T) -> String,

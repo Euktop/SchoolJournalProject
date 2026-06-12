@@ -34,7 +34,7 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
     protected abstract fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?): BINDING
     protected abstract fun setupUI()
     protected abstract fun updateState(state: STATE)
-    protected abstract fun updateEvent(event: EVENT)
+    protected open fun updateEvent(event: EVENT) {}
 
     private lateinit var bindingDelegate: BindingDelegate<BINDING>
 
@@ -60,7 +60,7 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
-        messages = SnackBarMessages(binding.root,lifecycleScope)
+        messages = SnackBarMessages(binding.root, lifecycleScope)
         observeMessage(viewModel, messages)
         observeViewModel()
     }

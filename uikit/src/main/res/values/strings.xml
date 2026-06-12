@@ -240,4 +240,8 @@
     </plurals>
     <string name="app_name">School Journal</string>
     <string name="clear_grade">Очистить оценку</string>
+
+    <string name="user_name_or_id">Имя или ID пользователя</string>
+    <string name="table_name">Имя таблицы</string>
+    <string name="action_types">Типы действий</string>
 </resources>
