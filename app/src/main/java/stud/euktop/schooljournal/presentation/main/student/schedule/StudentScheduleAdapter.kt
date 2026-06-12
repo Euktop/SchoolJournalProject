@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import stud.euktop.domain.model.schedule.StudentScheduleItem
 import stud.euktop.domain.utils.toBaseString
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.ItemStudentScheduleBinding
 
 class StudentScheduleAdapter(
@@ -30,11 +31,15 @@ class StudentScheduleAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: StudentScheduleItem) {
             binding.tvDate.text = item.date.toBaseString()
-            binding.tvTime.text = "${item.startTime} - ${item.endTime}"
+            val startStr = item.startTime
+            val endStr = item.endTime
+            binding.tvTime.text =
+                binding.root.context.getString(R.string.time_range, startStr, endStr)
             binding.tvSubject.text = item.subjectName
             binding.tvTopic.text = item.topic
             binding.tvTeacher.text = item.teacherFullName
-            binding.tvRoom.text = item.roomName ?: item.locationAddress ?: "Не указано"
+            binding.tvRoom.text = item.roomName ?: item.locationAddress
+                    ?: binding.root.context.getString(R.string.room_not_specified)
             binding.root.setOnClickListener { onItemClick(item) }
         }
     }

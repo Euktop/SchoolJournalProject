@@ -55,6 +55,7 @@
     <string name="last_grades">Последние оценки</string>
     <string name="lesson">Урок</string>
     <string name="lesson_marks_title">Оценки за урок</string>
+    <string name="hello_student_format">Здравствуй, %s!</string>
     <string name="lessons_today_format">Сегодня у вас %1$d занятий</string>
     <string name="location_address">Адрес (для выездного урока)</string>
     <string name="my_subjects">Мои предметы</string>
@@ -197,4 +198,28 @@
     <string name="welcome_admin_format">Здравствуйте, %s!</string>
     <string name="home">Главная</string>
     <string name="profile">Профиль</string>
+    <string name="subjects_count_format">%d предметов</string>
+    <string name="homeworks_not_submitted_format">%d задания не сдано</string>
+
+    <plurals name="lessons_count">
+        <item quantity="one">%d урок сегодня</item>
+        <item quantity="few">%d урока сегодня</item>
+        <item quantity="many">%d уроков сегодня</item>
+        <item quantity="other">%d уроков сегодня</item>
+    </plurals>
+
+    <plurals name="subjects_count">
+        <item quantity="one">%d предмет</item>
+        <item quantity="few">%d предмета</item>
+        <item quantity="many">%d предметов</item>
+        <item quantity="other">%d предметов</item>
+    </plurals>
+
+    <plurals name="homeworks_not_submitted">
+        <item quantity="one">%d задание не сдано</item>
+        <item quantity="few">%d задания не сдано</item>
+        <item quantity="many">%d заданий не сдано</item>
+        <item quantity="other">%d заданий не сдано</item>
+    </plurals>
+    <string name="app_name">Школьный Дневник</string>
 </resources>

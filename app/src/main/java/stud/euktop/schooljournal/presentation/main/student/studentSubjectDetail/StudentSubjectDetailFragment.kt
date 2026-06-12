@@ -53,7 +53,6 @@ class StudentSubjectDetailFragment : BaseFragment<
         binding.tvTrend.text = state.trend
         binding.tvNextLesson.text = state.nextLesson
 
-        // Переключение табов
         binding.containerGrades.visibility = if (state.selectedTab == 0) View.VISIBLE else View.GONE
         binding.containerHomework.visibility =
             if (state.selectedTab == 1) View.VISIBLE else View.GONE

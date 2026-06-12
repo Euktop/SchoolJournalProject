@@ -19,11 +19,13 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Welcome Card -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardWelcome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
+                android:foreground="?attr/selectableItemBackground"
                 app:cardBackgroundColor="@color/color_accent"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp">
@@ -38,9 +40,9 @@
                         android:id="@+id/tvWelcomeTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/hello_student"
                         android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold"
-                        android:textColor="@color/color_text_on_accent" />
+                        android:textColor="@color/color_text_on_accent"
+                        tools:text="Здравствуй, Ученик!" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -58,7 +60,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <!-- New Homeworks -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -81,12 +82,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="3"
                                 android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
-                                android:textColor="@color/color_text_on_accent" />
+                                android:textColor="@color/color_text_on_accent"
+                                tools:text="3" />
                         </LinearLayout>
 
-                        <!-- Average Mark -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -109,9 +109,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="4.8"
                                 android:textAppearance="@style/TextAppearance.SchJ.Title2.Bold"
-                                android:textColor="@color/color_text_on_accent" />
+                                android:textColor="@color/color_text_on_accent"
+                                tools:text="4.8" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -133,6 +133,7 @@
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/bg_bento_card"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -162,12 +163,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="@string/lessons_today"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
-                        android:textColor="@color/color_text_secondary" />
+                        android:textColor="@color/color_text_secondary"
+                        tools:text="5 уроков сегодня" />
                 </LinearLayout>
 
-                <!-- My Subjects -->
+                <!-- Subjects -->
                 <LinearLayout
                     android:id="@+id/btnSubjects"
                     android:layout_width="0dp"
@@ -175,6 +176,7 @@
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/bg_bento_card"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -204,9 +206,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="@string/subjects_count"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
-                        android:textColor="@color/color_text_secondary" />
+                        android:textColor="@color/color_text_secondary"
+                        tools:text="8 предметов" />
                 </LinearLayout>
 
                 <!-- Marks Details -->
@@ -217,6 +219,7 @@
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/bg_bento_card"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -251,47 +254,64 @@
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
 
-                <!-- Homework -->
-                <LinearLayout
+                <!-- Homework (Wrapped in FrameLayout for Badge) -->
+                <FrameLayout
                     android:id="@+id/btnHomework"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
-                    android:background="@drawable/bg_bento_card"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:foreground="?attr/selectableItemBackground">
 
-                    <FrameLayout
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@drawable/bg_icon_circle_primary">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_assignment"
-                            app:tint="@color/color_text_primary" />
-                    </FrameLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/homeworks"
-                        android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
-                        android:textColor="@color/color_text_primary" />
+                        android:background="@drawable/bg_bento_card"
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
-                    <TextView
-                        android:id="@+id/tvHomeworkSubtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="@string/homeworks_not_submitted"
-                        android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
-                        android:textColor="@color/color_text_secondary" />
-                </LinearLayout>
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginBottom="16dp"
+                            android:background="@drawable/bg_icon_circle_primary">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_assignment"
+                                app:tint="@color/color_text_primary" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/homeworks"
+                            android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
+                            android:textColor="@color/color_text_primary" />
+
+                        <TextView
+                            android:id="@+id/tvHomeworkSubtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
+                            android:textColor="@color/color_text_secondary"
+                            tools:text="3 задания не сдано" />
+                    </LinearLayout>
+
+                    <!-- Notification Badge -->
+                    <View
+                        android:id="@+id/badgeHomework"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:layout_gravity="top|end"
+                        android:layout_margin="12dp"
+                        android:background="@drawable/bg_circle_error"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </FrameLayout>
 
                 <!-- Analytics -->
                 <LinearLayout
@@ -301,6 +321,7 @@
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/bg_bento_card"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -342,6 +363,7 @@
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/bg_bento_card"
+                    android:foreground="?attr/selectableItemBackground"
                     android:orientation="vertical"
                     android:padding="20dp">
 
@@ -392,7 +414,6 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Header -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -415,12 +436,11 @@
                             android:background="@drawable/bg_next_lesson_badge"
                             android:paddingHorizontal="8dp"
                             android:paddingVertical="4dp"
-                            android:text="@string/in_15_min"
                             android:textAppearance="@style/TextAppearance.SchJ.Caption2.Bold"
-                            android:textColor="@color/color_text_accent" />
+                            android:textColor="@color/color_text_accent"
+                            tools:text="ЧЕРЕЗ 15 МИН" />
                     </LinearLayout>
 
-                    <!-- Lesson Info -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -451,22 +471,21 @@
                                 android:id="@+id/tvLessonName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/higher_math"
                                 android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
-                                android:textColor="@color/color_text_primary" />
+                                android:textColor="@color/color_text_primary"
+                                tools:text="Высшая математика" />
 
                             <TextView
                                 android:id="@+id/tvLessonDetails"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/room_and_teacher"
                                 android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
-                                android:textColor="@color/color_text_secondary" />
+                                android:textColor="@color/color_text_secondary"
+                                tools:text="Каб. 402 • Проф. Ричардсон" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_teacher"
+    app:startDestination="@id/teacherDashboardFragment">
+
+    <fragment
+        android:id="@+id/teacherDashboardFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.dashboard.TeacherDashboardFragment"
+        android:label="Главная"
+        tools:layout="@layout/fragment_teacher_dashboard" />
+
+    <fragment
+        android:id="@+id/teacherClassesFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.teacherClass.TeacherClassesFragment"
+        android:label="Мои классы"
+        tools:layout="@layout/fragment_teacher_classes" />
+
+    <fragment
+        android:id="@+id/teacherLessonsFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.teacherLessons.TeacherLessonsFragment"
+        android:label="Уроки"
+        tools:layout="@layout/fragment_teacher_lessons">
+        <argument
+            android:name="classId"
+            app:argType="integer" />
+        <argument
+            android:name="subjectId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/lessonMarksFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.lessonMarks.LessonMarksFragment"
+        android:label="Оценки за урок"
+        tools:layout="@layout/fragment_lesson_marks">
+        <argument
+            android:name="lessonId"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/teacherHomeworkListFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.teacher.homework.TeacherHomeworkListFragment"
+        android:label="Домашние задания"
+        tools:layout="@layout/fragment_teacher_homework_list" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.profile.ProfileFragment"
+        android:label="Профиль"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>
+

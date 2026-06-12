@@ -37,7 +37,6 @@ class StudentSubjectsViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         overallAverage = overall.averageMark,
-                        totalGrades = overall.totalGrades
                     )
                 }
             }

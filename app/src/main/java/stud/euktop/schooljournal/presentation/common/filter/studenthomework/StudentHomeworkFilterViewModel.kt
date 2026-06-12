@@ -1,4 +1,4 @@
-package stud.euktop.schooljournal.presentation.main.student.homework
+package stud.euktop.schooljournal.presentation.common.filter.studenthomework
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

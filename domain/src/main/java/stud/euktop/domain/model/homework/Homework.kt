@@ -8,5 +8,6 @@ data class Homework(
     val description: String,
     val createdAt: Date,
     val medias: List<HomeworkMedia>,
-    val createdByUserId: Int
+    val createdByUserId: Int,
+    val isSubmitted: Boolean = false
 )

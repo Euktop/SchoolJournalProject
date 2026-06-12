@@ -326,4 +326,23 @@ class RouterImpl @Inject constructor(
     override fun toMaintenance() {
         // TODO: диалог обслуживания
     }
+
+    override fun toSchedule() {
+//        nav(NavStudentDirections.actionDashboardToSchedule())
+    }
+
+    override fun toSubjects() {
+//        nav(NavStudentDirections.actionDashboardToSubjects())
+    }
+
+    override fun toMarks() {
+        /* Экран еще не создан, но метод в интерфейсе есть */
+    }
+
+    override fun toHomework() {
+//        nav(NavStudentDirections.actionDashboardToHomework())
+    }
+
+    override fun toAnalytics() { /* Экран еще не создан */
+    }
 }

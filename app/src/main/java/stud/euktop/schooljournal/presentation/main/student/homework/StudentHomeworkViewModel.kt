@@ -1,10 +1,13 @@
 package stud.euktop.schooljournal.presentation.main.student.homework
 
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import stud.euktop.domain.model.homework.HomeworkFull
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.HomeworkRepository
-import stud.euktop.domain.repository.StudentRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.filter.homework.AppHomeworkFilter
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
@@ -43,15 +46,26 @@ class StudentHomeworkViewModel @Inject constructor(
     }
 
     private fun loadHomework() {
-        executeWithLoadingSync(
-            key = "load_homework",
-            block = {
+        viewModelScope.launch {
+            withLoading("load_homework") {
                 val filter = _state.value.filter.toDomain()
-                homeworkRepository.getHomeworks(filter)
-            },
-            onSuccess = { list ->
+                val list = executeCoordinatorResult {
+                    homeworkRepository.getHomeworks(filter)
+                }.await()?.map {
+                    executeCoordinatorResult {
+                        homeworkRepository.getHomeworkFullById(it.homeworkId)
+                    }
+                }?.awaitAll()?.filterNotNull() ?: emptyList()
                 _state.update { it.copy(homeworkList = list) }
             }
-        )
+        }
+    }
+
+    fun onHomeWorkClick(homeworkFull: HomeworkFull) {
+        //По факту, ничего не делает, т.к. и так уже показывается подробная информация
+    }
+
+    fun onMediaClick(mediaId: Int) {
+        //TODO("Тут нужно будет добавить логику загрузки файла, но до начала не забыть создать общую утилиту для работы с файлом в common.")
     }
 }

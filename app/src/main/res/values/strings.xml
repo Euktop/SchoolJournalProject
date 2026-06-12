@@ -158,4 +158,6 @@
     <string name="i_agree_to_the_terms_of_use_and_privacy_policy">I agree to the Terms of Use and Privacy Policy</string>
     <string name="audit_log">Логи</string>
     <string name="schools">Школы</string>
+    <string name="time_range" translatable="false">%1$s - %2$s</string>
+    <string name="theme_not_supported">Тема не указана</string>
 </resources>

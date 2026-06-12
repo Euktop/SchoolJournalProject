@@ -1,4 +1,4 @@
-package stud.euktop.schooljournal.presentation.main.student.homework
+package stud.euktop.schooljournal.presentation.common.filter.studenthomework
 
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels

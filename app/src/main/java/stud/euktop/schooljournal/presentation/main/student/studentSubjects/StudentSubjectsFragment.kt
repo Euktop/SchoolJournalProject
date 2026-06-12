@@ -55,8 +55,5 @@ class StudentSubjectsFragment :
     override fun updateEvent(event: Unit) {}
     override fun getToolbarConfig() = ToolbarConfig(
         titleRes = stud.euktop.uikit.R.string.my_subjects,
-        menuRes = R.menu.menu_home_filter,
-        onMenuItemClick = {
-        },
     )
 }

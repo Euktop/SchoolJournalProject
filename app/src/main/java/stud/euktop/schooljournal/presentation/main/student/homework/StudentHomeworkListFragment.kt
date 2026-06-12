@@ -6,11 +6,11 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentHomeworkListBinding
+import stud.euktop.schooljournal.presentation.common.adapter.HomeworkAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
-import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
+import stud.euktop.schooljournal.presentation.common.filter.studenthomework.StudentHomeworkFilterDialog
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class StudentHomeworkListFragment :
@@ -22,24 +22,25 @@ class StudentHomeworkListFragment :
 
     override val viewModel: StudentHomeworkViewModel by viewModels()
 
-    @Inject
-    lateinit var navigationManager: NavigationManager
-
-    private lateinit var adapter: StudentHomeworkAdapter
+    private lateinit var adapter: HomeworkAdapter
 
     override fun setupUI() {
-        adapter = StudentHomeworkAdapter {}
+        adapter = HomeworkAdapter(
+            onItemClick = viewModel::onHomeWorkClick,
+            onMediaDownload = viewModel::onMediaClick,
+            onMediaDelete = null,
+            isEditMode = false
+        )
         binding.rvHomeworkList.adapter = adapter
     }
 
     private fun showFilterDialog() {
-        val currentFilter = viewModel.state.value.filter
-        val dialog = StudentHomeworkFilterDialog(
-            initialFilter = currentFilter, onFilterApplied = { filter ->
-                viewModel.filterApplied(filter)
-            }, onError = viewModel.onError
-        )
-        dialog.show(parentFragmentManager, "filter")
+        if (parentFragmentManager.findFragmentByTag("filter") != null) return
+        StudentHomeworkFilterDialog(
+            initialFilter = viewModel.state.value.filter,
+            onFilterApplied = viewModel::filterApplied,
+            onError = viewModel.onError
+        ).show(parentFragmentManager, "filter")
     }
 
     override fun updateState(state: StudentHomeworkState) {
