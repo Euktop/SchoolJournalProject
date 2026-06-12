@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_bg_primary"
@@ -33,7 +34,7 @@
                     android:id="@+id/tvWelcomeTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Здравствуйте, Учитель!"
+                    android:text="@string/teacher_greeting"
                     android:textAppearance="@style/TextAppearance.SchJ.Title1.Bold"
                     android:textColor="@color/color_text_on_accent" />
 
@@ -41,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Готовы к следующему уроку?"
+                    android:text="@string/teacher_ready_question"
                     android:textAppearance="@style/TextAppearance.SchJ.Text.Regular"
                     android:textColor="@color/color_text_on_accent" />
 
@@ -77,7 +78,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="СЛЕДУЮЩИЙ УРОК"
+                            android:text="@string/teacher_next_lesson_label"
                             android:textAppearance="@style/TextAppearance.SchJ.Caption2.Bold"
                             android:textColor="@color/color_text_on_accent" />
 
@@ -85,9 +86,10 @@
                             android:id="@+id/tvNextLesson"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="10:30, 5А (Алгебра)"
+                            android:text=""
                             android:textAppearance="@style/TextAppearance.SchJ.Title3.SemiBold"
-                            android:textColor="@color/color_text_on_accent" />
+                            android:textColor="@color/color_text_on_accent"
+                            tools:text="10:30, 5А (Алгебра)" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -132,17 +134,19 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Расписание учителя"
+                        android:text="@string/teacher_schedule"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
+                        android:id="@+id/tvLessonsToday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="4 урока сегодня"
+                        android:text=""
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
-                        android:textColor="@color/color_text_secondary" />
+                        android:textColor="@color/color_text_secondary"
+                        tools:text="4 урока сегодня" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -177,15 +181,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Мои классы"
+                        android:text="@string/teacher_my_classes"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Список классов"
+                        android:text="@string/teacher_class_list"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
@@ -222,15 +225,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Список уроков"
+                        android:text="@string/teacher_lessons_list"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="План занятий"
+                        android:text="@string/teacher_lesson_plan"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
@@ -267,15 +269,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Выставление оценок"
+                        android:text="@string/teacher_grading"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Ожидают проверки"
+                        android:text="@string/teacher_pending_checks"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
@@ -312,15 +313,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Список ДЗ"
+                        android:text="@string/teacher_homework_list"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Отслеживать сдачу"
+                        android:text="@string/teacher_track_submission"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
@@ -357,15 +357,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Создать ДЗ"
+                        android:text="@string/teacher_create_homework"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Новое задание"
+                        android:text="@string/teacher_new_assignment"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
@@ -402,15 +401,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Аналитика"
+                        android:text="@string/teacher_analytics"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Успеваемость класса"
+                        android:text="@string/teacher_class_performance"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
@@ -447,15 +445,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Настройки"
+                        android:text="@string/teacher_settings"
                         android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                         android:textColor="@color/color_text_primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Приложения"
+                        android:text="@string/teacher_app_preferences"
                         android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                         android:textColor="@color/color_text_secondary" />
                 </LinearLayout>
@@ -482,7 +479,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Академическое превосходство"
+                    android:text="@string/teacher_academic_excellence"
                     android:textAppearance="@style/TextAppearance.SchJ.Headline.Bold"
                     android:textColor="@color/color_text_accent" />
 
@@ -491,7 +488,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="Будьте организованны, вдохновляйте учеников."
+                    android:text="@string/teacher_inspire_message"
                     android:textAppearance="@style/TextAppearance.SchJ.Caption.Regular"
                     android:textColor="@color/color_text_secondary" />
             </LinearLayout>

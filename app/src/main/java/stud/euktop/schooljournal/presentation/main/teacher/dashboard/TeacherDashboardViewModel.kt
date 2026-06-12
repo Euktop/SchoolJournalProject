@@ -4,6 +4,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.coordinator.TeacherCoordinator
+import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterTeacher
 import javax.inject.Inject
@@ -11,6 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TeacherDashboardViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val teacherCoordinator: TeacherCoordinator,
     private val routerTeacher: RouterTeacher,
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<TeacherDashboardState, Unit>() {
@@ -40,32 +43,42 @@ class TeacherDashboardViewModel @Inject constructor(
     }
 
     private fun loadNextLesson() {
-        // TODO: Реальная реализация - получить следующий урок учителя
-        executeWithResultLoadingSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "nextLesson",
-            block = { Result.success("") },
-            onSuccess = { _ ->
-                _state.update { it.copy(nextLessonInfo = "10:30, 5А (Алгебра)") }
+            block = {
+                val user = authRepository.getCurrentUser().getOrNull()
+                if (user != null) teacherCoordinator.getNextLesson(user.userId)
+                else CoordinatorResult.Success(null)
+            },
+            onSuccess = { lesson ->
+                val info = lesson?.let {
+                    "${it.startTime}, ${it.topic?.take(20) ?: "урок"}"
+                } ?: ""
+                _state.update { it.copy(nextLessonInfo = info) }
             }
         )
     }
 
     private fun loadStatistics() {
-        // TODO: Реальная реализация - получить статистику
-        executeWithResultLoadingSync(
+        executeCoordinatorResultLoadingBlockSync(
             key = "stats",
-            block = { Result.success(Unit) },
-            onSuccess = { _ ->
+            block = {
+                val user = authRepository.getCurrentUser().getOrNull()
+                if (user != null) teacherCoordinator.getTeacherStatistics(user.userId)
+                else CoordinatorResult.Success(TeacherStatistics(0, 0))
+            },
+            onSuccess = { stats ->
                 _state.update {
                     it.copy(
-                        lessonsCount = 4,
-                        classesCount = 3
+                        lessonsCount = stats.lessonsTodayCount,
+                        classesCount = stats.classesCount
                     )
                 }
             }
         )
     }
 
+    // Навигация (без изменений)
     fun onScheduleClick() = routerTeacher.toTeacherSchedule()
     fun onMyClassesClick() = routerTeacher.toTeacherClasses()
     fun onLessonsListClick() = routerTeacher.toTeacherClasses()
@@ -73,10 +86,6 @@ class TeacherDashboardViewModel @Inject constructor(
     fun onHomeworkListClick() = routerTeacher.toTeacherHomeworkList()
     fun onCreateHomeworkClick() = routerTeacher.toTeacherHomeworkEdit()
     fun onAnalyticsClick() = routerTeacher.toTeacherAnalytics()
-    fun onSettingsClick() {
-
+    fun onSettingsClick() { /* реализовать по необходимости */
     }
 }
-
-
-

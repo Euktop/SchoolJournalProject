@@ -10,4 +10,5 @@ interface RouterTeacher : RouterBack {
     fun toTeacherHomeworkList()
     fun toTeacherSchedule()
     fun toTeacherAnalytics()
+    fun toTeacherSettings()
 }

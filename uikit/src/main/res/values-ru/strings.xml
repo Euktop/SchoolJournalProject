@@ -163,6 +163,7 @@
     <string name="account_privacy">Аккаунт и конфиденциальность</string>
     <string name="next_lesson">СЛЕДУЮЩИЙ УРОК</string>
     <string name="no_next_lesson">Нет запланированных уроков</string>
+    <string name="teacher_next_lesson_label">СЛЕДУЮЩИЙ УРОК</string>
     <string name="teacher_schedule">Расписание учителя</string>
     <string name="schedule">Расписание</string>
     <string name="lessons_today">%1$d уроков сегодня</string>
@@ -271,4 +272,24 @@
     <string name="subject_detail_trend_not_available">—</string>
     <string name="subject_detail_homework_coming_soon">Список домашних заданий будет доступен в следующей версии</string>
     <string name="subject_detail_error_load">Ошибка загрузки данных</string>
+    <string name="teacher_greeting">Здравствуйте, Учитель!</string>
+    <string name="teacher_ready_question">Готовы к следующему уроку?</string>
+    <string name="teacher_my_classes">Мои классы</string>
+    <string name="teacher_class_list">Список классов</string>
+    <string name="teacher_lessons_list">Список уроков</string>
+    <string name="teacher_lesson_plan">План занятий</string>
+    <string name="teacher_grading">Выставление оценок</string>
+    <string name="teacher_pending_checks">Ожидают проверки</string>
+    <string name="teacher_homework_list">Список ДЗ</string>
+    <string name="teacher_track_submission">Отслеживать сдачу</string>
+    <string name="teacher_create_homework">Создать ДЗ</string>
+    <string name="teacher_new_assignment">Новое задание</string>
+    <string name="teacher_analytics">Аналитика</string>
+    <string name="teacher_class_performance">Успеваемость класса</string>
+    <string name="teacher_settings">Настройки</string>
+    <string name="teacher_app_preferences">Приложения</string>
+    <string name="teacher_academic_excellence">Академическое превосходство</string>
+    <string name="teacher_inspire_message">Будьте организованны, вдохновляйте учеников.</string>
+    <string name="hello_teacher_name">Здравствуйте %s!</string>
+    <string name="def_teacher_dashboard_name">Отсутсвует</string>
 </resources>

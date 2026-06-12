@@ -291,4 +291,26 @@
     <string name="subject_detail_trend_not_available">—</string>
     <string name="subject_detail_homework_coming_soon">Список домашних заданий будет доступен в следующей версии</string>
     <string name="subject_detail_error_load">Ошибка загрузки данных</string>
+
+    <string name="teacher_greeting">Hello, Teacher!</string>
+    <string name="teacher_ready_question">" Are you ready for the next lesson?"</string>
+    <string name="teacher_next_lesson_label">NEXT LESSON</string>
+    <string name="teacher_my_classes">My classes</string>
+    <string name="teacher_class_list">Class list</string>
+    <string name="teacher_lessons_list">Lesson list</string>
+    <string name="teacher_lesson_plan">Class schedule</string>
+    <string name="teacher_grading">Marking</string>
+    <string name="teacher_pending_checks">Waiting for checks</string>
+    <string name="teacher_homework_list">Homework list</string>
+    <string name="teacher_track_submission">Track submissions</string>
+    <string name="teacher_create_homework">Create homework</string>
+    <string name="teacher_new_assignment">New assignment</string>
+    <string name="teacher_analytics">Analytics</string>
+    <string name="teacher_class_performance">Class performance</string>
+    <string name="teacher_settings">Settings</string>
+    <string name="teacher_app_preferences">Apps</string>
+    <string name="teacher_academic_excellence">Academic excellence</string>
+    <string name="teacher_inspire_message">Be organized and inspire your students.</string>
+    <string name="hello_teacher_name">Здравствуйте %s1!</string>
+    <string name="def_teacher_dashboard_name">Отсутсвует</string>
 </resources>

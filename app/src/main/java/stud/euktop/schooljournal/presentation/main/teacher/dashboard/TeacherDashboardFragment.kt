@@ -13,11 +13,9 @@ import stud.euktop.schooljournal.R as RApp
 import stud.euktop.uikit.R as RUi
 
 @AndroidEntryPoint
-class TeacherDashboardFragment : BaseFragment<
-        FragmentTeacherDashboardBinding,
-        TeacherDashboardViewModel,
-        TeacherDashboardState,
-        Unit>(), ToolbarConfigProvider {
+class TeacherDashboardFragment :
+    BaseFragment<FragmentTeacherDashboardBinding, TeacherDashboardViewModel, TeacherDashboardState, Unit>(),
+    ToolbarConfigProvider {
 
     override val viewModel: TeacherDashboardViewModel by viewModels()
 
@@ -37,20 +35,24 @@ class TeacherDashboardFragment : BaseFragment<
 
     override fun updateState(state: TeacherDashboardState) {
         binding.tvWelcomeTitle.text = if (state.teacherName.isNotEmpty()) {
-            getString(RApp.string.Hello_teacher_name, state.teacherName)
+            getString(RUi.string.hello_teacher_name, state.teacherName)
         } else {
-            getString(RApp.string.hello_teacher)
+            getString(RUi.string.hello_teacher)
         }
 
-        // 2. Информация о следующем уроке
-        binding.tvNextLesson.text = state.nextLessonInfo.ifEmpty { getString(RApp.string.def_teacher_dashboard_name) }
+        binding.tvNextLesson.text = state.nextLessonInfo.ifEmpty {
+            getString(RUi.string.def_teacher_dashboard_name)
+        }
+
+        binding.tvLessonsToday.text = resources.getQuantityString(
+            RUi.plurals.lessons_count, state.lessonsCount, state.lessonsCount
+        )
     }
 
     override fun updateEvent(event: Unit) {}
 
     override fun getToolbarConfig() = ToolbarConfig(
-        titleRes = RUi.string.app_name,
-        menuRes = RApp.menu.menu_home
+        titleRes = RUi.string.app_name, menuRes = RApp.menu.menu_home
     )
 }
 

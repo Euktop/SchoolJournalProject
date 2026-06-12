@@ -145,6 +145,10 @@ class RouterImpl @Inject constructor(
     override fun toTeacherAnalytics() { /* Экран еще не создан */
     }
 
+    override fun toTeacherSettings() {
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalSettings()))
+    }
+
     // --- RouterMainMenu ---
     override fun toMainMenuTeacherClasses() =
         navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalTeacherClasses()))

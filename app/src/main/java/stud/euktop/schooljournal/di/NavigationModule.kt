@@ -8,6 +8,7 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHand
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
+import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterBack
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterError
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMain
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterMainMenu
@@ -34,6 +35,10 @@ abstract class NavigationModule {
     @Binds
     @Singleton
     abstract fun bindsRouterSplash(routerSplash: RouterImpl): RouterSplash
+
+    @Binds
+    @Singleton
+    abstract fun bindsRouterBack(routerSplash: RouterImpl): RouterBack
 
     @Binds
     @Singleton
