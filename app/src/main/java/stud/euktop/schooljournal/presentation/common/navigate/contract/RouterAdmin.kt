@@ -19,4 +19,5 @@ interface RouterAdmin : RouterBack {
     fun toAdminEditSchool(schoolId: Int)
     fun toAdminProfile()
     fun toAuditLogDetail(id: Int)
+    fun toAdminEditRoom(roomId: Int)
 }

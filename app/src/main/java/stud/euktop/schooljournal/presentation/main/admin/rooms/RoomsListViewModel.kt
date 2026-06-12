@@ -66,7 +66,7 @@ class RoomsListViewModel @Inject constructor(
     }
 
     fun editRoom(room: Room) {
-
+        routerAdmin.toAdminEditRoom(room.roomId)
     }
 }
 

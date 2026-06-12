@@ -13,6 +13,8 @@ import stud.euktop.domain.model.dashboard.DashboardStatistics
 import stud.euktop.domain.model.school.ClassInfo
 import stud.euktop.domain.model.school.ClassInfoFilter
 import stud.euktop.domain.model.school.ClassInfoUpdate
+import stud.euktop.domain.model.school.Room
+import stud.euktop.domain.model.school.RoomUpdate
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.school.SchoolFilter
 import stud.euktop.domain.model.school.Subject
@@ -27,6 +29,7 @@ import stud.euktop.domain.repository.AssignmentAdminRepository
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.ClassAdminRepository
 import stud.euktop.domain.repository.DashboardRepository
+import stud.euktop.domain.repository.RoomAdminRepository
 import stud.euktop.domain.repository.SchoolAdminRepository
 import stud.euktop.domain.repository.SubjectAdminRepository
 import stud.euktop.domain.repository.UserAdminRepository
@@ -49,6 +52,7 @@ class AdminCoordinator @Inject constructor(
     private val assignmentRepository: AssignmentAdminRepository,
     private val dashboardRepository: DashboardRepository,
     private val authRepository: AuthRepository,
+    private val roomRepository: RoomAdminRepository,
     private val coordinatorExec: CoordinatorExec,
 ) {
 
@@ -164,4 +168,14 @@ class AdminCoordinator @Inject constructor(
 
     suspend fun getCurrentUser(): CoordinatorResult<UserProfile> =
         coordinatorExec.exec { authRepository.getCurrentUser() }
+
+    suspend fun getRoom(roomId: Int): CoordinatorResult<Room> =
+        coordinatorExec.exec { roomRepository.getRoom(roomId) }
+
+    suspend fun addRoom(room: Room): CoordinatorResult<Room> =
+        coordinatorExec.exec { roomRepository.addRoom(room) }
+
+    suspend fun updateRoom(update: RoomUpdate): CoordinatorResult<Room> =
+        coordinatorExec.exec { roomRepository.updateRoom(update) }
+
 }

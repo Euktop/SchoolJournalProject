@@ -266,6 +266,12 @@ class RouterImpl @Inject constructor(
         )
     }
 
+    override fun toAdminEditRoom(roomId: Int) {
+        navigationManager.navigate(
+            NavCommand.ToAction(NavMainMainDirections.actionGlobalRoomEdit(roomId))
+        )
+    }
+
 
     // --- RouterError ---
     override fun onUnauthorized(): () -> Unit =

@@ -2,19 +2,17 @@ package stud.euktop.schooljournal.presentation.main.admin.rooms
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.Room
-import stud.euktop.domain.model.school.RoomFilter
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
-import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
+import stud.euktop.schooljournal.presentation.common.filter.room.RoomFilterDialog
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 
@@ -56,12 +54,6 @@ class RoomsListFragment : BaseFragment<
 
         viewModel.loadNextPage()
     }
-
-    private class RoomFilterDialog(
-        initialFilter: RoomFilter,
-        onFilterApplied: (RoomFilter) -> Unit,
-        onError: (CoordinatorResult.Error) -> Unit
-    ) : DialogFragment()
 
     private fun showFilterDialog() {
         RoomFilterDialog(

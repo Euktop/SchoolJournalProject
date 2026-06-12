@@ -320,4 +320,17 @@
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu" />
 
+    <fragment
+        android:id="@+id/roomEditFragment"
+        android:name="stud.euktop.schooljournal.presentation.main.admin.rooms.RoomEditFragment"
+        android:label="@string/edit_room">
+        <argument
+            android:name="roomId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_global_room_edit"
+        app:destination="@id/roomEditFragment" />
 </navigation>
