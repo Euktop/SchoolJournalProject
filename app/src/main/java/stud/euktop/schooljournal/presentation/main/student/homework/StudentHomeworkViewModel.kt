@@ -49,10 +49,10 @@ class StudentHomeworkViewModel @Inject constructor(
         viewModelScope.launch {
             withLoading("load_homework") {
                 val filter = _state.value.filter.toDomain()
-                val list = executeCoordinatorResult {
+                val list = executeResult {
                     homeworkRepository.getHomeworks(filter)
                 }.await()?.map {
-                    executeCoordinatorResult {
+                    executeResult {
                         homeworkRepository.getHomeworkFullById(it.homeworkId)
                     }
                 }?.awaitAll()?.filterNotNull() ?: emptyList()

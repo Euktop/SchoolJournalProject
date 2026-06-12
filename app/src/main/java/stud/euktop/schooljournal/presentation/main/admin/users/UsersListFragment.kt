@@ -60,14 +60,12 @@ class UsersListFragment : BaseFragment<
 
     private fun showFilterDialog() {
         lifecycleScope.launch {
-            viewModel.apply {
-                val school = getSchoolUserFilter()
-                UserFilterDialog(
-                    initialFilter = viewModel.state.value.filter.toApp(school),
-                    onFilterApplied = { viewModel.applyFilter(it.toDomainFilter()) },
-                    onError = viewModel.onError
-                ).show(childFragmentManager, "user_filter")
-            }
+            val school = viewModel.getSchoolUserFilter()
+            UserFilterDialog(
+                initialFilter = viewModel.state.value.filter.toApp(school),
+                onFilterApplied = { viewModel.applyFilter(it.toDomainFilter()) },
+                onError = viewModel.onError
+            ).show(childFragmentManager, "user_filter")
         }
     }
 

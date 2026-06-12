@@ -39,10 +39,10 @@ class StudentScheduleViewModel @Inject constructor(
                 }
             )
             withLoading("load_student") {
-                val user = executeCoordinatorResult {
+                val user = executeResult {
                     authRepository.getCurrentUser()
                 }
-                val class1 = executeCoordinatorResult {
+                val class1 = executeResult {
                     studentRepository.getStudentClass()
                 }
                 user.await()?.let {

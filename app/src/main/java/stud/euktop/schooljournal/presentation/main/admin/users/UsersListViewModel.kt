@@ -1,7 +1,6 @@
 package stud.euktop.schooljournal.presentation.main.admin.users
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.model.common.Pagination
 import stud.euktop.domain.model.school.School
@@ -33,6 +32,9 @@ class UsersListViewModel @Inject constructor(
 
     private var currentOffset = 0
     var hasMore = true
+    suspend fun getSchoolUserFilter(): School? {
+        return _state.value.filter.schoolId?.let { schoolRepository.getSchool(it).getOrNull() }
+    }
 
     fun loadNextPage() {
         if (isLoading("pagination") || !hasMore) return
@@ -62,13 +64,6 @@ class UsersListViewModel @Inject constructor(
         currentOffset = 0
         hasMore = true
         loadNextPage()
-    }
-
-    suspend fun CoroutineScope.getSchoolUserFilter(): School? {
-        return executeCoordinatorResult {
-            _state.value.filter.schoolId?.let { schoolRepository.getSchool(it) }
-                ?: Result.success(null)
-        }.await()
     }
 
     fun deleteUser(userId: Int) {

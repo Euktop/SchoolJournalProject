@@ -60,6 +60,23 @@ class UserEditViewModel @Inject constructor(
         )
     }
 
+    fun addRole(role: Role, schoolId: Int?) {
+        withLoadingSync("add_role") {
+            executeCoordinatorResult {
+                adminCoordinator.addUserRole(userId, role, schoolId)
+            }.await()?.apply {
+                val schoolName = this.schoolId?.let {
+                    executeCoordinatorResult {
+                        adminCoordinator.getSchool(it)
+                    }.await()?.name
+                }
+                val newRole = RoleWithSchool(this.role, this.schoolId, schoolName)
+                _state.update { it.copy(selectedRoles = it.selectedRoles + newRole) }
+            }
+
+        }
+    }
+
     // Обновление основных данных (без ролей)
     fun updateLastName(value: String) {
         _state.update { it.copy(lastName = it.lastName.copy(value)) }
@@ -87,19 +104,6 @@ class UserEditViewModel @Inject constructor(
 
     fun updateAccountStatus(status: AccountStatus) {
         _state.update { it.copy(accountStatus = status) }
-    }
-
-    // Добавление роли (мгновенно на сервер)
-    fun addRole(role: Role, schoolId: Int?) {
-        executeCoordinatorResultLoadingBlockSync(
-            key = "add_role",
-            block = { adminCoordinator.addUserRole(userId, role, schoolId) },
-            onSuccess = { userRole ->
-                // Добавляем новую роль в локальный список
-                val newRole = RoleWithSchool(role, schoolId)
-                _state.update { it.copy(selectedRoles = it.selectedRoles + newRole) }
-            }
-        )
     }
 
     // Удаление роли (мгновенно на сервер)

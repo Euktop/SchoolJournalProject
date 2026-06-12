@@ -38,9 +38,9 @@ class ProfileViewModel @Inject constructor(
     private fun loadCurrentUser() {
         viewModelScope.launch {
             withLoading("load_profile") {
-                val user = executeCoordinatorResult { authRepository.getCurrentUser() }
+                val user = executeResult { authRepository.getCurrentUser() }
                 val role =
-                    executeCoordinatorResult { Result.success(roleRepository.getCurrentRole()) }
+                    executeResult { Result.success(roleRepository.getCurrentRole()) }
                 _state.update {
                     it.copy(user = user.await(), role = role.await())
                 }

@@ -1,7 +1,6 @@
 package stud.euktop.schooljournal.presentation.main.admin.users
 
 import stud.euktop.domain.model.user.AccountStatus
-import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.utils.validation.EmailValidator
 import stud.euktop.domain.utils.validation.NameLetterOnlyValidator
 import stud.euktop.domain.utils.validation.PasswordNullValidator
@@ -30,8 +29,3 @@ data class UserEditState(
     }
 }
 
-data class RoleWithSchool(
-    val role: Role,
-    val schoolId: Int?,
-    val schoolName: String? = null
-)

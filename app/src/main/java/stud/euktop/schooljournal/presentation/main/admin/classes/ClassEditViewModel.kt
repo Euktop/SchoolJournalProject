@@ -51,12 +51,12 @@ class ClassEditViewModel @Inject constructor(
 
     private fun loadClass() {
         withLoadingSync("load") {
-            val classInfo = executeCoordinatorResult { classRepository.getClass(classId) }.await()
+            val classInfo = executeResult { classRepository.getClass(classId) }.await()
                 ?: return@withLoadingSync
             val school =
-                executeCoordinatorResult { schoolRepository.getSchool(classInfo.schoolId) }.await()
+                executeResult { schoolRepository.getSchool(classInfo.schoolId) }.await()
             val teacher =
-                classInfo.teacherId?.let { executeCoordinatorResult { userRepository.getUser(it) }.await() }
+                classInfo.teacherId?.let { executeResult { userRepository.getUser(it) }.await() }
             _state.update {
                 it.copy(
                     grade = classInfo.grade,

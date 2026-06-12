@@ -178,4 +178,6 @@ class AdminCoordinator @Inject constructor(
     suspend fun updateRoom(update: RoomUpdate): CoordinatorResult<Room> =
         coordinatorExec.exec { roomRepository.updateRoom(update) }
 
+    suspend fun getSchool(schoolId: Int): CoordinatorResult<School> =
+        coordinatorExec.exec { schoolRepository.getSchool(schoolId) }
 }

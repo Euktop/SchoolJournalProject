@@ -93,29 +93,33 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
     ) = viewModelScope.launch {
         executeWithResultLoading(key, block, onSuccess)
     }
+
     protected suspend inline fun <T> executeWithResult(
         crossinline block: suspend () -> Result<T>,
         noinline onSuccess: suspend (T) -> Unit
     ) {
-        executeCoordinatorResult(
+        executeResult(
             block = { executeCoordinator.exec { block() } },
             onSuccess = onSuccess
         )
     }
 
-    protected fun <T> CoroutineScope.executeCoordinatorResult(
+    protected fun <T> CoroutineScope.executeResult(
         block: suspend () -> Result<T>
+    ) = executeCoordinatorResult{executeCoordinator.exec { block() }}
+
+    protected fun <T> CoroutineScope.executeCoordinatorResult(
+        block: suspend () -> CoordinatorResult<T>
     ) =
         async {
-            val result = executeCoordinator.exec { block() }
-            when (result) {
+            when (val result = block()) {
                 is CoordinatorResult.Success -> return@async result.result
                 is CoordinatorResult.Error -> onError.invoke(result)
             }
             return@async null
         }
 
-    protected suspend inline fun <T> executeCoordinatorResult(
+    protected suspend inline fun <T> executeResult(
         block: suspend () -> CoordinatorResult<T>,
         onSuccess: suspend (T) -> Unit
     ) {
@@ -130,7 +134,7 @@ abstract class BaseViewModel<STATE : BaseState<STATE>, EVENT : Any> : ViewModel(
         key: String,
         crossinline block: suspend CoroutineScope.() -> CoordinatorResult<T>,
         crossinline onSuccess: suspend (T) -> Unit
-    ) = withLoading(key) { executeCoordinatorResult({ block() }, onSuccess) }
+    ) = withLoading(key) { executeResult({ block() }, onSuccess) }
 
     protected inline fun <T> executeCoordinatorResultLoadingBlockSync(
         key: String,
