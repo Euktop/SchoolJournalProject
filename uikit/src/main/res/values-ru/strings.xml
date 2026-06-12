@@ -252,4 +252,9 @@
     <string name="time_now">СЕЙЧАС</string>
     <string name="time_minutes">ЧЕРЕЗ %d МИН</string>
     <string name="time_hours">ЧЕРЕЗ %d Ч</string>
+    <string name="date_format_prefix">Дата: %s</string>
+    <string name="download_error">Ошибка скачивания файла</string>
+    <string name="error_download">Ошибка скачивания</string>
+    <string name="homework_detail_title">Детали задания</string>
+    <string name="homework_date_format">Дата: %s</string>
 </resources>

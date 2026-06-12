@@ -9,6 +9,7 @@ import stud.euktop.domain.model.homework.HomeworkFull
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.domain.repository.HomeworkRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.schooljournal.presentation.common.coordinator.HomeworkCoordinator
 import stud.euktop.schooljournal.presentation.common.filter.homework.AppHomeworkFilter
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import javax.inject.Inject
@@ -17,8 +18,9 @@ import javax.inject.Inject
 class StudentHomeworkViewModel @Inject constructor(
     coordinatorExec: CoordinatorExec,
     private val authRepository: AuthRepository,
-    private val homeworkRepository: HomeworkRepository
-) : BaseViewModel<StudentHomeworkState, Unit>() {
+    private val homeworkRepository: HomeworkRepository,
+    private val homeworkCoordinator: HomeworkCoordinator
+) : BaseViewModel<StudentHomeworkState, StudentHomeworkEvent>() {
 
     private var studentId: Int = 0
 
@@ -62,10 +64,15 @@ class StudentHomeworkViewModel @Inject constructor(
     }
 
     fun onHomeWorkClick(homeworkFull: HomeworkFull) {
-        //По факту, ничего не делает, т.к. и так уже показывается подробная информация
+        _event.tryEmit(StudentHomeworkEvent.ShowHomeworkDetail(homeworkFull))
     }
 
     fun onMediaClick(mediaId: Int) {
-        //TODO("Тут нужно будет добавить логику загрузки файла, но до начала не забыть создать общую утилиту для работы с файлом в common.")
+        executeCoordinatorResultLoadingBlockSync(
+            key = "download_media",
+            block = { homeworkCoordinator.downloadMedia(mediaId) }
+        ) { file ->
+            _event.tryEmit(StudentHomeworkEvent.DownloadMediaFile(file))
+        }
     }
 }

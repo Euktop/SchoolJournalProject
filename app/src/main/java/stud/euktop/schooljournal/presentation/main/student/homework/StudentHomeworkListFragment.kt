@@ -1,20 +1,32 @@
 package stud.euktop.schooljournal.presentation.main.student.homework
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import stud.euktop.domain.model.common.DataError
+import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.adapter.HomeworkAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.filter.studenthomework.StudentHomeworkFilterDialog
+import stud.euktop.schooljournal.presentation.common.message.contract.MessageParam
+import stud.euktop.schooljournal.presentation.common.navigate.contract.ErrorHandler
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
+import java.io.File
+import javax.inject.Inject
+import stud.euktop.uikit.R as RUi
 
 @AndroidEntryPoint
 class StudentHomeworkListFragment :
-    BaseFragment<FragmentStudentHomeworkListBinding, StudentHomeworkViewModel, StudentHomeworkState, Unit>(),
+    BaseFragment<FragmentStudentHomeworkListBinding, StudentHomeworkViewModel, StudentHomeworkState, StudentHomeworkEvent>(),
     ToolbarConfigProvider {
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
@@ -47,7 +59,51 @@ class StudentHomeworkListFragment :
         adapter.submitList(state.homeworkList)
     }
 
-    override fun updateEvent(event: Unit) {}
+    override fun updateEvent(event: StudentHomeworkEvent) {
+        when (event) {
+            is StudentHomeworkEvent.ShowHomeworkDetail -> showHomeworkDialog(event.homework)
+            is StudentHomeworkEvent.DownloadMediaFile -> openMediaFile(event.file)
+        }
+    }
+
+    private fun showHomeworkDialog(homework: stud.euktop.domain.model.homework.HomeworkFull) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(RUi.string.homework_detail_title)
+            .setMessage(
+                "${homework.description}\n\n" +
+                        getString(
+                            RUi.string.homework_date_format,
+                            homework.createdAt.toBaseString()
+                        )
+            )
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
+    @Inject
+    internal lateinit var errorHandler: ErrorHandler
+
+    private fun openMediaFile(file: File) {
+        lifecycleScope.launch {
+            try {
+                val uri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "${requireContext().packageName}.file_provider",
+                    file
+                )
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(uri, "application/octet-stream")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                errorHandler.exec(DataError.FileError(e)).apply {
+                    messages.message(MessageParam(messageId, action = this.navAction))
+                }
+            }
+        }
+    }
+
     override fun getToolbarConfig() = ToolbarConfig(
         titleRes = R.string.homework_assignments,
         menuRes = R.menu.menu_home_filter,

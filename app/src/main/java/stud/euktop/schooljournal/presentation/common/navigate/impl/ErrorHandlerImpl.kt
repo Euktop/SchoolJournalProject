@@ -60,7 +60,9 @@ class ErrorHandlerImpl @Inject constructor(
                 in 500..599 -> routerError.onServerError() to R.string.error_server
                 else -> routerError.onDefault() to R.string.error_http
             }
+            is DataError.FileError -> ({}) to stud.euktop.uikit.R.string.error_download
             is DataError.EmptyBody -> routerError.onDefault() to R.string.error_empty_body
+
             else -> routerError.onDefault() to R.string.error_unknown
         }
         logger?.e("ErrorHandler", "Error occurred", throwable)

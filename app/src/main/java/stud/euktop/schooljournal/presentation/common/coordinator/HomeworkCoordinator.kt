@@ -8,6 +8,7 @@ import stud.euktop.domain.repository.LessonRepository
 import stud.euktop.domain.repository.UserAdminRepository
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
+import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,4 +55,7 @@ class HomeworkCoordinator @Inject constructor(
                 }
             }
         }
+
+    suspend fun downloadMedia(mediaId: Int): CoordinatorResult<File> =
+        coordinatorExec.exec { homeworkRepository.downloadMedia(mediaId) }
 }
