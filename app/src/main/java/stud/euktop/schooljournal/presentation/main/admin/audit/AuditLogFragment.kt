@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -51,13 +52,18 @@ class AuditLogFragment :
             onFilterApplied = { viewModel.applyFilter(it) },
             onError = viewModel.onError
         )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing audit_filter")
+        } catch (_: Throwable) {
+        }
         dialog.show(childFragmentManager, "audit_filter")
     }
 
-    override fun updateState(state: AuditLogState) {
-        // статистика может быть отображена в тулбаре или отдельном layout
-        // для простоты оставим пустым
-    }
+     override fun updateState(state: AuditLogState) {
+         logger?.d(this::class.java.simpleName, "updateState", "filter applied")
+         // статистика может быть отображена в тулбаре или отдельном layout
+         // для простоты оставим пустым
+     }
 
     override fun updateEvent(event: Unit) {}
 

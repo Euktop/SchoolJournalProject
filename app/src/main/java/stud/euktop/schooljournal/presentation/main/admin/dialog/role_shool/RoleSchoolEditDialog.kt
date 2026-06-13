@@ -21,6 +21,8 @@ import stud.euktop.schooljournal.presentation.common.navigate.RepositoryExec
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import stud.euktop.uikit.R
 import stud.euktop.uikit.components.filter.FilterFieldBuilder
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class RoleSchoolEditDialog : DialogFragment(), RepositoryExec {
@@ -69,14 +71,19 @@ class RoleSchoolEditDialog : DialogFragment(), RepositoryExec {
             initialSelectedItem = null,
             showFilterDialog = {
                 if (parentFragmentManager.findFragmentByTag(SchoolFilterDialog.TAG) != null) return@addSearchableSelect
-                SchoolFilterDialog(
+                val dialog = SchoolFilterDialog(
                     schoolFilter,
                     { newFilter ->
                         schoolFilter = newFilter
                         viewModel.loadSchools(schoolFilter)
                     },
                     onError
-                ).show(parentFragmentManager, SchoolFilterDialog.TAG)
+                )
+                try {
+                    logger?.d(this.toSimpleTag(), "showFilterDialog", "showing ${SchoolFilterDialog.TAG}")
+                } catch (_: Throwable) {
+                }
+                dialog.show(parentFragmentManager, SchoolFilterDialog.TAG)
             },
             onShowing = { viewModel.loadSchools(schoolFilter) }
         )

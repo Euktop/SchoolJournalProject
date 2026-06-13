@@ -10,6 +10,8 @@ import stud.euktop.schooljournal.presentation.common.binding.bindForm
 import stud.euktop.schooljournal.presentation.common.binding.bindLoading
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<ActivityLoginBinding, LoginViewModel, LoginState, Unit>() {
@@ -39,6 +41,10 @@ class LoginFragment : BaseFragment<ActivityLoginBinding, LoginViewModel, LoginSt
     }
 
     override fun updateState(state: LoginState) {
+        try {
+            logger?.d(this.toSimpleTag(), "updateState", "button active: ${state.isButtonActive()}")
+        } catch (_: Throwable) {
+        }
         binding.matuleButtonAuth.isEnabled = state.isButtonActive()
     }
 

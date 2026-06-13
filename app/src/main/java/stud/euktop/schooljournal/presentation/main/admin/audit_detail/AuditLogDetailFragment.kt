@@ -11,6 +11,8 @@ import stud.euktop.uikit.R
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class AuditLogDetailFragment :
@@ -32,6 +34,10 @@ class AuditLogDetailFragment :
 
     override fun updateState(state: AuditLogDetailState) {
         val log = state.log ?: return
+        try {
+            logger?.d(this.toSimpleTag(), "updateState", "logId=${log.id}")
+        } catch (_: Throwable) {
+        }
         with(binding) {
             tvId.text = log.id.toString()
             tvActionType.text = log.actionType.name

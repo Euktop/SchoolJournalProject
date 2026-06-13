@@ -10,6 +10,7 @@ import stud.euktop.schooljournal.presentation.common.binding.bindForm
 import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class SubjectEditFragment : BaseFragment<
@@ -36,9 +37,10 @@ class SubjectEditFragment : BaseFragment<
         binding.buttonsSaveCancel.toInit(loadingDelegate, viewModel::save, viewModel::cancel)
     }
 
-    override fun updateState(state: SubjectEditState) {
-        binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
-    }
+     override fun updateState(state: SubjectEditState) {
+         logger?.d(this::class.java.simpleName, "updateState", "name: ${state.name}, form valid: ${state.isFormValid()}")
+         binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
+     }
 
     override fun updateEvent(event: Unit) {}
 }

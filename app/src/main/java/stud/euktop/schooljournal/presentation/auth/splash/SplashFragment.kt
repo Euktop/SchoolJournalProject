@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.ActivitySplashBinding
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterSplash
+import stud.euktop.domain.utils.loger.logger
 import javax.inject.Inject
 /**
  * Сплэш-экран, отображаемый при запуске приложения.
@@ -50,6 +51,10 @@ class SplashFragment : Fragment() {
                         .toLong() - System.currentTimeMillis() + start, 0
                 )
             )
+            try {
+                logger?.d(this@SplashFragment::class.java.simpleName, "navigateAfterSplash", "splash completed")
+            } catch (_: Throwable) {
+            }
             routerSplash.navigateAfterSplash()
         }
         super.onViewCreated(view, savedInstanceState)

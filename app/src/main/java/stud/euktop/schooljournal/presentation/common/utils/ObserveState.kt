@@ -4,13 +4,17 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import stud.euktop.domain.utils.loger.logger
 
 inline fun <T> LifecycleOwner.observeState(
     stateFlow: StateFlow<T>,
     crossinline block: (T) -> Unit
 ) {
     lifecycleScope.launch {
-        stateFlow.collect { block(it) }
+        stateFlow.collect {
+            logger?.d("ObserveState", "stateCollect", "state changed: ${it?.javaClass?.simpleName ?: "null"}")
+            block(it)
+        }
     }
 }
 
@@ -21,4 +25,3 @@ inline fun <T> LifecycleOwner.observeState(
 ) {
     observeState(stateFlow, block)
 }
-

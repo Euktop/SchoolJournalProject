@@ -18,6 +18,8 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterPro
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import javax.inject.Inject
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class TeacherHomeFragment : BaseNavigationFragment<FragmentTeacherHomeBinding>() {
@@ -56,6 +58,10 @@ class TeacherHomeFragment : BaseNavigationFragment<FragmentTeacherHomeBinding>()
     }
 
     private fun updateToolbar(config: ToolbarConfig) {
+        try {
+            logger?.d(this.toSimpleTag(), "updateToolbar", "title=${config.titleRes?.let { getString(it) } ?: "default"}")
+        } catch (_: Throwable) {
+        }
         binding.toolbar.apply {
             title = config.titleRes?.let { getString(it) } ?: getString(R.string.app_name)
             menu.clear()

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherLessonsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -35,12 +36,17 @@ class TeacherLessonsFragment : BaseFragment<
             onFilterApplied = { filter -> viewModel.applyFilter(filter) },
             onError = viewModel.onError
         )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing lesson_filter")
+        } catch (_: Throwable) {
+        }
         dialog.show(parentFragmentManager, "lesson_filter")
     }
 
-    override fun updateState(state: TeacherLessonsState) {
-        binding.rvLessons.submitList(state.lessons)
-    }
+     override fun updateState(state: TeacherLessonsState) {
+         logger?.d(this::class.java.simpleName, "updateState", "lessons count: ${state.lessons.size}")
+         binding.rvLessons.submitList(state.lessons)
+     }
 
     override fun updateEvent(event: Unit) {}
     override fun getToolbarConfig() = ToolbarConfig(

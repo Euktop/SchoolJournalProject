@@ -8,6 +8,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.databinding.FragmentSettingsBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.uikit.R
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class SettingsFragment :
@@ -41,18 +43,30 @@ class SettingsFragment :
     }
 
     override fun updateState(state: SettingsState) {
+        try {
+            logger?.d(this.toSimpleTag(), "updateState", "isDarkTheme=${state.isDarkTheme}, isNotifications=${state.isNotificationsEnabled}, language=${state.currentLanguage}")
+        } catch (_: Throwable) {
+        }
         binding.switchDarkTheme.isChecked = state.isDarkTheme
         binding.switchNotifications.isChecked = state.isNotificationsEnabled
         binding.tvLanguageValue.text = state.currentLanguage
     }
 
     override fun updateEvent(event: SettingsEvent) {
+        try {
+            logger?.d(this.toSimpleTag(), "updateEvent", "event=${event::class.java.simpleName}")
+        } catch (_: Throwable) {
+        }
         when (event) {
             is SettingsEvent.ShowAboutDialog -> showAboutDialog(event.info)
         }
     }
 
     private fun showAboutDialog(info: String) {
+        try {
+            logger?.d(this.toSimpleTag(), "showAboutDialog", "info_len=${info.length}")
+        } catch (_: Throwable) {
+        }
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.about_app)
             .setMessage(info)
@@ -61,6 +75,10 @@ class SettingsFragment :
     }
 
     private fun showLanguageDialog() {
+        try {
+            logger?.d(this.toSimpleTag(), "showLanguageDialog")
+        } catch (_: Throwable) {
+        }
         val languages = arrayOf(
             getString(R.string.language_russian),
             getString(R.string.language_english)

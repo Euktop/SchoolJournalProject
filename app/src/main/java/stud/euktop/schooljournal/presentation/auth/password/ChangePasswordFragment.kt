@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.presentation.common.binding.bindForm
 import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class ChangePasswordFragment : BaseFragment<
@@ -55,9 +56,10 @@ class ChangePasswordFragment : BaseFragment<
         )
     }
 
-    override fun updateState(state: ChangePasswordState) {
-        binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
-    }
+     override fun updateState(state: ChangePasswordState) {
+         logger?.d(this::class.java.simpleName, "updateState", "form valid: ${state.isFormValid()}")
+         binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
+     }
 
     override fun updateEvent(event: Unit) {}
 }

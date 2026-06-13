@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import stud.euktop.domain.model.common.DataError
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentHomeworkListBinding
@@ -48,16 +49,22 @@ class StudentHomeworkListFragment :
 
     private fun showFilterDialog() {
         if (parentFragmentManager.findFragmentByTag("filter") != null) return
-        StudentHomeworkFilterDialog(
+        val dialog = StudentHomeworkFilterDialog(
             initialFilter = viewModel.state.value.filter,
             onFilterApplied = viewModel::filterApplied,
             onError = viewModel.onError
-        ).show(parentFragmentManager, "filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing student homework filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(parentFragmentManager, "filter")
     }
 
-    override fun updateState(state: StudentHomeworkState) {
-        adapter.submitList(state.homeworkList)
-    }
+     override fun updateState(state: StudentHomeworkState) {
+         logger?.d(this::class.java.simpleName, "updateState", "homework list count: ${state.homeworkList.size}")
+         adapter.submitList(state.homeworkList)
+     }
 
     override fun updateEvent(event: StudentHomeworkEvent) {
         when (event) {

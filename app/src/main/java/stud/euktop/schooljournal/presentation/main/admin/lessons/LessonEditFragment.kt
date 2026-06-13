@@ -15,6 +15,7 @@ import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import stud.euktop.schooljournal.presentation.common.utils.check
 import stud.euktop.schooljournal.presentation.common.utils.setup
 import stud.euktop.uikit.components.datePicker.SchJDatePicker
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class LessonEditFragment : BaseFragment<
@@ -97,27 +98,28 @@ class LessonEditFragment : BaseFragment<
         }
     }
 
-    override fun updateState(state: LessonEditState) {
-        binding.apply {
-            inputTopic.check(focusTrack, state.topic.isNotBlank())
-            inputStartTime.check(focusTrack, state.startTime.isNotBlank())
-            inputEndTime.check(focusTrack, state.endTime.isNotBlank())
+     override fun updateState(state: LessonEditState) {
+         logger?.d(this::class.java.simpleName, "updateState", "topic: ${state.topic}, date: ${state.date}, form valid: ${state.isFormValid()}")
+         binding.apply {
+             inputTopic.check(focusTrack, state.topic.isNotBlank())
+             inputStartTime.check(focusTrack, state.startTime.isNotBlank())
+             inputEndTime.check(focusTrack, state.endTime.isNotBlank())
 
-            selectClass.state =
-                selectClass.state.copy(selectText = state.selectedClass?.let { "${it.grade}${it.letter}" }
-                    ?: "")
-            selectSubject.state =
-                selectSubject.state.copy(selectText = state.selectedSubject?.name ?: "")
-            selectTeacher.state =
-                selectTeacher.state.copy(selectText = state.selectedTeacher?.let { "${it.lastName} ${it.firstName}" }
-                    ?: "")
-            selectRoom.state = selectRoom.state.copy(selectText = state.selectedRoom?.name ?: "")
+             selectClass.state =
+                 selectClass.state.copy(selectText = state.selectedClass?.let { "${it.grade}${it.letter}" }
+                     ?: "")
+             selectSubject.state =
+                 selectSubject.state.copy(selectText = state.selectedSubject?.name ?: "")
+             selectTeacher.state =
+                 selectTeacher.state.copy(selectText = state.selectedTeacher?.let { "${it.lastName} ${it.firstName}" }
+                     ?: "")
+             selectRoom.state = selectRoom.state.copy(selectText = state.selectedRoom?.name ?: "")
 
-            inputDate.state = inputDate.state.copy(text = state.date?.toBaseString() ?: "")
+             inputDate.state = inputDate.state.copy(text = state.date?.toBaseString() ?: "")
 
-            saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
-        }
-    }
+             saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
+         }
+     }
 
     override fun updateEvent(event: Unit) {}
 }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeworkListBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -48,9 +49,10 @@ class TeacherHomeworkListFragment : BaseFragment<
         }
     }
 
-    override fun updateState(state: TeacherHomeworkState) {
-        binding.rvHomeworkList.submitList(state.homeworkList)
-    }
+     override fun updateState(state: TeacherHomeworkState) {
+         logger?.d(this::class.java.simpleName, "updateState", "homework list count: ${state.homeworkList.size}")
+         binding.rvHomeworkList.submitList(state.homeworkList)
+     }
 
     private fun showFilterDialog() {
         if (parentFragmentManager.findFragmentByTag("filter") != null) return
@@ -59,6 +61,10 @@ class TeacherHomeworkListFragment : BaseFragment<
             onFilterApplied = { filter -> viewModel.applyFilter(filter) },
             onError = { error -> messages.message(MessageParam(error.messageId)) }
         )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing homework filter")
+        } catch (_: Throwable) {
+        }
         dialog.show(parentFragmentManager, "filter")
     }
 

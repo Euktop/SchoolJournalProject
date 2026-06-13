@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.presentation.common.binding.bindLoading
 import stud.euktop.schooljournal.presentation.common.binding.setupPasswordForm
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.domain.utils.loger.logger
 
 /**
  * Экран создания пароля (финальный шаг регистрации).
@@ -61,9 +62,10 @@ class CreatePasswordFragment : BaseFragment<
         binding.MatuleButtonSave.setOnClickListener { viewModel.onSaveClick() }
     }
 
-    override fun updateState(state: CreatePasswordState) {
-        binding.MatuleButtonSave.isEnabled = state.isNextActive()
-    }
+     override fun updateState(state: CreatePasswordState) {
+         logger?.d(this::class.java.simpleName, "updateState", "next active: ${state.isNextActive()}")
+         binding.MatuleButtonSave.isEnabled = state.isNextActive()
+     }
 
     override fun updateEvent(event: Unit) {}
 }

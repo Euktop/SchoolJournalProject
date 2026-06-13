@@ -12,6 +12,8 @@ import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class ProfileFragment :
@@ -45,6 +47,10 @@ class ProfileFragment :
     }
 
     override fun updateState(state: ProfileState) {
+        try {
+            logger?.d(this.toSimpleTag(), "updateState", "user=${state.user?.email}, role=${state.role}")
+        } catch (_: Throwable) {
+        }
         state.apply {
             updateUI(user, role, school)
         }

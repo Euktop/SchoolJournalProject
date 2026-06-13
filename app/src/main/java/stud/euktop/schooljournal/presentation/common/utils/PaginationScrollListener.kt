@@ -2,6 +2,8 @@ package stud.euktop.schooljournal.presentation.common.utils
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 class PaginationScrollListener(
     private val loadMore: () -> Unit,
@@ -25,6 +27,10 @@ class PaginationScrollListener(
                 && firstVisibleItemPosition >= 0
                 && totalItemCount >= pageSize
             ) {
+                try {
+                    logger?.d(this.toSimpleTag(), "pagination", "loadMore triggered: visible=$visibleItemCount, first=$firstVisibleItemPosition, total=$totalItemCount")
+                } catch (_: Throwable) {
+                }
                 loadMore()
             }
         }

@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStu
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.submitList
+import stud.euktop.domain.utils.loger.logger
 import javax.inject.Inject
 
 /**
@@ -48,9 +49,10 @@ class StudentSubjectsFragment :
         }
     }
 
-    override fun updateState(state: StudentSubjectsState) {
-        binding.rvSubjects.submitList(state.subjects)
-    }
+     override fun updateState(state: StudentSubjectsState) {
+         logger?.d(this::class.java.simpleName, "updateState", "subjects count: ${state.subjects.size}")
+         binding.rvSubjects.submitList(state.subjects)
+     }
 
     override fun updateEvent(event: Unit) {}
     override fun getToolbarConfig() = ToolbarConfig(

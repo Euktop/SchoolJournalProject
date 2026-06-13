@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.Room
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapter
@@ -56,17 +57,23 @@ class RoomsListFragment : BaseFragment<
     }
 
     private fun showFilterDialog() {
-        RoomFilterDialog(
+        val dialog = RoomFilterDialog(
             initialFilter = viewModel.state.value.filter,
             onFilterApplied = { viewModel.applyFilter(it) },
             onError = viewModel.onError
-        ).show(childFragmentManager, "room_filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing room_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "room_filter")
     }
 
-    override fun updateState(state: RoomsListState) {
-        adapter.submitList(state.rooms)
-        binding.rvEntity.update()
-    }
+     override fun updateState(state: RoomsListState) {
+         logger?.d(this::class.java.simpleName, "updateState", "rooms count: ${state.rooms.size}")
+         adapter.submitList(state.rooms)
+         binding.rvEntity.update()
+     }
 
     override fun updateEvent(event: Unit) {}
 

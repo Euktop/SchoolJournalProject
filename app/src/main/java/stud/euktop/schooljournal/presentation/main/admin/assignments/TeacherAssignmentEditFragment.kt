@@ -13,6 +13,8 @@ import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import java.text.SimpleDateFormat
 import java.util.Locale
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class TeacherAssignmentEditFragment :
@@ -106,6 +108,10 @@ class TeacherAssignmentEditFragment :
     }
 
     override fun updateState(state: TeacherAssignmentEditState) {
+        try {
+            logger?.d(this.toSimpleTag(), "updateState", "teacher=${state.teacher?.let { "${it.lastName} ${it.firstName}" }}, class=${state.classInfo?.let { "${it.grade}${it.letter}" }}, subject=${state.subject?.name}")
+        } catch (_: Throwable) {
+        }
         binding.selectTeacher.state = binding.selectTeacher.state.copy(
             selectText = state.teacher?.let { "${it.lastName} ${it.firstName}" } ?: ""
         )

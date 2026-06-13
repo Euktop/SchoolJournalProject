@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.user.AccountStatus
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.databinding.DialogUserEditBinding
 import stud.euktop.schooljournal.presentation.common.adapter.ListSelectAdapter
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -83,16 +84,21 @@ class UserEditFragment : BaseFragment<
                 viewModel.addRole(role, school?.schoolId)
             }
         )
+        try {
+            logger?.d(this::class.java.simpleName, "showDialog", "showing ${RoleSchoolEditDialog.TAG}")
+        } catch (_: Throwable) {
+        }
         dialog.show(childFragmentManager, RoleSchoolEditDialog.TAG)
     }
 
-    override fun updateState(state: UserEditState) {
-        binding.selectStatus.state = binding.selectStatus.state.copy(
-            selectText = requireContext().getString(state.accountStatus.toMessageId())
-        )
-        rolesAdapter.submitList(state.selectedRoles)
-        binding.saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
-    }
+     override fun updateState(state: UserEditState) {
+         logger?.d(this::class.java.simpleName, "updateState", "accountStatus: ${state.accountStatus}, roles count: ${state.selectedRoles.size}, form valid: ${state.isFormValid()}")
+         binding.selectStatus.state = binding.selectStatus.state.copy(
+             selectText = requireContext().getString(state.accountStatus.toMessageId())
+         )
+         rolesAdapter.submitList(state.selectedRoles)
+         binding.saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
+     }
 
     override fun updateEvent(event: Unit) {}
 }

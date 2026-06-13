@@ -9,6 +9,7 @@ import stud.euktop.schooljournal.databinding.FragmentAdminDashboardBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class AdminDashboardFragment :
@@ -25,19 +26,20 @@ class AdminDashboardFragment :
         // Если они нужны в будущем, их обработчики пока можно убрать.
     }
 
-    override fun updateState(state: AdminDashboardState) {
-        binding.tvWelcomeTitle.text =
-            requireContext().getString(
-                stud.euktop.uikit.R.string.welcome_admin_format,
-                state.adminName
-            )
-        binding.tvSchoolsCount.text = state.schoolsCount.toString()
-        binding.tvActiveUsersCount.text = state.activeUsersCount.toString()
-        binding.tvTotalStudents.text = state.totalStudents.toString()
-        binding.tvTotalTeachers.text = state.totalTeachers.toString()
-        binding.tvHealthPercent.text =
-            getString(stud.euktop.uikit.R.string.percent_format, state.healthPercent)
-    }
+     override fun updateState(state: AdminDashboardState) {
+         logger?.d(this::class.java.simpleName, "updateState", "adminName: ${state.adminName}, schools: ${state.schoolsCount}, users: ${state.activeUsersCount}, students: ${state.totalStudents}, teachers: ${state.totalTeachers}")
+         binding.tvWelcomeTitle.text =
+             requireContext().getString(
+                 stud.euktop.uikit.R.string.welcome_admin_format,
+                 state.adminName
+             )
+         binding.tvSchoolsCount.text = state.schoolsCount.toString()
+         binding.tvActiveUsersCount.text = state.activeUsersCount.toString()
+         binding.tvTotalStudents.text = state.totalStudents.toString()
+         binding.tvTotalTeachers.text = state.totalTeachers.toString()
+         binding.tvHealthPercent.text =
+             getString(stud.euktop.uikit.R.string.percent_format, state.healthPercent)
+     }
 
     override fun updateEvent(event: Unit) {}
 

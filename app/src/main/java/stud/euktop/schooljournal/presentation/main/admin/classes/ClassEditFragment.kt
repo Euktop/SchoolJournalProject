@@ -7,6 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import stud.euktop.domain.model.school.SchoolFilter
 import stud.euktop.domain.model.user.UserFilter
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentClassEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -88,41 +89,52 @@ class ClassEditFragment :
     }
 
     private fun showSchoolFilterDialog() {
-        SchoolFilterDialog(
+        val dialog = SchoolFilterDialog(
             initialFilter = schoolFilterFlow.value,
             onFilterApplied = { schoolFilterFlow.value = it },
             onError = viewModel.onError
-        ).show(childFragmentManager, "school_filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing school_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "school_filter")
     }
 
     private fun showTeacherFilterDialog() {
-        UserFilterDialog(
+        val dialog = UserFilterDialog(
             initialFilter = teacherFilterFlow.value.toApp(viewModel.state.value.school),
             onFilterApplied = { teacherFilterFlow.value = it.toDomainFilter() },
             onError = viewModel.onError
-        ).show(childFragmentManager, "teacher_filter")
-    }
-
-    override fun updateState(state: ClassEditState) {
-        binding.inputLetter.check(focusTrack, state.letter.validate())
-        binding.inputGrade.checkInt(focusTrack, state.grade, state.grade in 1..11)
-
-        val yearsValid = checkYearRange(
-            binding.inputYearStart,
-            binding.inputYearEnd,
-            focusTrack,
-            state.academicYearStart,
-            state.academicYearEnd
         )
-        val formValid = state.letter.validate() && (state.grade in 1..11) && yearsValid
-        binding.selectSchool.state =
-            binding.selectSchool.state.copy(selectText = state.school?.name ?: "")
-        binding.selectClassTeacher.state =
-            binding.selectClassTeacher.state.copy(selectText = state.classTeacher?.let { "${it.lastName} ${it.firstName}" }
-                ?: "")
-
-        binding.buttonsSaveCancel.btnSave.isEnabled = formValid
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing teacher_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "teacher_filter")
     }
+
+     override fun updateState(state: ClassEditState) {
+         logger?.d(this::class.java.simpleName, "updateState", "grade: ${state.grade}, letter: ${state.letter}, school: ${state.school?.name}, classTeacher: ${state.classTeacher?.firstName}")
+         binding.inputLetter.check(focusTrack, state.letter.validate())
+         binding.inputGrade.checkInt(focusTrack, state.grade, state.grade in 1..11)
+
+         val yearsValid = checkYearRange(
+             binding.inputYearStart,
+             binding.inputYearEnd,
+             focusTrack,
+             state.academicYearStart,
+             state.academicYearEnd
+         )
+         val formValid = state.letter.validate() && (state.grade in 1..11) && yearsValid
+         binding.selectSchool.state =
+             binding.selectSchool.state.copy(selectText = state.school?.name ?: "")
+         binding.selectClassTeacher.state =
+             binding.selectClassTeacher.state.copy(selectText = state.classTeacher?.let { "${it.lastName} ${it.firstName}" }
+                 ?: "")
+
+         binding.buttonsSaveCancel.btnSave.isEnabled = formValid
+     }
 
     override fun updateEvent(event: Unit) {}
 }

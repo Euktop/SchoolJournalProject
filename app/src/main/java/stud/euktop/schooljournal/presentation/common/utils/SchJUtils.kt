@@ -3,6 +3,8 @@ package stud.euktop.schooljournal.presentation.common.utils
 import stud.euktop.domain.utils.validation.Validator
 import stud.euktop.domain.utils.validation.ValidatorInterface
 import stud.euktop.uikit.components.input.SchJInput
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 inline fun SchJInput.setup(
     focusTrack: FocusTrack,
@@ -15,6 +17,10 @@ inline fun SchJInput.setup(
         }
     }
     listener = { action(it) }
+    try {
+        logger?.d(this.toSimpleTag(), "inputSetup", "id=$id")
+    } catch (_: Throwable) {
+    }
 }
 
 inline fun SchJInput.setup(

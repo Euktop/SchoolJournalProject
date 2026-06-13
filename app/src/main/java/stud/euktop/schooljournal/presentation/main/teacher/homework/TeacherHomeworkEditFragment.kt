@@ -15,6 +15,8 @@ import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import stud.euktop.schooljournal.presentation.common.utils.check
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class TeacherHomeworkEditFragment : BaseFragment<
@@ -61,6 +63,11 @@ class TeacherHomeworkEditFragment : BaseFragment<
     }
 
     override fun updateState(state: TeacherHomeworkState) {
+        try {
+            val descLen = state.description.value?.length ?: 0
+            logger?.d(this.toSimpleTag(), "updateState", "description_len=$descLen, selectedLesson=${state.selectedLesson?.lessonId}")
+        } catch (_: Throwable) {
+        }
         binding.inputDescription.check(focusTrack, state.description)
 
         val selectedText = state.selectedLesson?.let {

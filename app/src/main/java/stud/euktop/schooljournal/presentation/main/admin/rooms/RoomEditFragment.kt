@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import stud.euktop.domain.model.school.SchoolFilter
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentRoomEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -54,20 +55,26 @@ class RoomEditFragment :
     }
 
     private fun showSchoolFilterDialog() {
-        SchoolFilterDialog(
+        val dialog = SchoolFilterDialog(
             initialFilter = schoolFilterFlow.value,
             onFilterApplied = { schoolFilterFlow.value = it },
             onError = viewModel.onError
-        ).show(childFragmentManager, "school_filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing school_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "school_filter")
     }
 
-    override fun updateState(state: RoomEditState) {
-        binding.inputName.check(focusTrack, state.name.validate())
-        binding.selectSchool.state = binding.selectSchool.state.copy(
-            selectText = state.school?.name ?: ""
-        )
-        binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
-    }
+     override fun updateState(state: RoomEditState) {
+         logger?.d(this::class.java.simpleName, "updateState", "room name: ${state.name}, school: ${state.school?.name}, form valid: ${state.isFormValid()}")
+         binding.inputName.check(focusTrack, state.name.validate())
+         binding.selectSchool.state = binding.selectSchool.state.copy(
+             selectText = state.school?.name ?: ""
+         )
+         binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
+     }
 
     override fun updateEvent(event: Unit) {}
 }

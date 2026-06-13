@@ -15,6 +15,7 @@ import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.filter.classes.ClassFilterDialog
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class ClassesListFragment : BaseFragment<
@@ -63,10 +64,11 @@ class ClassesListFragment : BaseFragment<
         ).show(childFragmentManager, "class_filter")
     }
 
-    override fun updateState(state: ClassesListState) {
-        adapter.submitList(state.classes)
-        binding.rvEntity.update()
-    }
+     override fun updateState(state: ClassesListState) {
+         logger?.d(this::class.java.simpleName, "updateState", "classes count: ${state.classes.size}")
+         adapter.submitList(state.classes)
+         binding.rvEntity.update()
+     }
 
     override fun updateEvent(event: Unit) {}
 

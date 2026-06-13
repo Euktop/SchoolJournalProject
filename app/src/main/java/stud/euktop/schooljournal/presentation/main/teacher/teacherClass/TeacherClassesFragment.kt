@@ -8,6 +8,7 @@ import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherClassesBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.utils.submitList
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class TeacherClassesFragment : BaseFragment<
@@ -25,20 +26,21 @@ class TeacherClassesFragment : BaseFragment<
         binding.rvClasses.adapter = TeacherClassAdapter(viewModel::onClassClick)
     }
 
-    override fun updateState(state: TeacherClassesState) {
-        val greeting = if (state.teacherName.isNotEmpty()) {
-            getString(R.string.good_day_format, state.teacherName)
-        } else {
-            getString(R.string.good_day)
-        }
-        binding.tvGreeting.text = greeting
+     override fun updateState(state: TeacherClassesState) {
+         logger?.d(this::class.java.simpleName, "updateState", "teacherName: ${state.teacherName}, classes count: ${state.classes.size}")
+         val greeting = if (state.teacherName.isNotEmpty()) {
+             getString(R.string.good_day_format, state.teacherName)
+         } else {
+             getString(R.string.good_day)
+         }
+         binding.tvGreeting.text = greeting
 
-        val classesCount = state.classes.size
-        binding.tvClassesCount.text =
-            getString(stud.euktop.uikit.R.string.teacher_classes_count, classesCount)
+         val classesCount = state.classes.size
+         binding.tvClassesCount.text =
+             getString(stud.euktop.uikit.R.string.teacher_classes_count, classesCount)
 
-        binding.rvClasses.submitList(state.classes)
-    }
+         binding.rvClasses.submitList(state.classes)
+     }
 
     override fun updateEvent(event: Unit) {}
 }

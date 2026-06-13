@@ -10,6 +10,8 @@ import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
 import stud.euktop.schooljournal.presentation.common.delegate.MessageDelegate
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageDisplayer
 import stud.euktop.schooljournal.presentation.common.message.impl.SnackBarMessages
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 inline fun <T> Fragment.observeState(
     flow: StateFlow<T>,
@@ -17,7 +19,14 @@ inline fun <T> Fragment.observeState(
 ) {
     viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
-            flow.collect { block(it) }
+            flow.collect {
+                try {
+                    logger?.d(this.toSimpleTag(), "observeState", "collected: ${it?.javaClass?.simpleName ?: "null"}")
+                } catch (_: Throwable) {
+                }
+                block(it)
+            }
+
         }
     }
 }
@@ -28,7 +37,14 @@ inline fun <T> Fragment.observeEvent(
 ) {
     viewLifecycleOwner.lifecycleScope.launch {
         viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
-            flow.collect { block(it) }
+            flow.collect {
+                try {
+                    logger?.d(this.toSimpleTag(), "observeEvent", "event: ${it?.javaClass?.simpleName ?: "null"}")
+                } catch (_: Throwable) {
+                }
+                block(it)
+            }
+
         }
     }
 }

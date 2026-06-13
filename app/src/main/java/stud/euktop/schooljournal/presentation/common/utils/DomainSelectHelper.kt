@@ -13,6 +13,7 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.Coordinat
 import stud.euktop.uikit.components.adapter.SchJTextAdapter
 import stud.euktop.uikit.components.input.select.content.SelectableAdapter
 import stud.euktop.uikit.components.input.select.searchable.SchJSearchableSelect
+import stud.euktop.domain.utils.loger.logger
 
 fun UserListItem.fullName(): String = buildString {
     append(lastName)
@@ -72,6 +73,10 @@ object DomainSelectHelper {
             onSelected = { item -> onSelected(item, currentFilter) },
             showFilterDialog = {
                 if (fragmentManager.findFragmentByTag(UserFilterDialog.TAG) != null) return@setupSearchableSelect
+                try {
+                    logger?.d("DomainSelectHelper", "showFilterDialog", "showing ${UserFilterDialog.TAG}")
+                } catch (_: Throwable) {
+                }
                 val dialog = UserFilterDialog(
                     currentFilter, { newFilter ->
                         currentFilter = newFilter
@@ -95,8 +100,16 @@ object DomainSelectHelper {
     ) {
         var adapter: SchJTextAdapter<T>? = null
         select.onShowing = {
+            try {
+                logger?.d("DomainSelectHelper", "select.onShowing", "opening select")
+            } catch (_: Throwable) {
+            }
             launch {
                 val items = loadItems()
+                try {
+                    logger?.d("DomainSelectHelper", "loadItems", "items=${items.size}")
+                } catch (_: Throwable) {
+                }
                 adapter = SchJTextAdapter(object : SchJTextAdapter.Listener<T> {
                     override fun onClick(value: T) {
                         onSelected(value)

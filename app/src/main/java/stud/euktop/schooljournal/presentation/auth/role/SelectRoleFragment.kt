@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.schooljournal.databinding.FragmentSelectRoleBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class SelectRoleFragment : BaseFragment<
@@ -36,10 +37,11 @@ class SelectRoleFragment : BaseFragment<
         }
     }
 
-    override fun updateState(state: SelectRoleState) {
-        adapter.submitList(state.roles)
-        binding.btnContinue.isEnabled = state.isButtonActive()
-    }
+     override fun updateState(state: SelectRoleState) {
+         logger?.d(this::class.java.simpleName, "updateState", "roles count: ${state.roles.size}, button active: ${state.isButtonActive()}")
+         adapter.submitList(state.roles)
+         binding.btnContinue.isEnabled = state.isButtonActive()
+     }
 
     override fun updateEvent(event: Unit) {}
 }

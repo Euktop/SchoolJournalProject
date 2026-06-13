@@ -11,6 +11,7 @@ import stud.euktop.schooljournal.presentation.common.binding.bindLoading
 import stud.euktop.schooljournal.presentation.common.binding.setupProfileForm
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<FragmentRegBinding, ProfileViewModel, ProfileState, Unit>() {
@@ -34,9 +35,10 @@ class ProfileFragment : BaseFragment<FragmentRegBinding, ProfileViewModel, Profi
         binding.nextButton.setOnClickListener { viewModel.onNextClick() }
     }
 
-    override fun updateState(state: ProfileState) {
-        binding.nextButton.isEnabled = state.isButtonActive()
-    }
+     override fun updateState(state: ProfileState) {
+         logger?.d(this::class.java.simpleName, "updateState", "button active: ${state.isButtonActive()}")
+         binding.nextButton.isEnabled = state.isButtonActive()
+     }
 
     override fun updateEvent(event: Unit) {}
 }

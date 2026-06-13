@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.Subject
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapter
@@ -56,17 +57,23 @@ class SubjectsListFragment : BaseFragment<
     }
 
     private fun showFilterDialog() {
-        SubjectFilterDialog(
+        val dialog = SubjectFilterDialog(
             initialFilter = viewModel.state.value.filter,
             onFilterApplied = { viewModel.applyFilter(it) },
             onError = viewModel.onError
-        ).show(childFragmentManager, "subject_filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing subject_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "subject_filter")
     }
 
-    override fun updateState(state: SubjectsListState) {
-        adapter.submitList(state.subjects)
-        binding.rvEntity.update()
-    }
+     override fun updateState(state: SubjectsListState) {
+         logger?.d(this::class.java.simpleName, "updateState", "subjects count: ${state.subjects.size}")
+         adapter.submitList(state.subjects)
+         binding.rvEntity.update()
+     }
 
     override fun updateEvent(event: Unit) {}
 

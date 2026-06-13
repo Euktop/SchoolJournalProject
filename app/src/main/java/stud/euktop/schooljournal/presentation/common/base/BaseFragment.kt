@@ -13,6 +13,8 @@ import stud.euktop.schooljournal.presentation.common.message.impl.SnackBarMessag
 import stud.euktop.schooljournal.presentation.common.utils.observeEvent
 import stud.euktop.schooljournal.presentation.common.utils.observeMessage
 import stud.euktop.schooljournal.presentation.common.utils.observeState
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 /**
  * Базовый фрагмент с поддержкой делегатов:
@@ -72,9 +74,19 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
 
     private fun observeViewModel() {
         observeState(viewModel.state) {
+            // Логируем приход нового состояния и вызов updateState
+            try {
+                logger?.d(this.toSimpleTag(), "updateState", it.toString())
+            } catch (_: Throwable) {
+            }
             updateState(it)
         }
         observeEvent(viewModel.event) {
+            // Логируем приход события и вызов updateEvent
+            try {
+                logger?.d(this.toSimpleTag(), "updateEvent", it.toString())
+            } catch (_: Throwable) {
+            }
             updateEvent(it)
         }
     }

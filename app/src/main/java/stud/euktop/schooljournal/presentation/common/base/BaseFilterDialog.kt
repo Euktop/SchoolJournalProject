@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.uikit.components.filter.FilterFieldBuilder
 import stud.euktop.uikit.components.input.SchJInput
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 
 abstract class BaseFilterDialog<VM : BaseFilterViewModel, T>(
@@ -21,6 +23,10 @@ abstract class BaseFilterDialog<VM : BaseFilterViewModel, T>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        try {
+            logger?.i(this.toSimpleTag(), "FilterDialogShown", initialFilter?.toString())
+        } catch (_: Throwable) {
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewLifecycleOwner.lifecycleScope.launch {
@@ -44,6 +50,10 @@ abstract class BaseFilterDialog<VM : BaseFilterViewModel, T>(
     }
 
     override fun onApply(filter: T) {
+        try {
+            logger?.i(this.toSimpleTag(), "FilterDialogApply", filter?.toString())
+        } catch (_: Throwable) {
+        }
         onFilterApplied(filter)
     }
 

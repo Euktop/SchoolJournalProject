@@ -21,6 +21,8 @@ import stud.euktop.schooljournal.presentation.common.base.BaseNavigationFragment
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.observeState
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class AdminHomeFragment : BaseNavigationFragment<FragmentAdminHomeBinding>() {
@@ -81,6 +83,10 @@ class AdminHomeFragment : BaseNavigationFragment<FragmentAdminHomeBinding>() {
         }
 
         observeState(viewModel.state) { state ->
+            try {
+                logger?.d(this.toSimpleTag(), "updateState", "adminName=${state.adminName}, adminEmail=${state.adminEmail}")
+            } catch (_: Throwable) {
+            }
             val headerView = navigationView.getHeaderView(0)
             headerView.findViewById<TextView>(R.id.tvDrawerUserName).text = state.adminName
             headerView.findViewById<TextView>(R.id.tvDrawerUserEmail).text = state.adminEmail
@@ -103,6 +109,10 @@ class AdminHomeFragment : BaseNavigationFragment<FragmentAdminHomeBinding>() {
     }
 
     private fun updateToolbar(config: ToolbarConfig) {
+        try {
+            logger?.d(this.toSimpleTag(), "updateToolbar", "title=${config.titleRes?.let { getString(it) } ?: "default"}")
+        } catch (_: Throwable) {
+        }
         binding.toolbar.apply {
             title = config.titleRes?.let { getString(it) } ?: getString(R.string.app_name)
             menu.clear()

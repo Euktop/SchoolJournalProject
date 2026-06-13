@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.assignment.TeacherAssignment
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapter
@@ -66,17 +67,23 @@ class AssignmentsListFragment : BaseFragment<
     private fun showFilterDialog() {
         val currentFilter = viewModel.state.value.filter
         val appFilter = currentFilter.toApp(null, null, null)
-        TeacherAssignmentFilterDialog(
+        val dialog = TeacherAssignmentFilterDialog(
             initialFilter = appFilter,
             onFilterApplied = { viewModel.applyFilter(it.toDomain()) },
             onError = viewModel.onError
-        ).show(childFragmentManager, "assignment_filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing assignment_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "assignment_filter")
     }
 
-    override fun updateState(state: AssignmentsListState) {
-        adapter.submitList(state.assignments)
-        binding.rvEntity.update()
-    }
+     override fun updateState(state: AssignmentsListState) {
+         logger?.d(this::class.java.simpleName, "updateState", "assignments count: ${state.assignments.size}")
+         adapter.submitList(state.assignments)
+         binding.rvEntity.update()
+     }
 
     override fun updateEvent(event: Unit) {}
 

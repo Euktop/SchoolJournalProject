@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentStudentScheduleBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -31,17 +32,23 @@ class StudentScheduleFragment : BaseFragment<
         binding.rvSchedule.adapter = adapter
     }
 
-    override fun updateState(state: StudentScheduleState) {
-        binding.rvSchedule.submitList(state.schedule)
-    }
+     override fun updateState(state: StudentScheduleState) {
+         logger?.d(this::class.java.simpleName, "updateState", "schedule lessons count: ${state.schedule.size}")
+         binding.rvSchedule.submitList(state.schedule)
+     }
 
     private fun showFilter() {
         if (parentFragmentManager.findFragmentByTag("lesson_filter") != null) return
-        LessonFilterDialog(
+        val dialog = LessonFilterDialog(
             initialFilter = viewModel.state.value.filter,
             onFilterApplied = { filter -> viewModel.applyFilter(filter) },
             onError = viewModel.onError
-        ).show(childFragmentManager, "lesson_filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing lesson_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "lesson_filter")
     }
 
     override fun updateEvent(event: Unit) {}

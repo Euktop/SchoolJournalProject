@@ -14,6 +14,7 @@ import stud.euktop.schooljournal.presentation.common.utils.toDomain
 import stud.euktop.schooljournal.presentation.common.utils.toUI
 import stud.euktop.uikit.components.markPicker.SchJMarkPickerSheet
 import stud.euktop.uikit.components.markPicker.SchJMarkPickerState
+import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class LessonMarksFragment : BaseFragment<
@@ -54,9 +55,10 @@ class LessonMarksFragment : BaseFragment<
         }.show(parentFragmentManager, "markPicker")
     }
 
-    override fun updateState(state: LessonMarksState) {
-        binding.rvMarks.submitList(state.marks)
-    }
+     override fun updateState(state: LessonMarksState) {
+         logger?.d(this::class.java.simpleName, "updateState", "marks count: ${state.marks.size}")
+         binding.rvMarks.submitList(state.marks)
+     }
 
     override fun updateEvent(event: Unit) {}
     override fun getToolbarConfig() = ToolbarConfig(

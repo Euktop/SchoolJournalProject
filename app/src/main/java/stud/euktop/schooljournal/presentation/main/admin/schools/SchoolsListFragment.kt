@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.School
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapter
@@ -55,17 +56,23 @@ class SchoolsListFragment : BaseFragment<
     }
 
     private fun showFilterDialog() {
-        SchoolFilterDialog(
+        val dialog = SchoolFilterDialog(
             initialFilter = viewModel.state.value.filter,
             onFilterApplied = { viewModel.applyFilter(it) },
             onError = viewModel.onError
-        ).show(childFragmentManager, "school_filter")
+        )
+        try {
+            logger?.d(this::class.java.simpleName, "showFilterDialog", "showing school_filter")
+        } catch (_: Throwable) {
+        }
+        dialog.show(childFragmentManager, "school_filter")
     }
 
-    override fun updateState(state: SchoolsListState) {
-        adapter.submitList(state.schools)
-        binding.rvEntity.update()
-    }
+     override fun updateState(state: SchoolsListState) {
+         logger?.d(this::class.java.simpleName, "updateState", "schools count: ${state.schools.size}")
+         adapter.submitList(state.schools)
+         binding.rvEntity.update()
+     }
 
     override fun updateEvent(event: Unit) {}
     override fun getToolbarConfig() = ToolbarConfig(

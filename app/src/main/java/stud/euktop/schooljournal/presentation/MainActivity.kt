@@ -1,17 +1,13 @@
 package stud.euktop.schooljournal.presentation
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.utils.loger.logger
@@ -36,6 +32,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        try {
+            logger?.d(this.toSimpleTag(), "onCreate", "activity created")
+        } catch (_: Throwable) {
+        }
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -54,10 +54,18 @@ class MainActivity : AppCompatActivity() {
                 RegisterFragmentLifecycleCallbacks,
                 false
             )
+            try {
+                logger?.d(this.toSimpleTag(), "onCreate", "navigation initialized from savedInstanceState=null")
+            } catch (_: Throwable) {
+            }
         } else {
             navController = supportFragmentManager
                 .findFragmentById(binding.fragmentContainer.id)!!
                 .let { (it as NavHostFragment).navController }
+            try {
+                logger?.d(this.toSimpleTag(), "onCreate", "navigation restored from savedInstanceState")
+            } catch (_: Throwable) {
+            }
         }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -69,6 +77,10 @@ class MainActivity : AppCompatActivity() {
                 if (navController.previousBackStackEntry == null) {
                     val activity = WeakReference(this@MainActivity)
                     isDismissed = true
+                    try {
+                        logger?.d(this@MainActivity.toSimpleTag(), "handleOnBackPressed", "showing exit confirmation")
+                    } catch (_: Throwable) {
+                    }
                     SnackBarMessages(binding.root,lifecycleScope).message(
                         MessageParam(
                             R.string.press_again_to_exit,

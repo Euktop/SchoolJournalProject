@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.presentation.common.base.BaseState
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 class LoadingDelegate<STATE : BaseState<STATE>>(
     private val viewModel: BaseViewModel<STATE, *>,
@@ -31,6 +33,10 @@ class LoadingDelegate<STATE : BaseState<STATE>>(
                             val oldValue = oldMap[key] == true
                             val newValue = currentMap[key] == true
                             if (oldValue != newValue) {
+                                try {
+                                    logger?.d(viewModel.toSimpleTag(), "loading", "key=$key newValue=$newValue")
+                                } catch (_: Throwable) {
+                                }
                                 subscriptions[key]?.forEach { it(newValue) }
                             }
                         }

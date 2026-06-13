@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import stud.euktop.domain.model.user.UserListItem
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminEntityBinding
 import stud.euktop.schooljournal.presentation.common.adapter.OperationsListAdapter
@@ -61,18 +62,24 @@ class UsersListFragment : BaseFragment<
     private fun showFilterDialog() {
         lifecycleScope.launch {
             val school = viewModel.getSchoolUserFilter()
-            UserFilterDialog(
+            val dialog = UserFilterDialog(
                 initialFilter = viewModel.state.value.filter.toApp(school),
                 onFilterApplied = { viewModel.applyFilter(it.toDomainFilter()) },
                 onError = viewModel.onError
-            ).show(childFragmentManager, "user_filter")
+            )
+            try {
+                logger?.d(this::class.java.simpleName, "showFilterDialog", "showing user_filter")
+            } catch (_: Throwable) {
+            }
+            dialog.show(childFragmentManager, "user_filter")
         }
     }
 
-    override fun updateState(state: UsersListState) {
-        adapter.submitList(state.users)
-        binding.rvEntity.update()
-    }
+     override fun updateState(state: UsersListState) {
+         logger?.d(this::class.java.simpleName, "updateState", "users count: ${state.users.size}")
+         adapter.submitList(state.users)
+         binding.rvEntity.update()
+     }
 
     override fun updateEvent(event: Unit) {}
 

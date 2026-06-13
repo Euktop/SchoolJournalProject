@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.presentation.common.message.MessageEvent
 import stud.euktop.schooljournal.presentation.common.message.contract.MessageDisplayer
 import stud.euktop.schooljournal.presentation.common.message.impl.SnackBarMessages
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 
 class MessageDelegate(
     private val rootView: View,
@@ -23,7 +25,13 @@ class MessageDelegate(
             lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 messageEventFlow.collect { event ->
                     when (event) {
-                        is MessageEvent.Message -> messageDisplayer.message(event.param)
+                        is MessageEvent.Message -> {
+                            try {
+                                logger?.d(this.toSimpleTag(), "messageEvent", "message=${event.param.message}")
+                            } catch (_: Throwable) {
+                            }
+                            messageDisplayer.message(event.param)
+                        }
                     }
                 }
             }
