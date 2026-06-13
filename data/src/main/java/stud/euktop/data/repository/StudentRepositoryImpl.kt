@@ -134,8 +134,11 @@ class StudentRepositoryImpl @Inject constructor(
         subjectId: Int,
         studentId: Int?,
         weeks: Int
-    ): Result<SubjectTrend> {
-        // TODO: реальный расчёт через API, пока заглушка
-        return Result.success(SubjectTrend(0.12, true, "+0.12 за неделю"))
+    ): Result<SubjectTrend> = errorHandler.safeApiCall {
+        studentApi.apiStudentMarksSubjectIdTrendGet(
+            subjectId = subjectId,
+            studentId = studentId,
+            weeks = weeks
+        ).toDomain()
     }
 }

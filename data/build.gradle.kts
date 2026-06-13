@@ -53,6 +53,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.dagger)
+    implementation(libs.moshi.kotlin)
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)

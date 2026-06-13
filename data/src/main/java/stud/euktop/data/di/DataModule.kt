@@ -21,6 +21,14 @@ internal object DataModule {
 
     @Provides
     @Singleton
+    fun provideDashboardApi(client: NetworkClient) = client.dashboardApi()
+
+    @Provides
+    @Singleton
+    fun provideSystemApi(client: NetworkClient) = client.systemApi()
+
+    @Provides
+    @Singleton
     fun provideToken(tokenStorage: TokenStorage): TokenProvider = TokenProvider {
         runBlocking { tokenStorage.getToken() }
     }

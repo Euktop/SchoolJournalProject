@@ -4,6 +4,7 @@ import com.schooljournal.api.AbsenceTypesApi
 import com.schooljournal.api.AuditApi
 import com.schooljournal.api.AuthorizationApi
 import com.schooljournal.api.ClassesApi
+import com.schooljournal.api.DashboardApi
 import com.schooljournal.api.GradesApi
 import com.schooljournal.api.HomeworkApi
 import com.schooljournal.api.LessonsApi
@@ -12,6 +13,7 @@ import com.schooljournal.api.RoomsApi
 import com.schooljournal.api.SchoolsApi
 import com.schooljournal.api.StudentApi
 import com.schooljournal.api.SubjectsApi
+import com.schooljournal.api.SystemApi
 import com.schooljournal.api.TeacherAssignmentsApi
 import com.schooljournal.api.UsersApi
 import com.squareup.moshi.Moshi
@@ -85,4 +87,6 @@ class NetworkClient @Inject constructor(
     fun absenceTypesApi(): AbsenceTypesApi = AbsenceTypesApi(baseUrl, okHttpClient)
     fun roomsApi(): RoomsApi = RoomsApi(baseUrl, okHttpClient)
     fun gradeApi(): GradesApi = GradesApi(baseUrl, okHttpClient)
+    fun dashboardApi(): DashboardApi = DashboardApi(baseUrl, okHttpClient)
+    fun systemApi(): SystemApi = SystemApi(baseUrl, okHttpClient)
 }
