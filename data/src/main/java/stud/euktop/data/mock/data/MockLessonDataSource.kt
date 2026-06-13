@@ -64,6 +64,18 @@ internal object MockLessonDataSource {
 
     fun getAll(): List<Lesson> = _lessons.toList()
     fun getLesson(lessonId: Int): Lesson? = _lessons.find { it.lessonId == lessonId }
+        ?: _lessons.firstOrNull() ?: Lesson(
+            lessonId = lessonId,
+            classId = 0,
+            subjectId = 0,
+            teacherId = 0,
+            date = java.util.Date(),
+            topic = "Неизвестный урок",
+            startTime = "00:00",
+            endTime = "00:00",
+            roomId = null,
+            locationAddress = null
+        )
     fun addLesson(lesson: Lesson): Lesson {
         val newId = (_lessons.maxOfOrNull { it.lessonId } ?: 0) + 1
         val newLesson = lesson.copy(lessonId = newId)

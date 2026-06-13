@@ -31,7 +31,18 @@ class AuditMockLogRepositoryImpl @Inject constructor(
         MockDelayService.delay()
         val result = MockAuditDataSource.getLogs(filter, limit, offset)
         logger?.i(tag, "getLogs_success", "Returned ${result.size} logs")
-        result.ifEmpty { emptyList() }
+        result.ifEmpty {
+            listOf(
+                AuditLogListItem(
+                    id = 0,
+                    actionType = ActionType.CREATE,
+                    tableName = "unknown",
+                    executorName = "System",
+                    ipAddress = "0.0.0.0",
+                    eventTime = Instant.now()
+                )
+            )
+        }
     }
 
     override suspend fun getLogById(id: Int): Result<AuditLog?> = apiErrorHandler.safeApiCall {

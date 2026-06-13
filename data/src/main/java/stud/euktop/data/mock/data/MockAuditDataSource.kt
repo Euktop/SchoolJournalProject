@@ -27,21 +27,39 @@ internal object MockAuditDataSource {
     }
 
     fun getLogById(id: Int): AuditLog? {
-        val log = mockLogs.find { it.id == id } ?: return null
-        return AuditLog(
-            id = log.id,
-            actionType = log.actionType,
-            tableName = log.tableName,
-            objectId = -1,
-            executorName = log.executorName,
-            executorUserId = -1,
-            eventTime = log.eventTime,
-            ipAddress = log.ipAddress,
-            dataChange = DataChange(emptyMap(), emptyMap()),
-            userAgent = "MockAgent",
-            requestMethod = "GET",
-            origin = "Mock"
-        )
+        val log = mockLogs.find { it.id == id }
+        return if (log != null) {
+            AuditLog(
+                id = log.id,
+                actionType = log.actionType,
+                tableName = log.tableName,
+                objectId = -1,
+                executorName = log.executorName,
+                executorUserId = -1,
+                eventTime = log.eventTime,
+                ipAddress = log.ipAddress,
+                dataChange = DataChange(emptyMap(), emptyMap()),
+                userAgent = "MockAgent",
+                requestMethod = "GET",
+                origin = "Mock"
+            )
+        } else {
+            // Возвращаем fallback вместо null
+            AuditLog(
+                id = id,
+                actionType = ActionType.CREATE,
+                tableName = "unknown",
+                objectId = -1,
+                executorName = "System",
+                executorUserId = -1,
+                eventTime = Instant.now(),
+                ipAddress = "0.0.0.0",
+                dataChange = DataChange(emptyMap(), emptyMap()),
+                userAgent = "MockAgent",
+                requestMethod = "GET",
+                origin = "Mock"
+            )
+        }
     }
 
     fun getStatistics(): AuditStatistics {

@@ -72,7 +72,20 @@ internal object MockHomeworkDataSource {
         }
     }
 
-    fun getMedia(homeworkId: Int): List<HomeworkMedia> = _media[homeworkId] ?: emptyList()
+    fun getMedia(homeworkId: Int): List<HomeworkMedia> {
+        val list = _media.getOrPut(homeworkId) { mutableListOf() }
+        if (list.isEmpty()) {
+            val default = HomeworkMedia(
+                mediaId = 0,
+                fileName = "mock.png",
+                contentType = "image/png",
+                fileSize = DEFAULT_FILE_BYTES.size,
+                uploadedAt = Date()
+            )
+            list.add(default)
+        }
+        return list.toList()
+    }
 
     fun addMedia(homeworkId: Int, fileName: String, contentType: String, fileSize: Int): HomeworkMedia {
         val list = _media.getOrPut(homeworkId) { mutableListOf() }
@@ -108,12 +121,15 @@ internal object MockHomeworkDataSource {
             lessonId = 0,
             description = "Домашнее задание не найдено",
             createdAt = Date(),
-            medias = emptyList(),
+            medias = listOf(
+                HomeworkMedia(mediaId = 0, fileName = "mock.png", contentType = "image/png", fileSize = DEFAULT_FILE_BYTES.size, uploadedAt = Date())
+            ),
             createdByUserId = 0
         )
     }
 
     fun getMediaById(mediaId: Int): HomeworkMedia? = _media.values.flatten().find { it.mediaId == mediaId }
+        ?: HomeworkMedia(mediaId = mediaId, fileName = "mock.png", contentType = "image/png", fileSize = DEFAULT_FILE_BYTES.size, uploadedAt = Date())
 
     /**
      * Гарантированно возвращает валидный File для тестирования скачивания.

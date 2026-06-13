@@ -85,11 +85,20 @@ internal object MockStudentDataSource {
     fun getOverallAverage(studentId: Int): StudentOverallAverage = studentOverallAverage
 
     fun getStudentSchedule(studentId: Int): List<StudentScheduleItem> {
-        val now = Date()
+        val calendar = java.util.Calendar.getInstance()
+
+        // Сдвигаем первый урок на 1 час вперед, чтобы он считался "следующим"
+        calendar.add(java.util.Calendar.HOUR_OF_DAY, 1)
+        val nextLessonDate = calendar.time
+
+        // Второй урок через 2 часа от текущего момента
+        calendar.add(java.util.Calendar.HOUR_OF_DAY, 1)
+        val secondLessonDate = calendar.time
+
         return listOf(
             StudentScheduleItem(
                 lessonId = 1,
-                date = now,
+                date = nextLessonDate,
                 startTime = "09:00",
                 endTime = "09:45",
                 topic = "Квадратные уравнения",
@@ -102,7 +111,7 @@ internal object MockStudentDataSource {
             ),
             StudentScheduleItem(
                 lessonId = 2,
-                date = now,
+                date = secondLessonDate,
                 startTime = "10:00",
                 endTime = "10:45",
                 topic = "Дискриминант",

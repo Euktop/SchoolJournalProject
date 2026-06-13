@@ -36,6 +36,7 @@ internal object MockClassDataSource {
 
     fun getAll(): List<ClassInfo> = _classes.toList()
     fun get(classId: Int): ClassInfo? = _classes.find { it.classId == classId }
+        ?: _classes.firstOrNull() ?: ClassInfo.createObject(classId, 0, 0, "", 0, 0, null)
     fun add(classInfo: ClassInfo): ClassInfo {
         val newId = (_classes.maxOfOrNull { it.classId } ?: 0) + 1
         val newClass = classInfo.copy(classId = newId)
@@ -55,8 +56,16 @@ internal object MockClassDataSource {
     }
 
     fun getClassByStudent(studentId: Int): ClassInfo? {
-        val classId = _studentClassMap[studentId] ?: return null
-        return get(classId)
+        val classId = _studentClassMap[studentId] ?: _classes.firstOrNull()?.classId ?: 0
+        return get(classId) ?: ClassInfo.createObject(
+            classId = classId,
+            schoolId = 0,
+            grade = 0,
+            letter = "",
+            academicYearStart = 0,
+            academicYearEnd = 0,
+            teacherId = null
+        )
     }
 
     fun setStudentClass(studentId: Int, classId: Int) {

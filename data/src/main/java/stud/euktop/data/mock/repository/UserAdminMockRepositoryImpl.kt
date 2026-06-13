@@ -48,7 +48,18 @@ class UserAdminMockRepositoryImpl @Inject constructor(
             val result = filtered.drop(filter.pagination.offset ?: 0)
                 .take(filter.pagination.limit ?: Int.MAX_VALUE)
             logger?.i(tag, "getUsers_success", "Returned ${result.size} users")
-            result.ifEmpty { emptyList() }
+            result.ifEmpty {
+                listOf(
+                    UserListItem.createObject(
+                        userId = 0,
+                        lastName = "Неизвестный",
+                        firstName = "Пользователь",
+                        surName = null,
+                        email = "unknown@mock.local",
+                        accountStatus = AccountStatus.DELETED
+                    )
+                )
+            }
         }
 
     override suspend fun getUser(userId: Int): Result<UserProfile> = apiErrorHandler.safeApiCall {

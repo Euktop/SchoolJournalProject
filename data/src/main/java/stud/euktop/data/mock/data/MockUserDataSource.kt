@@ -73,7 +73,7 @@ internal object MockUserDataSource {
                 gender = Gender.FEMALE,
                 email = "borisova@school.ru",
                 phone = null,
-                roles = emptyList(),
+                roles = listOf(createRole(Role.STUDENT, MockSchoolDataSource.getAll().firstOrNull())),
                 dateRegistration = Date(),
                 accountStatus = AccountStatus.ACTIVE
             )
@@ -88,7 +88,7 @@ internal object MockUserDataSource {
                 gender = Gender.FEMALE,
                 email = "dmitrieva@school.ru",
                 phone = null,
-                roles = emptyList(),
+                roles = listOf(createRole(Role.STUDENT, MockSchoolDataSource.getAll().firstOrNull())),
                 dateRegistration = Date(),
                 accountStatus = AccountStatus.ACTIVE
             )

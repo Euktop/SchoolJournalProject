@@ -13,6 +13,7 @@ internal object MockRoomDataSource {
 
     fun getAll(): List<Room> = _rooms.toList()
     fun get(roomId: Int): Room? = _rooms.find { it.roomId == roomId }
+        ?: _rooms.firstOrNull() ?: Room(roomId = roomId, schoolId = 0, name = "Неизвестный")
     fun add(room: Room): Room {
         val newId = (_rooms.maxOfOrNull { it.roomId } ?: 0) + 1
         val newRoom = room.copy(roomId = newId)

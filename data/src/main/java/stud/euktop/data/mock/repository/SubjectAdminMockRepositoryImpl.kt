@@ -28,6 +28,7 @@ class SubjectAdminMockRepositoryImpl @Inject constructor(
             }
             filtered.drop(filter.pagination.offset ?: 0)
                 .take(filter.pagination.limit ?: Int.MAX_VALUE)
+                .ifEmpty { MockSubjectDataSource.getAll().take(1) }
         }
     }
 

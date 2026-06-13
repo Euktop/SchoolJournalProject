@@ -32,6 +32,7 @@ class RoomAdminMockRepositoryImpl @Inject constructor(
             }
             filtered.drop(filter.pagination.offset ?: 0)
                 .take(filter.pagination.limit ?: Int.MAX_VALUE)
+                .ifEmpty { MockRoomDataSource.getAll().take(1) }
         }
     }
 

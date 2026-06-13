@@ -56,7 +56,7 @@ class HomeworkMockRepositoryImpl @Inject constructor(
             }
             filtered.drop(filter.pagination.offset ?: 0)
                 .take(filter.pagination.limit ?: Int.MAX_VALUE)
-                .ifEmpty { emptyList() }
+                .ifEmpty { MockHomeworkDataSource.getAll().take(1) }
         }
 
     override suspend fun getHomeworkById(id: Int): Result<Homework> = apiErrorHandler.safeApiCall {
@@ -102,7 +102,17 @@ class HomeworkMockRepositoryImpl @Inject constructor(
                 room = room,
                 locationAddress = lesson?.locationAddress
             )
-            val media = getMediaList(id).getOrElse { emptyList() }
+            val media = getMediaList(id).getOrElse {
+                listOf(
+                    HomeworkMedia(
+                        mediaId = 0,
+                        fileName = "mock.png",
+                        contentType = "image/png",
+                        fileSize = 1,
+                        uploadedAt = Date()
+                    )
+                )
+            }
             HomeworkFull(
                 homeworkId = homework.homeworkId,
                 lesson = lessonFull,
@@ -155,7 +165,17 @@ class HomeworkMockRepositoryImpl @Inject constructor(
         apiErrorHandler.safeApiCall {
             logger?.d(tag, "getMediaList", "homeworkId=$homeworkId")
             MockDelayService.delay()
-            MockHomeworkDataSource.getMedia(homeworkId).ifEmpty { emptyList() }
+            MockHomeworkDataSource.getMedia(homeworkId).ifEmpty {
+                listOf(
+                    HomeworkMedia(
+                        mediaId = 0,
+                        fileName = "mock.png",
+                        contentType = "image/png",
+                        fileSize = 1,
+                        uploadedAt = Date()
+                    )
+                )
+            }
         }
 
     override suspend fun addMedia(homeworkId: Int, file: File): Result<HomeworkMedia> =

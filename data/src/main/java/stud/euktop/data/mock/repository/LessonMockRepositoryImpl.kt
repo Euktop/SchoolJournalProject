@@ -106,7 +106,23 @@ class LessonMockRepositoryImpl @Inject constructor(
             }
             val paged = filtered.drop(filter.pagination.offset ?: 0)
                 .take(filter.pagination.limit ?: Int.MAX_VALUE)
-            paged.map { enrichToFull(it) }
+            val enriched = paged.map { enrichToFull(it) }
+            if (enriched.isEmpty()) {
+                if (all.isNotEmpty()) listOf(enrichToFull(all.first())) else listOf(
+                    LessonFull.createObject(
+                        lessonId = 0,
+                        classInfo = ClassInfo.createObject(0, 0, 0, "А", 2024, 2025, null),
+                        subject = Subject.createObject(0, "Неизвестный предмет", null),
+                        teacher = UserRef.createObject(0, "Неизвестный", "Учитель", null),
+                        date = null,
+                        topic = "Тема не указана",
+                        startTime = "00:00",
+                        endTime = "00:00",
+                        room = Room.createObject(0, 0, "Неизвестный кабинет"),
+                        locationAddress = null
+                    )
+                )
+            } else enriched
         }
     }
 

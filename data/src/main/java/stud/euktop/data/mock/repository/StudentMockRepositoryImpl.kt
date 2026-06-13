@@ -35,7 +35,7 @@ class StudentMockRepositoryImpl @Inject constructor(
         val currentId = studentId ?: getCurrentUserId()
         logger?.i(tag, "getSubjectsSummary", "studentId=$currentId")
         MockDelayService.delay()
-        MockStudentDataSource.getSubjectsSummary(currentId).ifEmpty { emptyList() }
+        MockStudentDataSource.getSubjectsSummary(currentId).ifEmpty { MockStudentDataSource.studentSubjectsSummary.take(1) }
     }
 
     override suspend fun getSubjectMarks(
@@ -54,7 +54,7 @@ class StudentMockRepositoryImpl @Inject constructor(
         if (endDate != null) marks = marks.filter { it.date <= endDate }
         val offsetVal = offset ?: 0
         val limitVal = limit ?: Int.MAX_VALUE
-        marks.drop(offsetVal).take(limitVal).ifEmpty { emptyList() }
+        marks.drop(offsetVal).take(limitVal).ifEmpty { MockStudentDataSource.studentSubjectMarks.take(1) }
     }
 
     override suspend fun getStudentClass(studentId: Int?): Result<ClassInfo> = apiErrorHandler.safeApiCall {

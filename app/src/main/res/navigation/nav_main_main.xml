@@ -242,7 +242,9 @@
         app:destination="@id/studentSubjectsFragment" />
     <action
         android:id="@+id/action_global_student_subject_detail"
-        app:destination="@id/studentSubjectDetailFragment" />
+        app:destination="@id/studentSubjectDetailFragment"
+        app:popUpTo="@id/studentHomeFragment"
+        app:popUpToInclusive="true" />
     <action
         android:id="@+id/action_global_lesson_marks"
         app:destination="@id/lessonMarksFragment" />

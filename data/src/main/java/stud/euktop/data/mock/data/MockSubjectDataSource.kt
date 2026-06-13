@@ -11,6 +11,7 @@ internal object MockSubjectDataSource {
 
     fun getAll(): List<Subject> = _subjects.toList()
     fun get(subjectId: Int): Subject? = _subjects.find { it.subjectId == subjectId }
+        ?: _subjects.firstOrNull() ?: Subject(subjectId = subjectId, name = "Неизвестный предмет", description = null)
     fun add(subject: Subject): Subject {
         val newId = (_subjects.maxOfOrNull { it.subjectId } ?: 0) + 1
         val newSubject = subject.copy(subjectId = newId)
