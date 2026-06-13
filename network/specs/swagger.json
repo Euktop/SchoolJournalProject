@@ -260,6 +260,181 @@
         }
       }
     },
+    "/api/Audit/{id}": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Получить полную информацию о конкретной записи журнала аудита по её идентификатору.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditLogById_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditLogById_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditLogById_Result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
+    "/api/Audit/statistics": {
+      "get": {
+        "tags": [
+          "Audit"
+        ],
+        "summary": "Получить агрегированную статистику по журналу аудита.",
+        "parameters": [
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditStatistics_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditStatistics_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAuditStatistics_Result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
     "/api/Authorization/login": {
       "post": {
         "tags": [
@@ -1057,6 +1232,106 @@
           },
           "403": {
             "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
+    "/api/Dashboard/statistics": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Получить сводную статистику по всей системе для отображения на главной панели администратора.",
+        "parameters": [
+          {
+            "name": "schoolId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDashboardStatistics_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDashboardStatistics_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDashboardStatistics_Result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -3563,9 +3838,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Доступ запрещён"
           }
         }
       }
@@ -3804,9 +4076,6 @@
               }
             }
           },
-          "403": {
-            "description": "Доступ запрещён"
-          },
           "500": {
             "description": "Внутренняя ошибка сервера"
           }
@@ -3890,9 +4159,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Доступ запрещён"
           },
           "500": {
             "description": "Внутренняя ошибка сервера"
@@ -3984,9 +4250,6 @@
                 }
               }
             }
-          },
-          "403": {
-            "description": "Доступ запрещён"
           },
           "500": {
             "description": "Внутренняя ошибка сервера"
@@ -5527,6 +5790,107 @@
         }
       }
     },
+    "/api/Student/marks/{subjectId}/trend": {
+      "get": {
+        "tags": [
+          "Student"
+        ],
+        "summary": "Рассчитать и вернуть изменение средней оценки ученика по конкретному предмету за заданный период.",
+        "parameters": [
+          {
+            "name": "subjectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "studentId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "weeks",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 2
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStudentMarkTrend_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStudentMarkTrend_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStudentMarkTrend_Result"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
     "/api/Subjects/filter": {
       "get": {
         "tags": [
@@ -6028,6 +6392,59 @@
           },
           "404": {
             "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Доступ запрещён"
+          }
+        }
+      }
+    },
+    "/api/System/info": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Получить общую информацию о версии и состоянии системы.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSystemInfo_Result"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSystemInfo_Result"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSystemInfo_Result"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "text/plain": {
                 "schema": {
@@ -8354,6 +8771,58 @@
         },
         "additionalProperties": false
       },
+      "GetAuditLogById_Result": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
+          "actionType": {
+            "type": "string",
+            "nullable": true
+          },
+          "targetTable": {
+            "type": "string",
+            "nullable": true
+          },
+          "recordId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "oldValues": {
+            "type": "string",
+            "nullable": true
+          },
+          "newValues": {
+            "type": "string",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "userAgent": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "GetAuditLog_Result": {
         "type": "object",
         "properties": {
@@ -8398,6 +8867,24 @@
           "userAgent": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetAuditStatistics_Result": {
+        "type": "object",
+        "properties": {
+          "totalEvents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "criticalEvents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "todayEvents": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -8543,6 +9030,36 @@
           "dateRegistration": {
             "type": "string",
             "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetDashboardStatistics_Result": {
+        "type": "object",
+        "properties": {
+          "totalSchools": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalTeachers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalClasses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "activeSessions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "systemHealthPercent": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -9151,6 +9668,35 @@
         },
         "additionalProperties": false
       },
+      "GetStudentMarkTrend_Result": {
+        "type": "object",
+        "properties": {
+          "currentAverage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "previousAverage": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "trendValue": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isPositive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "formattedString": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "GetStudentMarksAggregated_Result": {
         "type": "object",
         "properties": {
@@ -9346,6 +9892,28 @@
             "nullable": true
           },
           "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "GetSystemInfo_Result": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string",
+            "nullable": true
+          },
+          "apiStatus": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastDbUpdate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "environment": {
             "type": "string",
             "nullable": true
           }
