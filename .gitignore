@@ -8,7 +8,13 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
-/build
+/build/*
+!/build/generated/
+!/build/generated/openapi/
+!/build/generated/openapi/src/
+!/build/generated/openapi/src/main/
+!/build/generated/openapi/src/main/kotlin/
+!/build/generated/openapi/src/main/kotlin/**
 /captures
 .externalNativeBuild
 .cxx
