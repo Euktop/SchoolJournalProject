@@ -12,10 +12,14 @@ import stud.euktop.domain.model.lesson.Lesson
 import stud.euktop.domain.model.lesson.LessonFilter
 import stud.euktop.domain.model.lesson.LessonFull
 import stud.euktop.domain.model.lesson.LessonUpdate
+import stud.euktop.domain.model.school.ClassInfo
+import stud.euktop.domain.model.school.Room
+import stud.euktop.domain.model.school.Subject
 import stud.euktop.domain.model.user.UserRef
 import stud.euktop.domain.repository.LessonRepository
 import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
+import java.util.Date
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,20 +30,34 @@ class LessonMockRepositoryImpl @Inject constructor(
     private val tag = this.toSimpleTag()
 
     private suspend fun enrichToFull(lesson: Lesson): LessonFull {
-        val classInfo = MockClassDataSource.get(lesson.classId)
-            ?: throw NoSuchElementException("Class not found for lesson ${lesson.lessonId}")
-        val subject = MockSubjectDataSource.get(lesson.subjectId)
-            ?: throw NoSuchElementException("Subject not found for lesson ${lesson.lessonId}")
+        val classInfo = MockClassDataSource.get(lesson.classId) ?: ClassInfo.createObject(
+            0,
+            0,
+            0,
+            "А",
+            2024,
+            2025,
+            null
+        )
+        val subject = MockSubjectDataSource.get(lesson.subjectId) ?: Subject.createObject(
+            0,
+            "Неизвестный предмет",
+            null
+        )
         val teacher = MockUserDataSource.getUser(lesson.teacherId)
-            ?: throw NoSuchElementException("Teacher not found for lesson ${lesson.lessonId}")
         val room = lesson.roomId?.let { MockRoomDataSource.get(it) }
         return LessonFull(
             lessonId = lesson.lessonId,
             classInfo = classInfo,
             subject = subject,
-            teacher = UserRef(teacher.userId, teacher.lastName, teacher.firstName, teacher.surName),
+            teacher = UserRef(
+                teacher?.userId ?: 0,
+                teacher?.lastName ?: "Неизвестный",
+                teacher?.firstName ?: "Учитель",
+                teacher?.surName
+            ),
             date = lesson.date,
-            topic = lesson.topic ?: "",
+            topic = lesson.topic ?: "Тема не указана",
             startTime = lesson.startTime,
             endTime = lesson.endTime,
             room = room,
@@ -51,8 +69,23 @@ class LessonMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "getLesson started", "lessonId=$lessonId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            val lesson = MockLessonDataSource.getLesson(lessonId) ?: throw NoSuchElementException("Lesson not found")
-            enrichToFull(lesson)
+            val lesson = MockLessonDataSource.getLesson(lessonId)
+            if (lesson != null) {
+                enrichToFull(lesson)
+            } else {
+                LessonFull.createObject(
+                    lessonId = lessonId,
+                    classInfo = ClassInfo.createObject(0, 0, 0, "А", 2024, 2025, null),
+                    subject = Subject.createObject(0, "Неизвестный предмет", null),
+                    teacher = UserRef.createObject(0, "Неизвестный", "Учитель", null),
+                    date = null,
+                    topic = "Тема не указана",
+                    startTime = "00:00",
+                    endTime = "00:00",
+                    room = Room.createObject(0, 0, "Неизвестный кабинет"),
+                    locationAddress = null
+                )
+            }
         }
     }
 
@@ -91,7 +124,7 @@ class LessonMockRepositoryImpl @Inject constructor(
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
             val existing = MockLessonDataSource.getLesson(update.lessonId)
-                ?: throw NoSuchElementException("Lesson not found")
+                ?: Lesson(update.lessonId, 0, 0, 0, Date(), null, "00:00", "00:00", null, null)
             val updated = existing.copy(
                 classId = update.classId.uValue ?: existing.classId,
                 subjectId = update.subjectId.uValue ?: existing.subjectId,
@@ -112,7 +145,15 @@ class LessonMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "deleteLesson started", "lessonId=$lessonId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            if (!MockLessonDataSource.deleteLesson(lessonId)) throw NoSuchElementException("Lesson not found")
+            val deleted = MockLessonDataSource.deleteLesson(lessonId)
+            if (!deleted) {
+                logger?.d(
+                    tag,
+                    "deleteLesson_warning",
+                    "Lesson not found, returning success for idempotency"
+                )
+            }
+            Unit
         }
     }
 }

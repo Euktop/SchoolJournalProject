@@ -58,7 +58,7 @@ class SessionStorageImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRole() =
+    override suspend fun getRole(): Role? =
         roleKey.getValue()?.let {
             Role.entries.getOrNull(it)
         }

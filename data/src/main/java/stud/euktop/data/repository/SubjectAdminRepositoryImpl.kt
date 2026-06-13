@@ -1,4 +1,3 @@
-// data/src/main/java/stud/euktop/data/repository/SubjectAdminMockRepositoryImpl.kt
 package stud.euktop.data.repository
 
 import com.schooljournal.api.SubjectsApi

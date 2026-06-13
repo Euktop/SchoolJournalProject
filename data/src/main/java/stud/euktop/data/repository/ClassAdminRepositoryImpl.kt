@@ -1,4 +1,3 @@
-// data/src/main/java/stud/euktop/data/repository/ClassAdminRepositoryImpl.kt
 package stud.euktop.data.repository
 
 import com.schooljournal.api.ClassesApi
@@ -22,6 +21,8 @@ class ClassAdminRepositoryImpl @Inject constructor(
         errorHandler.safeApiCall {
             val dtos = classesApi.apiClassesFilterGet(
                 schoolId = filter.schoolId,
+                grade = null, // Можно добавить в фильтр при необходимости
+                letter = null,
                 query = filter.query,
                 classTeacherId = filter.teacherId,
                 filterByClassTeacherId = filter.teacherId != null,
@@ -53,7 +54,6 @@ class ClassAdminRepositoryImpl @Inject constructor(
 
     override suspend fun updateClass(update: ClassInfoUpdate): Result<ClassInfo> =
         errorHandler.safeApiCall {
-            // Используем флаги updateXxx, которые принимает API
             classesApi.apiClassesIdPatch(
                 id = update.classId,
                 schoolId = update.schoolId.uValue,

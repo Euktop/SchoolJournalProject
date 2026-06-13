@@ -12,7 +12,6 @@ import stud.euktop.data.map.toLocalDateTime
 import stud.euktop.data.map.toNetwork
 import stud.euktop.data.utils.ApiErrorHandler
 import stud.euktop.domain.model.user.Role
-import stud.euktop.domain.model.user.UserAuth
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
 import javax.inject.Inject
@@ -33,10 +32,15 @@ class AuthRepositoryImpl @Inject constructor(
             val response = authApi.apiAuthorizationLoginPost(LoginRequest(login, passwordHash))
             val token = response.token ?: throw IllegalStateException("No token")
             val userId = response.userId ?: throw IllegalStateException("No userId")
+
             tokenStorage.setToken(token)
             userIdStorage.setUserId(userId)
+
             val roleIds = response.roles?.map { it.roleId ?: 0 } ?: emptyList()
-            UserAuth(userId, token, roleIds)
+            // Сохраняем первую роль как основную для простоты, или обрабатываем логику выбора
+            roleIds.firstOrNull()?.let { roleStorage.saveRole(Role.entries.getOrNull(it)) }
+
+            Unit
         }
 
     override suspend fun registration(profile: UserProfile, password: String): Result<Unit> =
@@ -66,34 +70,29 @@ class AuthRepositoryImpl @Inject constructor(
         userIdStorage.clearAll()
         roleStorage.clearAll()
         return Result.success(Unit)
+        // Примечание: Если на бэкенде есть эндпоинт logout, его нужно вызвать здесь перед очисткой
     }
 
     override suspend fun changePassword(oldPassword: String, newPassword: String): Result<Unit> =
         errorHandler.safeApiCall {
-            val userId =
-                userIdStorage.getUserId() ?: throw IllegalStateException("No user logged in")
+            val userId = userIdStorage.getUserId() ?: throw IllegalStateException("No user logged in")
             usersApi.apiUsersIdPasswordPatch(userId, oldPassword, newPassword)
         }
 
     override suspend fun getRoles(): Result<List<Role>> {
         return getCurrentUser().fold(
-            onSuccess = { it ->
-                Result.success(it.roles.map { it.role }.distinct())
-            }, onFailure = {
-                Result.failure(it)
-            }
+            onSuccess = { Result.success(it.roles.map { role -> role.role }.distinct()) },
+            onFailure = { Result.failure(it) }
         )
     }
 
-    override suspend fun saveRole(role: Role): Result<Unit> {
-        return errorHandler.safeApiCall {
+    override suspend fun saveRole(role: Role): Result<Unit> =
+        errorHandler.safeApiCall {
             roleStorage.saveRole(role)
         }
-    }
 
-    override suspend fun getSaveRole(): Result<Role?> {
-        return errorHandler.safeApiCall {
+    override suspend fun getSaveRole(): Result<Role?> =
+        errorHandler.safeApiCall {
             roleStorage.getRole()
         }
-    }
 }

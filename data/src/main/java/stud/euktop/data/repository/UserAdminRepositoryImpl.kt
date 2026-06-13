@@ -31,8 +31,10 @@ class UserAdminRepositoryImpl @Inject constructor(
             val dtos = usersApi.apiUsersFilterGet(
                 fullName = filter.fullName,
                 roleId = filter.role?.toNetwork(),
+                filterByRoleId = filter.role != null,
                 schoolId = filter.schoolId,
-                accountStatusId = filter.accountStatus?.toNetwork(),
+                filterBySchoolId = filter.schoolId != null,
+                accountStatusId = filter.accountStatus?.id,
                 offset = filter.pagination.offset,
                 limit = filter.pagination.limit
             )
@@ -56,12 +58,16 @@ class UserAdminRepositoryImpl @Inject constructor(
                 birthDay = profile.birthday?.toLocalDateTime(),
                 email = profile.email,
                 phone = profile.phone,
+                roleId = profile.roles.firstOrNull()?.role?.toNetwork(),
+                schoolId = profile.roles.firstOrNull()?.schoolId
             )
-            val result = usersApi.apiUsersAdminPost(request)
+            val resultId = usersApi.apiUsersAdminPost(request)
+
+            // Добавляем дополнительные роли, если их несколько
             profile.roles.forEach {
-                addUserRole(result, it.role, it.schoolId)
+                addUserRole(resultId, it.role, it.schoolId).getOrThrow()
             }
-            getUser(result).getOrThrow()
+            getUser(resultId).getOrThrow()
         }
 
     override suspend fun updateUser(update: UserUpdate): Result<UserProfile> =
@@ -69,12 +75,19 @@ class UserAdminRepositoryImpl @Inject constructor(
             usersApi.apiUsersIdPatch(
                 id = update.userId,
                 lastName = update.lastName.uValue,
+                lastNameUpdate = update.lastName.isUpdate,
                 firstName = update.firstName.uValue,
+                firstNameUpdate = update.firstName.isUpdate,
                 surName = update.surName.uValue,
+                surNameUpdate = update.surName.isUpdate,
                 gender = update.gender.uValue?.toNetwork(),
+                genderUpdate = update.gender.isUpdate,
                 birthDay = update.birthday.uValue?.toLocalDateTime(),
+                birthDayUpdate = update.birthday.isUpdate,
                 email = update.email.uValue,
-                phone = update.phone.uValue
+                emailUpdate = update.email.isUpdate,
+                phone = update.phone.uValue,
+                phoneUpdate = update.phone.isUpdate
             )
             getUser(update.userId).getOrThrow()
         }

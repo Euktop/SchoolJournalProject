@@ -14,10 +14,16 @@ internal object MockSchoolDataSource {
     }
 
     fun getAll(): List<School> = _schools.toList()
-    fun add(school: School) { _schools.add(school) }
+    fun add(school: School) {
+        _schools.add(school)
+    }
+
     fun update(school: School) {
         val index = _schools.indexOfFirst { it.schoolId == school.schoolId }
         if (index >= 0) _schools[index] = school
     }
-    fun delete(schoolId: Int) { _schools.removeIf { it.schoolId == schoolId } }
+
+    fun delete(schoolId: Int): Boolean {
+        return _schools.removeIf { it.schoolId == schoolId }
+    }
 }

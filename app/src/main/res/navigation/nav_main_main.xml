@@ -188,7 +188,7 @@
         android:label="AuditLogDetailFragment">
         <argument
             android:name="id"
-            app:argType="kotlin.Int"
+            app:argType="integer"
             app:nullable="false" />
     </fragment>
 

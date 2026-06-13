@@ -43,7 +43,15 @@ class ClassAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "getClass started", "classId=$classId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            MockClassDataSource.get(classId) ?: throw NoSuchElementException("Class not found")
+            MockClassDataSource.get(classId) ?: ClassInfo.createObject(
+                classId = classId,
+                schoolId = 0,
+                grade = 0,
+                letter = "А",
+                academicYearStart = 2024,
+                academicYearEnd = 2025,
+                teacherId = null
+            )
         }
     }
 
@@ -60,7 +68,7 @@ class ClassAdminMockRepositoryImpl @Inject constructor(
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
             val existing = MockClassDataSource.get(update.classId)
-                ?: throw NoSuchElementException("Class not found")
+                ?: ClassInfo.createObject(update.classId, 0, 0, "А", 2024, 2025, null)
             val updated = existing.copy(
                 schoolId = update.schoolId.uValue ?: existing.schoolId,
                 grade = update.grade.uValue ?: existing.grade,
@@ -78,7 +86,15 @@ class ClassAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "deleteClass started", "classId=$classId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            if (!MockClassDataSource.delete(classId)) throw NoSuchElementException("Class not found")
+            val deleted = MockClassDataSource.delete(classId)
+            if (!deleted) {
+                logger?.d(
+                    tag,
+                    "deleteClass_warning",
+                    "Class not found, returning success for idempotency"
+                )
+            }
+            Unit
         }
     }
 }

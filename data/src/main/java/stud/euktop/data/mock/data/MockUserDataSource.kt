@@ -100,7 +100,21 @@ internal object MockUserDataSource {
         schoolId = school?.schoolId,
         assignedAt = Date()
     )
-
+    fun getUser(userId: Int): UserProfile {
+        val user = _users.find { it.userId == userId }
+        return if (user != null) {
+            enrichWithRoles(user)
+        } else {
+            // Fallback вместо null
+            UserProfile.createObject(
+                userId = userId,
+                lastName = "Неизвестный",
+                firstName = "Пользователь",
+                email = "unknown@mock.local",
+                accountStatus = stud.euktop.domain.model.user.AccountStatus.DELETED
+            )
+        }
+    }
     private val _userRoles = mutableListOf<Triple<Int, Role, Int?>>().apply {
         add(Triple(1, Role.ADMIN, null))
         add(Triple(2, Role.TEACHER, 1))
@@ -165,11 +179,6 @@ internal object MockUserDataSource {
             UserRole(it.second, it.third, Date())
         }
         return user.copy(roles = roles)
-    }
-
-    fun getUser(userId: Int): UserProfile? {
-        val user = _users.find { it.userId == userId } ?: return null
-        return enrichWithRoles(user)
     }
 
     fun getAllUsersWithRoles(): List<UserProfile> {

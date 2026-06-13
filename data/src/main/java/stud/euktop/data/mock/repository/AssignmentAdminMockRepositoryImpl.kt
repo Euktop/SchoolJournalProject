@@ -43,7 +43,11 @@ class AssignmentAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "getTeacherAssignment started", "id=$id")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            MockAssignmentDataSource.get(id) ?: throw NoSuchElementException("Assignment not found")
+            MockAssignmentDataSource.get(id) ?: TeacherAssignment(
+                assignmentId = id,
+                validToDate = null,
+                isPrimary = false
+            )
         }
     }
 
@@ -60,7 +64,11 @@ class AssignmentAdminMockRepositoryImpl @Inject constructor(
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
             val existing = MockAssignmentDataSource.get(update.id)
-                ?: throw NoSuchElementException("Assignment not found")
+                ?: TeacherAssignment(
+                    assignmentId = update.id,
+                    validToDate = null,
+                    isPrimary = false
+                )
             val updated = existing.copy(
                 validToDate = update.validToDate.uValue ?: existing.validToDate,
                 isPrimary = update.isPrimary.uValue ?: existing.isPrimary
@@ -74,8 +82,15 @@ class AssignmentAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "deleteTeacherAssignment started", "id=$id")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            if (!MockAssignmentDataSource.delete(id))
-                throw NoSuchElementException("Assignment not found")
+            val deleted = MockAssignmentDataSource.delete(id)
+            if (!deleted) {
+                logger?.d(
+                    tag,
+                    "deleteTeacherAssignment_warning",
+                    "Assignment not found, returning success for idempotency"
+                )
+            }
+            Unit
         }
     }
 }

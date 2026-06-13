@@ -25,7 +25,10 @@ class RoomAdminMockRepositoryImpl @Inject constructor(
             val all = MockRoomDataSource.getAll()
             val filtered = all.filter { room ->
                 (filter.schoolId == null || room.schoolId == filter.schoolId) &&
-                        (filter.name == null || room.name.contains(filter.name!!, ignoreCase = true))
+                        (filter.name == null || room.name.contains(
+                            filter.name!!,
+                            ignoreCase = true
+                        ))
             }
             filtered.drop(filter.pagination.offset ?: 0)
                 .take(filter.pagination.limit ?: Int.MAX_VALUE)
@@ -36,7 +39,11 @@ class RoomAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "getRoom started", "roomId=$roomId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            MockRoomDataSource.get(roomId) ?: throw NoSuchElementException("Room not found")
+            MockRoomDataSource.get(roomId) ?: Room.createObject(
+                roomId = roomId,
+                schoolId = 0,
+                name = "Неизвестный кабинет"
+            )
         }
     }
 
@@ -52,7 +59,11 @@ class RoomAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "updateRoom started", "roomUpdate=$room")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            val existing = MockRoomDataSource.get(room.roomId) ?: throw NoSuchElementException("Room not found")
+            val existing = MockRoomDataSource.get(room.roomId) ?: Room.createObject(
+                room.roomId,
+                0,
+                "Неизвестный кабинет"
+            )
             val updatedSchoolId = room.schoolId.uValue ?: existing.schoolId
             val updatedName = room.name.uValue ?: existing.name
             val updatedRoom = existing.copy(schoolId = updatedSchoolId, name = updatedName)
@@ -65,7 +76,15 @@ class RoomAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "deleteRoom started", "roomId=$roomId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            if (!MockRoomDataSource.delete(roomId)) throw NoSuchElementException("Room not found")
+            val deleted = MockRoomDataSource.delete(roomId)
+            if (!deleted) {
+                logger?.d(
+                    tag,
+                    "deleteRoom_warning",
+                    "Room not found, returning success for idempotency"
+                )
+            }
+            Unit
         }
     }
 }

@@ -60,17 +60,21 @@ class RouterImpl @Inject constructor(
     // --- RouterSplash & RouterMain ---
     override suspend fun navigateAfterSplash() {
         if (authRepository.getCurrentUser().isSuccess) {
-            val role = roleRepository.getCurrentRole()?.name ?: return toLogin()
-            val lastDest = stateManager.getLastDestination(role)
+            val role = roleRepository.getCurrentRole() ?: return toLogin()
+            val roleName = role.name
+            val lastDest = stateManager.getLastDestination(roleName)
+
             if (lastDest != null && roleChecker.isDestinationAllowed(
                     lastDest.destinationId,
-                    roleRepository.getCurrentRole()
+                    role
                 )
             ) {
-                navigationManager.navigate(NavCommand.ToDestination(lastDest.destinationId))
-                lastDest.arguments?.let { args ->
-                    // Восстановить аргументы сложно, можно сохранять отдельно
-                }
+                // 1. Сначала переходим в основной граф (чистим стек от splash)
+                // 2. Затем переходим к сохраненному экрану внутри этого графа
+                navigationManager.navigate(
+                    NavCommand.ToAction(Nav1Directions.actionGlobalNavMainMain()),
+                    NavCommand.ToDestination(lastDest.destinationId)
+                )
             } else {
                 toMain()
             }
@@ -80,14 +84,26 @@ class RouterImpl @Inject constructor(
     }
 
     override suspend fun toMain() {
+        val mainGraphAction = NavCommand.ToAction(Nav1Directions.actionGlobalNavMainMain())
+
         if (BuildConfig.DEBUG) {
-            navigationManager.navigate(NavCommand.ToAction(Nav1Directions.actionGlobalNavMainMain()))
+            // В дебаге просто открываем тестовое меню (startDestination графа nav_main_main)
+            navigationManager.navigate(mainGraphAction)
         } else {
             val role = roleRepository.getCurrentRole()
             when (role) {
-                Role.STUDENT -> toMainMenuStudentHome()
-                Role.TEACHER -> toMainMenuStudentTeacher()
-                Role.ADMIN, Role.DIRECTOR -> toMainMenuStudentAdmin()
+                Role.STUDENT -> navigationManager.navigate(
+                    mainGraphAction,
+                    NavCommand.ToAction(NavMainMainDirections.actionGlobalHomeStudent())
+                )
+                Role.TEACHER -> navigationManager.navigate(
+                    mainGraphAction,
+                    NavCommand.ToAction(NavMainMainDirections.actionGlobalHomeTeacher())
+                )
+                Role.ADMIN, Role.DIRECTOR -> navigationManager.navigate(
+                    mainGraphAction,
+                    NavCommand.ToAction(NavMainMainDirections.actionGlobalHomeAdmin())
+                )
                 else -> toLogin()
             }
         }

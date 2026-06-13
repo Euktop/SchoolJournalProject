@@ -35,7 +35,11 @@ class SubjectAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "getSubject started", "subjectId=$subjectId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            MockSubjectDataSource.get(subjectId) ?: throw NoSuchElementException("Subject not found")
+            MockSubjectDataSource.get(subjectId) ?: Subject.createObject(
+                subjectId = subjectId,
+                name = "Неизвестный предмет",
+                description = "Описание отсутствует"
+            )
         }
     }
 
@@ -52,7 +56,11 @@ class SubjectAdminMockRepositoryImpl @Inject constructor(
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
             val existing = MockSubjectDataSource.get(subject.subjectId)
-                ?: throw NoSuchElementException("Subject not found")
+                ?: Subject.createObject(
+                    subject.subjectId,
+                    "Неизвестный предмет",
+                    "Описание отсутствует"
+                )
             val updatedName = subject.name.uValue ?: existing.name
             val updatedDescription = subject.description.uValue ?: existing.description
             val updatedSubject = existing.copy(name = updatedName, description = updatedDescription)
@@ -65,7 +73,15 @@ class SubjectAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "deleteSubject started", "subjectId=$subjectId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            if (!MockSubjectDataSource.delete(subjectId)) throw NoSuchElementException("Subject not found")
+            val deleted = MockSubjectDataSource.delete(subjectId)
+            if (!deleted) {
+                logger?.d(
+                    tag,
+                    "deleteSubject_warning",
+                    "Subject not found, returning success for idempotency"
+                )
+            }
+            Unit
         }
     }
 }

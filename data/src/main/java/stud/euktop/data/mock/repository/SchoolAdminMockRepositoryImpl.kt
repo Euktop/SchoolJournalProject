@@ -40,8 +40,12 @@ class SchoolAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "getSchool started", "schoolId=$schoolId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            MockSchoolDataSource.getAll().find { it.schoolId == schoolId }
-                ?: throw NoSuchElementException("School not found")
+            MockSchoolDataSource.getAll().find { it.schoolId == schoolId } ?: School(
+                schoolId = schoolId,
+                name = "Неизвестная школа",
+                region = "Неизвестный регион",
+                address = "Неизвестный адрес"
+            )
         }
     }
 
@@ -61,7 +65,7 @@ class SchoolAdminMockRepositoryImpl @Inject constructor(
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
             val existing = MockSchoolDataSource.getAll().find { it.schoolId == update.schoolId }
-                ?: throw NoSuchElementException("School not found")
+                ?: School(update.schoolId, "Неизвестная школа", "Неизвестный регион", "Неизвестный адрес")
             val updated = existing.copy(
                 name = update.name.uValue ?: existing.name,
                 region = update.region.uValue ?: existing.region,
@@ -76,7 +80,11 @@ class SchoolAdminMockRepositoryImpl @Inject constructor(
         logger?.i(tag, "deleteSchool started", "schoolId=$schoolId")
         return apiErrorHandler.safeApiCall {
             MockDelayService.delay()
-            MockSchoolDataSource.delete(schoolId)
+            val deleted = MockSchoolDataSource.delete(schoolId)
+            if (!deleted) {
+                logger?.d(tag, "deleteSchool_warning", "School not found, returning success for idempotency")
+            }
+            Unit
         }
     }
 }

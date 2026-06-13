@@ -1,4 +1,3 @@
-// data/src/main/java/stud/euktop/data/repository/StudentRepositoryImpl.kt
 package stud.euktop.data.repository
 
 import com.schooljournal.api.StudentApi
@@ -136,7 +135,7 @@ class StudentRepositoryImpl @Inject constructor(
         studentId: Int?,
         weeks: Int
     ): Result<SubjectTrend> {
-        // TODO: реальный расчёт через API (например, сравнение среднего за последние weeks недель с предыдущим периодом)
+        // TODO: реальный расчёт через API, пока заглушка
         return Result.success(SubjectTrend(0.12, true, "+0.12 за неделю"))
     }
 }

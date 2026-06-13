@@ -1,5 +1,6 @@
 package stud.euktop.data.mock.repository
 
+import stud.euktop.data.local.storage.contract.UserIdStorage
 import stud.euktop.data.mock.data.MockClassDataSource
 import stud.euktop.data.mock.data.MockDelayService
 import stud.euktop.data.mock.data.MockStudentDataSource
@@ -21,16 +22,20 @@ import javax.inject.Singleton
 
 @Singleton
 class StudentMockRepositoryImpl @Inject constructor(
-    private val apiErrorHandler: ApiErrorHandler
+    private val apiErrorHandler: ApiErrorHandler,
+    private val userIdStorage: UserIdStorage
 ) : StudentRepository {
     private val tag = this.toSimpleTag()
 
-    override suspend fun getSubjectsSummary(studentId: Int?): Result<List<StudentSubjectSummary>> {
-        logger?.i(tag, "getSubjectsSummary started", "studentId=$studentId")
-        return apiErrorHandler.safeApiCall {
-            MockDelayService.delay()
-            MockStudentDataSource.getSubjectsSummary(studentId ?: 0)
-        }
+    private suspend fun getCurrentUserId(): Int {
+        return userIdStorage.getUserId() ?: 0
+    }
+
+    override suspend fun getSubjectsSummary(studentId: Int?): Result<List<StudentSubjectSummary>> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getSubjectsSummary", "studentId=$currentId")
+        MockDelayService.delay()
+        MockStudentDataSource.getSubjectsSummary(currentId).ifEmpty { emptyList() }
     }
 
     override suspend fun getSubjectMarks(
@@ -40,45 +45,44 @@ class StudentMockRepositoryImpl @Inject constructor(
         endDate: Date?,
         offset: Int?,
         limit: Int?
-    ): Result<List<StudentSubjectMark>> {
-        logger?.i(
-            tag, "getSubjectMarks started",
-            "subjectId=$subjectId, studentId=$studentId, startDate=$startDate, endDate=$endDate, offset=$offset, limit=$limit"
-        )
-        return apiErrorHandler.safeApiCall {
-            MockDelayService.delay()
-            val marks = MockStudentDataSource.getSubjectMarks(studentId ?: 0, subjectId)
-            var filtered = marks
-            if (startDate != null) filtered = filtered.filter { it.date >= startDate }
-            if (endDate != null) filtered = filtered.filter { it.date <= endDate }
-            val offsetVal = offset ?: 0
-            val limitVal = limit ?: Int.MAX_VALUE
-            filtered.drop(offsetVal).take(limitVal)
-        }
+    ): Result<List<StudentSubjectMark>> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getSubjectMarks", "subjectId=$subjectId, studentId=$currentId")
+        MockDelayService.delay()
+        var marks = MockStudentDataSource.getSubjectMarks(currentId, subjectId)
+        if (startDate != null) marks = marks.filter { it.date >= startDate }
+        if (endDate != null) marks = marks.filter { it.date <= endDate }
+        val offsetVal = offset ?: 0
+        val limitVal = limit ?: Int.MAX_VALUE
+        marks.drop(offsetVal).take(limitVal).ifEmpty { emptyList() }
     }
 
-    override suspend fun getStudentClass(studentId: Int?): Result<ClassInfo> {
-        logger?.i(tag, "getStudentClass started", "studentId=$studentId")
-        return apiErrorHandler.safeApiCall {
-            MockDelayService.delay()
-            MockClassDataSource.getClassByStudent(studentId ?: 0)
-                ?: throw NoSuchElementException("Student class not found")
-        }
+    override suspend fun getStudentClass(studentId: Int?): Result<ClassInfo> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getStudentClass", "studentId=$currentId")
+        MockDelayService.delay()
+        MockClassDataSource.getClassByStudent(currentId)
+            ?: ClassInfo.createObject(
+                classId = 0, schoolId = 0, grade = 0, letter = "А",
+                academicYearStart = 2024, academicYearEnd = 2025, teacherId = null
+            )
     }
 
     override suspend fun getGradesSummary(
         studentId: Int?,
         periodStart: Date?,
         periodEnd: Date?
-    ): Result<List<StudentGradesSummary>> {
-        logger?.i(
-            tag, "getGradesSummary started",
-            "studentId=$studentId, periodStart=$periodStart, periodEnd=$periodEnd"
-        )
-        return apiErrorHandler.safeApiCall {
-            MockDelayService.delay()
-            // TODO: реализовать в MockStudentDataSource, пока заглушка
-            emptyList()
+    ): Result<List<StudentGradesSummary>> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getGradesSummary", "studentId=$currentId")
+        MockDelayService.delay()
+        MockStudentDataSource.getGradesSummary(currentId).ifEmpty {
+            listOf(
+                StudentGradesSummary(
+                    subjectId = 0, subjectName = "Неизвестный предмет", averageMark = 0.0, finalMark = 0.0,
+                    totalGrades = 0, goodGrades = 0, excellentGrades = 0
+                )
+            )
         }
     }
 
@@ -88,15 +92,12 @@ class StudentMockRepositoryImpl @Inject constructor(
         startDate: Date?,
         endDate: Date?,
         maxPoints: Int?
-    ): Result<List<StudentMarksAggregated>> {
-        logger?.i(
-            tag, "getMarksAggregated started",
-            "subjectId=$subjectId, studentId=$studentId, startDate=$startDate, endDate=$endDate, maxPoints=$maxPoints"
-        )
-        return apiErrorHandler.safeApiCall {
-            MockDelayService.delay()
-            // TODO: реализовать в MockStudentDataSource, пока заглушка
-            emptyList()
+    ): Result<List<StudentMarksAggregated>> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getMarksAggregated", "subjectId=$subjectId, studentId=$currentId")
+        MockDelayService.delay()
+        MockStudentDataSource.getMarksAggregated(currentId, subjectId).ifEmpty {
+            listOf(StudentMarksAggregated(date = Date(), averageMark = 0.0, marksCount = 0))
         }
     }
 
@@ -104,20 +105,12 @@ class StudentMockRepositoryImpl @Inject constructor(
         studentId: Int?,
         startDate: Date?,
         endDate: Date?
-    ): Result<StudentOverallAverage> {
-        logger?.i(
-            tag, "getOverallAverage started",
-            "studentId=$studentId, startDate=$startDate, endDate=$endDate"
-        )
-        return apiErrorHandler.safeApiCall {
-            MockDelayService.delay()
-            StudentOverallAverage(
-                averageMark = null,
-                totalGrades = null,
-                goodGrades = null,
-                excellentGrades = null
-            )
-        }
+    ): Result<StudentOverallAverage> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getOverallAverage", "studentId=$currentId")
+        MockDelayService.delay()
+        MockStudentDataSource.getOverallAverage(currentId)
+            ?: StudentOverallAverage(averageMark = 0.0, totalGrades = 0, goodGrades = 0, excellentGrades = 0)
     }
 
     override suspend fun getStudentSchedule(
@@ -125,58 +118,29 @@ class StudentMockRepositoryImpl @Inject constructor(
         startDate: Date?,
         endDate: Date?
     ): Result<List<StudentScheduleItem>> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getStudentSchedule", "studentId=$currentId")
         MockDelayService.delay()
-        // Генерируем тестовые данные для демонстрации
-        val now = Date()
-        listOf(
-            StudentScheduleItem(
-                lessonId = 1,
-                date = now,
-                startTime = "09:00",
-                endTime = "09:45",
-                topic = "Квадратные уравнения",
-                subjectName = "Математика",
-                teacherLastName = "Петрова",
-                teacherFirstName = "Анна",
-                teacherSurName = "Сергеевна",
-                roomName = "101",
-                locationAddress = null
-            ),
-            StudentScheduleItem(
-                lessonId = 2,
-                date = now,
-                startTime = "10:00",
-                endTime = "10:45",
-                topic = "Дискриминант",
-                subjectName = "Математика",
-                teacherLastName = "Петрова",
-                teacherFirstName = "Анна",
-                teacherSurName = "Сергеевна",
-                roomName = "101",
-                locationAddress = null
-            ),
-            StudentScheduleItem(
-                lessonId = 3,
-                date = now,
-                startTime = "11:00",
-                endTime = "11:45",
-                topic = "Русский язык",
-                subjectName = "Русский язык",
-                teacherLastName = "Иванов",
-                teacherFirstName = "Иван",
-                teacherSurName = "Иванович",
-                roomName = "203",
-                locationAddress = null
+        MockStudentDataSource.getStudentSchedule(currentId).ifEmpty {
+            listOf(
+                StudentScheduleItem(
+                    lessonId = 0, date = Date(), startTime = "00:00", endTime = "00:00",
+                    topic = "Нет расписания", subjectName = "Нет предмета",
+                    teacherLastName = "Нет", teacherFirstName = "Нет", teacherSurName = "Нет",
+                    roomName = "Нет", locationAddress = null
+                )
             )
-        )
+        }
     }
 
     override suspend fun getSubjectTrend(
         subjectId: Int,
         studentId: Int?,
         weeks: Int
-    ): Result<SubjectTrend> {
-        // TODO: реальный расчёт через API (например, сравнение среднего за последние weeks недель с предыдущим периодом)
-        return Result.success(SubjectTrend(0.12, true, "+0.12 за неделю"))
+    ): Result<SubjectTrend> = apiErrorHandler.safeApiCall {
+        val currentId = studentId ?: getCurrentUserId()
+        logger?.i(tag, "getSubjectTrend", "subjectId=$subjectId, studentId=$currentId, weeks=$weeks")
+        MockDelayService.delay()
+        SubjectTrend(value = 0.0, isPositive = true, formattedString = "Без изменений")
     }
 }

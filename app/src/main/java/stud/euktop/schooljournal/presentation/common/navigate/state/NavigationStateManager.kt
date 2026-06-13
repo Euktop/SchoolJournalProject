@@ -45,10 +45,12 @@ class NavigationStateManager @Inject constructor(
         }
     }
 
-    // === Работа с последним экраном для конкретной роли ===
     suspend fun saveLastDestination(role: String, destinationData: DestinationData) {
         lastDestKey(role).setValue(destinationData.destinationId.toString())
-        val argsStr = destinationData.arguments?.let { bundleToString(it) }
+        val argsStr = destinationData.arguments
+            ?.takeIf { !it.isEmpty }
+            ?.let { bundleToString(it) }
+
         lastArgsKey(role).setValue(argsStr)
     }
 
@@ -106,9 +108,13 @@ class NavigationStateManager @Inject constructor(
 
     private fun stringToBundle(str: String): Bundle {
         val bundle = Bundle()
+        if (str.isBlank()) return bundle
+
         str.split("&").forEach { pair ->
-            val (key, value) = pair.split("=", limit = 2)
-            bundle.putString(key, value)
+            if (pair.contains("=")) {
+                val (key, value) = pair.split("=", limit = 2)
+                bundle.putString(key, value)
+            }
         }
         return bundle
     }

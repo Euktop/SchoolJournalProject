@@ -77,6 +77,7 @@ class AssignmentAdminRepositoryImpl @Inject constructor(
                 comment = update.comment.uValue,
                 commentUpdate = update.comment.isUpdate,
                 validToUpdate = update.validToDate.isUpdate,
+                isPrimaryUpdate = update.isPrimary.isUpdate
             )
             getTeacherAssignment(update.id).getOrThrow()
         }

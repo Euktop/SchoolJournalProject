@@ -23,10 +23,10 @@ class SchoolAdminRepositoryImpl @Inject constructor(
             schoolsApi.apiSchoolsGet(
                 name = filter.name,
                 region = filter.region,
+                address = filter.address,
                 offset = filter.pagination.offset,
                 limit = filter.pagination.limit
             ).map { it.toDomain() }
-            TODO("Не хватает фильтрации по адресу")
         }
 
     override suspend fun getSchool(schoolId: Int): Result<School> =
