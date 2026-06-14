@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="download_notification_channel_name">Загрузки</string>
+    <string name="download_notification_title">Загрузка файла</string>
+    <string name="download_notification_in_progress">Загрузка...</string>
+    <string name="download_notification_done_title">Загрузка завершена</string>
+    <string name="download_saved_to">Файл сохранён: %s</string>
+</resources>
+
