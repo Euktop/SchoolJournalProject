@@ -14,6 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 import stud.euktop.schooljournal.NavMainMainDirections
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminHomeBinding
@@ -21,8 +23,6 @@ import stud.euktop.schooljournal.presentation.common.base.BaseNavigationFragment
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.observeState
-import stud.euktop.domain.utils.loger.logger
-import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class AdminHomeFragment : BaseNavigationFragment<FragmentAdminHomeBinding>() {
@@ -52,20 +52,60 @@ class AdminHomeFragment : BaseNavigationFragment<FragmentAdminHomeBinding>() {
         }
 
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_dashboard -> viewModel.onDashboardClick()
-                R.id.nav_schools -> viewModel.onSchoolsClick()
-                R.id.nav_classes -> viewModel.onClassesClick()
-                R.id.nav_subjects -> viewModel.onSubjectsClick()
-                R.id.nav_rooms -> viewModel.onRoomsClick()
-                R.id.nav_assignments -> viewModel.onAssignmentsClick()
-                R.id.nav_users -> viewModel.onUsersClick()
-                R.id.nav_audit -> viewModel.onAuditClick()
-                R.id.nav_settings -> viewModel.onSettingsClick()
+            val handled = when (menuItem.itemId) {
+                R.id.nav_dashboard -> {
+                    navController.navigate(R.id.action_to_dashboard)
+                    true
+                }
+
+                R.id.nav_schools -> {
+                    navController.navigate(R.id.action_to_schools)
+                    true
+                }
+
+                R.id.nav_classes -> {
+                    navController.navigate(R.id.action_to_classes)
+                    true
+                }
+
+                R.id.nav_subjects -> {
+                    navController.navigate(R.id.action_to_subjects)
+                    true
+                }
+
+                R.id.nav_rooms -> {
+                    navController.navigate(R.id.action_to_rooms)
+                    true
+                }
+
+                R.id.nav_assignments -> {
+                    navController.navigate(R.id.action_to_assignments)
+                    true
+                }
+
+                R.id.nav_users -> {
+                    navController.navigate(R.id.action_to_users)
+                    true
+                }
+
+                R.id.nav_audit -> {
+                    navController.navigate(R.id.action_to_audit)
+                    true
+                }
+
+                R.id.nav_settings -> {
+                    navController.navigate(R.id.action_to_settings)
+                    true
+                }
+
+                else -> false
             }
-            navigationView.setCheckedItem(menuItem.itemId)
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-            true
+
+            if (handled) {
+                navigationView.setCheckedItem(menuItem.itemId)
+                binding.drawerLayout.closeDrawer(GravityCompat.START)
+            }
+            handled
         }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -84,7 +124,11 @@ class AdminHomeFragment : BaseNavigationFragment<FragmentAdminHomeBinding>() {
 
         observeState(viewModel.state) { state ->
             try {
-                logger?.d(this.toSimpleTag(), "updateState", "adminName=${state.adminName}, adminEmail=${state.adminEmail}")
+                logger?.d(
+                    this.toSimpleTag(),
+                    "updateState",
+                    "adminName=${state.adminName}, adminEmail=${state.adminEmail}"
+                )
             } catch (_: Throwable) {
             }
             val headerView = navigationView.getHeaderView(0)
@@ -110,7 +154,10 @@ class AdminHomeFragment : BaseNavigationFragment<FragmentAdminHomeBinding>() {
 
     private fun updateToolbar(config: ToolbarConfig) {
         try {
-            logger?.d(this.toSimpleTag(), "updateToolbar", "title=${config.titleRes?.let { getString(it) } ?: "default"}")
+            logger?.d(
+                this.toSimpleTag(),
+                "updateToolbar",
+                "title=${config.titleRes?.let { getString(it) } ?: "default"}")
         } catch (_: Throwable) {
         }
         binding.toolbar.apply {

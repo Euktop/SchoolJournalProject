@@ -24,6 +24,8 @@ import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvid
 import java.io.File
 import javax.inject.Inject
 import stud.euktop.uikit.R as RUi
+import stud.euktop.schooljournal.presentation.common.notification.DownloadNotificationHelper
+import com.google.android.material.snackbar.Snackbar
 
 @AndroidEntryPoint
 class StudentHomeworkListFragment :
@@ -69,7 +71,21 @@ class StudentHomeworkListFragment :
     override fun updateEvent(event: StudentHomeworkEvent) {
         when (event) {
             is StudentHomeworkEvent.ShowHomeworkDetail -> showHomeworkDialog(event.homework)
-            is StudentHomeworkEvent.DownloadMediaFile -> openMediaFile(event.file)
+            is StudentHomeworkEvent.DownloadMediaFile -> {
+                // Обновляем уведомление о скачивании и показываем Snackbar с местом сохранения
+                try {
+                    DownloadNotificationHelper.showDownloaded(requireContext(), event.file)
+                } catch (_: Throwable) {
+                }
+                Snackbar.make(
+                    binding.root,
+                    getString(RUi.string.download_saved_to, event.file.absolutePath),
+                    requireContext().resources.getInteger(R.integer.duration_notification)
+                ).setAction("Открыть") {
+                    openMediaFile(event.file)
+                }.show()
+                // Не открываем файл автоматически — оставляем пользователю открыть через Snackbar или уведомление
+            }
         }
     }
 

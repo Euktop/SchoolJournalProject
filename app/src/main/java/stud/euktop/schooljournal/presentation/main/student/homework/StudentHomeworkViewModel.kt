@@ -64,7 +64,7 @@ class StudentHomeworkViewModel @Inject constructor(
     }
 
     fun onHomeWorkClick(homeworkFull: HomeworkFull) {
-        _event.tryEmit(StudentHomeworkEvent.ShowHomeworkDetail(homeworkFull))
+        //TODO Не требуется
     }
 
     fun onMediaClick(mediaId: Int) {

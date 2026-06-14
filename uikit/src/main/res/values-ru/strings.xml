@@ -258,6 +258,7 @@
     <string name="date_format_prefix">Дата: %s</string>
     <string name="download_error">Ошибка скачивания файла</string>
     <string name="error_download">Ошибка скачивания</string>
+    <string name="download_saved_to">Файл сохранён: %s</string>
     <string name="homework_detail_title">Детали задания</string>
     <string name="homework_date_format">Дата: %s</string>
     <string name="grade_excellent">Отличная работа</string>
@@ -300,4 +301,8 @@
     <string name="dialog_delete_role_message">Вы уверены, что хотите удалить роль %s?</string>
     <string name="edit">Изменить</string>
     <string name="create_new">Create New</string>
+    <string name="download_notification_channel_name">Загрузки</string>
+    <string name="download_notification_title">Загрузка файла</string>
+    <string name="download_notification_in_progress">Загрузка...</string>
+    <string name="download_notification_done_title">Загрузка завершена</string>
 </resources>

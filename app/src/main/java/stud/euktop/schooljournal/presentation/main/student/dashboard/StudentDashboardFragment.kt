@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.databinding.FragmentStudentDashboardBinding
@@ -89,11 +90,10 @@ class StudentDashboardFragment :
     }
 
     override fun updateEvent(event: StudentDashboardEvent) {
-        val ctrl = parentFragment as? stud.euktop.schooljournal.presentation.MainController
         when (event) {
-            StudentDashboardEvent.SwitchToSchedule -> ctrl?.switchToTab(stud.euktop.schooljournal.R.id.studentScheduleFragment)
-            StudentDashboardEvent.SwitchToSubjects -> ctrl?.switchToTab(stud.euktop.schooljournal.R.id.studentSubjectsFragment)
-            StudentDashboardEvent.SwitchToHomework -> ctrl?.switchToTab(stud.euktop.schooljournal.R.id.studentHomeworkFragment)
+            StudentDashboardEvent.SwitchToSchedule -> findNavController().navigate(RApp.id.studentScheduleFragment)
+            StudentDashboardEvent.SwitchToSubjects -> findNavController().navigate(RApp.id.studentSubjectsFragment)
+            StudentDashboardEvent.SwitchToHomework -> findNavController().navigate(RApp.id.studentHomeworkFragment)
         }
     }
 

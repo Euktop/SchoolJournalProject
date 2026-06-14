@@ -1,66 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Базовые цвета -->
     <color name="color_accent">#1A6FEE</color>
     <color name="color_accent_inactive">#C9D4FB</color>
     <color name="color_error">#FD3535</color>
+    <color name="color_green">#4CAF50</color>                      <!-- новый -->
     <color name="color_black">#121212</color>
     <color name="color_white">#ffffff</color>
-    <color name="color_bg_primary">@color/color_white</color>
-    <color name="color_bg_secondary">#F5F5F9</color>
-    <color name="color_bg_tertiary">#F1F1F1</color>
-    <color name="color_stroke_default">#EBEBEB</color>
-    <color name="color_text_primary">@color/color_black</color>
-    <color name="color_text_secondary">#939396</color>
-    <color name="color_text_tertiary">#7E7E9A</color>
-    <color name="color_text_on_accent">#FFFFFF</color>
-    <color name="color_text_on_accent_alter">#D1E0FC</color>
-    <color name="color_text_accent">@color/color_accent</color>
-    <color name="color_icon_default">#B8C1CC</color>
-    <color name="color_divider">#F4F4F4</color>
     <color name="transparent">#00000000</color>
     <color name="color_overlay">#99000000</color>
     <color name="color_accent_bg">#881A6FEE</color>
 
+    <!-- Прозрачные версии -->
+    <color name="color_accent_10">#1A1A6FEE</color>                <!-- новый: 10% акцентного -->
+    <color name="color_white_20">#33FFFFFF</color>                <!-- новый: 20% белого -->
+    <color name="color_white_10">#1AFFFFFF</color>                <!-- новый: 10% белого -->
+    <color name="color_black_10">#1A000000</color>                <!-- новый: 10% чёрного -->
 
-    <color name="color_input_stroke_error">#FD3535</color>
-    <color name="color_input_bg_error">#19FD3535</color>
-
-    <!-- Grade Badges Colors -->
-    <color name="color_grade_5_bg">#1A6FEE</color>
-    <color name="color_grade_5_text">#FFFFFF</color>
-    <color name="color_grade_4_bg">#D9E2FF</color>
-    <color name="color_grade_4_text">#0057C4</color>
-    <color name="color_grade_3_bg">#FFF3E0</color>
-    <color name="color_grade_3_text">#E65100</color>
-    <color name="color_grade_2_bg">#FFDAD6</color>
-    <color name="color_grade_2_text">#93000A</color>
-    <color name="color_grade_absent_bg">#FFDAD6</color>
-    <color name="color_grade_absent_text">#93000A</color>
-    <color name="color_grade_empty_bg">#E6E7F2</color>
-    <color name="color_grade_empty_text">#727786</color>
-
-    <!-- Новые цвета для дашборда и бейджей -->
-    <color name="color_primary_fixed">#D9E2FF</color>
-    <color name="color_on_primary_fixed">#001944</color>
-    <color name="color_tertiary_container">#C55100</color>
-    <color name="color_on_tertiary_container">#FFFDFF</color>
-    <color name="color_surface_container_highest">#E1E2ED</color>
-    <color name="color_outline_variant">#C2C6D7</color>
-
-
+    <!-- Фоны -->
+    <color name="color_bg_primary">@color/color_white</color>
+    <color name="color_bg_secondary">#F5F5F9</color>
+    <color name="color_bg_tertiary">#F1F1F1</color>
     <color name="background">#FAF8FF</color>
-    <color name="surface">#FAF8FF</color>
-    <color name="primary">#0057C4</color>
-    <color name="on_primary">#FFFFFF</color>
+    <color name="surface">@color/background</color>
     <color name="surface_container">#ECEDF8</color>
     <color name="surface_container_low">#F2F3FE</color>
-    <color name="outline_variant">#C2C6D7</color>
+    <color name="color_surface_container_highest">#E1E2ED</color>
+
+    <!-- Обводки, разделители, контуры -->
+    <color name="color_stroke_default">#EBEBEB</color>
+    <color name="color_divider">#F4F4F4</color>
+    <color name="color_outline">#727786</color>
+    <color name="color_outline_variant">#C2C6D7</color>
+    <color name="outline_variant">@color/color_outline_variant</color>
+
+    <!-- Текст -->
+    <color name="color_text_primary">@color/color_black</color>
+    <color name="color_text_secondary">#939396</color>
+    <color name="color_text_tertiary">#7E7E9A</color>
+    <color name="color_text_on_accent">@color/color_white</color>
+    <color name="color_text_on_accent_alter">#D1E0FC</color>
+    <color name="color_text_accent">@color/color_accent</color>
     <color name="on_surface_variant">#424754</color>
-    <color name="primary_container">#1A6FEE</color>
-    <color name="on_primary_container">#FFFDFF</color>
     <color name="on_surface">#191B23</color>
 
+    <!-- Иконки -->
+    <color name="color_icon_default">#B8C1CC</color>
+
+    <!-- Поля ввода (ошибки) -->
+    <color name="color_input_stroke_error">@color/color_error</color>
+    <color name="color_input_bg_error">#19FD3535</color>
+
+    <!-- Бейджи оценок -->
+    <color name="color_grade_5_bg">@color/color_accent</color>
+    <color name="color_grade_5_text">@color/color_white</color>
+
+    <color name="color_grade_4_bg">#D9E2FF</color>
+    <color name="color_grade_4_text">@color/primary</color>
+
+    <color name="color_grade_3_bg">#FFF3E0</color>
+    <color name="color_grade_3_text">#E65100</color>
+
+    <color name="color_grade_2_bg">#FFDAD6</color>
+    <color name="color_grade_2_text">#93000A</color>
+
+    <color name="color_grade_absent_bg">@color/color_grade_2_bg</color>
+    <color name="color_grade_absent_text">@color/color_grade_2_text</color>
+
+    <color name="color_grade_empty_bg">#E6E7F2</color>
+    <color name="color_grade_empty_text">@color/color_outline</color>
+
+    <!-- Цвета дашборда / Material Design -->
+    <color name="color_primary_fixed">@color/color_grade_4_bg</color>
+    <color name="color_on_primary_fixed">#001944</color>
+
     <color name="color_tertiary">#9D3F00</color>
+    <color name="color_tertiary_container">#C55100</color>
+    <color name="color_on_tertiary_container">#FFFDFF</color>
+
     <color name="color_secondary">#5E5E61</color>
-    <color name="color_outline">#727786</color>
+
+    <color name="primary">#0057C4</color>
+    <color name="on_primary">@color/color_white</color>
+    <color name="primary_container">@color/color_accent</color>
+    <color name="on_primary_container">#FFFDFF</color>
+
+    <!-- Дополнительные цвета (для drawable и выделений) -->
+    <color name="color_selected_bg">#EEF4FF</color>                <!-- новый: фон выбранной карточки -->
+    <color name="color_tertiary_container_light">#FFDBCC</color>   <!-- новый: светлый контейнер tertiary -->
+
+    <!-- Splash screen gradient colors -->
+    <color name="splash_gradient_start1">#FFA1CAFF</color>
+    <color name="splash_gradient_end1">#FF4D9CFF</color>
+    <color name="splash_gradient_start2">#FF74C8E4</color>
+    <color name="splash_gradient_mid2">#FF73D5BC</color>
+    <color name="splash_gradient_end2">#FF74C8E4</color>
+    <color name="splash_gradient_start3">#0C6269F0</color>
+    <color name="splash_gradient_mid3_1">#A53740F5</color>
+    <color name="splash_gradient_mid3_2">#FF2254F5</color>
+    <color name="splash_gradient_mid3_3">#A53740F5</color>
+    <color name="splash_gradient_end3">#0C6269F0</color>
 </resources>

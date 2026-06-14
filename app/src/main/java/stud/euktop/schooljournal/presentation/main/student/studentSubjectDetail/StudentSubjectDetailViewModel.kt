@@ -15,6 +15,9 @@ import stud.euktop.schooljournal.presentation.common.coordinator.StudentCoordina
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterBack
 import stud.euktop.schooljournal.presentation.common.paging.StudentMarksPagingSource
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,6 +59,7 @@ class StudentSubjectDetailViewModel @Inject constructor(
             loadSchedule()
             loadTrend()
             setupMarksPaging()
+            loadGraphic()
         }
     }
 
@@ -73,6 +77,28 @@ class StudentSubjectDetailViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun loadGraphic() {
+        executeCoordinatorResultLoadingBlockSync(
+            key = "load_graphic",
+            block = {
+                val oneMonthAgoDate: Date = LocalDate.now()
+                    .minusMonths(1)
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .let { Date.from(it) }
+                studentCoordinator.getMarksAggregated(
+                    subjectId = subjectId,
+                    studentId = studentId,
+                    startDate = Date(),
+                    endDate = oneMonthAgoDate,
+                    maxPoints = 50
+                )
+            }
+        ) {
+
         }
     }
 

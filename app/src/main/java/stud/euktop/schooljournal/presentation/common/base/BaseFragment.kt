@@ -15,6 +15,7 @@ import stud.euktop.schooljournal.presentation.common.utils.observeMessage
 import stud.euktop.schooljournal.presentation.common.utils.observeState
 import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
+import stud.euktop.schooljournal.presentation.common.base.DownloadNotificationHelper
 
 /**
  * Базовый фрагмент с поддержкой делегатов:
@@ -64,6 +65,8 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
         setupUI()
         messages = SnackBarMessages(binding.root, lifecycleScope)
         observeMessage(viewModel, messages)
+        // Инициализируем канал уведомлений для загрузок
+        DownloadNotificationHelper.createChannel(requireContext())
         observeViewModel()
     }
 
@@ -80,6 +83,16 @@ abstract class BaseFragment<BINDING : ViewBinding, VM : BaseViewModel<STATE, EVE
             } catch (_: Throwable) {
             }
             updateState(it)
+            // Отслеживаем начало/конец загрузки файла по ключу "download_media"
+            try {
+                val downloading = it.isLoading("download_media")
+                if (downloading) {
+                    DownloadNotificationHelper.showDownloading(requireContext())
+                } else {
+                    DownloadNotificationHelper.cancel(requireContext())
+                }
+            } catch (_: Throwable) {
+            }
         }
         observeEvent(viewModel.event) {
             // Логируем приход события и вызов updateEvent

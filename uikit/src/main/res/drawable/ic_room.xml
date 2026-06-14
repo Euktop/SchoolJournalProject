@@ -6,12 +6,12 @@
 
     <!-- Книга (Синий силуэт) -->
     <path
-        android:fillColor="#1A73E8"
+        android:fillColor="@color/color_accent"
         android:pathData="M6,1h12c1.66,0 3,1.34 3,3v16c0,1.66 -1.34,3 -3,3h-12c-1.66,0 -3,-1.34 -3,-3v-16c0,-1.66 1.34,-3 3,-3z" />
 
     <!-- Закладка (Белый силуэт) -->
     <path
-        android:fillColor="#FFFFFF"
+        android:fillColor="@color/color_white"
         android:pathData="M12,1h5v10l-2.5,-2l-2.5,2z" />
 
 </vector>
