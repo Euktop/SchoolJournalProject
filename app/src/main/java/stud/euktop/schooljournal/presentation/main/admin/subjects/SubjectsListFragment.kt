@@ -53,6 +53,8 @@ class SubjectsListFragment : BaseFragment<
             }
         })
 
+        binding.fabCreateNew.setOnClickListener { viewModel.createNew() }
+
         viewModel.loadNextPage()
     }
 

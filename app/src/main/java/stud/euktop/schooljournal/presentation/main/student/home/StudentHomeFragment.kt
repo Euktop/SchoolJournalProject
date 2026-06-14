@@ -22,7 +22,7 @@ import stud.euktop.domain.utils.loger.logger
 import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
-class StudentHomeFragment : BaseNavigationFragment<FragmentStudentHomeBinding>() {
+class StudentHomeFragment : BaseNavigationFragment<FragmentStudentHomeBinding>(), stud.euktop.schooljournal.presentation.MainController {
 
     override val screenTag = "student_home"
 
@@ -78,5 +78,15 @@ class StudentHomeFragment : BaseNavigationFragment<FragmentStudentHomeBinding>()
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+    // Быстрый safe-путь переключения таба: фрагменты внутри StudentHomeFragment вызывают
+    // (parentFragment as? MainController)?.switchToTab(R.id.some) и BottomNavigationView
+    // выполнит навигацию через setupWithNavController.
+    override fun switchToTab(menuItemId: Int) {
+        try {
+            binding.bottomNavigationView.selectedItemId = menuItemId
+        } catch (_: Throwable) {
+        }
     }
 }

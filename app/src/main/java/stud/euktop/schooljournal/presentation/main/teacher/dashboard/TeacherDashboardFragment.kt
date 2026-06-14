@@ -4,18 +4,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.databinding.FragmentTeacherDashboardBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
-import stud.euktop.domain.utils.loger.logger
-
 import stud.euktop.schooljournal.R as RApp
 import stud.euktop.uikit.R as RUi
 
 @AndroidEntryPoint
 class TeacherDashboardFragment :
-    BaseFragment<FragmentTeacherDashboardBinding, TeacherDashboardViewModel, TeacherDashboardState, Unit>(),
+    BaseFragment<FragmentTeacherDashboardBinding, TeacherDashboardViewModel, TeacherDashboardState, TeacherDashboardEvent>(),
     ToolbarConfigProvider {
 
     override val viewModel: TeacherDashboardViewModel by viewModels()
@@ -51,7 +50,14 @@ class TeacherDashboardFragment :
          )
      }
 
-    override fun updateEvent(event: Unit) {}
+    override fun updateEvent(event: TeacherDashboardEvent) {
+        val ctrl = parentFragment as? stud.euktop.schooljournal.presentation.MainController
+        when (event) {
+            TeacherDashboardEvent.SwitchToSchedule -> ctrl?.switchToTab(stud.euktop.schooljournal.R.id.teacherLessonsFragment)
+            TeacherDashboardEvent.SwitchToClasses -> ctrl?.switchToTab(stud.euktop.schooljournal.R.id.teacherClassesFragment)
+            TeacherDashboardEvent.SwitchToHomework -> ctrl?.switchToTab(stud.euktop.schooljournal.R.id.teacherHomeworkListFragment)
+        }
+    }
 
     override fun getToolbarConfig() = ToolbarConfig(
         titleRes = RUi.string.app_name, menuRes = RApp.menu.menu_home

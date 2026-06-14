@@ -4,6 +4,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import stud.euktop.schooljournal.presentation.common.coordinator.TeacherCoordinator
 import stud.euktop.schooljournal.presentation.common.navigate.CoordinatorResult
 import stud.euktop.schooljournal.presentation.common.navigate.contract.CoordinatorExec
@@ -16,7 +18,7 @@ class TeacherDashboardViewModel @Inject constructor(
     private val teacherCoordinator: TeacherCoordinator,
     private val routerTeacher: RouterTeacher,
     coordinatorExec: CoordinatorExec
-) : BaseViewModel<TeacherDashboardState, Unit>() {
+) : BaseViewModel<TeacherDashboardState, TeacherDashboardEvent>() {
 
     override fun initState() = TeacherDashboardState()
 
@@ -70,22 +72,27 @@ class TeacherDashboardViewModel @Inject constructor(
             onSuccess = { stats ->
                 _state.update {
                     it.copy(
-                        lessonsCount = stats.lessonsTodayCount,
-                        classesCount = stats.classesCount
+                        lessonsCount = stats.lessonsTodayCount
                     )
                 }
             }
         )
     }
 
-    // Навигация (без изменений)
-    fun onScheduleClick() = routerTeacher.toTeacherSchedule()
-    fun onMyClassesClick() = routerTeacher.toTeacherClasses()
-    fun onLessonsListClick() = routerTeacher.toTeacherClasses()
-    fun onGradingClick() = routerTeacher.toTeacherClasses()
-    fun onHomeworkListClick() = routerTeacher.toTeacherHomeworkList()
+    // Навигация: события для табов — фрагмент обработает через MainController
+    fun onScheduleClick() { viewModelScope.launch { _event.emit(TeacherDashboardEvent.SwitchToSchedule) } }
+    fun onMyClassesClick() { viewModelScope.launch { _event.emit(TeacherDashboardEvent.SwitchToClasses) } }
+    fun onLessonsListClick() { viewModelScope.launch { _event.emit(TeacherDashboardEvent.SwitchToClasses) } }
+    fun onGradingClick() { viewModelScope.launch { _event.emit(TeacherDashboardEvent.SwitchToClasses) } }
+    fun onHomeworkListClick() { viewModelScope.launch { _event.emit(TeacherDashboardEvent.SwitchToHomework) } }
+
     fun onCreateHomeworkClick() = routerTeacher.toTeacherHomeworkEdit()
     fun onAnalyticsClick() = routerTeacher.toTeacherAnalytics()
-    fun onSettingsClick() { /* реализовать по необходимости */
-    }
+    fun onSettingsClick() { /* реализовать по необходимости */ }
+}
+
+sealed class TeacherDashboardEvent {
+    object SwitchToSchedule : TeacherDashboardEvent()
+    object SwitchToClasses : TeacherDashboardEvent()
+    object SwitchToHomework : TeacherDashboardEvent()
 }

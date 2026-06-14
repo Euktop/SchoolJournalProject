@@ -90,7 +90,7 @@
         android:label="@string/editing_a_user">
         <argument
             android:name="userId"
-            android:defaultValue="0"
+            android:defaultValue="-1"
             app:argType="integer" />
     </fragment>
 
@@ -100,7 +100,7 @@
         android:label="@string/edit_class">
         <argument
             android:name="classId"
-            android:defaultValue="0"
+            android:defaultValue="-1"
             app:argType="integer" />
     </fragment>
 
@@ -110,7 +110,7 @@
         android:label="@string/edit_subject">
         <argument
             android:name="subjectId"
-            android:defaultValue="0"
+            android:defaultValue="-1"
             app:argType="integer" />
     </fragment>
 
@@ -242,9 +242,7 @@
         app:destination="@id/studentSubjectsFragment" />
     <action
         android:id="@+id/action_global_student_subject_detail"
-        app:destination="@id/studentSubjectDetailFragment"
-        app:popUpTo="@id/studentHomeFragment"
-        app:popUpToInclusive="true" />
+        app:destination="@id/studentSubjectDetailFragment" />
     <action
         android:id="@+id/action_global_lesson_marks"
         app:destination="@id/lessonMarksFragment" />
@@ -328,7 +326,7 @@
         android:label="@string/edit_room">
         <argument
             android:name="roomId"
-            android:defaultValue="0"
+            android:defaultValue="-1"
             app:argType="integer" />
     </fragment>
 

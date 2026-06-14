@@ -28,8 +28,8 @@ class RoomEditViewModel @Inject constructor(
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<RoomEditState, Unit>() {
 
-    private val roomId: Int = savedStateHandle["roomId"] ?: 0
-    private val isEditMode get() = roomId != 0
+    private val roomId: Int = savedStateHandle["roomId"] ?: -1
+    private val isEditMode get() = roomId > 0
 
     override fun initState() = RoomEditState(roomId = roomId)
 

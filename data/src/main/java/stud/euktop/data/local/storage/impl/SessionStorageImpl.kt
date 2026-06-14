@@ -11,6 +11,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 import stud.euktop.data.local.storage.contract.RoleStorage
 import stud.euktop.data.local.storage.contract.TokenStorage
 import stud.euktop.data.local.storage.contract.UserIdStorage
@@ -50,7 +52,14 @@ class SessionStorageImpl @Inject constructor(
     override suspend fun setToken(token: String?) = tokenKey.setValue(token)
 
     override suspend fun getUserId(): Int? = userIdKey.getValue()
-    override suspend fun setUserId(userId: Int?) = userIdKey.setValue(userId)
+
+    override suspend fun setUserId(userId: Int?) {
+        userIdKey.setValue(userId)
+        try {
+            logger?.d(this.toSimpleTag(), "setUserId", "userId=$userId")
+        } catch (_: Throwable) {
+        }
+    }
 
     override suspend fun clearAll() {
         mutex.withLock {

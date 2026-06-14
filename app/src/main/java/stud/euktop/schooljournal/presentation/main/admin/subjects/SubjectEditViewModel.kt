@@ -27,8 +27,8 @@ class SubjectEditViewModel @Inject constructor(
         executeCoordinator = coordinatorExec
     }
 
-    private val subjectId: Int = savedStateHandle["subjectId"] ?: 0
-    private val isEditMode get() = subjectId != 0
+    private val subjectId: Int = savedStateHandle["subjectId"] ?: -1
+    private val isEditMode get() = subjectId > 0
 
     override fun initState() = SubjectEditState()
 

@@ -58,6 +58,7 @@ class SubjectsListViewModel @Inject constructor(
     }
 
     fun editSubject(subject: Subject) = routerAdmin.toAdminEditSubject(subject.subjectId)
+    fun createNew() = routerAdmin.toAdminEditSubject(-1)
     fun deleteSubject(subjectId: Int) {
         executeWithResultLoadingSync(
             "delete",

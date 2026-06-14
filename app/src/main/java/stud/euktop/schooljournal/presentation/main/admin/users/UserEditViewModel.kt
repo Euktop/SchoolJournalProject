@@ -26,8 +26,9 @@ class UserEditViewModel @Inject constructor(
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<UserEditState, Unit>() {
 
-    private val userId: Int = savedStateHandle["userId"] ?: 0
-    private val isEditMode get() = userId != 0
+    private val userId: Int = savedStateHandle["userId"] ?: -1
+    // Edit mode: userId >= 1; Create mode: userId < 1 (usually -1)
+    private val isEditMode get() = userId > 0
 
     override fun initState() = UserEditState(userId = userId)
 

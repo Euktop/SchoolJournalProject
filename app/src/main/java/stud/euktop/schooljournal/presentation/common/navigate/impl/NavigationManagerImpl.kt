@@ -74,7 +74,10 @@ class NavigationManagerImpl @Inject constructor(
                 }
 
                 is NavCommand.ToAction, is NavCommand.Back, is NavCommand.PopUpTo -> {
-                    val nav = controllers.values.lastOrNull() ?: controllers["main"]
+                    // Предпочитаем главный контроллер для глобальных действий (чтобы popUpTo и global actions
+                    // корректно применялись к корню приложения). Если главный контроллер не зарегистрирован,
+                    // используем последний доступный контроллер.
+                    val nav = controllers["main"] ?: controllers.values.lastOrNull()
                     nav to null
                 }
             }
@@ -126,12 +129,28 @@ class NavigationManagerImpl @Inject constructor(
                         saveCurrentDestination(targetNav)
                         logger?.i(toSimpleTag(), "execute", "Выполнен Back")
                     } else {
-                        logger?.e(
-                            toSimpleTag(),
-                            "execute",
-                            null,
-                            "Back проигнорирован: достигнут корень графа"
-                        )
+                        // Если мы в корне вложенного графа (e.g. admin), пробуем передать Back главному контроллеру
+                        if (targetNav != controllers["main"] && controllers["main"] != null) {
+                            val mainPopped = controllers["main"]?.popBackStack() ?: false
+                            if (mainPopped) {
+                                saveCurrentDestination(controllers["main"]!!)
+                                logger?.i(toSimpleTag(), "execute", "Back выполнен на главном контроллере после корня вложенного графа")
+                            } else {
+                                logger?.e(
+                                    toSimpleTag(),
+                                    "execute",
+                                    null,
+                                    "Back проигнорирован: достигнут корень графа приложения"
+                                )
+                            }
+                        } else {
+                            logger?.e(
+                                toSimpleTag(),
+                                "execute",
+                                null,
+                                "Back проигнорирован: достигнут корень графа"
+                            )
+                        }
                     }
                 }
 

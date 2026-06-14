@@ -7,13 +7,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import stud.euktop.domain.model.school.School
 import stud.euktop.domain.model.user.Role
 import stud.euktop.domain.model.user.UserProfile
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 import stud.euktop.domain.utils.toBaseString
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentProfileBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
-import stud.euktop.domain.utils.loger.logger
-import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
 class ProfileFragment :
@@ -39,6 +39,11 @@ class ProfileFragment :
 
         /*        // Кнопка аватара пока не используется – скрываем
                 binding.btnEditAvatar.visibility = View.GONE*/
+
+        // TODO: реализовать выбор и загрузку аватара через ActivityResultContracts.GetContent
+        binding.btnEditAvatar.setOnClickListener {
+            logger?.d(this.toSimpleTag(), "Avatar clicked", "TODO: implement avatar selection/upload")
+        }
 
         // Редактирование роли – открываем SelectRoleFragment
         binding.btnEditRole.setOnClickListener {

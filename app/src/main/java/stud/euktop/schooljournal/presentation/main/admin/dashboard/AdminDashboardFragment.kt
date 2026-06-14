@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentAdminDashboardBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
-import stud.euktop.domain.utils.loger.logger
 
 @AndroidEntryPoint
 class AdminDashboardFragment :
@@ -24,6 +24,8 @@ class AdminDashboardFragment :
     override fun setupUI() {
         // Кнопки Generate Report, Invite, Maintenance удалены из UI (или закомментированы)
         // Если они нужны в будущем, их обработчики пока можно убрать.
+        // TODO: Кнопка "Недавние входы" (Recent Logins chart) использует мок-данные
+        // Реальные данные из backend-а интегрированы в ViewModel через AdminDashboardRepository
     }
 
      override fun updateState(state: AdminDashboardState) {

@@ -4,11 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentSubjectEditBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.binding.bindForm
 import stud.euktop.schooljournal.presentation.common.binding.toInit
 import stud.euktop.schooljournal.presentation.common.delegate.LoadingDelegate
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
+import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import stud.euktop.domain.utils.loger.logger
 
@@ -17,7 +20,7 @@ class SubjectEditFragment : BaseFragment<
         FragmentSubjectEditBinding,
         SubjectEditViewModel,
         SubjectEditState,
-        Unit>() {
+        Unit>(), ToolbarConfigProvider {
 
     override val viewModel: SubjectEditViewModel by viewModels()
     private val focusTrack = FocusTrack()
@@ -43,4 +46,8 @@ class SubjectEditFragment : BaseFragment<
      }
 
     override fun updateEvent(event: Unit) {}
+
+    override fun getToolbarConfig() = ToolbarConfig(
+        titleRes = R.string.edit_subject
+    )
 }

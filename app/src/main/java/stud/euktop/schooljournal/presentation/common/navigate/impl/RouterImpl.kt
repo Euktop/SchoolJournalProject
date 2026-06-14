@@ -14,6 +14,7 @@ import stud.euktop.schooljournal.NavAdminDirections
 import stud.euktop.schooljournal.NavAuthDirections
 import stud.euktop.schooljournal.NavMainMainDirections
 import stud.euktop.schooljournal.presentation.common.navigate.NavCommand
+import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.presentation.common.navigate.contract.NavigationManager
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAdmin
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
@@ -173,7 +174,12 @@ class RouterImpl @Inject constructor(
     }
 
     override fun toLogout() {
-        navigationManager.navigate(NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()))
+        // Выполняем переход в onboarding и очищаем стек главного графа (nav1), чтобы гарантировать
+        // отсутствие вернувшихся фрагментов после логаута (например, ProfileFragment).
+        navigationManager.navigate(
+            NavCommand.ToAction(Nav1Directions.actionGlobalToOnboarding()),
+            NavCommand.PopUpTo(R.id.nav1, true)
+        )
         runBlocking {
             val role = roleRepository.getCurrentRole()?.name ?: return@runBlocking
             stateManager.clearPending(role)
@@ -394,7 +400,8 @@ class RouterImpl @Inject constructor(
 
     override fun toAdminSettings() {
         runBlocking { checkRole(Role.ADMIN, Role.DIRECTOR, action = "toAdminSettings") }
-        navigationManager.navigate(NavCommand.ToAction(NavAdminDirections.actionToSettings()))
+        // Открываем Settings через главный граф, чтобы экран был сквозным для всех ролей
+        navigationManager.navigate(NavCommand.ToAction(NavMainMainDirections.actionGlobalSettings()))
     }
 
     override fun toAdminEditAssignment(id: AssignmentId) {

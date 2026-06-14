@@ -53,6 +53,8 @@ class RoomsListFragment : BaseFragment<
             }
         })
 
+        binding.fabCreateNew.setOnClickListener { viewModel.createNew() }
+
         viewModel.loadNextPage()
     }
 

@@ -12,6 +12,8 @@ import stud.euktop.data.map.toLocalDateTime
 import stud.euktop.data.map.toNetwork
 import stud.euktop.data.utils.ApiErrorHandler
 import stud.euktop.domain.model.user.Role
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 import stud.euktop.domain.model.user.UserProfile
 import stud.euktop.domain.repository.AuthRepository
 import javax.inject.Inject
@@ -35,6 +37,10 @@ class AuthRepositoryImpl @Inject constructor(
 
             tokenStorage.setToken(token)
             userIdStorage.setUserId(userId)
+            try {
+                logger?.d(this.toSimpleTag(), "login", "saved userId=$userId token=${token.takeIf { it.isNotEmpty() } != null}")
+            } catch (_: Throwable) {
+            }
 
             val roleIds = response.roles?.map { it.roleId ?: 0 } ?: emptyList()
             // Сохраняем первую роль как основную для простоты, или обрабатываем логику выбора

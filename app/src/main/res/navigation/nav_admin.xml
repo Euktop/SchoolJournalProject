@@ -74,6 +74,26 @@
         android:id="@+id/action_to_classes"
         app:destination="@id/classesListFragment" />
 
+    <!-- Global actions mirroring main graph so RouterImpl global actions are resolvable from admin graph -->
+    <action
+        android:id="@+id/action_global_class_edit"
+        app:destination="@id/classEditFragment" />
+    <action
+        android:id="@+id/action_global_subject_edit"
+        app:destination="@id/subjectEditFragment" />
+    <action
+        android:id="@+id/action_global_teacher_assignment_edit"
+        app:destination="@id/teacherAssignmentEditFragment" />
+    <action
+        android:id="@+id/action_global_user_edit"
+        app:destination="@id/userEditFragment" />
+    <action
+        android:id="@+id/action_global_room_edit"
+        app:destination="@id/roomEditFragment" />
+    <action
+        android:id="@+id/action_global_audit_detail"
+        app:destination="@id/auditLogDetailFragment" />
+
     <action
         android:id="@+id/action_to_subjects"
         app:destination="@id/subjectsListFragment" />

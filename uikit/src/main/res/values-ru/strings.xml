@@ -299,4 +299,5 @@
     <string name="dialog_delete_role_title">Удаление роли</string>
     <string name="dialog_delete_role_message">Вы уверены, что хотите удалить роль %s?</string>
     <string name="edit">Изменить</string>
+    <string name="create_new">Create New</string>
 </resources>

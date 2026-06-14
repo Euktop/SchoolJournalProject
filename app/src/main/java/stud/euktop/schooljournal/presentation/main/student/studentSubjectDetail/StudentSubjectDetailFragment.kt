@@ -8,12 +8,14 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import stud.euktop.domain.utils.loger.logger
 import stud.euktop.schooljournal.databinding.FragmentStudentSubjectDetailBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
 import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterStudent
 import stud.euktop.uikit.R
-import stud.euktop.domain.utils.loger.logger
 import java.util.Locale
+import stud.euktop.uikit.components.lineChart.SchJLineChartState
+import stud.euktop.uikit.components.lineChart.SchJLinePoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -65,6 +67,22 @@ class StudentSubjectDetailFragment :
          binding.headerInclude.tvNextLesson.text = nextLesson?.let {
              "${it.startTime} - ${it.subjectName}"
          } ?: getString(R.string.subject_detail_no_next_lesson)
+
+         // Chart: если есть общая оценка — показываем мок-данные точек для графика
+         try {
+             val avg = state.overallAverage ?: 0.0
+             val points = (0 until 12).map { i ->
+                 // Простая демонстрация: значения вокруг average
+                 val value = (avg + Math.sin(i.toDouble()) * 1.5).toFloat()
+                 SchJLinePoint(label = "${i + 1}", value = value)
+             }
+             binding.chartInclude.chartTrend.state = SchJLineChartState(points = points)
+         } catch (_: Throwable) {
+         }
+
+         // TODO: Рефакторинг - передавать распарсенные данные уроков в State вместо строк
+         // TODO: Добавить поля в StudentSubjectDetailState для room и teacher отдельно
+         // TODO: Вместо парсинга здесь: state.nextLessonDetails.split("|")
      }
 
     override fun updateEvent(event: Unit) {}

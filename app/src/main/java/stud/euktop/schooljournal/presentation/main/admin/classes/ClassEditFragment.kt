@@ -27,7 +27,8 @@ import stud.euktop.schooljournal.presentation.common.utils.check
 
 @AndroidEntryPoint
 class ClassEditFragment :
-    BaseFragment<FragmentClassEditBinding, ClassEditViewModel, ClassEditState, Unit>() {
+    BaseFragment<FragmentClassEditBinding, ClassEditViewModel, ClassEditState, Unit>(),
+    stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider {
 
     override val viewModel: ClassEditViewModel by viewModels()
     private val focusTrack = FocusTrack()
@@ -137,4 +138,8 @@ class ClassEditFragment :
      }
 
     override fun updateEvent(event: Unit) {}
+
+    override fun getToolbarConfig() = stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig(
+        titleRes = R.string.edit_class
+    )
 }

@@ -55,6 +55,7 @@ class SchoolsListViewModel @Inject constructor(
     }
 
     fun editSchool(school: School) = routerAdmin.toAdminEditSchool(school.schoolId)
+    fun createNew() = routerAdmin.toAdminEditSchool(-1)
     fun deleteSchool(schoolId: Int) {
         executeWithResultLoadingSync("delete", { schoolRepository.deleteSchool(schoolId) }) { refresh() }
     }

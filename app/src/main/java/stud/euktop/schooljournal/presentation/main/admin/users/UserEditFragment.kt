@@ -16,6 +16,10 @@ import stud.euktop.schooljournal.presentation.common.utils.FocusTrack
 import stud.euktop.schooljournal.presentation.common.utils.toMessageId
 import stud.euktop.schooljournal.presentation.main.admin.dialog.role_shool.RoleSchoolEditDialog
 import stud.euktop.uikit.R
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import stud.euktop.data.local.storage.contract.UserIdStorage
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserEditFragment : BaseFragment<
@@ -28,6 +32,9 @@ class UserEditFragment : BaseFragment<
         DialogUserEditBinding.inflate(inflater, container, false)
 
     override val viewModel: UserEditViewModel by viewModels()
+    @Inject
+    lateinit var userIdStorage: UserIdStorage
+    private var currentUserId: Int = 0
     private val focusTrack = FocusTrack()
     private lateinit var loadingDelegate: LoadingDelegate<UserEditState>
 
@@ -56,20 +63,14 @@ class UserEditFragment : BaseFragment<
         statusAdapter.submitList(AccountStatus.entries.toList())
         binding.selectStatus.attach(statusAdapter, statusAdapter, childFragmentManager)
 
-        rolesAdapter = RoleSchoolAdapter { role ->
-            androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                .setTitle(R.string.dialog_delete_role_title)
-                .setMessage(
-                    getString(
-                        R.string.dialog_delete_role_message,
-                        getString(role.role.toMessageId())
-                    )
-                )
-                .setPositiveButton(R.string.delete) { _, _ -> viewModel.removeRole(role) }
-                .setNegativeButton(R.string.cancel, null)
-                .show()
-        }
+        // Инициализируем адаптер - логика удаления будет задаваться в updateState
+        rolesAdapter = RoleSchoolAdapter { _ -> }
         binding.rvRoles.adapter = rolesAdapter
+
+        // Получаем текущего пользователя для блокировки изменения собственной роли
+        lifecycleScope.launch {
+            currentUserId = userIdStorage.getUserId() ?: 0
+        }
 
         binding.btnAddRole.setOnClickListener { showRoleSchoolDialog() }
 
@@ -96,8 +97,28 @@ class UserEditFragment : BaseFragment<
          binding.selectStatus.state = binding.selectStatus.state.copy(
              selectText = requireContext().getString(state.accountStatus.toMessageId())
          )
-         rolesAdapter.submitList(state.selectedRoles)
-         binding.saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
+          // Если редактируем самого себя — запрещаем добавлять/удалять роли
+          val isEditingSelf = state.userId == currentUserId
+          binding.btnAddRole.isEnabled = !isEditingSelf
+
+          // Переинициализируем адаптер с правильной логикой удаления, чтобы учитывать isEditingSelf
+          rolesAdapter = RoleSchoolAdapter { role ->
+              if (isEditingSelf) return@RoleSchoolAdapter
+              androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                  .setTitle(R.string.dialog_delete_role_title)
+                  .setMessage(
+                      getString(
+                          R.string.dialog_delete_role_message,
+                          getString(role.role.toMessageId())
+                      )
+                  )
+                  .setPositiveButton(R.string.delete) { _, _ -> viewModel.removeRole(role) }
+                  .setNegativeButton(R.string.cancel, null)
+                  .show()
+          }
+          binding.rvRoles.adapter = rolesAdapter
+          rolesAdapter.submitList(state.selectedRoles)
+          binding.saveCancel.btnSave.isEnabled = state.isFormValid() && !state.isAnyLoading()
      }
 
     override fun updateEvent(event: Unit) {}

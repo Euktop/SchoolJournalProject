@@ -11,7 +11,6 @@ data class TeacherDashboardState(
     val teacherName: String = "",
     val nextLessonInfo: String = "",
     val lessonsCount: Int = 0,
-    val classesCount: Int = 0,
     override val loadingMap: Map<String, Boolean> = emptyMap()
 ) : BaseState<TeacherDashboardState>() {
     override fun updateIsLoading(loadingMap: Map<String, Boolean>): TeacherDashboardState =

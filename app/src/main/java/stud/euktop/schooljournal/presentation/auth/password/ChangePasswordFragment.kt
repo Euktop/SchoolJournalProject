@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.navigation.fragment.findNavController
 import stud.euktop.domain.utils.validation.ValidatorInterface
 import stud.euktop.schooljournal.databinding.FragmentChangePasswordBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseFragment
@@ -18,7 +19,7 @@ class ChangePasswordFragment : BaseFragment<
         FragmentChangePasswordBinding,
         ChangePasswordViewModel,
         ChangePasswordState,
-        Unit>() {
+        ChangePasswordEvent>() {
 
     override val viewModel: ChangePasswordViewModel by viewModels()
     private val focusTrack = FocusTrack()
@@ -61,5 +62,10 @@ class ChangePasswordFragment : BaseFragment<
          binding.buttonsSaveCancel.btnSave.isEnabled = state.isFormValid()
      }
 
-    override fun updateEvent(event: Unit) {}
+     override fun updateEvent(event: ChangePasswordEvent) {
+         when (event) {
+             is ChangePasswordEvent.Success -> findNavController().navigateUp()
+             is ChangePasswordEvent.Cancel -> findNavController().navigateUp()
+         }
+     }
 }

@@ -6,16 +6,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import stud.euktop.domain.repository.AuthRepository
 import stud.euktop.schooljournal.presentation.common.base.BaseViewModel
-import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterAuth
+
 import javax.inject.Inject
 
 @HiltViewModel
 class ChangePasswordViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
-    private val routerAuth: RouterAuth
-) : BaseViewModel<ChangePasswordState, Unit>() {
+    private val authRepository: AuthRepository
+) : BaseViewModel<ChangePasswordState, ChangePasswordEvent>() {
 
     override fun initState() = ChangePasswordState()
+
+    // События навигации/утверждения результата – фрагмент подписывается и выполняет навигацию
 
     fun updateOldPassword(value: String) {
         _state.update { it.copy(oldPassword = it.oldPassword.copy(value)) }
@@ -40,13 +41,16 @@ class ChangePasswordViewModel @Inject constructor(
                     state.newPassword.getValidate()
                 )
             },
-            onSuccess = { routerAuth.toSuccessChangePassword() }
+            onSuccess = { _event.emit(ChangePasswordEvent.Success) }
         )
     }
 
     fun cancel() {
-        viewModelScope.launch {
-            routerAuth.toCancelChangePassword()
-        }
+        viewModelScope.launch { _event.emit(ChangePasswordEvent.Cancel) }
     }
+}
+
+sealed class ChangePasswordEvent {
+    object Success : ChangePasswordEvent()
+    object Cancel : ChangePasswordEvent()
 }

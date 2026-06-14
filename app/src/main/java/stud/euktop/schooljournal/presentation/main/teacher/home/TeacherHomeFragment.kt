@@ -11,6 +11,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import stud.euktop.domain.utils.loger.logger
+import stud.euktop.domain.utils.loger.toSimpleTag
 import stud.euktop.schooljournal.R
 import stud.euktop.schooljournal.databinding.FragmentTeacherHomeBinding
 import stud.euktop.schooljournal.presentation.common.base.BaseNavigationFragment
@@ -18,11 +20,9 @@ import stud.euktop.schooljournal.presentation.common.navigate.contract.RouterPro
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfig
 import stud.euktop.schooljournal.presentation.common.toolbar.ToolbarConfigProvider
 import javax.inject.Inject
-import stud.euktop.domain.utils.loger.logger
-import stud.euktop.domain.utils.loger.toSimpleTag
 
 @AndroidEntryPoint
-class TeacherHomeFragment : BaseNavigationFragment<FragmentTeacherHomeBinding>() {
+class TeacherHomeFragment : BaseNavigationFragment<FragmentTeacherHomeBinding>(), stud.euktop.schooljournal.presentation.MainController {
 
     override val screenTag = "teacher_home"
 
@@ -78,5 +78,12 @@ class TeacherHomeFragment : BaseNavigationFragment<FragmentTeacherHomeBinding>()
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+    override fun switchToTab(menuItemId: Int) {
+        try {
+            binding.bottomNavigationView.selectedItemId = menuItemId
+        } catch (_: Throwable) {
+        }
     }
 }

@@ -35,19 +35,21 @@ class MainMenuFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnTeacherClasses.setOnClickListener { 
+        binding.btnTeacherClasses.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuTeacherClasses")
             } catch (_: Throwable) {
             }
-            router.toMainMenuTeacherClasses() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.teacherClassesFragment) else router.toMainMenuTeacherClasses()
         }
-        binding.btnStudentSubjects.setOnClickListener { 
+        binding.btnStudentSubjects.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuStudentSubjects")
             } catch (_: Throwable) {
             }
-            router.toMainMenuStudentSubjects() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.studentSubjectsFragment) else router.toMainMenuStudentSubjects()
         }
         binding.btnAdminPanel.setOnClickListener { 
             try {
@@ -63,7 +65,7 @@ class MainMenuFragment : Fragment() {
             }
             router.toMainMenuAuthProfile() 
         }
-        binding.btnStudentDetail.setOnClickListener { 
+        binding.btnStudentDetail.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toStudentSubjectDetail")
             } catch (_: Throwable) {
@@ -113,19 +115,21 @@ class MainMenuFragment : Fragment() {
             }
             router.toMainMenuLessonMarks(DEFAULT_LESSON_ID) 
         }
-        binding.btnHomework.setOnClickListener { 
+        binding.btnHomework.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuTeacherHomeworkList")
             } catch (_: Throwable) {
             }
-            router.toMainMenuTeacherHomeworkList() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.teacherHomeworkListFragment) else router.toMainMenuTeacherHomeworkList()
         }
-        binding.btnStudentHomework.setOnClickListener { 
+        binding.btnStudentHomework.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuStudentHomeworkList")
             } catch (_: Throwable) {
             }
-            router.toMainMenuStudentHomeworkList() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.studentHomeworkFragment) else router.toMainMenuStudentHomeworkList()
         }
         binding.btnLessonEdit.setOnClickListener { 
             try {
@@ -134,12 +138,13 @@ class MainMenuFragment : Fragment() {
             }
             router.toMainMenuLessonEdit() 
         }
-        binding.btnStudentSchedule.setOnClickListener { 
+        binding.btnStudentSchedule.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuStudentSchedule")
             } catch (_: Throwable) {
             }
-            router.toMainMenuStudentSchedule() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.studentScheduleFragment) else router.toMainMenuStudentSchedule()
         }
         binding.btnSelectRole.setOnClickListener { 
             try {
@@ -149,26 +154,29 @@ class MainMenuFragment : Fragment() {
             router.toMainMenuSelectRole() 
         }
 
-        binding.btnHomeStudent.setOnClickListener { 
+        binding.btnHomeStudent.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuStudentHome")
             } catch (_: Throwable) {
             }
-            router.toMainMenuStudentHome() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.studentDashboardFragment) else router.toMainMenuStudentHome()
         }
-        binding.btnHomeAdmin.setOnClickListener { 
+        binding.btnHomeAdmin.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuStudentAdmin")
             } catch (_: Throwable) {
             }
-            router.toMainMenuStudentAdmin() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.teacherDashboardFragment) else router.toMainMenuStudentAdmin()
         }
-        binding.btnHomeTeacher.setOnClickListener { 
+        binding.btnHomeTeacher.setOnClickListener {
             try {
                 logger?.d(this::class.java.simpleName, "navigate", "toMainMenuStudentTeacher")
             } catch (_: Throwable) {
             }
-            router.toMainMenuStudentTeacher() 
+            val ctrl = activity as? stud.euktop.schooljournal.presentation.MainController
+            if (ctrl != null) ctrl.switchToTab(stud.euktop.schooljournal.R.id.teacherDashboardFragment) else router.toMainMenuStudentTeacher()
         }
     }
 

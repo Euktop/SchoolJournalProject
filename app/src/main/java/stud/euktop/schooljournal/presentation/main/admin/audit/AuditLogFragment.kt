@@ -2,6 +2,7 @@ package stud.euktop.schooljournal.presentation.main.admin.audit
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +44,9 @@ class AuditLogFragment :
                 binding.rvEntity.update()
             }
         }
+
+        // Скрываем FAB «Создать» – логи создаёт система автоматически, вручную создавать нельзя
+        binding.fabCreateNew.visibility = View.GONE
     }
 
     private fun showFilterDialog() {
@@ -60,9 +64,13 @@ class AuditLogFragment :
     }
 
      override fun updateState(state: AuditLogState) {
-         logger?.d(this::class.java.simpleName, "updateState", "filter applied")
-         // статистика может быть отображена в тулбаре или отдельном layout
-         // для простоты оставим пустым
+         logger?.d(this::class.java.simpleName, "updateState", "filter applied, statistics: ${state.statistics}")
+         // TODO: Если требуется отобразить статистику (общее количество логов, последнее событие и т.д.),
+         // TODO: добавить элементы UI в layout и обновлять их здесь
+         // state.statistics?.let { stats ->
+         //     binding.tvTotalLogsCount.text = stats.totalCount.toString()
+         //     binding.tvLastEventTime.text = stats.lastEventTime
+         // }
      }
 
     override fun updateEvent(event: Unit) {}

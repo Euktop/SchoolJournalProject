@@ -37,8 +37,8 @@ class LessonEditViewModel @Inject constructor(
     coordinatorExec: CoordinatorExec
 ) : BaseViewModel<LessonEditState, Unit>() {
 
-    private val lessonId: Int = savedStateHandle["lessonId"] ?: 0
-    private val isEditMode get() = lessonId != 0
+    private val lessonId: Int = savedStateHandle["lessonId"] ?: -1
+    private val isEditMode get() = lessonId > 0
 
     override fun initState() = LessonEditState(lessonId = lessonId)
 
